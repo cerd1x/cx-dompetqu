@@ -2,60 +2,153 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
 import '../models/product.dart';
+import '../widgets/bottom_bar.dart';
+import 'BookkeepingTab.dart';
+import 'DebtTab.dart';
 import 'ExpenseForm.dart';
 import 'LoanForm.dart';
 import 'SaleForm.dart';
 
-enum _OrderTab { sale, expense, loan }
+/// Tab laporan (buku besar & utang) dibuka lebih dulu, disusul form transaksi.
+enum _OrderTab { bookkeeping, debt, sale, expense, loan }
 
-/// Layar buat transaksi/order dengan 3 tab — padanan
-/// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan).
+extension on _OrderTab {
+  String get label => switch (this) {
+    _OrderTab.bookkeeping => 'Bookkeeping',
+    _OrderTab.debt => 'Debt',
+    _OrderTab.sale => 'Sale',
+    _OrderTab.expense => 'Expense',
+    _OrderTab.loan => 'Loan',
+  };
+
+  /// Ikon pembuka label tab.
+  IconData get icon => switch (this) {
+    _OrderTab.bookkeeping => Icons.menu_book_outlined,
+    _OrderTab.debt => Icons.receipt_long_outlined,
+    _OrderTab.sale => Icons.sell_outlined,
+    _OrderTab.expense => Icons.money_off_outlined,
+    _OrderTab.loan => Icons.request_quote_outlined,
+  };
+
+  /// Tab form membuat transaksi; tab lain hanya menampilkan laporan.
+  bool get isForm =>
+      this == _OrderTab.sale || this == _OrderTab.expense || this == _OrderTab.loan;
+}
+
+/// Layar buat transaksi/order — padanan
+/// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),
+/// ditambah tab laporan **Bookkeeping** (buku besar) dan **Debt** (utang).
 class OrderScreen extends ConsumerStatefulWidget {
-  const OrderScreen({super.key, this.product});
+  const OrderScreen({super.key, this.product, this.embedded = false});
 
   /// Produk yang dibeli dari tombol "Buy" di detail produk.
   final Product? product;
+
+  /// Saat `true`, layar ini dipasang sebagai tab di dalam `HomeShell` sehingga
+  /// latar, safe area, dan navigasi ditangani oleh shell (tanpa tombol back).
+  final bool embedded;
 
   @override
   ConsumerState<OrderScreen> createState() => _OrderScreenState();
 }
 
 class _OrderScreenState extends ConsumerState<OrderScreen> {
-  _OrderTab _tab = _OrderTab.sale;
+  _OrderTab _tab = _OrderTab.bookkeeping;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: DompetGradientBackground(
-        child: SafeArea(
-          child: Column(
+    final content = Column(
+      children: [
+        // header section
+        _buildHeader(context),
+        const SizedBox(height: 8),
+        // form section — IndexedStack menjaga state tiap tab tetap hidup
+        Expanded(
+          child: IndexedStack(
+            index: _tab.index,
             children: [
-              // header section
-              _buildHeader(context),
-              // tab selector section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _TabSelector(
-                  tab: _tab,
-                  onChanged: (t) => setState(() => _tab = t),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // form section — IndexedStack menjaga state tiap tab tetap hidup
-              Expanded(
-                child: IndexedStack(
-                  index: _tab.index,
-                  children: [
-                    _ScrollingForm(child: SaleForm(product: widget.product)),
-                    const _ScrollingForm(child: ExpenseForm()),
-                    const _ScrollingForm(child: LoanForm()),
-                  ],
-                ),
-              ),
+              // laporan: manages its own scroll + filter state
+              const _ReportBody(child: BookkeepingTab()),
+              const _ReportBody(child: DebtTab()),
+              _ScrollingForm(child: SaleForm(product: widget.product)),
+              const _ScrollingForm(child: ExpenseForm()),
+              const _ScrollingForm(child: LoanForm()),
             ],
           ),
+        ),
+        // tab selector section — sticky di bawah konten
+        TabBottomBar(child: _buildTabSelector()),
+      ],
+    );
+
+    // Sebagai tab di HomeShell, shell sudah menyediakan Scaffold, gradient, dan
+    // safe area — cukup kirim kontennya apa adanya.
+    if (widget.embedded) return content;
+
+    return Scaffold(
+      body: DompetGradientBackground(child: SafeArea(child: content)),
+    );
+  }
+
+  Widget _buildTabSelector() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (final entry in _OrderTab.values)
+              Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: GestureDetector(
+                  onTap: () => setState(() => _tab = entry),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: _tab == entry
+                          ? const LinearGradient(
+                              colors: [Color(0xFFF97316), Color(0xFFEC4899)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            )
+                          : null,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          entry.icon,
+                          size: 15,
+                          color: _tab == entry ? Colors.white : Colors.white38,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          entry.label,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: _tab == entry ? Colors.white : Colors.white38,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -63,24 +156,34 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
+      padding: EdgeInsets.fromLTRB(widget.embedded ? 20 : 8, 8, 16, 8),
       child: Row(
         children: [
           // back button section
-          IconButton(
-            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => context.pop(),
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.white.withValues(alpha: 0.06),
+          if (!widget.embedded) ...[
+            IconButton(
+              icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+              onPressed: () => context.pop(),
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white.withValues(alpha: 0.06),
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
+            const SizedBox(width: 8),
+          ],
           Expanded(
-            child: Text(
-              'Create Transaction',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            child: Row(
+              children: [
+                Icon(_tab.icon, size: 20, color: DompetBrand.gold),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    _tab.isForm ? 'Create Transaction' : _tab.label,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
             ),
           ),
           if (widget.product != null)
@@ -110,60 +213,19 @@ class _ScrollingForm extends StatelessWidget {
   }
 }
 
-/// Segmented tab Sale/Expense/Loan — padanan tab `create-transaction/+page.svelte`.
-class _TabSelector extends StatelessWidget {
-  const _TabSelector({required this.tab, required this.onChanged});
+/// Wrapper untuk tab laporan (Bookkeeping/Debt) — tanpa `SingleChildScrollView`
+/// karena tab itu sudah punya daftar/scroll sendiri.
+class _ReportBody extends StatelessWidget {
+  const _ReportBody({required this.child});
 
-  final _OrderTab tab;
-  final ValueChanged<_OrderTab> onChanged;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    const tabs = {
-      _OrderTab.sale: 'Sale',
-      _OrderTab.expense: 'Expense',
-      _OrderTab.loan: 'Loan',
-    };
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          for (final entry in tabs.entries)
-            Expanded(
-              child: GestureDetector(
-                onTap: () => onChanged(entry.key),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOut,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    gradient: tab == entry.key
-                        ? const LinearGradient(
-                            colors: [Color(0xFFF97316), Color(0xFFEC4899)],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          )
-                        : null,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    entry.value,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: tab == entry.key ? Colors.white : Colors.white38,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      child: child,
     );
   }
 }
+

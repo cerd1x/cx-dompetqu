@@ -30,6 +30,48 @@ class OrderRemoteSource {
     }
   ''';
 
+  static const _createTransactionMutation = r'''
+    mutation CreateTransaction($input: CreateTransactionInput!) {
+      createTransaction(input: $input) { id status }
+    }
+  ''';
+
+  /// Catat pembayaran utang sebagai transaksi income — dipakai tab Debt saat
+  /// pelunasan ditebus. Pembayaran dicatat penuh tanpa keuntungan (modal ikut
+  /// pulih), jadi `capital` disamakan dengan `amount`.
+  Future<bool> createDebtPayment({
+    required num totalAmount,
+    required String currency,
+    required String customerId,
+    required String description,
+    String paymentMethod = 'cash',
+  }) async {
+    final balance = '${currency.toUpperCase()} ${totalAmount.toDouble()}';
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(_createTransactionMutation),
+        variables: {
+          'input': {
+            'type': 'income',
+            'amount': balance,
+            'capital': balance,
+            'date': DateTime.now().toUtc().toIso8601String(),
+            'description': description,
+            'category': 'Debt Payment',
+            'paymentMethod': {'type': paymentMethod},
+            'customerId': customerId,
+            'status': 'success',
+          },
+        },
+      ),
+    );
+    return _ok(
+      result,
+      key: 'createTransaction',
+      fallback: 'Gagal mencatat pembayaran utang',
+    );
+  }
+
   Future<bool> createProductSale({
     required String productId,
     required int itemCount,

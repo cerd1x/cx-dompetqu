@@ -10,6 +10,7 @@ import 'application/bootstrap.dart';
 import 'contacts/contacts_screen.dart';
 import 'dashboard/dashboard_screen.dart';
 import 'inventory/inventory_screen.dart';
+import 'order/order_screen.dart';
 import 'portfolio/portfolio_screen.dart';
 import 'widgets/ai_bubble.dart';
 
@@ -39,6 +40,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     NavItem(icon: Icons.space_dashboard_outlined, name: 'Dashboard'),
     NavItem(icon: Icons.inventory_2_outlined, name: 'Inventory'),
     NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
+    NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
     NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
     NavItem(icon: Icons.account_balance_wallet_outlined, name: 'Assets'),
   ];
@@ -47,6 +49,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     const DashboardScreen(),
     const InventoryScreen(),
     const ContactsScreen(),
+    const OrderScreen(embedded: true),
     const PortfolioScreen(),
     const AssetsScreen(),
   ];

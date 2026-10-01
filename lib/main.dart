@@ -20,9 +20,9 @@ import 'features/beta_report/beta_report_screen.dart';
 import 'features/home/contacts/contact_detail_screen.dart';
 import 'features/home/contacts/contact_merge.dart';
 import 'features/home/home_shell.dart';
-import 'features/home/models/product.dart';
 import 'features/home/models/transaction.dart';
 import 'features/home/order/order_screen.dart';
+import 'features/home/order/order_tab.dart';
 import 'features/app_lock/application/app_lock_controller.dart';
 import 'features/app_lock/presentation/app_lock_screen.dart';
 import 'features/home/settings/application/settings_controller.dart';
@@ -133,7 +133,17 @@ GoRouter appRouter(Ref ref) {
       ),
       GoRoute(
         path: '/order',
-        builder: (_, state) => OrderScreen(product: state.extra as Product?),
+        builder: (_, state) {
+          // Argumen typed: tab tujuan + parameter spesifiknya (mis. produk
+          // untuk form Sale). Absen/tipe lain → default Bookkeeping.
+          final args = state.extra;
+          return OrderScreen(
+            initialTab: args is OrderRouteArgs
+                ? args.tab
+                : OrderTab.bookkeeping,
+            product: args is OrderRouteArgs ? args.product : null,
+          );
+        },
       ),
       GoRoute(
         path: '/asset-detail/:id',

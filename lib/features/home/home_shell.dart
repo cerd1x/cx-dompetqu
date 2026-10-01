@@ -5,10 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../auth/application/session_controller.dart';
 import '../../core/theme/dompet_brand.dart';
 import '../../core/theme/widgets/dompet_gradient_background.dart';
-import 'assets/assets_screen.dart';
 import 'application/bootstrap.dart';
-import 'contacts/contacts_screen.dart';
 import 'dashboard/dashboard_screen.dart';
+import 'contacts/contacts_screen.dart';
 import 'inventory/inventory_screen.dart';
 import 'order/order_screen.dart';
 import 'portfolio/portfolio_screen.dart';
@@ -42,7 +41,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
     NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
     NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
-    NavItem(icon: Icons.account_balance_wallet_outlined, name: 'Assets'),
   ];
 
   static final _pages = <Widget>[
@@ -51,7 +49,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     const ContactsScreen(),
     const OrderScreen(embedded: true),
     const PortfolioScreen(),
-    const AssetsScreen(),
   ];
 
   @override

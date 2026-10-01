@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/formatters.dart';
+import '../assets/assets_screen.dart';
 import '../widgets/search_field.dart';
 
 class _Holding {
@@ -173,8 +174,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         children: [
           // header section
           _PortfolioHeader(),
-          // content section
-          Expanded(child: _tab == 0 ? _buildInvestment() : _buildBusiness()),
+          // content section — IndexedStack menjaga state tiap tab tetap hidup
+          Expanded(
+            child: IndexedStack(
+              index: _tab,
+              children: [
+                const AssetsScreen(embedded: true),
+                _buildInvestment(),
+                _buildBusiness(),
+              ],
+            ),
+          ),
           // tab bar section
           _PortfolioTabBar(
             current: _tab,
@@ -418,6 +428,7 @@ class _PortfolioTabBar extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   static const _tabs = [
+    (label: 'Assets', icon: Icons.account_balance_wallet_outlined),
     (label: 'Investment', icon: Icons.show_chart),
     (label: 'Business', icon: Icons.business_center_outlined),
   ];

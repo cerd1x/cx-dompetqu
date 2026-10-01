@@ -18,7 +18,11 @@ import 'package:go_router/go_router.dart';
 
 /// Padanan `_assets/AssetsPage.svelte`.
 class AssetsScreen extends ConsumerStatefulWidget {
-  const AssetsScreen({super.key});
+  const AssetsScreen({super.key, this.embedded = false});
+
+  /// Saat `true`, layar ini dipasang sebagai tab di dalam `PortfolioScreen`
+  /// sehingga judul halaman ditangani header Portfolio (header Assets disembunyikan).
+  final bool embedded;
 
   @override
   ConsumerState<AssetsScreen> createState() => _AssetsScreenState();
@@ -72,22 +76,22 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
   }
 
   List<ItemMenuAction> _menuActions(Asset asset) => [
-        ItemMenuAction(
-          icon: Icons.edit_outlined,
-          label: 'Update',
-          onTap: () => _openForm(asset: asset),
-        ),
-        ItemMenuAction(
-          icon: Icons.add_chart,
-          label: 'Add Balance',
-          onTap: () => _openAddBalance(asset),
-        ),
-        ItemMenuAction(
-          icon: Icons.delete_outline,
-          label: 'Delete',
-          onTap: () => _confirmDelete(asset),
-        ),
-      ];
+    ItemMenuAction(
+      icon: Icons.edit_outlined,
+      label: 'Update',
+      onTap: () => _openForm(asset: asset),
+    ),
+    ItemMenuAction(
+      icon: Icons.add_chart,
+      label: 'Add Balance',
+      onTap: () => _openAddBalance(asset),
+    ),
+    ItemMenuAction(
+      icon: Icons.delete_outline,
+      label: 'Delete',
+      onTap: () => _confirmDelete(asset),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +101,8 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // header section
-        const AssetsHeader(),
+        // header section — disembunyikan saat jadi tab Portfolio
+        if (!widget.embedded) const AssetsHeader(),
         // body section
         Expanded(child: _buildBody(state)),
         // bottom bar section
@@ -152,10 +156,8 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
       itemBuilder: (_, i) => AssetItem(
         asset: assets[i],
         menuActions: _menuActions(assets[i]),
-        onTap: () => context.push(
-          '/asset-detail/${assets[i].id}',
-          extra: assets[i].id,
-        ),
+        onTap: () =>
+            context.push('/asset-detail/${assets[i].id}', extra: assets[i].id),
       ),
     );
   }

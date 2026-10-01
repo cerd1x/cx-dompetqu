@@ -8,6 +8,7 @@ import '../../../core/theme/widgets/dompet_avatar.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/utils/formatters.dart';
 import '../models/product.dart';
+import '../order/order_tab.dart';
 
 /// Dialog detail product — padanan popup detail di web.
 class ProductDetailView extends StatelessWidget {
@@ -82,7 +83,10 @@ class ProductDetailView extends StatelessWidget {
                   onPressed: () {
                     final router = GoRouter.of(context);
                     Navigator.of(context).pop();
-                    router.push('/order', extra: product);
+                    router.push(
+                      '/order',
+                      extra: OrderRouteArgs.sale(product: product),
+                    );
                   },
                 ),
               ),

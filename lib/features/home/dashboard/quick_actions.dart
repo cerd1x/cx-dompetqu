@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/widgets/round_action_button.dart';
+import '../order/order_tab.dart';
 
 /// Padanan tombol aksi cepat di dashboard (`_dashboard/DashboardPage.svelte`).
 class QuickActions extends StatelessWidget {
@@ -22,7 +23,8 @@ class QuickActions extends StatelessWidget {
             RoundActionButton(
               icon: Icons.add_rounded,
               label: 'Add Transaction',
-              onTap: () => context.push('/order'),
+              onTap: () =>
+                  context.push('/order', extra: const OrderRouteArgs.sale()),
             ),
             // receive section
             RoundActionButton(

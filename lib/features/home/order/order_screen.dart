@@ -10,41 +10,26 @@ import 'BookkeepingTab.dart';
 import 'DebtTab.dart';
 import 'ExpenseForm.dart';
 import 'LoanForm.dart';
+import 'order_tab.dart';
 import 'SaleForm.dart';
-
-/// Tab laporan (buku besar & utang) dibuka lebih dulu, disusul form transaksi.
-enum _OrderTab { bookkeeping, debt, sale, expense, loan }
-
-extension on _OrderTab {
-  String get label => switch (this) {
-    _OrderTab.bookkeeping => 'Bookkeeping',
-    _OrderTab.debt => 'Debt',
-    _OrderTab.sale => 'Sale',
-    _OrderTab.expense => 'Expense',
-    _OrderTab.loan => 'Loan',
-  };
-
-  /// Ikon pembuka label tab.
-  IconData get icon => switch (this) {
-    _OrderTab.bookkeeping => Icons.menu_book_outlined,
-    _OrderTab.debt => Icons.receipt_long_outlined,
-    _OrderTab.sale => Icons.sell_outlined,
-    _OrderTab.expense => Icons.money_off_outlined,
-    _OrderTab.loan => Icons.request_quote_outlined,
-  };
-
-  /// Tab form membuat transaksi; tab lain hanya menampilkan laporan.
-  bool get isForm =>
-      this == _OrderTab.sale || this == _OrderTab.expense || this == _OrderTab.loan;
-}
 
 /// Layar buat transaksi/order — padanan
 /// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),
 /// ditambah tab laporan **Bookkeeping** (buku besar) dan **Debt** (utang).
 class OrderScreen extends ConsumerStatefulWidget {
-  const OrderScreen({super.key, this.product, this.embedded = false});
+  const OrderScreen({
+    super.key,
+    this.initialTab = OrderTab.bookkeeping,
+    this.product,
+    this.embedded = false,
+  });
 
-  /// Produk yang dibeli dari tombol "Buy" di detail produk.
+  /// Tab yang aktif saat layar dibuka — dipilih lewat nama enum
+  /// (`OrderTab.sale`, `OrderTab.expense`, dst).
+  final OrderTab initialTab;
+
+  /// Produk yang dibeli dari tombol "Buy" di detail produk; dipakai form
+  /// [OrderTab.sale].
   final Product? product;
 
   /// Saat `true`, layar ini dipasang sebagai tab di dalam `HomeShell` sehingga
@@ -56,7 +41,13 @@ class OrderScreen extends ConsumerStatefulWidget {
 }
 
 class _OrderScreenState extends ConsumerState<OrderScreen> {
-  _OrderTab _tab = _OrderTab.bookkeeping;
+  late OrderTab _tab = widget.initialTab;
+
+  @override
+  void didUpdateWidget(covariant OrderScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialTab != widget.initialTab) _tab = widget.initialTab;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +95,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            for (final entry in _OrderTab.values)
+            for (final entry in OrderTab.values)
               Padding(
                 padding: const EdgeInsets.only(right: 4),
                 child: GestureDetector(

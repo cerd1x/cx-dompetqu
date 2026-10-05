@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql/client.dart';
 
 import '../../../core/graphql/graphql_providers.dart';
+import '../../../core/logger/app_logger.dart';
 import 'gql_result.dart';
 
 /// Remote source GraphQL untuk modul order — padanan `sources/order_source.ts`.
@@ -82,22 +83,38 @@ class OrderRemoteSource {
     String? description,
     String? payToAssetId,
   }) async {
+    final input = {
+      'productId': productId,
+      'itemCount': itemCount,
+      'totalAmount': totalAmount.toDouble(),
+      'currency': currency,
+      'paymentMethod': ?paymentMethod,
+      'customerId': ?customerId,
+      'description': ?description,
+      'payToAssetId': ?payToAssetId,
+    };
+    AppLogger.instance.info(
+      'createOrderProductSale request',
+      tag: 'OrderRemoteSource',
+      extras: {'query': _saleMutation, 'input': input},
+    );
     final result = await _client.mutate(
       MutationOptions(
         document: gql(_saleMutation),
-        variables: {
-          'input': {
-            'productId': productId,
-            'itemCount': itemCount,
-            'totalAmount': totalAmount.toDouble(),
-            'currency': currency,
-            'paymentMethod': ?paymentMethod,
-            'customerId': ?customerId,
-            'description': ?description,
-            'payToAssetId': ?payToAssetId,
-          },
-        },
+        variables: {'input': input},
       ),
+    );
+    AppLogger.instance.info(
+      'createOrderProductSale result',
+      tag: 'OrderRemoteSource',
+      extras: {
+        'data': result.data,
+        'hasException': result.hasException,
+        'graphqlErrors': result.exception?.graphqlErrors
+            .map((e) => e.message)
+            .toList(),
+        'linkException': result.exception?.linkException?.toString(),
+      },
     );
     return _ok(
       result,

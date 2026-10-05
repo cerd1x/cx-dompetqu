@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dompetqu/features/home/asset-detail/asset_detail_screen.dart';
 import 'package:dompetqu/features/home/analytics/analytics_screen.dart';
 import 'package:dompetqu/features/home/models/contact.dart';
@@ -41,7 +43,9 @@ Future<void> main() async {
     'App dimulai (${const String.fromEnvironment('API_BASE_URL')})',
     tag: 'App',
   );
-  await AppLogger.instance.enableFileLogging();
+  await AppLogger.instance.enableFileLogging(
+    directory: Directory("/home/cerd1x/Documents/cx-dompetqu"),
+  );
 
   final cookieClient = CookieAwareClient();
   await cookieClient.restore();

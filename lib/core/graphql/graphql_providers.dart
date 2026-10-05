@@ -7,6 +7,34 @@ import '../network/cookie_aware_client.dart';
 
 part 'graphql_providers.g.dart';
 
+/// Parser respons GraphQL yang toleran terhadap error tanpa field `message`.
+///
+/// `ResponseParser` bawaan `gql_link` melakukan `error["message"] as String`
+/// (lihat `gql_link/src/response_parser.dart`) sehingga respons error yang
+/// tidak menyertakan `message` melempar `ResponseFormatException` dan menutupi
+/// pesan asli dari server. Parser ini menggantinya dengan pesan fallback agar
+/// error tetap bisa dibaca dan dicatat.
+class _LenientResponseParser extends ResponseParser {
+  const _LenientResponseParser();
+
+  @override
+  GraphQLError parseError(Map<String, dynamic> error) => GraphQLError(
+    message: (error['message'] as String?) ?? 'GraphQL error tanpa pesan',
+    path: error['path'] as List?,
+    locations: (error['locations'] as List?)
+        ?.whereType<Map<String, dynamic>>()
+        .map(parseLocation)
+        .toList(),
+    extensions: error['extensions'] as Map<String, dynamic>?,
+  );
+
+  @override
+  ErrorLocation parseLocation(Map<String, dynamic> location) => ErrorLocation(
+    line: (location['line'] as int?) ?? 0,
+    column: (location['column'] as int?) ?? 0,
+  );
+}
+
 /// Link observability: catat setiap operasi GraphQL + error ke [AppLogger].
 ///
 /// Ini menjamin semua remote source (auth, transactions, assets, dsb.)
@@ -22,7 +50,13 @@ class _GraphQLLogLink extends Link {
     await for (final response in upstream) {
       final errors = response.errors;
       if (errors != null && errors.isNotEmpty) {
-        _log.error('$opName gagal: ${errors.first.message}', tag: 'GraphQL');
+        _log.error(
+          '$opName gagal: ${errors.first.message}',
+          tag: 'GraphQL',
+          extras: errors.first.extensions == null
+              ? null
+              : {'extensions': errors.first.extensions},
+        );
       }
       yield response;
     }
@@ -44,6 +78,7 @@ GraphQLClient graphQLClient(Ref ref) {
   final httpLink = HttpLink(
     ApiConfig.graphqlEndpoint,
     httpClient: cookieClient,
+    parser: const _LenientResponseParser(),
   );
   AppLogger.instance.info(
     'GraphQL endpoint: ${ApiConfig.graphqlEndpoint}',

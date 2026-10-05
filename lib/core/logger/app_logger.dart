@@ -369,7 +369,7 @@ class _FileSink {
         } else {
           while (_pending.isNotEmpty) {
             final batch = List.of(_pending);
-            if (await file.length() > maxBytes) {
+            if (await file.exists() && await file.length() > maxBytes) {
               await _rotate(file);
             }
             await file.writeAsString(

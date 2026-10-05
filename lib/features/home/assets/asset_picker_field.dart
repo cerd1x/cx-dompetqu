@@ -44,7 +44,6 @@ class AssetPickerField extends ConsumerWidget {
         final picked = await showCsModalTopBar<String>(
           context: context,
           builder: (sheetCtx) => _AssetPickerSheet(
-            assets: assets,
             selectedId: selectedId,
             title: title,
             minBalance: minBalance,
@@ -117,24 +116,22 @@ class FieldTile extends StatelessWidget {
   }
 }
 
-class _AssetPickerSheet extends StatefulWidget {
+class _AssetPickerSheet extends ConsumerStatefulWidget {
   const _AssetPickerSheet({
-    required this.assets,
     this.selectedId,
     this.title = 'Pilih Aset',
     this.minBalance,
   });
 
-  final List<Asset> assets;
   final String? selectedId;
   final String title;
   final num? minBalance;
 
   @override
-  State<_AssetPickerSheet> createState() => _AssetPickerSheetState();
+  ConsumerState<_AssetPickerSheet> createState() => _AssetPickerSheetState();
 }
 
-class _AssetPickerSheetState extends State<_AssetPickerSheet> {
+class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
   final _ctrl = TextEditingController();
   String _query = '';
 
@@ -142,6 +139,10 @@ class _AssetPickerSheetState extends State<_AssetPickerSheet> {
   void dispose() {
     _ctrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _refresh() async {
+    await ref.read(assetsControllerProvider.notifier).load();
   }
 
   String _formatBalance(String raw) {
@@ -170,9 +171,11 @@ class _AssetPickerSheetState extends State<_AssetPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = ref.watch(assetsControllerProvider);
+    final assets = controller.items;
     final filtered = _query.isEmpty
-        ? widget.assets
-        : widget.assets
+        ? assets
+        : assets
               .where((a) => a.name.toLowerCase().contains(_query.toLowerCase()))
               .toList();
 
@@ -293,30 +296,64 @@ class _AssetPickerSheetState extends State<_AssetPickerSheet> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: TextField(
-            controller: _ctrl,
-            onChanged: (v) => setState(() => _query = v),
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-            decoration: InputDecoration(
-              hintText: 'Cari aset...',
-              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
-              isDense: true,
-              filled: true,
-              fillColor: Colors.white.withValues(alpha: 0.06),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 12,
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _ctrl,
+                  onChanged: (v) => setState(() => _query = v),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  decoration: InputDecoration(
+                    hintText: 'Cari aset...',
+                    hintStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
+                    isDense: true,
+                    filled: true,
+                    fillColor: Colors.white.withValues(alpha: 0.06),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      size: 18,
+                      color: Colors.white38,
+                    ),
+                  ),
+                ),
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 46,
+                height: 46,
+                child: Material(
+                  color: Colors.white.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(14),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: controller.loading ? null : _refresh,
+                    child: controller.loading
+                        ? const Padding(
+                            padding: EdgeInsets.all(13),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white70,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.refresh_rounded,
+                            size: 20,
+                            color: Colors.white70,
+                          ),
+                  ),
+                ),
               ),
-              prefixIcon: const Icon(
-                Icons.search,
-                size: 18,
-                color: Colors.white38,
-              ),
-            ),
+            ],
           ),
         ),
       ],

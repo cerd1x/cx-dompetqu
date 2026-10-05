@@ -41,6 +41,7 @@ Future<void> main() async {
     'App dimulai (${const String.fromEnvironment('API_BASE_URL')})',
     tag: 'App',
   );
+  await AppLogger.instance.enableFileLogging();
 
   final cookieClient = CookieAwareClient();
   await cookieClient.restore();

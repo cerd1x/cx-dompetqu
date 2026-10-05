@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/logger/app_logger.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
@@ -82,7 +83,12 @@ class _SaleFormState extends ConsumerState<SaleForm> {
       } else {
         setState(() => _error = 'Gagal membuat transaksi');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.debug(
+        'Gagal submit product sale: $e',
+        tag: 'SaleForm',
+        extras: {'stackTrace': '$stackTrace'},
+      );
       if (mounted) setState(() => _error = e is Exception ? '$e' : '$e');
     } finally {
       if (mounted) setState(() => _busy = false);

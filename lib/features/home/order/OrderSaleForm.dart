@@ -52,6 +52,10 @@ class _SaleFormState extends ConsumerState<SaleForm> {
       setState(() => _error = 'Pilih customer terlebih dahulu');
       return;
     }
+    if (_payToAssetId == null) {
+      setState(() => _error = 'Pilih Pay From Aset terlebih dahulu');
+      return;
+    }
     setState(() {
       _busy = true;
       _error = null;

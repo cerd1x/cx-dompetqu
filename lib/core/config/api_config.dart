@@ -9,10 +9,10 @@
 class ApiConfig {
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://cxapp-n68.pages.dev',
-    // defaultValue: "http://localhost:8787"
+    // defaultValue: 'https://cxs.cerdix.workers.dev',
+    defaultValue: "http://localhost:8787"
   );
 
   /// Path `/api/graphql` pada web → diteruskan sebagai `/graphql` ke cx-services.
-  static String get graphqlEndpoint => '$baseUrl/api/graphql';
+  static String get graphqlEndpoint => '$baseUrl/graphql';
 }

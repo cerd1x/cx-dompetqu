@@ -92,7 +92,12 @@ class OrderRemoteSource {
       'customerId': ?customerId,
       'description': ?description,
       'payToAssetId': ?payToAssetId,
-    };
+    }..removeWhere(
+      (key, value) =>
+          value is String &&
+          (key == 'customerId' || key == 'payToAssetId') &&
+          value.trim().isEmpty,
+    );
     AppLogger.instance.info(
       'createOrderProductSale request',
       tag: 'OrderRemoteSource',

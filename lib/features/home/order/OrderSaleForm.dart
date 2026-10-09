@@ -49,11 +49,11 @@ class _SaleFormState extends ConsumerState<SaleForm> {
       setState(() => _error = 'Amount dan Capital harus lebih dari 0');
       return;
     }
-    if (_customerId == null) {
+    if (_customerId == null || _customerId!.trim().isEmpty) {
       setState(() => _error = 'Pilih customer terlebih dahulu');
       return;
     }
-    if (_payToAssetId == null) {
+    if (_payToAssetId == null || _payToAssetId!.trim().isEmpty) {
       setState(() => _error = 'Pilih Pay From Aset terlebih dahulu');
       return;
     }

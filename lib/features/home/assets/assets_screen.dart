@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
+import '../../../core/theme/widgets/scroll_refresh_wrapper.dart';
 import '../models/asset.dart';
 import '../application/assets_controller.dart';
 import '../widgets/bottom_bar.dart';
@@ -146,18 +147,33 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     final assets = state.filtered.reversed.toList();
     // empty section
     if (assets.isEmpty) {
-      return const EmptyState(label: 'Assets Is Empty');
+      return ScrollRefreshWrapper(
+        onRefresh: () => ref.read(assetsControllerProvider.notifier).load(),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: const [
+            SizedBox(height: 120),
+            EmptyState(label: 'Assets Is Empty'),
+          ],
+        ),
+      );
     }
     // asset list section
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      itemCount: assets.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
-      itemBuilder: (_, i) => AssetItem(
-        asset: assets[i],
-        menuActions: _menuActions(assets[i]),
-        onTap: () =>
-            context.push('/asset-detail/${assets[i].id}', extra: assets[i].id),
+    return ScrollRefreshWrapper(
+      onRefresh: () => ref.read(assetsControllerProvider.notifier).load(),
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        itemCount: assets.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
+        itemBuilder: (_, i) => AssetItem(
+          asset: assets[i],
+          menuActions: _menuActions(assets[i]),
+          onTap: () => context.push(
+            '/asset-detail/${assets[i].id}',
+            extra: assets[i].id,
+          ),
+        ),
       ),
     );
   }

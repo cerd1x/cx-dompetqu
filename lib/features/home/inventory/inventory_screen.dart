@@ -6,6 +6,7 @@ import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
+import '../../../core/theme/widgets/scroll_refresh_wrapper.dart';
 import '../../../core/utils/formatters.dart';
 import '../models/product.dart';
 import '../application/inventory_controller.dart';
@@ -131,18 +132,31 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     final products = state.filtered;
     // empty section
     if (products.isEmpty) {
-      return const EmptyState(label: 'Inventory Is Empty');
+      return ScrollRefreshWrapper(
+        onRefresh: () => ref.read(inventoryControllerProvider.notifier).load(),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: const [
+            SizedBox(height: 120),
+            EmptyState(label: 'Inventory Is Empty'),
+          ],
+        ),
+      );
     }
     // product list section
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      itemCount: products.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
-      itemBuilder: (_, i) => ProductItemView(
-        product: products[i],
-        onTap: () => _openDetail(products[i]),
-        onUpdate: () => _openForm(product: products[i]),
-        onDelete: () => _confirmDelete(products[i]),
+    return ScrollRefreshWrapper(
+      onRefresh: () => ref.read(inventoryControllerProvider.notifier).load(),
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        itemCount: products.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
+        itemBuilder: (_, i) => ProductItemView(
+          product: products[i],
+          onTap: () => _openDetail(products[i]),
+          onUpdate: () => _openForm(product: products[i]),
+          onDelete: () => _confirmDelete(products[i]),
+        ),
       ),
     );
   }

@@ -42,14 +42,14 @@ Drizzle pada Cloudflare D1). Verifikasi endpoint/tipe ke `cx-services/*.md`,
 
 ## Command yang Digunakan
 
-| Perintah | Kategori | Catatan |
-| --- | --- | --- |
-| `flutter analyze` | read-only | type check + lint; butuh konfirmasi |
-| `flutter test` | read-only | test; butuh konfirmasi |
-| `dart format .` | read-only | format; butuh konfirmasi |
-| `dart run build_runner build --delete-conflicting-outputs` | codegen | **HANYA USER** yang menjalankan |
-| `flutter build <target>` | build | konfirmasi + jelaskan output |
-| `flutter run -d linux` | dev server | **Jangan jalankan** — user yang menjalankan |
+| Perintah                                                   | Kategori   | Catatan                                     |
+| ---------------------------------------------------------- | ---------- | ------------------------------------------- |
+| `flutter analyze`                                          | read-only  | type check + lint; butuh konfirmasi         |
+| `flutter test`                                             | read-only  | test; butuh konfirmasi                      |
+| `dart format .`                                            | read-only  | format; butuh konfirmasi                    |
+| `dart run build_runner build --delete-conflicting-outputs` | codegen    | **HANYA USER** yang menjalankan             |
+| `flutter build <target>`                                   | build      | konfirmasi + jelaskan output                |
+| `flutter run -d linux`                                     | dev server | **Jangan jalankan** — user yang menjalankan |
 
 Tidak ada `bun run`, `rs:check`, atau `oxlint` di proyek ini.
 
@@ -103,7 +103,7 @@ lib/
 
 ## Konvensi Kode
 
-- **Komentar Bahasa Indonesia** untuk semua doc comment; jelaskan *mengapa*,
+- **Komentar Bahasa Indonesia** untuk semua doc comment; jelaskan _mengapa_,
   bukan apa. Bila meniru perilaku web/backend, **rujuk padanan SvelteKit/TS**-nya
   (contoh: "padanan `transactionStore` di web", "cerminan `DEFAULT_PAGE_SIZE` di
   `services/domain/transactions`").
@@ -125,6 +125,8 @@ lib/
 
 ## Design System
 
+- untuk design dari Container gantikan dengan Box milik package:mix
+  docs ref: https://concepta.dev/documentation/mix/widgets/box
 - `UiStyle` (`lib/core/theme/ui_style.dart`) = sumber kebenaran look & feel;
   dibaca via `ref.watch(uiStyleControllerProvider).value ?? const UiStyle()`.
   Palet: primary gold `#D4A574`, secondary purple `#8B5CF6`, tertiary pink

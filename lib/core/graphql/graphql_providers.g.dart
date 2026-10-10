@@ -116,4 +116,4 @@ final class GraphQLClientProvider
   }
 }
 
-String _$graphQLClientHash() => r'767dfc5205e039a79ba1f82f7786b9e82579a60e';
+String _$graphQLClientHash() => r'ff00e2c767b3ba5463d797bf90c5e58a3d95ffb2';

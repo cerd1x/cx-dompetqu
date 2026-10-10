@@ -502,6 +502,12 @@ class _MenuList extends StatelessWidget {
       route: '/beta-report',
     ),
     (
+      icon: Icons.power_settings_new_rounded,
+      title: 'Kill Switch',
+      subtitle: 'Matikan/hidupkan operation GraphQL',
+      route: '/admin/killswitch',
+    ),
+    (
       icon: Icons.settings_rounded,
       title: 'Pengaturan',
       subtitle: 'Konfigurasi aplikasi',

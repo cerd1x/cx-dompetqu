@@ -15,4 +15,15 @@ class ApiConfig {
 
   /// Path `/api/graphql` pada web → diteruskan sebagai `/graphql` ke cx-services.
   static String get graphqlEndpoint => '$baseUrl/graphql';
+
+  /// Token admin untuk endpoint kontrol kill switch (header `x-admin-token`).
+  ///
+  /// Set saat run/build:
+  ///   flutter run --dart-define=KILLSWITCH_ADMIN_TOKEN=secret
+  static const String killswitchAdminToken = String.fromEnvironment(
+    'KILLSWITCH_ADMIN_TOKEN',
+  );
+
+  /// Endpoint kontrol kill switch REST (di luar GraphQL).
+  static String get killswitchEndpoint => '$baseUrl/admin/killswitch';
 }

@@ -19,6 +19,7 @@ import 'package:dompetqu/core/theme/ui_style_controller.dart';
 import 'features/auth/application/session_controller.dart';
 import 'features/auth/presentation/auth_screen.dart';
 import 'features/admin_pannel/admin_pannel_screen.dart';
+import 'features/admin_pannel/killswitch_controll_screen.dart';
 import 'features/beta_report/beta_report_screen.dart';
 import 'features/home/contacts/contact_detail_screen.dart';
 import 'features/home/contacts/contact_merge.dart';
@@ -127,6 +128,10 @@ GoRouter appRouter(Ref ref) {
         builder: (_, _) => const BetaReportScreen(),
       ),
       GoRoute(path: '/admin', builder: (_, _) => const AdminPannelScreen()),
+      GoRoute(
+        path: '/admin/killswitch',
+        builder: (_, _) => const KillswitchControllScreen(),
+      ),
       GoRoute(path: '/app-lock', builder: (_, _) => const AppLockScreen()),
       GoRoute(path: '/', builder: (_, _) => const HomeShell()),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),

@@ -25,6 +25,14 @@ class DashboardScreen extends ConsumerWidget {
         title: 'DompetQu',
         actions: [
           IconButton(
+            tooltip: 'Admin Panel',
+            onPressed: () => context.push('/admin'),
+            icon: const Icon(
+              Icons.admin_panel_settings_outlined,
+              color: Colors.white54,
+            ),
+          ),
+          IconButton(
             tooltip: 'Laporan Beta',
             onPressed: () => context.push('/beta-report'),
             icon: const Icon(Icons.bug_report_outlined, color: Colors.white54),

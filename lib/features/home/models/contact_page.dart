@@ -14,7 +14,8 @@ class ContactPageInfo {
   final String? startCursor;
   final String? endCursor;
 
-  factory ContactPageInfo.fromJson(Map<String, dynamic> json) => ContactPageInfo(
+  factory ContactPageInfo.fromJson(Map<String, dynamic> json) =>
+      ContactPageInfo(
         hasNextPage: json['hasNextPage'] as bool? ?? false,
         hasPreviousPage: json['hasPreviousPage'] as bool? ?? false,
         startCursor: json['startCursor']?.toString(),
@@ -50,18 +51,17 @@ class ContactPage {
   const ContactPage({required this.edges, required this.pageInfo});
 
   const ContactPage.empty()
-      : edges = const [],
-        pageInfo = const ContactPageInfo(
-          hasNextPage: false,
-          hasPreviousPage: false,
-        );
+    : edges = const [],
+      pageInfo = const ContactPageInfo(
+        hasNextPage: false,
+        hasPreviousPage: false,
+      );
 
   final List<ContactEdge> edges;
   final ContactPageInfo pageInfo;
 
   /// Kontak pada halaman ini, urut `id DESC` (terbaru dulu).
-  List<Contact> get items =>
-      edges.map((e) => e.node).toList(growable: false);
+  List<Contact> get items => edges.map((e) => e.node).toList(growable: false);
 
   /// Cursor tiap edge, sejajar dengan [items].
   List<String> get cursors =>

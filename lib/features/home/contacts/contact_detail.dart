@@ -1,6 +1,7 @@
 import 'package:dompetqu/features/home/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/widgets/dompet_avatar.dart';
 import '../../../core/theme/widgets/dompet_badge.dart';
@@ -29,7 +30,9 @@ class ContactDetail extends StatelessWidget {
   }
 
   List<Widget> _phoneInfoRows() {
-    return [for (final p in _phones) InfoRow(icon: Icons.phone_outlined, text: p)];
+    return [
+      for (final p in _phones) InfoRow(icon: Icons.phone_outlined, text: p),
+    ];
   }
 
   @override
@@ -87,14 +90,30 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            ),
+          )
+          .margin(EdgeInsetsGeometryMix.value(const EdgeInsets.only(bottom: 8)))
+          .constraints(
+            BoxConstraintsMix.value(
+              (const BoxConstraints()).tighten(
+                width: double.infinity,
+                height: null,
+              ),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           Icon(icon, size: 16, color: Colors.white38),

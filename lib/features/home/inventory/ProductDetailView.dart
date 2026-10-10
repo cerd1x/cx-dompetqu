@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_avatar.dart';
@@ -108,13 +109,22 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      margin: const EdgeInsets.only(bottom: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+          )
+          .margin(EdgeInsetsGeometryMix.value(const EdgeInsets.only(bottom: 6)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           Text(

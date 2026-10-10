@@ -174,9 +174,7 @@ class AssetsRemoteSource {
     );
     final data = result.data?['swapBalance'];
     if (data == null) {
-      throw StateError(
-        gqlErrorMessage(result, fallback: 'Gagal swap saldo'),
-      );
+      throw StateError(gqlErrorMessage(result, fallback: 'Gagal swap saldo'));
     }
     final map = data as Map<String, dynamic>;
     return (

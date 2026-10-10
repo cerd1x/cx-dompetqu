@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mix/mix.dart';
 
 import '../../core/logger/app_logger.dart';
 import '../../core/logger/beta_report_remote.dart';
@@ -211,13 +212,29 @@ class _LogTile extends StatelessWidget {
     };
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: const Color(0x0FFFFFFF),
-          borderRadius: BorderRadius.circular(10),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: double.infinity,
+                  height: null,
+                ),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: const Color(0x0FFFFFFF),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
         child: Text(
           record.line,
           style: TextStyle(

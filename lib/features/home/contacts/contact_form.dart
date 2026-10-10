@@ -33,9 +33,9 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
     final c = widget.contact;
     _nameCtrl = TextEditingController(text: c?.name ?? '');
     _emailCtrl = TextEditingController(text: c?.email ?? '');
-    _phoneCtrls = _initialPhones(c)
-        .map((p) => TextEditingController(text: p))
-        .toList();
+    _phoneCtrls = _initialPhones(
+      c,
+    ).map((p) => TextEditingController(text: p)).toList();
     if (_phoneCtrls.isEmpty) _phoneCtrls.add(TextEditingController());
     _groupCtrl = TextEditingController(text: c?.group ?? '');
   }
@@ -127,10 +127,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
             DompetTextField(
               controller: _nameCtrl,
               label: 'Name',
-              leading: const Icon(
-                Icons.person_outline,
-                color: Colors.white54,
-              ),
+              leading: const Icon(Icons.person_outline, color: Colors.white54),
             ),
             const SizedBox(height: 12),
             // email field section
@@ -138,10 +135,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
               controller: _emailCtrl,
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
-              leading: const Icon(
-                Icons.email_outlined,
-                color: Colors.white54,
-              ),
+              leading: const Icon(Icons.email_outlined, color: Colors.white54),
             ),
             const SizedBox(height: 12),
             // phone fields section — mendukung multiple nomor
@@ -188,10 +182,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
             DompetTextField(
               controller: _groupCtrl,
               label: 'Group',
-              leading: const Icon(
-                Icons.group_outlined,
-                color: Colors.white54,
-              ),
+              leading: const Icon(Icons.group_outlined, color: Colors.white54),
             ),
           ],
         ),

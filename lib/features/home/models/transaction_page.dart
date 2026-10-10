@@ -51,11 +51,11 @@ class TransactionPage {
   const TransactionPage({required this.edges, required this.pageInfo});
 
   const TransactionPage.empty()
-      : edges = const [],
-        pageInfo = const TransactionPageInfo(
-          hasNextPage: false,
-          hasPreviousPage: false,
-        );
+    : edges = const [],
+      pageInfo = const TransactionPageInfo(
+        hasNextPage: false,
+        hasPreviousPage: false,
+      );
 
   final List<TransactionEdge> edges;
   final TransactionPageInfo pageInfo;

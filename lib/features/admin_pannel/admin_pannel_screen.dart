@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mix/mix.dart';
 
 import '../../core/theme/ui_style.dart';
 import '../../core/theme/ui_style_controller.dart';
@@ -22,8 +23,7 @@ class AdminPannelScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final style =
-        ref.watch(uiStyleControllerProvider).value ?? const UiStyle();
+    final style = ref.watch(uiStyleControllerProvider).value ?? const UiStyle();
 
     return Scaffold(
       body: SafeArea(
@@ -94,10 +94,7 @@ class _AdminHeader extends StatelessWidget {
           ),
         ),
         // notification section
-        _GlassIconButton(
-          icon: Icons.notifications_none_rounded,
-          onTap: () {},
-        ),
+        _GlassIconButton(icon: Icons.notifications_none_rounded, onTap: () {}),
         const SizedBox(width: 10),
         // avatar section
         const DompetAvatar(label: 'A', size: 42),
@@ -121,14 +118,24 @@ class _GlassIconButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.06),
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-          ),
+        child: Box(
+          style: BoxStyler()
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: 42, height: 42),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.06),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.12),
+                    ),
+                  ),
+                ),
+              ),
           child: Icon(icon, size: 20, color: Colors.white70),
         ),
       ),
@@ -146,13 +153,21 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 4,
-          height: 16,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        Box(
+          style: BoxStyler()
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: 4, height: 16),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
         ),
         const SizedBox(width: 8),
         Text(
@@ -182,20 +197,25 @@ class _OverviewCard extends StatelessWidget {
       end: style.gradientEnd,
     );
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
-        boxShadow: [
-          BoxShadow(
-            color: style.primary.withValues(alpha: 0.35),
-            blurRadius: 30,
-            offset: const Offset(0, 12),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(20)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                boxShadow: [
+                  BoxShadow(
+                    color: style.primary.withValues(alpha: 0.35),
+                    blurRadius: 30,
+                    offset: const Offset(0, 12),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -217,15 +237,21 @@ class _OverviewCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+              Box(
+                style: BoxStyler()
+                    .padding(
+                      EdgeInsetsGeometryMix.value(
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(
+                        BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
                 child: const Text(
                   'Bulan ini',
                   style: TextStyle(
@@ -346,18 +372,25 @@ class _StatRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // icon section
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: items[i].color.withValues(alpha: 0.16),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      items[i].icon,
-                      size: 18,
-                      color: items[i].color,
-                    ),
+                  Box(
+                    style: BoxStyler()
+                        .constraints(
+                          BoxConstraintsMix.value(
+                            (const BoxConstraints()).tighten(
+                              width: 36,
+                              height: 36,
+                            ),
+                          ),
+                        )
+                        .decoration(
+                          DecorationMix.value(
+                            BoxDecoration(
+                              color: items[i].color.withValues(alpha: 0.16),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                    child: Icon(items[i].icon, size: 18, color: items[i].color),
                   ),
                   const SizedBox(height: 10),
                   // value section
@@ -375,10 +408,7 @@ class _StatRow extends StatelessWidget {
                   // label section
                   Text(
                     items[i].label,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.white54,
-                    ),
+                    style: const TextStyle(fontSize: 11, color: Colors.white54),
                   ),
                 ],
               ),
@@ -425,16 +455,22 @@ class _ActivityChart extends StatelessWidget {
                               alignment: Alignment.bottomCenter,
                               child: FractionallySizedBox(
                                 heightFactor: _values[i],
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        style.primary,
-                                        style.secondary.withValues(alpha: 0.5),
-                                      ],
+                                child: Box(
+                                  style: BoxStyler().decoration(
+                                    DecorationMix.value(
+                                      BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            style.primary,
+                                            style.secondary.withValues(
+                                              alpha: 0.5,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -544,13 +580,21 @@ class _MenuItem extends StatelessWidget {
           child: Row(
             children: [
               // icon section
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.14),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              Box(
+                style: BoxStyler()
+                    .constraints(
+                      BoxConstraintsMix.value(
+                        (const BoxConstraints()).tighten(width: 34, height: 34),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(
+                        BoxDecoration(
+                          color: accent.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                 child: Icon(entry.icon, size: 18, color: accent),
               ),
               const SizedBox(width: 14),

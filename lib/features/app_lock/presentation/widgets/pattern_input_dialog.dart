@@ -14,8 +14,7 @@ class PatternInputDialog extends ConsumerStatefulWidget {
   const PatternInputDialog({super.key});
 
   @override
-  ConsumerState<PatternInputDialog> createState() =>
-      _PatternInputDialogState();
+  ConsumerState<PatternInputDialog> createState() => _PatternInputDialogState();
 }
 
 class _PatternInputDialogState extends ConsumerState<PatternInputDialog> {
@@ -69,10 +68,9 @@ class _PatternInputDialogState extends ConsumerState<PatternInputDialog> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              color:
-                  _errorText != null
-                      ? const Color(0xFFEF4444)
-                      : Colors.white.withValues(alpha: 0.5),
+              color: _errorText != null
+                  ? const Color(0xFFEF4444)
+                  : Colors.white.withValues(alpha: 0.5),
             ),
           ),
           const SizedBox(height: 20),

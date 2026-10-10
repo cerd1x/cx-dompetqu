@@ -48,7 +48,8 @@ class PasskeyService {
 
   /// Alur: minta challenge dari server → platform authenticator meminta
   /// biometrik → kirim assertion JSON ke `signInWithPassKey`.
-  Future<({User user, String session, String refreshToken})> signInWithPasskey() async {
+  Future<({User user, String session, String refreshToken})>
+  signInWithPasskey() async {
     _log.debug('Passkey sign-in dimulai', tag: 'Passkey');
     try {
       final options = await _source.passkeyAuthenticationOptions();

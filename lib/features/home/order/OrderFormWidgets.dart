@@ -3,6 +3,7 @@ import 'package:dompetqu/features/home/assets/asset_picker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/utils/formatters.dart';
@@ -21,12 +22,21 @@ class ProfitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = profit >= 0 ? const Color(0xFF34D399) : DompetBrand.pink;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -77,13 +87,20 @@ class Segmented extends StatelessWidget {
             style: const TextStyle(fontSize: 12, color: Colors.white70),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
-          ),
+        Box(
+          style: BoxStyler()
+              .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(3)))
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.10),
+                    ),
+                  ),
+                ),
+              ),
           child: Row(
             children: [
               for (var i = 0; i < options.length; i++)

@@ -106,32 +106,32 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   List<ItemMenuAction> _menuActions(Contact contact) => [
-        ItemMenuAction(
-          icon: Icons.edit_outlined,
-          label: 'Edit',
-          onTap: () {
-            showDialog<void>(
-              context: context,
-              builder: (_) => ContactFormDialog(contact: contact),
-            );
-          },
-        ),
-        ItemMenuAction(
-          icon: Icons.merge_type,
-          label: 'Merge',
-          onTap: () => context.push('/contact-merge/${contact.id}'),
-        ),
-        ItemMenuAction(
-          icon: Icons.delete_outline,
-          label: 'Delete',
-          onTap: () {
-            showDialog<void>(
-              context: context,
-              builder: (_) => _deleteConfirm(contact),
-            );
-          },
-        ),
-      ];
+    ItemMenuAction(
+      icon: Icons.edit_outlined,
+      label: 'Edit',
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (_) => ContactFormDialog(contact: contact),
+        );
+      },
+    ),
+    ItemMenuAction(
+      icon: Icons.merge_type,
+      label: 'Merge',
+      onTap: () => context.push('/contact-merge/${contact.id}'),
+    ),
+    ItemMenuAction(
+      icon: Icons.delete_outline,
+      label: 'Delete',
+      onTap: () {
+        showDialog<void>(
+          context: context,
+          builder: (_) => _deleteConfirm(contact),
+        );
+      },
+    ),
+  ];
 
   Widget _deleteConfirm(Contact contact) {
     return CsDialog(

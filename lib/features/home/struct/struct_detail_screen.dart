@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../core/theme/widgets/dompet_card.dart';
@@ -49,8 +50,9 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
 
   /// Capture struktur card -> PNG -> simpan ke dokumen aplikasi.
   Future<void> _saveAsPng() async {
-    final boundary = _boundaryKey.currentContext?.findRenderObject()
-        as RenderRepaintBoundary?;
+    final boundary =
+        _boundaryKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
     if (boundary == null) {
       _showError('Tidak dapat menangkap gambar.');
       return;
@@ -64,9 +66,7 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
 
       final baseDir = await getApplicationDocumentsDirectory();
       final stamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-      final file = File(
-        '${baseDir.path}/struct_${stamp}_${tx.id}.png',
-      );
+      final file = File('${baseDir.path}/struct_${stamp}_${tx.id}.png');
       await file.writeAsBytes(byteData.buffer.asUint8List());
 
       if (!mounted) return;
@@ -100,9 +100,9 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -135,11 +135,7 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
           children: [
             RepaintBoundary(
               key: _boundaryKey,
-              child: _StructCard(
-                tx: tx,
-                tone: tone,
-                amountText: amountText,
-              ),
+              child: _StructCard(tx: tx, tone: tone, amountText: amountText),
             ),
             const SizedBox(height: 20),
             FilledButton.icon(
@@ -204,17 +200,25 @@ class _StructCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 28),
           child: Column(
             children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: tone.color.withValues(alpha: 0.12),
-                  border: Border.all(
-                    color: tone.color.withValues(alpha: 0.5),
-                    width: 1.5,
-                  ),
-                ),
+              Box(
+                style: BoxStyler()
+                    .constraints(
+                      BoxConstraintsMix.value(
+                        (const BoxConstraints()).tighten(width: 56, height: 56),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(
+                        BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: tone.color.withValues(alpha: 0.12),
+                          border: Border.all(
+                            color: tone.color.withValues(alpha: 0.5),
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                    ),
                 child: Icon(tone.icon, size: 28, color: tone.color),
               ),
               const SizedBox(height: 14),
@@ -255,10 +259,7 @@ class _StructCard extends StatelessWidget {
                 label: 'Tanggal',
                 value: DateFormat('d MMM yyyy, HH:mm').format(tx.createdAt),
               ),
-              _StructRow(
-                label: 'Tipe',
-                value: tx.type.toUpperCase(),
-              ),
+              _StructRow(label: 'Tipe', value: tx.type.toUpperCase()),
               if (tx.category != null)
                 _StructRow(label: 'Kategori', value: tx.category!),
               if (tx.description != null)
@@ -289,13 +290,25 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final ok = status.toLowerCase() == 'success';
     final color = ok ? const Color(0xFF34D399) : const Color(0xFFFBBF24);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: color.withValues(alpha: 0.5),
+                  width: 1,
+                ),
+              ),
+            ),
+          ),
       child: Text(
         status.toUpperCase(),
         style: TextStyle(
@@ -324,18 +337,27 @@ class _StructRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : Border(
-                bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.06),
-                  width: 1,
-                ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(vertical: 12),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                border: isLast
+                    ? null
+                    : Border(
+                        bottom: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.06),
+                          width: 1,
+                        ),
+                      ),
               ),
-      ),
+            ),
+          ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

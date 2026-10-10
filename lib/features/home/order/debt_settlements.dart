@@ -31,8 +31,9 @@ class DebtSettlements extends Notifier<Set<String>> {
   }
 
   /// Status [transactionId]: lunas bila id-nya ada di [state].
-  DebtStatus statusOf(String transactionId) =>
-      state.contains(transactionId) ? DebtStatus.settled : DebtStatus.outstanding;
+  DebtStatus statusOf(String transactionId) => state.contains(transactionId)
+      ? DebtStatus.settled
+      : DebtStatus.outstanding;
 
   bool isSettled(String transactionId) => state.contains(transactionId);
 
@@ -61,5 +62,6 @@ class DebtSettlements extends Notifier<Set<String>> {
 }
 
 /// Penyimpanan lokal status pelunasan utang — dipakai tab Debt.
-final debtSettlementsProvider =
-    NotifierProvider<DebtSettlements, Set<String>>(DebtSettlements.new);
+final debtSettlementsProvider = NotifierProvider<DebtSettlements, Set<String>>(
+  DebtSettlements.new,
+);

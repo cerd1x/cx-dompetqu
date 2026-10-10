@@ -138,15 +138,11 @@ class DompetButton extends StatelessWidget {
                   ),
       DompetButtonVariant.text =>
         _dimmed
-            ? base
-                  .color(Colors.transparent)
-                  .labelColor(Colors.white38)
+            ? base.color(Colors.transparent).labelColor(Colors.white38)
             : base
                   .color(Colors.transparent)
                   .labelColor(DompetBrand.purple)
-                  .onHovered(
-                    ButtonStyler().labelColor(const Color(0xFFA78BFA)),
-                  )
+                  .onHovered(ButtonStyler().labelColor(const Color(0xFFA78BFA)))
                   .onPressed(
                     ButtonStyler().labelColor(const Color(0xFF7C3AED)),
                   ),

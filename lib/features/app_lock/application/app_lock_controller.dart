@@ -196,10 +196,7 @@ class AppLockController extends _$AppLockController {
     if (attempts >= _kMaxFailedAttempts) {
       final lockoutUntil = DateTime.now().add(_kLockoutDuration);
       state = AsyncValue.data(
-        current.copyWith(
-          failedAttempts: attempts,
-          lockoutUntil: lockoutUntil,
-        ),
+        current.copyWith(failedAttempts: attempts, lockoutUntil: lockoutUntil),
       );
       _startLockoutTimer(_kLockoutDuration);
     } else {

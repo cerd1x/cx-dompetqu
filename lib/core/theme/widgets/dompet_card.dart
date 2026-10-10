@@ -23,6 +23,7 @@ class DompetCard extends StatelessWidget {
   final double radius;
   final DompetCardVariant variant;
   final VoidCallback? onTap;
+
   /// When true, uses a tighter internal padding to render a compact card.
   final bool compact;
 

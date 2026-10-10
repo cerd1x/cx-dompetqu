@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 /// Lembar notifikasi — padanan popover `PopupNotification.svelte`.
 class NotificationsSheet extends StatelessWidget {
@@ -39,15 +40,22 @@ class NotificationsSheet extends StatelessWidget {
             for (final (icon, color, message, desc) in _items)
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
-                    ),
-                  ),
+                child: Box(
+                  style: BoxStyler()
+                      .padding(
+                        EdgeInsetsGeometryMix.value(const EdgeInsets.all(12)),
+                      )
+                      .decoration(
+                        DecorationMix.value(
+                          BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.1),
+                            ),
+                          ),
+                        ),
+                      ),
                   child: Row(
                     children: [
                       Icon(icon, size: 22, color: color),

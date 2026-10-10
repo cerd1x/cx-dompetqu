@@ -8,7 +8,12 @@ import '../../../core/theme/widgets/item_menu.dart';
 
 /// Single asset row used in assets list.
 class AssetItem extends StatelessWidget {
-  const AssetItem({super.key, required this.asset, required this.menuActions, this.onTap});
+  const AssetItem({
+    super.key,
+    required this.asset,
+    required this.menuActions,
+    this.onTap,
+  });
 
   final Asset asset;
   final List<ItemMenuAction> menuActions;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mix/mix.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 import '../../../../core/theme/widgets/dompet_card.dart';
@@ -15,16 +16,20 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(sessionControllerProvider).user;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF111827), // from-gray-900
-              Color(0x4D581C87), // via-purple-900/30
-              Color(0x4D7C2D12), // to-orange-900/30
-            ],
+      body: Box(
+        style: BoxStyler().decoration(
+          DecorationMix.value(
+            const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF111827), // from-gray-900
+                  Color(0x4D581C87), // via-purple-900/30
+                  Color(0x4D7C2D12), // to-orange-900/30
+                ],
+              ),
+            ),
           ),
         ),
         child: SafeArea(
@@ -62,13 +67,18 @@ class ProfileScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                       // avatar section
                       Center(
-                        child: Container(
-                          width: 96,
-                          height: 96,
-                          decoration: const BoxDecoration(
-                            color: Color(0x338B5CF6),
-                            shape: BoxShape.circle,
-                          ),
+                        child: Box(
+                          style: BoxStyler()
+                              .width(96)
+                              .height(96)
+                              .decoration(
+                                DecorationMix.value(
+                                  const BoxDecoration(
+                                    color: Color(0x338B5CF6),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
                           child: const Icon(
                             Icons.account_circle_outlined,
                             size: 48,

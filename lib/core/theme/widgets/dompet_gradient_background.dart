@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../dompet_brand.dart';
 
@@ -17,23 +18,27 @@ class DompetGradientBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const kRoundedBottom = BorderRadius.vertical(bottom: Radius.circular(20));
-    return Container(
-      decoration: BoxDecoration(
-        color: DompetBrand.background,
-        borderRadius: kRoundedBottom,
-        border: const Border(
-          bottom: BorderSide(color: DompetBrand.csBorder, width: 1),
-        ),
-        gradient: RadialGradient(
-          center: Alignment.topRight,
-          radius: radial ? 1.1 : 0.9,
-          colors: [
-            DompetBrand.pink.withValues(alpha: .4),
-            DompetBrand.goldDark.withValues(alpha: 0.4),
-            DompetBrand.purple.withAlpha(10),
-            Colors.black,
-          ],
-          stops: const [0.0, 0.1, 0.29, .3],
+    return Box(
+      style: BoxStyler().decoration(
+        DecorationMix.value(
+          BoxDecoration(
+            color: DompetBrand.background,
+            borderRadius: kRoundedBottom,
+            border: const Border(
+              bottom: BorderSide(color: DompetBrand.csBorder, width: 1),
+            ),
+            gradient: RadialGradient(
+              center: Alignment.topRight,
+              radius: radial ? 1.1 : 0.9,
+              colors: [
+                DompetBrand.pink.withValues(alpha: .4),
+                DompetBrand.goldDark.withValues(alpha: 0.4),
+                DompetBrand.purple.withAlpha(10),
+                Colors.black,
+              ],
+              stops: const [0.0, 0.1, 0.29, .3],
+            ),
+          ),
         ),
       ),
       child: child,

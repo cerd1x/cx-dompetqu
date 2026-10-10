@@ -19,9 +19,9 @@ part 'cookie_aware_client.g.dart';
 ///   meminta backend mengeluarkan `__sst__` baru via Set-Cookie.
 class CookieAwareClient extends http.BaseClient {
   CookieAwareClient({http.Client? inner, Uri? graphqlEndpoint})
-      : _inner = inner ?? http.Client(),
-        _graphqlEndpoint =
-            graphqlEndpoint ?? Uri.parse(ApiConfig.graphqlEndpoint);
+    : _inner = inner ?? http.Client(),
+      _graphqlEndpoint =
+          graphqlEndpoint ?? Uri.parse(ApiConfig.graphqlEndpoint);
 
   static const String prefsKey = 'session_cookies';
 
@@ -131,7 +131,10 @@ class CookieAwareClient extends http.BaseClient {
       _captureSetCookie(response.headers);
       await _persist();
       final ok = isSessionValid;
-      _log.debug('Refresh session: ${ok ? 'OK' : 'gagal'}', tag: 'CookieClient');
+      _log.debug(
+        'Refresh session: ${ok ? 'OK' : 'gagal'}',
+        tag: 'CookieClient',
+      );
       return ok;
     } catch (e) {
       _log.warn('Refresh session gagal: $e', tag: 'CookieClient');
@@ -190,8 +193,9 @@ class CookieAwareClient extends http.BaseClient {
     try {
       final parts = token.split('.');
       if (parts.length < 2) return null;
-      final payload =
-          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final payload = utf8.decode(
+        base64Url.decode(base64Url.normalize(parts[1])),
+      );
       final json = jsonDecode(payload) as Map<String, dynamic>;
       final raw = json['expiresAt'];
       if (raw is String) return DateTime.tryParse(raw);

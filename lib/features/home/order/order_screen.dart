@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
@@ -85,12 +86,17 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
   }
 
   Widget _buildTabSelector() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(14),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(4)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -131,7 +137,9 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: _tab == entry ? Colors.white : Colors.white38,
+                            color: _tab == entry
+                                ? Colors.white
+                                : Colors.white38,
                           ),
                         ),
                       ],
@@ -169,9 +177,9 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
                 Expanded(
                   child: Text(
                     _tab.isForm ? 'Create Transaction' : _tab.label,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -219,4 +227,3 @@ class _ReportBody extends StatelessWidget {
     );
   }
 }
-

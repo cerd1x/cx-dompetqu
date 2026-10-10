@@ -110,9 +110,7 @@ class DompetCombobox<T> extends StatelessWidget {
         enabledBorder: border,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
         ),
       ),
       menuStyle: MenuStyle(

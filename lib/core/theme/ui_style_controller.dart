@@ -60,9 +60,7 @@ class UiStyleController extends _$UiStyleController {
   }
 
   Future<void> _update(UiStyle Function(UiStyle) mutate) {
-    state = AsyncData(
-      mutate(state.value ?? const UiStyle()),
-    );
+    state = AsyncData(mutate(state.value ?? const UiStyle()));
     return _schedulePersist();
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
@@ -17,8 +18,7 @@ class AppLockSetupScreen extends ConsumerStatefulWidget {
   const AppLockSetupScreen({super.key});
 
   @override
-  ConsumerState<AppLockSetupScreen> createState() =>
-      _AppLockSetupScreenState();
+  ConsumerState<AppLockSetupScreen> createState() => _AppLockSetupScreenState();
 }
 
 class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
@@ -66,16 +66,20 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
     final editing = _selectedCredential != null;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF111827),
-              Color(0x4D581C87),
-              Color(0x4D7C2D12),
-            ],
+      body: Box(
+        style: BoxStyler().decoration(
+          DecorationMix.value(
+            const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF111827),
+                  Color(0x4D581C87),
+                  Color(0x4D7C2D12),
+                ],
+              ),
+            ),
           ),
         ),
         child: SafeArea(
@@ -120,10 +124,9 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                           const SizedBox(height: 8),
                           _buildBiometricToggle(
                             editing: editing,
-                            biometricOn:
-                                editing
-                                    ? _biometricOption
-                                    : (lockState?.biometricEnabled ?? false),
+                            biometricOn: editing
+                                ? _biometricOption
+                                : (lockState?.biometricEnabled ?? false),
                           ),
                         ],
                         const SizedBox(height: 16),
@@ -203,10 +206,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                 ),
                 Text(
                   'Kredensial: ${state.credential.label}$biometricText',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white54,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.white54),
                 ),
               ],
             ),
@@ -262,21 +262,32 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                     }),
               child: Row(
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isSelected
-                          ? DompetBrand.purple.withValues(alpha: 0.2)
-                          : DompetBrand.csFill,
-                      border: Border.all(
-                        color: isSelected
-                            ? DompetBrand.purple
-                            : DompetBrand.csBorder,
-                        width: 1,
-                      ),
-                    ),
+                  Box(
+                    style: BoxStyler()
+                        .constraints(
+                          BoxConstraintsMix.value(
+                            (const BoxConstraints()).tighten(
+                              width: 40,
+                              height: 40,
+                            ),
+                          ),
+                        )
+                        .decoration(
+                          DecorationMix.value(
+                            BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isSelected
+                                  ? DompetBrand.purple.withValues(alpha: 0.2)
+                                  : DompetBrand.csFill,
+                              border: Border.all(
+                                color: isSelected
+                                    ? DompetBrand.purple
+                                    : DompetBrand.csBorder,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                        ),
                     child: Icon(
                       m.$2,
                       size: 20,
@@ -339,10 +350,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        PinInput(
-          key: _pinKey,
-          onCompleted: (pin) => _handlePinCompleted(pin),
-        ),
+        PinInput(key: _pinKey, onCompleted: (pin) => _handlePinCompleted(pin)),
       ],
     );
   }
@@ -432,10 +440,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
   /// biometrik yang sedang aktif.
   bool _effectiveBiometricOption() {
     if (_selectedCredential == null) {
-      return ref
-              .read(appLockControllerProvider)
-              .value
-              ?.biometricEnabled ??
+      return ref.read(appLockControllerProvider).value?.biometricEnabled ??
           false;
     }
     return _biometricOption;
@@ -520,9 +525,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
             child: const Text('NONAKTIFKAN'),
           ),
         ],
-        child: const Text(
-          'Aplikasi tidak akan terkunci lagi. Lanjutkan?',
-        ),
+        child: const Text('Aplikasi tidak akan terkunci lagi. Lanjutkan?'),
       ),
     );
     if (confirmed != true || !mounted) return;
@@ -531,9 +534,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(content: Text('App Lock dinonaktifkan')),
-      );
+      ..showSnackBar(const SnackBar(content: Text('App Lock dinonaktifkan')));
   }
 }
 
@@ -562,10 +563,7 @@ class _Header extends StatelessWidget {
           ),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
           ),
           const Spacer(),
           ...actions,

@@ -3,6 +3,7 @@ import 'package:dompetqu/features/home/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_avatar.dart';
@@ -239,13 +240,20 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
           // inline error section
           if (_error != null) ...[
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: DompetBrand.pink.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: DompetBrand.pink, width: 1),
-              ),
+            Box(
+              style: BoxStyler()
+                  .padding(
+                    EdgeInsetsGeometryMix.value(const EdgeInsets.all(10)),
+                  )
+                  .decoration(
+                    DecorationMix.value(
+                      BoxDecoration(
+                        color: DompetBrand.pink.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: DompetBrand.pink, width: 1),
+                      ),
+                    ),
+                  ),
               child: Row(
                 children: [
                   const Icon(
@@ -309,12 +317,17 @@ class _MergePairHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(14)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           _MiniContact(contact: primary, tag: 'Utama'),
@@ -430,12 +443,17 @@ class MergeFieldChoice<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(10)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

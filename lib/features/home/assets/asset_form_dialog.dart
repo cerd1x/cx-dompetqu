@@ -58,11 +58,7 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
     final ok = _isEdit
         ? await ref
               .read(assetsControllerProvider.notifier)
-              .update(
-                widget.asset!.id,
-                name: name,
-                type: _type,
-              )
+              .update(widget.asset!.id, name: name, type: _type)
         : await ref
               .read(assetsControllerProvider.notifier)
               .create(

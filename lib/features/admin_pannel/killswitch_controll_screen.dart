@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../core/theme/widgets/dompet_button.dart';
 import '../../core/theme/widgets/dompet_card.dart';
@@ -73,17 +74,16 @@ class _KillswitchControllScreenState
       );
       return;
     }
-    final ok = await _controller.disable(
-      operation,
-      reason: _reasonCtrl.text,
-    );
+    final ok = await _controller.disable(operation, reason: _reasonCtrl.text);
     if (!mounted) return;
     if (ok) {
       _operationCtrl.clear();
       _reasonCtrl.clear();
     }
     _snack(
-      ok ? 'Operation "$operation" dimatikan.' : 'Gagal mematikan "$operation".',
+      ok
+          ? 'Operation "$operation" dimatikan.'
+          : 'Gagal mematikan "$operation".',
       ok,
     );
   }
@@ -239,9 +239,7 @@ class _TokenFieldState extends State<_TokenField> {
             Row(
               children: [
                 Icon(
-                  widget.hasToken
-                      ? Icons.key_rounded
-                      : Icons.key_off_rounded,
+                  widget.hasToken ? Icons.key_rounded : Icons.key_off_rounded,
                   size: 20,
                   color: widget.hasToken
                       ? const Color(0xFF34D399)
@@ -415,18 +413,22 @@ class _EntryCard extends StatelessWidget {
           // header section
           Row(
             children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.16),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  Icons.block_rounded,
-                  size: 18,
-                  color: accent,
-                ),
+              Box(
+                style: BoxStyler()
+                    .constraints(
+                      BoxConstraintsMix.value(
+                        (const BoxConstraints()).tighten(width: 34, height: 34),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(
+                        BoxDecoration(
+                          color: accent.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                child: Icon(Icons.block_rounded, size: 18, color: accent),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -454,7 +456,11 @@ class _EntryCard extends StatelessWidget {
           // meta section
           Row(
             children: [
-              const Icon(Icons.schedule_rounded, size: 13, color: Colors.white38),
+              const Icon(
+                Icons.schedule_rounded,
+                size: 13,
+                color: Colors.white38,
+              ),
               const SizedBox(width: 4),
               Text(
                 _formatDate(entry.disabledAt),
@@ -518,16 +524,29 @@ class _ErrorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF7F1D1D).withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0x66F87171)),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: const Color(0xFF7F1D1D).withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0x66F87171)),
+              ),
+            ),
+          ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded, color: Color(0xFFF87171), size: 18),
+          const Icon(
+            Icons.error_outline_rounded,
+            color: Color(0xFFF87171),
+            size: 18,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -551,13 +570,21 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 4,
-          height: 16,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        Box(
+          style: BoxStyler()
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: 4, height: 16),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
         ),
         const SizedBox(width: 8),
         Text(

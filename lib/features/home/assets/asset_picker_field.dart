@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/cs_modal_top_sheet.dart';
@@ -57,7 +58,8 @@ class AssetPickerField extends ConsumerWidget {
 
 /// Tile input bergaya `csinput` yang bisa ditap.
 class FieldTile extends StatelessWidget {
-  const FieldTile({super.key, 
+  const FieldTile({
+    super.key,
     required this.label,
     required this.value,
     required this.onTap,
@@ -83,13 +85,22 @@ class FieldTile extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              color: DompetBrand.csFill,
-              borderRadius: BorderRadius.circular(DompetBrand.radius),
-              border: Border.all(color: DompetBrand.csBorder, width: 1),
-            ),
+          child: Box(
+            style: BoxStyler()
+                .padding(
+                  EdgeInsetsGeometryMix.value(
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      color: DompetBrand.csFill,
+                      borderRadius: BorderRadius.circular(DompetBrand.radius),
+                      border: Border.all(color: DompetBrand.csBorder, width: 1),
+                    ),
+                  ),
+                ),
             child: Row(
               children: [
                 Icon(leading, size: 18, color: Colors.white54),
@@ -224,72 +235,74 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                       ),
                     ),
                     for (final asset in filtered)
-                      Builder(builder: (_) {
-                        final insufficient = _insufficient(asset);
-                        final selected = asset.id == widget.selectedId;
-                        final accent = insufficient
-                            ? DompetBrand.pink.withValues(alpha: 0.9)
-                            : selected
-                                ? const Color(0xFF34D399)
-                                : Colors.white70;
-                        return ListTile(
-                          leading: Icon(
-                            insufficient
-                                ? Icons.error_outline
-                                : Icons.account_balance_wallet_outlined,
-                            color: insufficient
-                                ? DompetBrand.pink.withValues(alpha: 0.9)
-                                : Colors.white70,
-                          ),
-                          title: Text(
-                            asset.name,
-                            style: TextStyle(color: accent),
-                          ),
-                          subtitle: Text(
-                            insufficient
-                                ? 'Saldo tidak cukup · ${_formatBalance(asset.balance)}'
-                                : '${asset.type.toUpperCase()} · ${_formatBalance(asset.balance)}',
-                            style: TextStyle(
-                              fontSize: 11,
+                      Builder(
+                        builder: (_) {
+                          final insufficient = _insufficient(asset);
+                          final selected = asset.id == widget.selectedId;
+                          final accent = insufficient
+                              ? DompetBrand.pink.withValues(alpha: 0.9)
+                              : selected
+                              ? const Color(0xFF34D399)
+                              : Colors.white70;
+                          return ListTile(
+                            leading: Icon(
+                              insufficient
+                                  ? Icons.error_outline
+                                  : Icons.account_balance_wallet_outlined,
                               color: insufficient
-                                  ? DompetBrand.pink.withValues(alpha: 0.7)
-                                  : Colors.white38,
+                                  ? DompetBrand.pink.withValues(alpha: 0.9)
+                                  : Colors.white70,
                             ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                _formatBalance(asset.balance),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: accent,
-                                ),
+                            title: Text(
+                              asset.name,
+                              style: TextStyle(color: accent),
+                            ),
+                            subtitle: Text(
+                              insufficient
+                                  ? 'Saldo tidak cukup · ${_formatBalance(asset.balance)}'
+                                  : '${asset.type.toUpperCase()} · ${_formatBalance(asset.balance)}',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: insufficient
+                                    ? DompetBrand.pink.withValues(alpha: 0.7)
+                                    : Colors.white38,
                               ),
-                              if (insufficient) ...[
-                                const SizedBox(width: 8),
-                                Icon(
-                                  Icons.error_outline,
-                                  size: 18,
-                                  color: DompetBrand.pink.withValues(
-                                    alpha: 0.9,
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  _formatBalance(asset.balance),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: accent,
                                   ),
                                 ),
-                              ] else if (selected) ...[
-                                const SizedBox(width: 8),
-                                const Icon(
-                                  Icons.check,
-                                  color: Color(0xFF34D399),
-                                ),
+                                if (insufficient) ...[
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    Icons.error_outline,
+                                    size: 18,
+                                    color: DompetBrand.pink.withValues(
+                                      alpha: 0.9,
+                                    ),
+                                  ),
+                                ] else if (selected) ...[
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.check,
+                                    color: Color(0xFF34D399),
+                                  ),
+                                ],
                               ],
-                            ],
-                          ),
-                          onTap: insufficient
-                              ? null
-                              : () => Navigator.of(context).pop(asset.id),
-                        );
-                      }),
+                            ),
+                            onTap: insufficient
+                                ? null
+                                : () => Navigator.of(context).pop(asset.id),
+                          );
+                        },
+                      ),
                     const SizedBox(height: 8),
                   ],
                 ),

@@ -1,5 +1,6 @@
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
 import '../../../core/theme/cs_mix.dart';
@@ -42,7 +43,20 @@ class TabBottomBar extends StatelessWidget {
               top: 0,
               left: 0,
               right: 0,
-              child: Container(height: 1, color: Colors.white10),
+              child: Box(
+                style: BoxStyler()
+                    .constraints(
+                      BoxConstraintsMix.value(
+                        (const BoxConstraints()).tighten(
+                          width: null,
+                          height: 1,
+                        ),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(BoxDecoration(color: Colors.white10)),
+                    ),
+              ),
             ),
             // content section
             Padding(

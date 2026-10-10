@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mix/mix.dart';
 
 import '../dompet_brand.dart';
 
@@ -45,14 +46,8 @@ class ScrollRefreshWrapper extends StatefulWidget {
     this.color,
     this.backgroundColor = Colors.transparent,
     this.size = 32,
-  }) : assert(
-         maxExtent > 0,
-         'maxExtent harus lebih besar dari 0',
-       ),
-       assert(
-         triggerExtent > 0,
-         'triggerExtent harus lebih besar dari 0',
-       );
+  }) : assert(maxExtent > 0, 'maxExtent harus lebih besar dari 0'),
+       assert(triggerExtent > 0, 'triggerExtent harus lebih besar dari 0');
 
   /// Konten scrollable (ListView, SingleChildScrollView, CustomScrollView, …).
   final Widget child;
@@ -176,9 +171,7 @@ class _ScrollRefreshWrapperState extends State<ScrollRefreshWrapper>
       }
     } else if (notification is ScrollEndNotification) {
       if (_dragExtent >= widget.triggerExtent) {
-        _settle.animateTo(
-          widget.displacement.clamp(0.0, widget.maxExtent),
-        );
+        _settle.animateTo(widget.displacement.clamp(0.0, widget.maxExtent));
         _trigger().whenComplete(() {
           if (mounted) _settle.animateTo(0);
         });
@@ -220,10 +213,22 @@ class _ScrollRefreshWrapperState extends State<ScrollRefreshWrapper>
             right: 0,
             child: IgnorePointer(
               child: ClipRect(
-                child: Container(
-                  height: _dragExtent,
-                  color: widget.backgroundColor,
-                  alignment: Alignment.center,
+                child: Box(
+                  style: BoxStyler()
+                      .alignment(Alignment.center)
+                      .constraints(
+                        BoxConstraintsMix.value(
+                          (const BoxConstraints()).tighten(
+                            width: null,
+                            height: _dragExtent,
+                          ),
+                        ),
+                      )
+                      .decoration(
+                        DecorationMix.value(
+                          BoxDecoration(color: widget.backgroundColor),
+                        ),
+                      ),
                   child: Opacity(
                     opacity: _refreshing
                         ? 1
@@ -256,7 +261,9 @@ class _TopSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Center(child: SpinKitFadingCube(color: color, size: size)),
+      child: Center(
+        child: SpinKitFadingCube(color: color, size: size),
+      ),
     );
   }
 }

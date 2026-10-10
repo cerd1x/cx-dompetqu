@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../application/contacts_controller.dart';
 import '../models/contact.dart';
@@ -250,14 +251,30 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            ),
+          )
+          .margin(EdgeInsetsGeometryMix.value(const EdgeInsets.only(bottom: 8)))
+          .constraints(
+            BoxConstraintsMix.value(
+              (const BoxConstraints()).tighten(
+                width: double.infinity,
+                height: null,
+              ),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           Icon(icon, size: 16, color: Colors.white38),

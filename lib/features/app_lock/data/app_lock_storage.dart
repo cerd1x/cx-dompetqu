@@ -60,9 +60,7 @@ class AppLockStorage {
   }
 
   /// Membaca credential, menerapkan migrasi dari key lama bila diperlukan.
-  Future<LockCredential> _credentialOrMigrate(
-    SharedPreferences prefs,
-  ) async {
+  Future<LockCredential> _credentialOrMigrate(SharedPreferences prefs) async {
     final raw = prefs.getString(_kLockCredentialKey);
     if (raw != null) {
       return _credentialFromName(raw);

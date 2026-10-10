@@ -232,7 +232,7 @@ class _OutlinedButton extends StatelessWidget {
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.white,
-      side: BorderSide(color: DompetBrand.csBorder, width: 1),
+        side: BorderSide(color: DompetBrand.csBorder, width: 1),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         minimumSize: const Size(0, 28),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,

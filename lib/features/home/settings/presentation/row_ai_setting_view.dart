@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 import '../../../../core/theme/widgets/cs_select_picker.dart';
@@ -34,15 +35,11 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   }
 
   void _selectModel(String value) {
-    ref
-        .read(settingsControllerProvider.notifier)
-        .setAiModel(value);
+    ref.read(settingsControllerProvider.notifier).setAiModel(value);
   }
 
   void _saveApiKey(String value) {
-    ref
-        .read(settingsControllerProvider.notifier)
-        .setAiApiKey(value);
+    ref.read(settingsControllerProvider.notifier).setAiApiKey(value);
   }
 
   @override
@@ -64,10 +61,11 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       padding: EdgeInsets.zero,
       child: Column(
         children: [
-          // AI assistant section — membuka sheet chat AI.
+          // AI assistant section — membuka route chat AI.
           _buildRow(
             icon: Icons.auto_awesome,
             label: 'AI Assistant',
+            onTap: () => context.push('/gen-ai'),
             trailing: const Icon(
               Icons.chevron_right,
               size: 20,
@@ -101,10 +99,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                     child: TextField(
                       controller: _apiKeyCtrl,
                       obscureText: true,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(fontSize: 13, color: Colors.white),
                       onChanged: _saveApiKey,
                       decoration: InputDecoration(
                         hintText: 'Masukkan API key Gemini…',
@@ -148,28 +143,25 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
     required String label,
     Widget? trailing,
     Widget? trailing2,
+    VoidCallback? onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: DompetBrand.purple),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(label, style: const TextStyle(fontSize: 14)),
-          ),
-          if (trailing2 != null) ...[
-            trailing2,
-            const SizedBox(width: 8),
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: DompetBrand.purple),
+            const SizedBox(width: 12),
+            Expanded(child: Text(label, style: const TextStyle(fontSize: 14))),
+            if (trailing2 != null) ...[trailing2, const SizedBox(width: 8)],
+            trailing ?? const SizedBox.shrink(),
           ],
-          trailing ?? const SizedBox.shrink(),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildDivider() => Divider(
-    height: 1,
-    color: Colors.white.withValues(alpha: 0.08),
-  );
+  Widget _buildDivider() =>
+      Divider(height: 1, color: Colors.white.withValues(alpha: 0.08));
 }

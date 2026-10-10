@@ -20,13 +20,15 @@ class AssetMutation {
   final DateTime? createdAt;
 
   factory AssetMutation.fromJson(Map<String, dynamic> json) => AssetMutation(
-        id: json['id'] as String,
-        type: json['type'] as String,
-        amount: json['amount']?.toString() ?? '',
-        currency: json['currency'] as String? ?? '',
-        balanceBefore: json['balanceBefore']?.toString() ?? '',
-        balanceAfter: json['balanceAfter']?.toString() ?? '',
-        description: json['description'] as String?,
-        createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt'] as String),
-      );
+    id: json['id'] as String,
+    type: json['type'] as String,
+    amount: json['amount']?.toString() ?? '',
+    currency: json['currency'] as String? ?? '',
+    balanceBefore: json['balanceBefore']?.toString() ?? '',
+    balanceAfter: json['balanceAfter']?.toString() ?? '',
+    description: json['description'] as String?,
+    createdAt: json['createdAt'] == null
+        ? null
+        : DateTime.parse(json['createdAt'] as String),
+  );
 }

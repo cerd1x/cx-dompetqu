@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
@@ -39,13 +40,24 @@ class SkeletonRow extends StatelessWidget {
   }
 
   Widget _block({required Size size, double radius = 6}) {
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(radius),
-      ),
+    return Box(
+      style: BoxStyler()
+          .constraints(
+            BoxConstraintsMix.value(
+              (const BoxConstraints()).tighten(
+                width: size.width,
+                height: size.height,
+              ),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(radius),
+              ),
+            ),
+          ),
     );
   }
 }

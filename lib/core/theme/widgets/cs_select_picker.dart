@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mix/mix.dart';
 
 import '../cs_mix.dart';
 import '../dompet_brand.dart';
@@ -177,14 +178,26 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
           offset: Offset(0, 4),
         ),
       ],
-      child: Container(
-        width: widget.panelWidth,
-        decoration: BoxDecoration(
-          color: DompetBrand.csFillDark,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          border: Border.all(color: DompetBrand.csBorderDark, width: 1),
-        ),
-        padding: const EdgeInsets.all(4),
+      child: Box(
+        style: BoxStyler()
+            .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(4)))
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: widget.panelWidth,
+                  height: null,
+                ),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: DompetBrand.csFillDark,
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  border: Border.all(color: DompetBrand.csBorderDark, width: 1),
+                ),
+              ),
+            ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -207,13 +220,29 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
         onTap: () => _selectItem(item),
         borderRadius: BorderRadius.circular(8),
         hoverColor: DompetBrand.csFillHover,
-        child: Container(
-          height: widget.optionHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: selected ? DompetBrand.csFillHover : null,
-            borderRadius: BorderRadius.circular(8),
-          ),
+        child: Box(
+          style: BoxStyler()
+              .padding(
+                EdgeInsetsGeometryMix.value(
+                  const EdgeInsets.symmetric(horizontal: 8),
+                ),
+              )
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(
+                    width: null,
+                    height: widget.optionHeight,
+                  ),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    color: selected ? DompetBrand.csFillHover : null,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
           child: widget.itemBuilder!(item, selected),
         ),
       );
@@ -223,13 +252,29 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
       onTap: () => _selectItem(item),
       borderRadius: BorderRadius.circular(8),
       hoverColor: DompetBrand.csFillHover,
-      child: Container(
-        height: widget.optionHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: selected ? DompetBrand.csFillHover : null,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 8),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: null,
+                  height: widget.optionHeight,
+                ),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: selected ? DompetBrand.csFillHover : null,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
         child: Row(
           children: [
             if (item.symbol != null)
@@ -277,14 +322,27 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(widget.borderRadius),
-      child: Container(
-        height: 32,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: DompetBrand.csFill,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          border: Border.all(color: DompetBrand.csBorder, width: 1),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 8),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(width: null, height: 32),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: DompetBrand.csFill,
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  border: Border.all(color: DompetBrand.csBorder, width: 1),
+                ),
+              ),
+            ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -324,6 +382,6 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
     final trigger =
         widget.triggerBuilder?.call(_selectedItem, _menuOpen, _toggleMenu) ??
         _buildDefaultTrigger(_selectedItem, _menuOpen, _toggleMenu);
-    return Container(key: _triggerKey, child: trigger);
+    return Box(style: BoxStyler(), key: _triggerKey, child: trigger);
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../application/app_lock_controller.dart';
@@ -54,20 +55,31 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
           }
         },
         child: Scaffold(
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF111827),
-                  Color(0x4D581C87),
-                  Color(0x4D7C2D12),
-                ],
-              ),
-            ),
+          body: Box(
+            style: BoxStyler()
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                    ),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF111827),
+                          Color(0x4D581C87),
+                          Color(0x4D7C2D12),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             child: SafeArea(
               child: lockState == null
                   ? const Center(child: CircularProgressIndicator())
@@ -126,9 +138,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
             padding: const EdgeInsets.only(bottom: 32),
             child: BiometricButton(
               onAuthenticated: () {
-                ref
-                    .read(appLockControllerProvider.notifier)
-                    .completeUnlock();
+                ref.read(appLockControllerProvider.notifier).completeUnlock();
               },
             ),
           ),

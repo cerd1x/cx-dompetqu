@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
 import '../dompet_brand.dart';
@@ -69,18 +70,26 @@ class RoundActionButton extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
-          child: Container(
-            alignment: Alignment.center,
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: borderColor ?? DompetBrand.csBorderDark,
-                width: borderWidth,
-              ),
-            ),
+          child: Box(
+            style: BoxStyler()
+                .alignment(Alignment.center)
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: size, height: size),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      color: Colors.transparent,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: borderColor ?? DompetBrand.csBorderDark,
+                        width: borderWidth,
+                      ),
+                    ),
+                  ),
+                ),
             child: Icon(icon, color: DompetBrand.goldLight, size: size * 0.5),
           ),
         ),

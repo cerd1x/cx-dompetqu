@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:mix/mix.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 
@@ -68,23 +69,28 @@ class _BiometricButtonState extends State<BiometricButton> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: DompetBrand.csFill,
-              border: Border.all(color: DompetBrand.csBorder, width: 1),
-            ),
+          Box(
+            style: BoxStyler()
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: 64, height: 64),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: DompetBrand.csFill,
+                      border: Border.all(color: DompetBrand.csBorder, width: 1),
+                    ),
+                  ),
+                ),
             child: Icon(icon, size: 32, color: DompetBrand.purple),
           ),
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white54,
-            ),
+            style: const TextStyle(fontSize: 12, color: Colors.white54),
           ),
         ],
       ),

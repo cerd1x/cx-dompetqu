@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mix/mix.dart';
 
 import '../application/contacts_controller.dart';
 
@@ -9,7 +10,9 @@ class ContactsHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final count = ref.watch(contactsControllerProvider.select((s) => s.items.length));
+    final count = ref.watch(
+      contactsControllerProvider.select((s) => s.items.length),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
@@ -21,12 +24,21 @@ class ContactsHeader extends ConsumerWidget {
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(999),
-            ),
+          Box(
+            style: BoxStyler()
+                .padding(
+                  EdgeInsetsGeometryMix.value(
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
+                ),
             child: Text(
               '$count',
               style: TextStyle(

@@ -302,11 +302,7 @@ class AppLogger extends ChangeNotifier {
 /// dibungkus `try/catch` supaya kegagalan menulis log tidak pernah membuat
 /// aplikasi crash.
 class _FileSink {
-  _FileSink({
-    required this.fileName,
-    required this.maxBytes,
-    this.onError,
-  });
+  _FileSink({required this.fileName, required this.maxBytes, this.onError});
 
   final String fileName;
   final int maxBytes;

@@ -38,7 +38,8 @@ class KillswitchController extends _$KillswitchController {
 
   Future<void>? _inFlight;
 
-  KillswitchRemoteSource get _remote => ref.read(killswitchRemoteSourceProvider);
+  KillswitchRemoteSource get _remote =>
+      ref.read(killswitchRemoteSourceProvider);
 
   /// Muat daftar operation yang dimatikan. Panggilan beruntun di-dedupe.
   Future<void> load() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
@@ -160,15 +161,22 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
-        border: const Border(
-          bottom: BorderSide(color: Color(0x4DFBBF24), width: 2),
-        ),
-        color: const Color(0xFF111111).withValues(alpha: 0.7),
-      ),
+    return Box(
+      style: BoxStyler()
+          .clipBehavior(Clip.antiAlias)
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(24),
+                ),
+                border: const Border(
+                  bottom: BorderSide(color: Color(0x4DFBBF24), width: 2),
+                ),
+                color: const Color(0xFF111111).withValues(alpha: 0.7),
+              ),
+            ),
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -435,13 +443,22 @@ class _PortfolioTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(4)))
+          .margin(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.fromLTRB(16, 0, 16, 14),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           for (var i = 0; i < _tabs.length; i++)
@@ -449,14 +466,23 @@ class _PortfolioTabBar extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
                 onTap: () => onChanged(i),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    color: current == i
-                        ? DompetBrand.purple.withValues(alpha: 0.3)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                child: Box(
+                  style: BoxStyler()
+                      .padding(
+                        EdgeInsetsGeometryMix.value(
+                          const EdgeInsets.symmetric(vertical: 8),
+                        ),
+                      )
+                      .decoration(
+                        DecorationMix.value(
+                          BoxDecoration(
+                            color: current == i
+                                ? DompetBrand.purple.withValues(alpha: 0.3)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -537,12 +563,21 @@ class _SummaryCard extends StatelessWidget {
               const SizedBox(width: 4),
               Text(change, style: TextStyle(fontSize: 13, color: color)),
               const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(999),
-                ),
+              Box(
+                style: BoxStyler()
+                    .padding(
+                      EdgeInsetsGeometryMix.value(
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      ),
+                    )
+                    .decoration(
+                      DecorationMix.value(
+                        BoxDecoration(
+                          color: color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
                 child: Text(
                   '${changePercent >= 0 ? '+' : ''}${changePercent.toStringAsFixed(2)}%',
                   style: TextStyle(fontSize: 11, color: color),
@@ -598,7 +633,13 @@ class _AllocationBar extends StatelessWidget {
                     if (total > 0)
                       Expanded(
                         flex: (entry.value / total * 1000).round(),
-                        child: Container(color: _typeColors[entry.key]),
+                        child: Box(
+                          style: BoxStyler().decoration(
+                            DecorationMix.value(
+                              BoxDecoration(color: _typeColors[entry.key]),
+                            ),
+                          ),
+                        ),
                       ),
                 ],
               ),
@@ -613,13 +654,24 @@ class _AllocationBar extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: _typeColors[entry.key],
-                        shape: BoxShape.circle,
-                      ),
+                    Box(
+                      style: BoxStyler()
+                          .constraints(
+                            BoxConstraintsMix.value(
+                              (const BoxConstraints()).tighten(
+                                width: 8,
+                                height: 8,
+                              ),
+                            ),
+                          )
+                          .decoration(
+                            DecorationMix.value(
+                              BoxDecoration(
+                                color: _typeColors[entry.key],
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -677,16 +729,25 @@ class _FilterChips extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(999),
       onTap: () => onChanged(type),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: active
-                ? DompetBrand.pink.withValues(alpha: 0.6)
-                : Colors.white12,
-          ),
-          borderRadius: BorderRadius.circular(999),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  border: Border.all(
+                    color: active
+                        ? DompetBrand.pink.withValues(alpha: 0.6)
+                        : Colors.white12,
+                  ),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+            ),
         child: Text(
           type == 'all' ? 'All' : type[0].toUpperCase() + type.substring(1),
           style: TextStyle(
@@ -713,14 +774,22 @@ class _HoldingItem extends StatelessWidget {
       child: Row(
         children: [
           // icon section
-          Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: DompetBrand.purple.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(999),
-            ),
+          Box(
+            style: BoxStyler()
+                .alignment(Alignment.center)
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: 40, height: 40),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      color: DompetBrand.purple.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
+                ),
             child: Icon(holding.icon, size: 18, color: Colors.white),
           ),
           const SizedBox(width: 12),
@@ -743,15 +812,24 @@ class _HoldingItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 1,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: holding.badgeColor),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                    Box(
+                      style: BoxStyler()
+                          .padding(
+                            EdgeInsetsGeometryMix.value(
+                              const EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 1,
+                              ),
+                            ),
+                          )
+                          .decoration(
+                            DecorationMix.value(
+                              BoxDecoration(
+                                border: Border.all(color: holding.badgeColor),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
                       child: Text(
                         holding.symbol,
                         style: TextStyle(

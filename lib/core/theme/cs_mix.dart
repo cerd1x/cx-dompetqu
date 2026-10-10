@@ -33,10 +33,7 @@ class CsFrost extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Opacity(
-          opacity: opacity,
-          child: child,
-        ),
+        child: Opacity(opacity: opacity, child: child),
       ),
     );
     if (shadow == null || shadow!.isEmpty) return frosted;

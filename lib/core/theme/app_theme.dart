@@ -8,16 +8,15 @@ class AppTheme {
   AppTheme._();
 
   /// Tema gelap bawaan (pakai [UiStyle] default).
-  static ThemeData get dark => fromStyle(const UiStyle(), brightness: Brightness.dark);
+  static ThemeData get dark =>
+      fromStyle(const UiStyle(), brightness: Brightness.dark);
 
   /// Tema terang bawaan (pakai [UiStyle] default).
-  static ThemeData get light => fromStyle(const UiStyle(), brightness: Brightness.light);
+  static ThemeData get light =>
+      fromStyle(const UiStyle(), brightness: Brightness.light);
 
   /// Bangun [ThemeData] dari [style] dan [brightness].
-  static ThemeData fromStyle(
-    UiStyle style, {
-    required Brightness brightness,
-  }) {
+  static ThemeData fromStyle(UiStyle style, {required Brightness brightness}) {
     final isDark = brightness == Brightness.dark;
     final scheme = ColorScheme.fromSeed(
       seedColor: style.primary,
@@ -74,9 +73,9 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: const Color(0xFF121212).withValues(
-          alpha: (style.glassOpacity * 8).clamp(0.0, 1.0),
-        ),
+        backgroundColor: const Color(
+          0xFF121212,
+        ).withValues(alpha: (style.glassOpacity * 8).clamp(0.0, 1.0)),
         indicatorColor: style.primary.withValues(alpha: 0.35),
         height: 68,
         labelTextStyle: WidgetStateProperty.resolveWith(

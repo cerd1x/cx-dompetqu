@@ -83,21 +83,22 @@ class OrderRemoteSource {
     String? description,
     String? payToAssetId,
   }) async {
-    final input = {
-      'productId': productId,
-      'itemCount': itemCount,
-      'totalAmount': totalAmount.toDouble(),
-      'currency': currency,
-      'paymentMethod': ?paymentMethod,
-      'customerId': ?customerId,
-      'description': ?description,
-      'payToAssetId': ?payToAssetId,
-    }..removeWhere(
-      (key, value) =>
-          value is String &&
-          (key == 'customerId' || key == 'payToAssetId') &&
-          value.trim().isEmpty,
-    );
+    final input =
+        {
+          'productId': productId,
+          'itemCount': itemCount,
+          'totalAmount': totalAmount.toDouble(),
+          'currency': currency,
+          'paymentMethod': ?paymentMethod,
+          'customerId': ?customerId,
+          'description': ?description,
+          'payToAssetId': ?payToAssetId,
+        }..removeWhere(
+          (key, value) =>
+              value is String &&
+              (key == 'customerId' || key == 'payToAssetId') &&
+              value.trim().isEmpty,
+        );
     AppLogger.instance.info(
       'createOrderProductSale request',
       tag: 'OrderRemoteSource',

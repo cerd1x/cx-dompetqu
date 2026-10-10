@@ -1,6 +1,7 @@
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
@@ -186,13 +187,26 @@ class _SummaryBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            ),
+          )
+          .margin(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.fromLTRB(16, 4, 16, 8),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
       child: Wrap(
         spacing: 16,
         runSpacing: 4,

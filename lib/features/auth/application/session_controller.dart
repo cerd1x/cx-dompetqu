@@ -108,10 +108,7 @@ class SessionController extends _$SessionController {
       _log.success('Sign in: ${result.user.username}', tag: 'Session');
       await _cookieClient.setToken(result.session);
       await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(
-        status: AuthStatus.authenticated,
-        user: result.user,
-      );
+      state = SessionState(status: AuthStatus.authenticated, user: result.user);
       return true;
     } on AuthException catch (e) {
       _log.warn('Sign in gagal: ${e.message}', tag: 'Session');
@@ -135,10 +132,7 @@ class SessionController extends _$SessionController {
       _log.success('Sign up: ${result.user.username}', tag: 'Session');
       await _cookieClient.setToken(result.session);
       await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(
-        status: AuthStatus.authenticated,
-        user: result.user,
-      );
+      state = SessionState(status: AuthStatus.authenticated, user: result.user);
       return true;
     } on AuthException catch (e) {
       _log.warn('Sign up gagal: ${e.message}', tag: 'Session');
@@ -154,10 +148,7 @@ class SessionController extends _$SessionController {
       _log.success('Passkey sign in: ${result.user.username}', tag: 'Session');
       await _cookieClient.setToken(result.session);
       await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(
-        status: AuthStatus.authenticated,
-        user: result.user,
-      );
+      state = SessionState(status: AuthStatus.authenticated, user: result.user);
       return true;
     } on AuthException catch (e) {
       _log.warn('Passkey sign in gagal: ${e.message}', tag: 'Session');

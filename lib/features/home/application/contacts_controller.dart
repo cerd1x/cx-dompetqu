@@ -66,7 +66,9 @@ class ContactsState {
     error: identical(error, _keep) ? this.error : error as String?,
     searchQuery: searchQuery ?? this.searchQuery,
     pageSize: pageSize ?? this.pageSize,
-    nextCursor: identical(nextCursor, _keep) ? this.nextCursor : nextCursor as String?,
+    nextCursor: identical(nextCursor, _keep)
+        ? this.nextCursor
+        : nextCursor as String?,
     hasMore: hasMore ?? this.hasMore,
     loadingMore: loadingMore ?? this.loadingMore,
   );
@@ -351,7 +353,13 @@ class ContactsController extends _$ContactsController {
     try {
       final created = await ref
           .read(contactsRemoteSourceProvider)
-          .create(name: name, email: email, phone: phone, phones: phones, group: group);
+          .create(
+            name: name,
+            email: email,
+            phone: phone,
+            phones: phones,
+            group: group,
+          );
       if (!ref.mounted) return true;
       state = state.copyWith(items: [created, ...state.items]);
       return true;
@@ -524,10 +532,7 @@ class ContactsController extends _$ContactsController {
   ///
   /// Mengembalikan [Contact] yang sudah ada jika ditemukan duplikat,
   /// atau `null` jika tidak ada duplikat.
-  Contact? checkContactsDuplicate({
-    required String phone,
-    String? excludeId,
-  }) {
+  Contact? checkContactsDuplicate({required String phone, String? excludeId}) {
     final normalizedPhone = phone.trim();
     if (normalizedPhone.isEmpty) return null;
 

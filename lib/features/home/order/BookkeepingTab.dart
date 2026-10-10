@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
@@ -57,12 +58,14 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   }
 
   bool get _isCurrentMonth =>
-      _month.year == DateTime.now().year && _month.month == DateTime.now().month;
+      _month.year == DateTime.now().year &&
+      _month.month == DateTime.now().month;
 
   /// Transaksi pada bulan terpilih, terbaru dulu.
   List<Transaction> _monthItems(List<Transaction> items) {
     final filtered = items.where((tx) {
-      if (tx.createdAt.year != _month.year || tx.createdAt.month != _month.month) {
+      if (tx.createdAt.year != _month.year ||
+          tx.createdAt.month != _month.month) {
         return false;
       }
       return switch (_filter) {
@@ -168,7 +171,9 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
           child: OrderStatTile(
             label: 'Profit',
             value: formatMoney(profit, currency),
-            color: profit >= 0 ? const Color(0xFF34D399) : const Color(0xFFF87171),
+            color: profit >= 0
+                ? const Color(0xFF34D399)
+                : const Color(0xFFF87171),
             icon: Icons.trending_up_rounded,
           ),
         ),
@@ -250,7 +255,10 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         ]);
     });
 
-    return ListView(padding: const EdgeInsets.only(bottom: 24), children: children);
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 24),
+      children: children,
+    );
   }
 
   /// Label tanggal: "Today"/"Yesterday"/tanggal lengkap.
@@ -302,14 +310,24 @@ class _LedgerRow extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: tone.color.withValues(alpha: 0.16),
-              border: Border.all(color: tone.color.withValues(alpha: 0.4)),
-            ),
+          Box(
+            style: BoxStyler()
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: 36, height: 36),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: tone.color.withValues(alpha: 0.16),
+                      border: Border.all(
+                        color: tone.color.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ),
+                ),
             child: Icon(tone.icon, size: 18, color: tone.color),
           ),
           const SizedBox(width: 12),
@@ -330,7 +348,8 @@ class _LedgerRow extends StatelessWidget {
                 Text(
                   [
                     tone.label,
-                    if (capital != null) 'capital ${formatMoney(capital, currency)}',
+                    if (capital != null)
+                      'capital ${formatMoney(capital, currency)}',
                     DateFormat('HH:mm').format(tx.createdAt),
                   ].join(' · '),
                   maxLines: 1,

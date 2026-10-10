@@ -1,3 +1,4 @@
+import 'package:dompetqu/features/gen_ai/presentation/ai_bubble.dart';
 import 'package:dompetqu/features/home/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,6 @@ import 'contacts/contacts_screen.dart';
 import 'inventory/inventory_screen.dart';
 import 'order/order_screen.dart';
 import 'portfolio/portfolio_screen.dart';
-import 'widgets/ai_bubble.dart';
 
 /// Shell utama — padanan `+layout.svelte` + tab NavigationBar di `/dompet`.
 class HomeShell extends ConsumerStatefulWidget {

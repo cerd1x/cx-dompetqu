@@ -34,6 +34,7 @@ import 'features/home/settings/presentation/appearance_screen.dart';
 import 'features/home/settings/presentation/profile_screen.dart';
 import 'features/home/settings/presentation/settings_screen.dart';
 import 'features/charts/charts_trading.dart';
+import 'features/gen_ai/presentation/gen_ai_screen.dart';
 
 part 'main.g.dart';
 
@@ -143,6 +144,7 @@ GoRouter appRouter(Ref ref) {
         path: '/settings/profile',
         builder: (_, _) => const ProfileScreen(),
       ),
+      GoRoute(path: '/gen-ai', builder: (_, _) => const GenAiScreen()),
       GoRoute(
         path: '/order',
         builder: (_, state) {

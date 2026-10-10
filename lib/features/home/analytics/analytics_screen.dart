@@ -1,3 +1,4 @@
+import 'package:mix/mix.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,8 +106,9 @@ class _PercentagesCard extends StatelessWidget {
         ? 0
         : (s.totalIncome / totalFlow * 100).clamp(0, 100);
     final expensePct = 100 - incomePct;
-    final margin =
-        s.totalIncome == 0 ? 0 : (s.totalProfit / s.totalIncome * 100);
+    final margin = s.totalIncome == 0
+        ? 0
+        : (s.totalProfit / s.totalIncome * 100);
 
     return DompetCard(
       variant: DompetCardVariant.csGlassCard,
@@ -145,10 +147,7 @@ class _PercentagesCard extends StatelessWidget {
                 children: [
                   Text(
                     'Margin',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.white54,
-                    ),
+                    style: const TextStyle(fontSize: 10, color: Colors.white54),
                   ),
                   Text(
                     '${margin.toStringAsFixed(1)}%',
@@ -181,9 +180,15 @@ class _FlowBar extends StatelessWidget {
         height: 10,
         child: Row(
           children: [
-            Expanded(flex: incomeFlex, child: const ColoredBox(color: _kIncome)),
+            Expanded(
+              flex: incomeFlex,
+              child: const ColoredBox(color: _kIncome),
+            ),
             if (expenseFlex > 0 && incomeFlex > 0) const SizedBox(width: 2),
-            Expanded(flex: expenseFlex, child: const ColoredBox(color: _kExpense)),
+            Expanded(
+              flex: expenseFlex,
+              child: const ColoredBox(color: _kExpense),
+            ),
           ],
         ),
       ),
@@ -199,15 +204,28 @@ class _Pill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
       child: Text(
         '$label ${pct.toStringAsFixed(0)}%',
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: color),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
       ),
     );
   }
@@ -268,7 +286,9 @@ class _PerformanceCard extends StatelessWidget {
             height: 200,
             child: series.isEmpty || series.daily.length == 1
                 ? const _EmptyChart()
-                : (barMode ? _BarCumulative(series: series) : _LineCumulative(series: series)),
+                : (barMode
+                      ? _BarCumulative(series: series)
+                      : _LineCumulative(series: series)),
           ),
         ],
       ),
@@ -391,8 +411,7 @@ class _BarCumulative extends StatelessWidget {
           dataSource: data,
           xValueMapper: (p, _) => p.date,
           yValueMapper: (p, _) => p.value.toDouble(),
-          pointColorMapper: (p, _) =>
-              p.value >= 0 ? _kIncome : _kExpense,
+          pointColorMapper: (p, _) => p.value >= 0 ? _kIncome : _kExpense,
           width: 0.5,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
           dataLabelSettings: const DataLabelSettings(isVisible: false),
@@ -580,15 +599,24 @@ class _DayCell extends StatelessWidget {
         date.day == DateTime.now().day;
     final hasProfit = profit != 0;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isToday
-            ? DompetBrand.purple.withValues(alpha: 0.25)
-            : Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white10, width: 0.5),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 4),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(vertical: 4),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: isToday
+                    ? DompetBrand.purple.withValues(alpha: 0.25)
+                    : Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.white10, width: 0.5),
+              ),
+            ),
+          ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -601,13 +629,18 @@ class _DayCell extends StatelessWidget {
           ),
           if (hasProfit) ...[
             const SizedBox(height: 2),
-            Container(
-              width: 6,
-              height: 6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: profit > 0 ? _kIncome : _kExpense,
-              ),
+            Box(
+              style: BoxStyler()
+                  .width(6)
+                  .height(6)
+                  .decoration(
+                    DecorationMix.value(
+                      BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: profit > 0 ? _kIncome : _kExpense,
+                      ),
+                    ),
+                  ),
             ),
             FittedBox(
               fit: BoxFit.scaleDown,
@@ -625,4 +658,3 @@ class _DayCell extends StatelessWidget {
     );
   }
 }
-

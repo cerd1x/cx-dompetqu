@@ -143,7 +143,12 @@ class ContactsRemoteSource {
         document: gql(_updateMutation),
         variables: {
           'id': id,
-          'input': {'name': name, 'email': email, 'phone': phone, 'phones': phones},
+          'input': {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'phones': phones,
+          },
         },
       ),
     );

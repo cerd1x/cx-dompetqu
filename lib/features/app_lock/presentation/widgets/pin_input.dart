@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mix/mix.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 
@@ -44,10 +45,18 @@ class PinInputState extends State<PinInput> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.length, (i) {
-        return Container(
-          width: 44,
-          height: 52,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
+        return Box(
+          style: BoxStyler()
+              .margin(
+                EdgeInsetsGeometryMix.value(
+                  const EdgeInsets.symmetric(horizontal: 5),
+                ),
+              )
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: 44, height: 52),
+                ),
+              ),
           child: TextField(
             controller: _controllers[i],
             focusNode: _focusNodes[i],
@@ -87,9 +96,7 @@ class PinInputState extends State<PinInput> {
                 ),
               ),
             ),
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (value) {
               if (value.isNotEmpty && i < widget.length - 1) {
                 _focusNodes[i + 1].requestFocus();
@@ -107,7 +114,8 @@ class PinInputState extends State<PinInput> {
   }
 
   void _handleBackspace(int index) {
-    if ((_controllers[index].text.isEmpty || _controllers[index].selection.isValid) &&
+    if ((_controllers[index].text.isEmpty ||
+            _controllers[index].selection.isValid) &&
         index > 0 &&
         _controllers[index].text.isEmpty) {
       _controllers[index - 1].clear();

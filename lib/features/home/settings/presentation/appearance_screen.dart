@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mix/mix.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 import '../../../../core/theme/ui_style.dart';
@@ -52,8 +53,10 @@ class _AppearanceScreenState extends ConsumerState<AppearanceScreen> {
     );
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: preview.gradient),
+      body: Box(
+        style: BoxStyler().decoration(
+          DecorationMix.value(BoxDecoration(gradient: preview.gradient)),
+        ),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -202,15 +205,24 @@ class _LivePreview extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(DompetBrand.radius),
-        child: Container(
-          height: 160,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: style.gradientColors,
-              begin: style.gradientBegin,
-              end: style.gradientEnd,
-            ),
-          ),
+        child: Box(
+          style: BoxStyler()
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: null, height: 160),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: style.gradientColors,
+                      begin: style.gradientBegin,
+                      end: style.gradientEnd,
+                    ),
+                  ),
+                ),
+              ),
           child: Stack(
             children: [
               Positioned.fill(
@@ -219,34 +231,53 @@ class _LivePreview extends StatelessWidget {
                     sigmaX: style.blurSigma,
                     sigmaY: style.blurSigma,
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.all(24),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: style.glassFill,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: style.glassBorder),
-                    ),
+                  child: Box(
+                    style: BoxStyler()
+                        .padding(
+                          EdgeInsetsGeometryMix.value(const EdgeInsets.all(16)),
+                        )
+                        .margin(
+                          EdgeInsetsGeometryMix.value(const EdgeInsets.all(24)),
+                        )
+                        .decoration(
+                          DecorationMix.value(
+                            BoxDecoration(
+                              color: style.glassFill,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: style.glassBorder),
+                            ),
+                          ),
+                        ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          width: 48,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
+                        Box(
+                          style: BoxStyler()
+                              .width(48)
+                              .height(6)
+                              .decoration(
+                                DecorationMix.value(
+                                  BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
                         ),
                         const SizedBox(height: 8),
-                        Container(
-                          width: 90,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
+                        Box(
+                          style: BoxStyler()
+                              .width(90)
+                              .height(6)
+                              .decoration(
+                                DecorationMix.value(
+                                  BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
                         ),
                       ],
                     ),
@@ -343,17 +374,25 @@ class _Swatch extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: selected ? Colors.white : Colors.white24,
-              width: selected ? 3 : 1,
-            ),
-          ),
+        child: Box(
+          style: BoxStyler()
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(width: 40, height: 40),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: selected ? Colors.white : Colors.white24,
+                      width: selected ? 3 : 1,
+                    ),
+                  ),
+                ),
+              ),
           child: isCustom
               ? const Icon(Icons.add, size: 20, color: Colors.white)
               : const SizedBox.shrink(),
@@ -518,20 +557,29 @@ class _GradientChip extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: colors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: selected ? Colors.white : Colors.white24,
-            width: selected ? 2 : 1,
-          ),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: colors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: selected ? Colors.white : Colors.white24,
+                    width: selected ? 2 : 1,
+                  ),
+                ),
+              ),
+            ),
         child: Text(label, style: const TextStyle(fontSize: 12)),
       ),
     );

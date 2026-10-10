@@ -58,9 +58,8 @@ class UiStyle {
   Color get glassFill => primary.withValues(alpha: glassOpacity);
 
   /// Border glass tipis dari [primary] berbasis [glassOpacity].
-  Color get glassBorder => primary.withValues(
-    alpha: (glassOpacity * 3).clamp(0.0, 1.0),
-  );
+  Color get glassBorder =>
+      primary.withValues(alpha: (glassOpacity * 3).clamp(0.0, 1.0));
 
   UiStyle copyWith({
     Color? primary,
@@ -146,7 +145,8 @@ class UiStyle {
         (map['gradientEndX'] as num?)?.toDouble() ?? 1,
         (map['gradientEndY'] as num?)?.toDouble() ?? 1,
       ),
-      glassOpacity: (map['glassOpacity'] as num?)?.toDouble() ?? kUiGlassOpacity,
+      glassOpacity:
+          (map['glassOpacity'] as num?)?.toDouble() ?? kUiGlassOpacity,
       blurSigma: (map['blurSigma'] as num?)?.toDouble() ?? kUiBlurSigma,
     );
   }
@@ -185,10 +185,13 @@ class UiStyle {
 
 /// Default primary — gold brand DompetQu.
 const Color kUiPrimary = Color(0xFFD4A574);
+
 /// Default secondary — purple accent.
 const Color kUiSecondary = Color(0xFF8B5CF6);
+
 /// Default tertiary — pink accent.
 const Color kUiTertiary = Color(0xFFF4A6D6);
+
 /// Default urutan warna gradient: gold → purple → pink.
 const List<Color> kUiGradientColors = [
   Color(0xFFFFD79B),
@@ -196,7 +199,9 @@ const List<Color> kUiGradientColors = [
   kUiSecondary,
   kUiTertiary,
 ];
+
 /// Default opacity isi frosted glass.
 const double kUiGlassOpacity = 0.08;
+
 /// Default sigma blur BackdropFilter (`backdrop-blur-[6.1px]` di web).
 const double kUiBlurSigma = 6.1;

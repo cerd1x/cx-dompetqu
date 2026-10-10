@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
@@ -23,7 +24,7 @@ class DuplicateContactsInvestigationDialog extends StatefulWidget {
   /// Gabungkan satu grup: semua [ContactDuplicateGroup.contacts] (kecuali
   /// [primary] yang dipilih user) digabung ke [Contact] primary tersebut.
   final Future<void> Function(Contact primary, List<Contact> duplicates)?
-      onMergeGroup;
+  onMergeGroup;
 
   @override
   State<DuplicateContactsInvestigationDialog> createState() =>
@@ -57,9 +58,7 @@ class _DuplicateContactsInvestigationDialogState
     final cb = widget.onMergeGroup;
     if (cb == null || _mergingGroups.contains(group.key)) return;
     final primary = _selectedFor(group);
-    final duplicates = group.contacts
-        .where((c) => c.id != primary.id)
-        .toList();
+    final duplicates = group.contacts.where((c) => c.id != primary.id).toList();
     setState(() => _mergingGroups.add(group.key));
     try {
       await cb(primary, duplicates);
@@ -104,7 +103,9 @@ class _DuplicateContactsInvestigationDialogState
         ),
         if (hasDuplicates)
           DompetButton(
-            label: _mergingGroups.isNotEmpty ? 'Gabungkan Semua…' : 'Gabungkan Semua',
+            label: _mergingGroups.isNotEmpty
+                ? 'Gabungkan Semua…'
+                : 'Gabungkan Semua',
             leadingIcon: Icons.merge_type,
             loading: allMerging,
             onPressed: widget.onMergeGroup == null || allMerging
@@ -180,12 +181,17 @@ class _DuplicateGroupTile extends StatelessWidget {
       DuplicateGroupType.phone => Icons.phone_outlined,
       DuplicateGroupType.name => Icons.person_outline,
     };
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(12)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -211,60 +217,51 @@ class _DuplicateGroupTile extends StatelessWidget {
             style: const TextStyle(fontSize: 11, color: Colors.white38),
           ),
           const SizedBox(height: 6),
-          ...group.contacts.map(
-            (c) {
-              final selected = c.id == selectedId;
-              return InkWell(
-                onTap: () => onSelect(c),
-                borderRadius: BorderRadius.circular(6),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        selected
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_unchecked,
-                        size: 16,
-                        color: selected ? DompetBrand.gold : Colors.white24,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+          ...group.contacts.map((c) {
+            final selected = c.id == selectedId;
+            return InkWell(
+              onTap: () => onSelect(c),
+              borderRadius: BorderRadius.circular(6),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(
+                      selected
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      size: 16,
+                      color: selected ? DompetBrand.gold : Colors.white24,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            c.name,
+                            style: TextStyle(
+                              color: selected ? Colors.white : Colors.white70,
+                              fontWeight: selected ? FontWeight.w600 : null,
+                            ),
+                          ),
+                          if (group.type == DuplicateGroupType.name &&
+                              (c.phone?.isNotEmpty ?? false))
                             Text(
-                              c.name,
-                              style: TextStyle(
-                                color: selected
-                                    ? Colors.white
-                                    : Colors.white70,
-                                fontWeight: selected
-                                    ? FontWeight.w600
-                                    : null,
+                              c.phone!,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.white38,
                               ),
                             ),
-                            if (group.type == DuplicateGroupType.name &&
-                                (c.phone?.isNotEmpty ?? false))
-                              Text(
-                                c.phone!,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.white38,
-                                ),
-                              ),
-                          ],
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }),
           const SizedBox(height: 6),
           Align(
             alignment: Alignment.centerRight,

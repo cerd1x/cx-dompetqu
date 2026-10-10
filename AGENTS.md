@@ -125,7 +125,7 @@ lib/
 
 ## Design System
 
-- untuk design dari Container gantikan dengan Box milik package:mix
+- untuk widget dari Container mejadi Box milik packages mix
   docs ref: https://concepta.dev/documentation/mix/widgets/box
 - `UiStyle` (`lib/core/theme/ui_style.dart`) = sumber kebenaran look & feel;
   dibaca via `ref.watch(uiStyleControllerProvider).value ?? const UiStyle()`.

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
@@ -89,10 +90,16 @@ class _DebtTabState extends ConsumerState<DebtTab> {
   List<_DebtGroup> _group(List<_Debt> debts) {
     final groups = <String, _DebtGroup>{};
     for (final debt in debts) {
-      groups.putIfAbsent(
-        '${debt.customerId}|${debt.currency}',
-        () => _DebtGroup(customerId: debt.customerId, currency: debt.currency),
-      ).debts.add(debt);
+      groups
+          .putIfAbsent(
+            '${debt.customerId}|${debt.currency}',
+            () => _DebtGroup(
+              customerId: debt.customerId,
+              currency: debt.currency,
+            ),
+          )
+          .debts
+          .add(debt);
     }
     final list = groups.values.toList();
     list.sort((a, b) => b.outstanding.compareTo(a.outstanding));
@@ -134,7 +141,9 @@ class _DebtTabState extends ConsumerState<DebtTab> {
   /// Total tunggakan, jumlah utang, dan yang sudah lewat [kDebtOverdueDays].
   Widget _buildSummary(List<_Debt> debts) {
     final outstanding = debts.where((d) => !d.settled);
-    final currency = outstanding.isNotEmpty ? outstanding.first.currency : 'IDR';
+    final currency = outstanding.isNotEmpty
+        ? outstanding.first.currency
+        : 'IDR';
     var total = 0.0;
     var overdue = 0;
     for (final debt in outstanding) {
@@ -224,7 +233,8 @@ class _DebtTabState extends ConsumerState<DebtTab> {
         ..add(
           OrderGroupHeader(
             title: names[group.customerId] ?? 'Unknown contact',
-            subtitle: '${group.debts.length} debts · '
+            subtitle:
+                '${group.debts.length} debts · '
                 '${group.settledCount} settled',
             trailing: _filter == _DebtFilter.outstanding
                 ? _SettleAllButton(
@@ -250,7 +260,10 @@ class _DebtTabState extends ConsumerState<DebtTab> {
         ]);
     }
 
-    return ListView(padding: const EdgeInsets.only(bottom: 24), children: children);
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 24),
+      children: children,
+    );
   }
 
   /// Tebus satu utang: konfirmasi → catat pembayaran income → tandai lunas.
@@ -280,9 +293,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
         _toast('Failed to record the payment');
         return;
       }
-      await ref
-          .read(debtSettlementsProvider.notifier)
-          .markSettled(debt.tx.id);
+      await ref.read(debtSettlementsProvider.notifier).markSettled(debt.tx.id);
       // Pembayaran baru tercatat di ledger → muat ulang transaksi.
       ref.invalidate(transactionsControllerProvider);
       _toast('Debt settled');
@@ -338,7 +349,9 @@ class _DebtTabState extends ConsumerState<DebtTab> {
       if (failed.isEmpty) {
         _toast('All debts settled');
       } else {
-        _toast('${pending.length - failed.length} settled, ${failed.length} failed');
+        _toast(
+          '${pending.length - failed.length} settled, ${failed.length} failed',
+        );
       }
     } finally {
       if (mounted) {
@@ -449,29 +462,36 @@ class _DebtRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: debt.settled
-                  ? const Color(0xFF34D399).withValues(alpha: 0.16)
-                  : DompetBrand.pink.withValues(alpha: 0.16),
-              border: Border.all(
-                color: (debt.settled
-                        ? const Color(0xFF34D399)
-                        : DompetBrand.pink)
-                    .withValues(alpha: 0.4),
-              ),
-            ),
+          Box(
+            style: BoxStyler()
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: 36, height: 36),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: debt.settled
+                          ? const Color(0xFF34D399).withValues(alpha: 0.16)
+                          : DompetBrand.pink.withValues(alpha: 0.16),
+                      border: Border.all(
+                        color:
+                            (debt.settled
+                                    ? const Color(0xFF34D399)
+                                    : DompetBrand.pink)
+                                .withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ),
+                ),
             child: Icon(
               debt.settled
                   ? Icons.check_circle_outline_rounded
                   : Icons.hourglass_bottom_rounded,
               size: 18,
-              color: debt.settled
-                  ? const Color(0xFF34D399)
-                  : DompetBrand.pink,
+              color: debt.settled ? const Color(0xFF34D399) : DompetBrand.pink,
             ),
           ),
           const SizedBox(width: 12),

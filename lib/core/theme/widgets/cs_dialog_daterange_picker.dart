@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../cs_dialog.dart';
 import '../dompet_brand.dart';
@@ -67,12 +68,32 @@ class _CsDateRangePickerState extends State<CsDateRangePicker> {
   /// Nama bulan manual — TIDAK memakai DateFormat(locale) supaya bebas
   /// dari LocaleDataException (data simbol intl tidak dijamin termuat).
   static const _monthsFull = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
   static const _monthsShort = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-    'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
   ];
 
   @override
@@ -96,8 +117,7 @@ class _CsDateRangePickerState extends State<CsDateRangePicker> {
 
   /// Jumlah baris grid bulan aktif: 1 baris label hari + sel tanggal
   /// (termasuk sel kosong leading) dibagi 7 kolom, dibulatkan ke atas.
-  int get _gridRows =>
-      ((7 + _leadingBlanks + _daysInMonth) / 7).ceil();
+  int get _gridRows => ((7 + _leadingBlanks + _daysInMonth) / 7).ceil();
 
   /// Sel kosong sebelum tanggal 1 (Senin = kolom pertama).
   int get _leadingBlanks => DateTime(_visible.year, _visible.month).weekday - 1;
@@ -323,25 +343,30 @@ class _DayCell extends StatelessWidget {
         ? DompetBrand.primary.withValues(alpha: 0.16)
         : Colors.transparent;
 
-    final shape = isEndpoint
-        ? BoxShape.circle
-        : BoxShape.rectangle;
+    final shape = isEndpoint ? BoxShape.circle : BoxShape.rectangle;
 
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
-      child: Container(
-        margin: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: bg,
-          shape: shape,
-          borderRadius: shape == BoxShape.rectangle
-              ? BorderRadius.circular(8)
-              : null,
-          border: isToday && !isEndpoint
-              ? Border.all(color: DompetBrand.primary.withValues(alpha: 0.55))
-              : null,
-        ),
-        alignment: Alignment.center,
+      child: Box(
+        style: BoxStyler()
+            .alignment(Alignment.center)
+            .margin(EdgeInsetsGeometryMix.value(const EdgeInsets.all(2)))
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: bg,
+                  shape: shape,
+                  borderRadius: shape == BoxShape.rectangle
+                      ? BorderRadius.circular(8)
+                      : null,
+                  border: isToday && !isEndpoint
+                      ? Border.all(
+                          color: DompetBrand.primary.withValues(alpha: 0.55),
+                        )
+                      : null,
+                ),
+              ),
+            ),
         child: Text('${day.day}', style: TextStyle(fontSize: 12.5, color: fg)),
       ),
     );

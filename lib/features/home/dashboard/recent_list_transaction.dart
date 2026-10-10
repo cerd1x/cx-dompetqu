@@ -2,6 +2,7 @@ import 'package:dompetqu/features/home/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/cs_dialog_daterange_picker.dart';
@@ -112,15 +113,20 @@ class _RecentListTransactionState extends State<RecentListTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: DompetBrand.csFillDark,
-        borderRadius: const BorderRadius.all(Radius.circular(24)),
-        border: const Border(
-          top: BorderSide(color: Color(0x4DFBBF24), width: 2),
-        ),
-      ),
-      padding: const EdgeInsets.only(top: 12),
+    return Box(
+      style: BoxStyler()
+          .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.only(top: 12)))
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: DompetBrand.csFillDark,
+                borderRadius: const BorderRadius.all(Radius.circular(24)),
+                border: const Border(
+                  top: BorderSide(color: Color(0x4DFBBF24), width: 2),
+                ),
+              ),
+            ),
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -178,14 +184,35 @@ class _RecentListTransactionState extends State<RecentListTransaction> {
               return InkWell(
                 onTap: onTap,
                 borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
-                child: Container(
-                  height: 28,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: DompetBrand.csFill,
-                    borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
-                    border: Border.all(color: DompetBrand.csBorder, width: 1),
-                  ),
+                child: Box(
+                  style: BoxStyler()
+                      .padding(
+                        EdgeInsetsGeometryMix.value(
+                          const EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                      )
+                      .constraints(
+                        BoxConstraintsMix.value(
+                          (const BoxConstraints()).tighten(
+                            width: null,
+                            height: 28,
+                          ),
+                        ),
+                      )
+                      .decoration(
+                        DecorationMix.value(
+                          BoxDecoration(
+                            color: DompetBrand.csFill,
+                            borderRadius: BorderRadius.circular(
+                              DompetBrand.radiusSm,
+                            ),
+                            border: Border.all(
+                              color: DompetBrand.csBorder,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                      ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -292,9 +319,20 @@ class _DateHeader extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.06),
+            child: Box(
+              style: BoxStyler()
+                  .constraints(
+                    BoxConstraintsMix.value(
+                      (const BoxConstraints()).tighten(width: null, height: 1),
+                    ),
+                  )
+                  .decoration(
+                    DecorationMix.value(
+                      BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                    ),
+                  ),
             ),
           ),
         ],
@@ -410,13 +448,24 @@ class TransactionRow extends StatelessWidget {
                 const SizedBox(height: 3),
                 Row(
                   children: [
-                    Container(
-                      width: 5,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: tone.color.withValues(alpha: 0.8),
-                      ),
+                    Box(
+                      style: BoxStyler()
+                          .constraints(
+                            BoxConstraintsMix.value(
+                              (const BoxConstraints()).tighten(
+                                width: 5,
+                                height: 5,
+                              ),
+                            ),
+                          )
+                          .decoration(
+                            DecorationMix.value(
+                              BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: tone.color.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ),
                     ),
                     const SizedBox(width: 5),
                     Text(
@@ -456,21 +505,32 @@ class _LeadingIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 38,
-      height: 38,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            tone.color.withValues(alpha: 0.32),
-            tone.color.withValues(alpha: 0.08),
-          ],
-        ),
-        border: Border.all(color: tone.color.withValues(alpha: 0.45), width: 1),
-      ),
+    return Box(
+      style: BoxStyler()
+          .constraints(
+            BoxConstraintsMix.value(
+              (const BoxConstraints()).tighten(width: 38, height: 38),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    tone.color.withValues(alpha: 0.32),
+                    tone.color.withValues(alpha: 0.08),
+                  ],
+                ),
+                border: Border.all(
+                  color: tone.color.withValues(alpha: 0.45),
+                  width: 1,
+                ),
+              ),
+            ),
+          ),
       child: Icon(tone.icon, size: 19, color: tone.color),
     );
   }

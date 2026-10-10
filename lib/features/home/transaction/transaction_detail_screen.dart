@@ -29,11 +29,7 @@ class TransactionDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Column(
                 children: [
-                  Icon(
-                    _typeIcon,
-                    size: 48,
-                    color: tone.color,
-                  ),
+                  Icon(_typeIcon, size: 48, color: tone.color),
                   const SizedBox(height: 12),
                   Text(
                     amountText,
@@ -57,7 +53,9 @@ class TransactionDetailScreen extends StatelessWidget {
             _DetailRow(label: 'ID', value: transaction.id),
             _DetailRow(
               label: 'Tanggal',
-              value: DateFormat('d MMM yyyy, HH:mm').format(transaction.createdAt),
+              value: DateFormat(
+                'd MMM yyyy, HH:mm',
+              ).format(transaction.createdAt),
             ),
             if (transaction.description != null)
               _DetailRow(label: 'Deskripsi', value: transaction.description!),
@@ -65,10 +63,7 @@ class TransactionDetailScreen extends StatelessWidget {
               _DetailRow(label: 'Kategori', value: transaction.category!),
             if (transaction.capital != null)
               _DetailRow(label: 'Modal', value: transaction.capital!),
-            _DetailRow(
-              label: 'Status',
-              value: transaction.status,
-            ),
+            _DetailRow(label: 'Status', value: transaction.status),
             if (transaction.paymentMethod != null)
               _DetailRow(
                 label: 'Metode',
@@ -83,11 +78,23 @@ class TransactionDetailScreen extends StatelessWidget {
   _TransactionTone get _tone {
     switch (transaction.type) {
       case 'income':
-        return (color: const Color(0xFF34D399), sign: '+', icon: Icons.arrow_upward_rounded);
+        return (
+          color: const Color(0xFF34D399),
+          sign: '+',
+          icon: Icons.arrow_upward_rounded,
+        );
       case 'expense':
-        return (color: const Color(0xFFF87171), sign: '-', icon: Icons.arrow_downward_rounded);
+        return (
+          color: const Color(0xFFF87171),
+          sign: '-',
+          icon: Icons.arrow_downward_rounded,
+        );
       default:
-        return (color: const Color(0xFFFBBF24), sign: '', icon: Icons.swap_horiz_rounded);
+        return (
+          color: const Color(0xFFFBBF24),
+          sign: '',
+          icon: Icons.swap_horiz_rounded,
+        );
     }
   }
 
@@ -127,10 +134,7 @@ class _DetailRow extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),
         ],

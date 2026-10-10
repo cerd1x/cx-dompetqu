@@ -99,7 +99,9 @@ class TransactionsController extends _$TransactionsController {
 
   Future<void> _fetch() async {
     try {
-      final items = await ref.read(transactionsRemoteSourceProvider).transactions();
+      final items = await ref
+          .read(transactionsRemoteSourceProvider)
+          .transactions();
       if (!ref.mounted) return;
       // Sesi pagination yang dimulai selagi request ini berjalan lebih
       // baru — jangan ditimpa dengan daftar penuh.

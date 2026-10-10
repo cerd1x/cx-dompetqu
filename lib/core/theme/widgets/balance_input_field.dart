@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
 
 import '../../utils/formatters.dart';
 import '../cs_mix.dart';
@@ -291,14 +292,26 @@ class _BalanceInputFieldState extends State<BalanceInputField> {
           offset: Offset(0, 4),
         ),
       ],
-      child: Container(
-        width: _panelWidth,
-        decoration: BoxDecoration(
-          color: DompetBrand.csFillDark,
-          borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
-          border: Border.all(color: DompetBrand.csBorderDark, width: 1),
-        ),
-        padding: const EdgeInsets.all(4),
+      child: Box(
+        style: BoxStyler()
+            .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.all(4)))
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: _panelWidth,
+                  height: null,
+                ),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: DompetBrand.csFillDark,
+                  borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
+                  border: Border.all(color: DompetBrand.csBorderDark, width: 1),
+                ),
+              ),
+            ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -433,14 +446,27 @@ class _BalanceInputFieldState extends State<BalanceInputField> {
       key: _triggerKey,
       onTap: _toggleMenu,
       borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
-      child: Container(
-        height: 32,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-        color: DompetBrand.csFill,
-          borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
-        border: Border.all(color: DompetBrand.csBorder, width: 1),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 8),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(width: null, height: 32),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: DompetBrand.csFill,
+                  borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
+                  border: Border.all(color: DompetBrand.csBorder, width: 1),
+                ),
+              ),
+            ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -477,17 +503,17 @@ class _BalanceInputFieldState extends State<BalanceInputField> {
       height: 32,
       decoration: BoxDecoration(
         gradient: focused
-          ? LinearGradient(
+            ? LinearGradient(
                 colors: [
-                DompetBrand.gold.withValues(alpha: 0.16),
-                DompetBrand.purple.withValues(alpha: 0.08),
+                  DompetBrand.gold.withValues(alpha: 0.16),
+                  DompetBrand.purple.withValues(alpha: 0.08),
                 ],
               )
             : null,
         color: focused ? null : Colors.transparent,
         borderRadius: BorderRadius.circular(DompetBrand.radiusSm),
         border: Border.all(
-        color: focused ? Colors.transparent : DompetBrand.csBorderHover,
+          color: focused ? Colors.transparent : DompetBrand.csBorderHover,
           width: 1,
         ),
       ),
@@ -571,13 +597,26 @@ class _CurrencyOption extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       hoverColor: DompetBrand.csFillHover,
-      child: Container(
-        height: 32,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: selected ? DompetBrand.csFillHover : null,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.symmetric(horizontal: 8),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(width: null, height: 32),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: selected ? DompetBrand.csFillHover : null,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
         child: Row(
           children: [
             SizedBox(
@@ -595,16 +634,14 @@ class _CurrencyOption extends StatelessWidget {
                 currency.code,
                 style: TextStyle(
                   fontSize: 12,
-                  color: selected ? DompetBrand.purple : const Color(0x80EA580C), // orange-600/50
+                  color: selected
+                      ? DompetBrand.purple
+                      : const Color(0x80EA580C), // orange-600/50
                 ),
               ),
             ),
             if (selected)
-              Icon(
-                Icons.check,
-                size: 12,
-                color: DompetBrand.purple,
-              ),
+              Icon(Icons.check, size: 12, color: DompetBrand.purple),
           ],
         ),
       ),

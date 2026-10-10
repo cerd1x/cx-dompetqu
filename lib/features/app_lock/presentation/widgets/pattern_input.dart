@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/mix.dart';
 
 import '../../../../core/theme/dompet_brand.dart';
 
@@ -31,14 +32,25 @@ class PatternInputState extends State<PatternInput> {
       onPanStart: _onPanStart,
       onPanUpdate: _onPanUpdate,
       onPanEnd: _onPanEnd,
-      child: Container(
-        width: boardSize,
-        height: boardSize,
-        decoration: BoxDecoration(
-          color: DompetBrand.csFill,
-          borderRadius: BorderRadius.circular(DompetBrand.radius),
-          border: Border.all(color: DompetBrand.csBorder, width: 1),
-        ),
+      child: Box(
+        style: BoxStyler()
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: boardSize,
+                  height: boardSize,
+                ),
+              ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  color: DompetBrand.csFill,
+                  borderRadius: BorderRadius.circular(DompetBrand.radius),
+                  border: Border.all(color: DompetBrand.csBorder, width: 1),
+                ),
+              ),
+            ),
         child: CustomPaint(
           painter: _PatternPainter(
             selected: _selected,
@@ -59,10 +71,9 @@ class PatternInputState extends State<PatternInput> {
     final startY = _padding + _spacing / 2;
     for (int row = 0; row < 3; row++) {
       for (int col = 0; col < 3; col++) {
-        _dotCenters.add(Offset(
-          startX + col * _spacing,
-          startY + row * _spacing,
-        ));
+        _dotCenters.add(
+          Offset(startX + col * _spacing, startY + row * _spacing),
+        );
       }
     }
   }
@@ -146,11 +157,9 @@ class _PatternPainter extends CustomPainter {
   final bool error;
   final double boardSize;
 
-  Color get _lineColor =>
-      error ? const Color(0xFFEF4444) : DompetBrand.purple;
+  Color get _lineColor => error ? const Color(0xFFEF4444) : DompetBrand.purple;
 
-  Color get _dotColor =>
-      error ? const Color(0xFFEF4444) : DompetBrand.purple;
+  Color get _dotColor => error ? const Color(0xFFEF4444) : DompetBrand.purple;
 
   @override
   void paint(Canvas canvas, Size size) {

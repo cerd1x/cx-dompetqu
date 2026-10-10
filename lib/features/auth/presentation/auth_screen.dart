@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
@@ -260,13 +261,24 @@ class _ErrorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFDB2777).withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: DompetBrand.pink.withValues(alpha: 0.4)),
-      ),
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: const Color(0xFFDB2777).withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: DompetBrand.pink.withValues(alpha: 0.4),
+                ),
+              ),
+            ),
+          ),
       child: Row(
         children: [
           const Icon(Icons.error_outline, size: 20, color: DompetBrand.pink),

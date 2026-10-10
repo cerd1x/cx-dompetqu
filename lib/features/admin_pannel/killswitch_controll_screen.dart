@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme/widgets/dompet_button.dart';
@@ -31,16 +32,37 @@ class _KillswitchControllScreenState
     extends ConsumerState<KillswitchControllScreen> {
   final _operationCtrl = TextEditingController();
   final _reasonCtrl = TextEditingController();
+  final _tokenCtrl = TextEditingController();
 
   @override
   void dispose() {
     _operationCtrl.dispose();
     _reasonCtrl.dispose();
+    _tokenCtrl.dispose();
     super.dispose();
   }
 
   KillswitchController get _controller =>
       ref.read(killswitchControllerProvider.notifier);
+
+  Future<void> _saveToken() async {
+    final value = _tokenCtrl.text.trim();
+    if (value.isEmpty) {
+      _snack('Token admin tidak boleh kosong.', false);
+      return;
+    }
+    final tokenNotifier = ref.read(killswitchAdminTokenProvider.notifier);
+    tokenNotifier.save(value);
+    await _controller.load();
+    if (!mounted) return;
+    _snack('Token admin disimpan.', true);
+  }
+
+  void _clearToken() {
+    _tokenCtrl.clear();
+    ref.read(killswitchAdminTokenProvider.notifier).clear();
+    _snack('Token admin dihapus.', false);
+  }
 
   Future<void> _disable() async {
     final operation = _operationCtrl.text.trim();
@@ -93,10 +115,22 @@ class _KillswitchControllScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(killswitchControllerProvider);
-    final hasToken = _controller.hasToken;
+    final token = ref.watch(killswitchAdminTokenProvider);
+    final hasToken = token.trim().isNotEmpty;
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'Kembali',
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/admin');
+            }
+          },
+          icon: const Icon(Icons.arrow_back_rounded),
+        ),
         title: const Text('Kill Switch'),
         actions: [
           // refresh section
@@ -114,8 +148,14 @@ class _KillswitchControllScreenState
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
             children: [
-              // token warning section
-              if (!hasToken) const _TokenWarning(),
+              // token section
+              _TokenField(
+                controller: _tokenCtrl,
+                busy: state.mutating,
+                hasToken: hasToken,
+                onSave: _saveToken,
+                onClear: _clearToken,
+              ),
               // form section
               _DisableForm(
                 operationCtrl: _operationCtrl,
@@ -161,9 +201,30 @@ class _KillswitchControllScreenState
   }
 }
 
-/// Peringatan bila token admin belum dikonfigurasi.
-class _TokenWarning extends StatelessWidget {
-  const _TokenWarning();
+/// Form input token admin (sementara dari user, in-memory).
+///
+/// Token dipakai sebagai header `x-admin-token` pada endpoint kontrol.
+class _TokenField extends StatefulWidget {
+  const _TokenField({
+    required this.controller,
+    required this.busy,
+    required this.hasToken,
+    required this.onSave,
+    required this.onClear,
+  });
+
+  final TextEditingController controller;
+  final bool busy;
+  final bool hasToken;
+  final VoidCallback onSave;
+  final VoidCallback onClear;
+
+  @override
+  State<_TokenField> createState() => _TokenFieldState();
+}
+
+class _TokenFieldState extends State<_TokenField> {
+  bool _obscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -171,22 +232,78 @@ class _TokenWarning extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: DompetCard(
         variant: DompetCardVariant.csGlassCard,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(
-              Icons.key_off_rounded,
-              color: Color(0xFFFBBF24),
-              size: 20,
+            // header section
+            Row(
+              children: [
+                Icon(
+                  widget.hasToken
+                      ? Icons.key_rounded
+                      : Icons.key_off_rounded,
+                  size: 20,
+                  color: widget.hasToken
+                      ? const Color(0xFF34D399)
+                      : const Color(0xFFFBBF24),
+                ),
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'Token Admin',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                if (widget.hasToken)
+                  IconButton(
+                    tooltip: 'Hapus token',
+                    onPressed: widget.busy ? null : widget.onClear,
+                    icon: const Icon(
+                      Icons.logout_rounded,
+                      size: 18,
+                      color: Colors.white54,
+                    ),
+                  ),
+              ],
             ),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                'Token admin belum diset. Jalankan dengan '
-                '--dart-define=KILLSWITCH_ADMIN_TOKEN=... agar endpoint '
-                'kontrol dapat diakses.',
-                style: TextStyle(fontSize: 12, color: Colors.white70),
+            const SizedBox(height: 6),
+            // token input section
+            TextField(
+              controller: widget.controller,
+              enabled: !widget.busy,
+              obscureText: _obscured,
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 13,
+                color: Colors.white,
               ),
+              decoration: InputDecoration(
+                hintText: 'Masukkan x-admin-token',
+                errorText: widget.hasToken ? null : 'Token belum diset.',
+                suffixIcon: IconButton(
+                  onPressed: () => setState(() => _obscured = !_obscured),
+                  icon: Icon(
+                    _obscured
+                        ? Icons.visibility_rounded
+                        : Icons.visibility_off_rounded,
+                    size: 18,
+                    color: Colors.white54,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // save section
+            DompetButton(
+              label: 'Simpan Token',
+              leadingIcon: Icons.save_rounded,
+              height: 40,
+              loading: widget.busy,
+              onPressed: widget.busy ? null : widget.onSave,
             ),
           ],
         ),

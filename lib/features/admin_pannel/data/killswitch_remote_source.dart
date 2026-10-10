@@ -1,50 +1,47 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dompetqu/core/network/cookie_aware_client.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/config/api_config.dart';
+
+part 'killswitch_remote_source.freezed.dart';
+part 'killswitch_remote_source.g.dart';
+
+/// Terima `disabledAt` sebagai ISO string (serialisasi Date) atau unix detik.
+DateTime? _parseDate(Object? value) {
+  if (value is num) {
+    return DateTime.fromMillisecondsSinceEpoch(
+      value.toInt() * 1000,
+      isUtc: true,
+    ).toLocal();
+  }
+  if (value is String) return DateTime.tryParse(value)?.toLocal();
+  return null;
+}
 
 /// Satu baris kill switch (`api_killswitch`) — operation GraphQL yang dimatikan.
 ///
 /// Kontrak REST: `GET /admin/killswitch` mengembalikan
 /// `{ status, count, items: [{ operation, reason, disabledAt }] }`.
-class KillswitchEntry {
-  const KillswitchEntry({
-    required this.operation,
-    this.reason,
-    this.disabledAt,
-  });
+@freezed
+abstract class KillswitchEntry with _$KillswitchEntry {
+  const factory KillswitchEntry({
+    /// Kunci operation GraphQL, format `"<Type>.<field>"` (mis.
+    /// `Mutation.createTransaction`).
+    required String operation,
 
-  /// Kunci operation GraphQL, format `"<Type>.<field>"` (mis.
-  /// `Mutation.createTransaction`).
-  final String operation;
+    /// Alasan operator (opsional).
+    String? reason,
 
-  /// Alasan operator (opsional).
-  final String? reason;
+    /// Waktu saat operation dimatikan.
+    @JsonKey(fromJson: _parseDate) DateTime? disabledAt,
+  }) = _KillswitchEntry;
 
-  /// Waktu saat operation dimatikan.
-  final DateTime? disabledAt;
-
-  factory KillswitchEntry.fromJson(Map<String, dynamic> json) {
-    return KillswitchEntry(
-      operation: json['operation'] as String? ?? '',
-      reason: json['reason'] as String?,
-      disabledAt: _parseDate(json['disabledAt']),
-    );
-  }
-
-  /// Terima `disabledAt` sebagai ISO string (serialisasi Date) atau unix detik.
-  static DateTime? _parseDate(Object? value) {
-    if (value is num) {
-      return DateTime.fromMillisecondsSinceEpoch(
-        value.toInt() * 1000,
-        isUtc: true,
-      ).toLocal();
-    }
-    if (value is String) return DateTime.tryParse(value)?.toLocal();
-    return null;
-  }
+  factory KillswitchEntry.fromJson(Map<String, dynamic> json) =>
+      _$KillswitchEntryFromJson(json);
 }
 
 /// Exception saat pemanggilan endpoint kill switch gagal.
@@ -81,20 +78,20 @@ class KillswitchRemoteSource {
 
   Uri get _base => Uri.parse(ApiConfig.killswitchEndpoint);
 
-  Uri _operationUri(String operation) =>
-      Uri.parse('${ApiConfig.killswitchEndpoint}/${Uri.encodeComponent(operation)}');
+  Uri _operationUri(String operation) => Uri.parse(
+    '${ApiConfig.killswitchEndpoint}/${Uri.encodeComponent(operation)}',
+  );
 
   Map<String, String> get _headers => {
     'content-type': 'application/json',
-    'x-admin-token': adminToken,
+    // 'x-admin-token': adminToken,
+    'Authorization': adminToken,
   };
 
   /// Ambil daftar operation yang sedang dimatikan.
   Future<List<KillswitchEntry>> list() async {
     _ensureToken();
-    final res = await _client
-        .get(_base, headers: _headers)
-        .timeout(_timeout);
+    final res = await _client.get(_base, headers: _headers).timeout(_timeout);
     _ensureOk(res);
     final body = _decode(res.body);
     final items = body['items'];
@@ -123,7 +120,7 @@ class KillswitchRemoteSource {
     return KillswitchEntry(
       operation: body['operation'] as String? ?? operation,
       reason: body['reason'] as String?,
-      disabledAt: KillswitchEntry._parseDate(body['disabledAt']),
+      disabledAt: _parseDate(body['disabledAt']),
     );
   }
 
@@ -144,8 +141,8 @@ class KillswitchRemoteSource {
   void _ensureToken() {
     if (!hasToken) {
       throw KillswitchException(
-        'Token admin belum diset. Jalankan dengan '
-        '--dart-define=KILLSWITCH_ADMIN_TOKEN=...',
+        'Token admin belum diset. Masukkan token pada form '
+        '"Token Admin" di layar Kill Switch.',
         statusCode: 401,
       );
     }
@@ -156,7 +153,8 @@ class KillswitchRemoteSource {
     String detail = res.body;
     try {
       final body = _decode(res.body);
-      detail = (body['error'] as String?) ?? (body['message'] as String?) ?? detail;
+      detail =
+          (body['error'] as String?) ?? (body['message'] as String?) ?? detail;
     } catch (_) {
       // biarkan body mentah
     }
@@ -173,10 +171,32 @@ class KillswitchRemoteSource {
   }
 }
 
-/// Provider remote source kill switch (manual, tanpa codegen).
-final killswitchRemoteSourceProvider = Provider<KillswitchRemoteSource>(
-  (ref) => KillswitchRemoteSource(
-    http.Client(),
-    adminToken: ApiConfig.killswitchAdminToken,
-  ),
-);
+/// Penyimpanan token admin yang diisi user (sementara, in-memory, tidak
+/// di-persist). Dipakai sebagai nilai header `x-admin-token`.
+///
+/// Nanti bisa diganti dengan penyimpanan aman (mis. `flutter_secure_storage`).
+@riverpod
+class KillswitchAdminTokenNotifier extends _$KillswitchAdminTokenNotifier {
+  @override
+  String build() => ref.watch(cookieAwareClientProvider).token ?? '';
+
+  /// Simpan token baru (sudah di-trim oleh pemanggil).
+  void save(String token) => state = token;
+
+  /// Hapus token.
+  void clear() => state = '';
+}
+
+/// Provider remote source kill switch.
+///
+/// Dibuat ulang setiap token berubah supaya request berikutnya langsung
+/// memakai token terbaru. Client di-dispose saat provider dibuang.
+@riverpod
+KillswitchRemoteSource killswitchRemoteSource(Ref ref) {
+  final client = http.Client();
+  ref.onDispose(client.close);
+  return KillswitchRemoteSource(
+    client,
+    adminToken: ref.watch(killswitchAdminTokenProvider),
+  );
+}

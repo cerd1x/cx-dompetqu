@@ -63,10 +63,6 @@ class _GraphQLLogLink extends Link {
   }
 }
 
-/// Client HTTP yang mengelola cookie session (persist antar request).
-@Riverpod(keepAlive: true)
-CookieAwareClient cookieAwareClient(Ref ref) => CookieAwareClient();
-
 /// GraphQL client tunggal untuk seluruh app, mirip `urql_client.ts` di web.
 ///
 /// `queryRequestTimeout` dinaikkan dari default 5s → 30s: saat startup semua

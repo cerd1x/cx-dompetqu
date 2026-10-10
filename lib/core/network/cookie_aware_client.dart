@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/api_config.dart';
 import '../logger/app_logger.dart';
+
+part 'cookie_aware_client.g.dart';
 
 /// Mengelola cookie session (`__sst__`) & refresh (`__rft__`) dari backend.
 ///
@@ -220,3 +223,7 @@ class CookieAwareClient extends http.BaseClient {
   @override
   void close() => _inner.close();
 }
+
+/// Client HTTP yang mengelola cookie session (persist antar request).
+@Riverpod(keepAlive: true)
+CookieAwareClient cookieAwareClient(Ref ref) => CookieAwareClient();

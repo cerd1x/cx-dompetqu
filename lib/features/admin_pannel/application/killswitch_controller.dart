@@ -1,43 +1,29 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/logger/app_logger.dart';
 import '../data/killswitch_remote_source.dart';
 
+part 'killswitch_controller.freezed.dart';
 part 'killswitch_controller.g.dart';
 
-/// State layar kill switch.
-class KillswitchState {
-  const KillswitchState({
-    this.entries = const [],
-    this.loading = true,
-    this.mutating = false,
-    this.error,
-  });
+/// State layar kill switch — daftar operation yang dimatikan beserta status
+/// loading/mutating dan pesan error.
+@freezed
+abstract class KillswitchState with _$KillswitchState {
+  const factory KillswitchState({
+    /// Daftar operation yang sedang dimatikan.
+    @Default([]) List<KillswitchEntry> entries,
 
-  /// Daftar operation yang sedang dimatikan.
-  final List<KillswitchEntry> entries;
+    /// `true` saat memuat daftar (pertama kali / refresh).
+    @Default(true) bool loading,
 
-  /// `true` saat memuat daftar (pertama kali / refresh).
-  final bool loading;
+    /// `true` saat operasi disable/enable sedang berjalan.
+    @Default(false) bool mutating,
 
-  /// `true` saat operasi disable/enable sedang berjalan.
-  final bool mutating;
-
-  /// Pesan error terakhir (untuk ditampilkan di UI).
-  final String? error;
-
-  KillswitchState copyWith({
-    List<KillswitchEntry>? entries,
-    bool? loading,
-    bool? mutating,
+    /// Pesan error terakhir (untuk ditampilkan di UI).
     String? error,
-    bool clearError = false,
-  }) => KillswitchState(
-    entries: entries ?? this.entries,
-    loading: loading ?? this.loading,
-    mutating: mutating ?? this.mutating,
-    error: clearError ? null : (error ?? this.error),
-  );
+  }) = _KillswitchState;
 }
 
 /// Kontrol kill switch: memuat daftar, mematikan, dan menghidupkan operation
@@ -58,7 +44,7 @@ class KillswitchController extends _$KillswitchController {
   Future<void> load() {
     final pending = _inFlight;
     if (pending != null) return pending;
-    state = state.copyWith(loading: true, clearError: true);
+    state = state.copyWith(loading: true, error: null);
     final future = _fetch();
     _inFlight = future;
     future.whenComplete(() {
@@ -85,7 +71,7 @@ class KillswitchController extends _$KillswitchController {
 
   /// Matikan [operation]. Mengembalikan `true` bila sukses.
   Future<bool> disable(String operation, {String? reason}) async {
-    state = state.copyWith(mutating: true, clearError: true);
+    state = state.copyWith(mutating: true, error: null);
     try {
       await _remote.disable(operation, reason: reason);
       AppLogger.instance.warn(
@@ -105,7 +91,7 @@ class KillswitchController extends _$KillswitchController {
 
   /// Nyalakan kembali [operation]. Mengembalikan `true` bila sukses.
   Future<bool> enable(String operation) async {
-    state = state.copyWith(mutating: true, clearError: true);
+    state = state.copyWith(mutating: true, error: null);
     try {
       await _remote.enable(operation);
       AppLogger.instance.info(

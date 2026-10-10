@@ -63,6 +63,17 @@ class _AdminHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        // back section
+        IconButton(
+          tooltip: 'Kembali',
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            }
+          },
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white54),
+        ),
+        const SizedBox(width: 4),
         // title section
         Expanded(
           child: Column(

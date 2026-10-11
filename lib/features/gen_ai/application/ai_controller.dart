@@ -1,8 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dompetqu/features/gen_ai/models/ai_message.dart';
-import 'package:dompetqu/features/home/settings/application/settings_controller.dart';
+import 'ai_settings_controller.dart';
+import '../models/ai_settings.dart';
 
+part 'ai_controller.freezed.dart';
 part 'ai_controller.g.dart';
 
 /// Persona & batasan asisten AI.
@@ -18,16 +21,12 @@ Aturan:
   kembali ke topik keuangan.''';
 
 /// State percakapan AI — daftar pesan + flag menunggu balasan.
-class AiState {
-  const AiState({this.messages = const [], this.sending = false});
-
-  final List<AiMessage> messages;
-  final bool sending;
-
-  AiState copyWith({List<AiMessage>? messages, bool? sending}) => AiState(
-    messages: messages ?? this.messages,
-    sending: sending ?? this.sending,
-  );
+@freezed
+abstract class AiState with _$AiState {
+  const factory AiState({
+    @Default([]) List<AiMessage> messages,
+    @Default(false) bool sending,
+  }) = _AiState;
 }
 
 /// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
@@ -60,14 +59,15 @@ class AiController extends _$AiController {
   }
 
   Future<String> _ask(String message, List<AiMessage> history) async {
-    final settings = await ref.read(settingsControllerProvider.future);
+    final settings = await ref.read(aiSettingsControllerProvider.future);
+    if (!ref.mounted) return '';
     final model = GenerativeModel(
-      model: settings.aiModel.isEmpty ? kDefaultAiModel : settings.aiModel,
-      apiKey: settings.aiApiKey,
+      model: settings.model.isEmpty ? kDefaultAiModel : settings.model,
+      apiKey: settings.apiKey,
       systemInstruction: Content.system(_kSystemInstruction),
     );
-    if (settings.aiApiKey.isEmpty) {
-      throw StateError('API key Gemini belum diatur di Settings.');
+    if (settings.apiKey.isEmpty) {
+      throw StateError('API key Gemini belum diatur di Pengaturan AI.');
     }
 
     // Gemini mewajibkan history dimulai dari peran "user".
@@ -91,7 +91,7 @@ class AiController extends _$AiController {
       }
       return reply.trim();
     } on GenerativeAIException catch (e) {
-      throw StateError(_friendly(e.message, settings.aiModel));
+      throw StateError(_friendly(e.message, settings.model));
     }
   }
 

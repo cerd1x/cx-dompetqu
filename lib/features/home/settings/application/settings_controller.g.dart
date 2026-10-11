@@ -8,17 +8,17 @@ part of 'settings_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Pengaturan lokal (dark mode, mata uang, AI) yang dipersist ke
+/// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
 /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.
 
 @ProviderFor(SettingsController)
 final settingsControllerProvider = SettingsControllerProvider._();
 
-/// Pengaturan lokal (dark mode, mata uang, AI) yang dipersist ke
+/// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
 /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.
 final class SettingsControllerProvider
     extends $AsyncNotifierProvider<SettingsController, AppSettings> {
-  /// Pengaturan lokal (dark mode, mata uang, AI) yang dipersist ke
+  /// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
   /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.
   SettingsControllerProvider._()
     : super(
@@ -40,9 +40,9 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'49bd7dacf92b91c1168beccd22bf4ee325b9a02a';
+    r'b5743d60b3ff0d486bd7b1468a383293d720ea6d';
 
-/// Pengaturan lokal (dark mode, mata uang, AI) yang dipersist ke
+/// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
 /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.
 
 abstract class _$SettingsController extends $AsyncNotifier<AppSettings> {

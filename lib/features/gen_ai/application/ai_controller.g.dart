@@ -56,7 +56,7 @@ final class AiControllerProvider
   }
 }
 
-String _$aiControllerHash() => r'8f503f35e4fcff1cc0d1cb31c6401428573aa0dc';
+String _$aiControllerHash() => r'2f55750d387bbf9adf8c7e671abe5650c6878180';
 
 /// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
 /// ditutup (tidak ada listener) — hemat memori & mulai fresh.

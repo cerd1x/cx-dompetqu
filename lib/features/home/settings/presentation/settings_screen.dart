@@ -9,7 +9,6 @@ import '../../../../core/theme/widgets/dompet_card.dart';
 import '../../../auth/application/session_controller.dart';
 import '../../../app_lock/presentation/app_lock_setup_screen.dart';
 import 'passkey_settings_section.dart';
-import 'row_ai_setting_view.dart';
 import 'row_currency_picker_view.dart';
 import 'row_notifications_view.dart';
 import '../application/settings_controller.dart';
@@ -142,8 +141,6 @@ class SettingsScreen extends ConsumerWidget {
                         showChevron: false,
                         onTap: () => _confirmLogout(context, ref),
                       ),
-                      // AI settings section — chat, API key & model.
-                      const AiSettingsSection(),
                     ],
                   ),
                 ),

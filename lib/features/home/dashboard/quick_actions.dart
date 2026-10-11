@@ -48,6 +48,11 @@ class QuickActions extends StatelessWidget {
               label: 'Analytics',
               onTap: () => context.push('/analytics'),
             ),
+            RoundActionButton(
+              icon: Icons.auto_awesome_rounded,
+              label: 'AI Assistant',
+              onTap: () => context.push('/gen-ai'),
+            ),
           ],
         ),
       ),

@@ -194,7 +194,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           Divider(height: 1, color: Colors.white.withValues(alpha: 0.08)),
           AiSettingRow(
             icon: Icons.auto_awesome,
-            label: 'Model',
+            label: 'Model Gemini',
             trailing: CSSelectPicker<String>(
               items: _kGeminiModels,
               value: widget.settings.model.isNotEmpty

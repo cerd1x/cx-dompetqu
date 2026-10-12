@@ -1,21 +1,18 @@
-class McpServer {
-  const McpServer({
-    required this.id,
-    required this.name,
-    required this.url,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final String url;
+part 'mcp_server.freezed.dart';
+part 'mcp_server.g.dart';
 
-  factory McpServer.fromJson(Map<String, dynamic> json) {
-    return McpServer(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      url: json['url'] as String,
-    );
-  }
+/// Satu server MCP — endpoint HTTP yang didaftarkan user. Dipakai controller,
+/// repository, dan datasource (persist JSON di SharedPreferences).
+@freezed
+abstract class McpServer with _$McpServer {
+  const factory McpServer({
+    required String id,
+    required String name,
+    required String url,
+  }) = _McpServer;
 
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'url': url};
+  factory McpServer.fromJson(Map<String, dynamic> json) =>
+      _$McpServerFromJson(json);
 }

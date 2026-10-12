@@ -1,25 +1,18 @@
-class AiSkill {
-  const AiSkill({
-    required this.id,
-    required this.name,
-    required this.instructions,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final String instructions;
+part 'ai_skill.freezed.dart';
+part 'ai_skill.g.dart';
 
-  factory AiSkill.fromJson(Map<String, dynamic> json) {
-    return AiSkill(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      instructions: json['instructions'] as String,
-    );
-  }
+/// Satu skill AI — instruksi khusus yang disimpan per user. Dipakai
+/// controller, repository, dan datasource (persist JSON di SharedPreferences).
+@freezed
+abstract class AiSkill with _$AiSkill {
+  const factory AiSkill({
+    required String id,
+    required String name,
+    required String instructions,
+  }) = _AiSkill;
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'instructions': instructions,
-  };
+  factory AiSkill.fromJson(Map<String, dynamic> json) =>
+      _$AiSkillFromJson(json);
 }

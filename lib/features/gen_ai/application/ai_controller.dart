@@ -1,8 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:genkit/genkit.dart';
+import 'package:genkit_google_genai/genkit_google_genai.dart';
+import 'package:genkit_mcp/genkit_mcp.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dompetqu/features/gen_ai/models/ai_message.dart';
 import 'ai_settings_controller.dart';
+import 'ai_skills_controller.dart';
+import 'mcp_controller.dart';
+import '../models/ai_skill.dart';
 import '../models/ai_settings.dart';
 
 part 'ai_controller.freezed.dart';
@@ -29,11 +34,7 @@ abstract class AiState with _$AiState {
   }) = _AiState;
 }
 
-/// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
-/// ditutup (tidak ada listener) — hemat memori & mulai fresh.
-///
-/// Memakai package `google_generative_ai` (Gemini) langsung dengan API key
-/// & model yang dikonfigurasi di halaman Settings.
+/// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 @Riverpod()
 class AiController extends _$AiController {
   @override
@@ -50,7 +51,7 @@ class AiController extends _$AiController {
     ];
     state = AiState(messages: history, sending: true);
     try {
-      // Riwayat TANPA pesan terakhir — pesan itu dikirim via sendMessage.
+      // Riwayat TANPA pesan terakhir; pesan terbaru dikirim terpisah ke Genkit.
       final reply = await _ask(text, history.sublist(0, history.length - 1));
       _append(reply);
     } catch (e) {
@@ -60,39 +61,84 @@ class AiController extends _$AiController {
 
   Future<String> _ask(String message, List<AiMessage> history) async {
     final settings = await ref.read(aiSettingsControllerProvider.future);
+    final skills = await ref.read(aiSkillsControllerProvider.future);
+    final mcpServers = await ref.read(mcpControllerProvider.future);
     if (!ref.mounted) return '';
-    final model = GenerativeModel(
-      model: settings.model.isEmpty ? kDefaultAiModel : settings.model,
-      apiKey: settings.apiKey,
-      systemInstruction: Content.system(_kSystemInstruction),
-    );
     if (settings.apiKey.isEmpty) {
       throw StateError('API key Gemini belum diatur di Pengaturan AI.');
     }
 
-    // Gemini mewajibkan history dimulai dari peran "user".
-    final contents = <Content>[];
-    for (final m in history) {
-      if (m.text.trim().isEmpty) continue;
-      contents.add(
-        Content(m.role == AiRole.user ? 'user' : 'model', [TextPart(m.text)]),
-      );
-    }
-    while (contents.isNotEmpty && contents.first.role != 'user') {
-      contents.removeAt(0);
-    }
-
+    final modelName = settings.model.isEmpty
+        ? kDefaultAiModel
+        : settings.model;
+    final ai = Genkit(plugins: [googleAI(apiKey: settings.apiKey)]);
+    final clients = <GenkitMcpClient>[];
     try {
-      final chat = model.startChat(history: contents);
-      final response = await chat.sendMessage(Content.text(message));
+      final tools = <Tool<Map<String, dynamic>, dynamic>>[];
+      for (var index = 0; index < mcpServers.length; index++) {
+        final server = mcpServers[index];
+        final client = createMcpClient(
+          McpClientOptions(
+            name: 'DompetQu',
+            serverName: 'server_$index',
+            mcpServer: McpServerConfig(url: Uri.parse(server.url)),
+          ),
+        );
+        clients.add(client);
+        await client.ready();
+        tools.addAll(await client.getActiveTools(ai));
+      }
+
+      final response = await ai.generate(
+        model: googleAI.gemini(modelName),
+        system: _systemPrompt(skills),
+        messages: [
+          for (final item in history)
+            if (item.text.trim().isNotEmpty)
+              Message(
+                role: item.role == AiRole.user ? Role.user : Role.model,
+                content: [TextPart(text: item.text)],
+              ),
+          Message(role: Role.user, content: [TextPart(text: message)]),
+        ],
+        tools: tools,
+        use: [retry()],
+      );
+
+      if (response.finishReason == FinishReason.failed) {
+        throw StateError(
+          _friendly(
+            response.error?.message ?? 'Genkit gagal menghasilkan jawaban.',
+            modelName,
+          ),
+        );
+      }
+      if (response.finishReason == FinishReason.blocked) {
+        throw StateError('Pesan diblokir filter keamanan.');
+      }
+      if (response.finishReason == FinishReason.aborted) {
+        throw StateError('Permintaan AI dihentikan sebelum selesai.');
+      }
+
       final reply = response.text;
-      if (reply == null || reply.trim().isEmpty) {
+      if (reply.trim().isEmpty) {
         throw StateError('Gemini mengembalikan jawaban kosong.');
       }
       return reply.trim();
-    } on GenerativeAIException catch (e) {
-      throw StateError(_friendly(e.message, settings.model));
+    } finally {
+      for (final client in clients) {
+        await client.close();
+      }
     }
+  }
+
+  String _systemPrompt(List<AiSkill> skills) {
+    if (skills.isEmpty) return _kSystemInstruction;
+    return [
+      _kSystemInstruction,
+      'Instruksi skill yang ditambahkan pengguna:',
+      for (final skill in skills) '## ${skill.name}\n${skill.instructions}',
+    ].join('\n\n');
   }
 
   /// Terjemahkan error SDK ke pesan yang ramah user.

@@ -85,8 +85,8 @@ class _McpSheetState extends State<McpSheet> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(20, 12, 20, 4),
                 child: Text(
-                  'Endpoint disimpan di perangkat. Koneksi dan pemanggilan '
-                  'MCP belum diaktifkan.',
+                  'Server yang tersimpan akan dihubungkan saat chat. AI '
+                  'dapat memanggil tools yang disediakan server tersebut.',
                   style: TextStyle(color: Colors.white54, fontSize: 12),
                 ),
               ),

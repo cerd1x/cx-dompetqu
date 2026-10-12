@@ -23,8 +23,7 @@ class AiChatSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return const AiChatConversation(isSheet: true);
   }
 }
 

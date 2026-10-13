@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../models/ai_skill.dart';
+import '../domain/entities/ai_skill.dart';
+import '../domain/repositories/ai_skills_repository.dart';
 import '../repositories/ai_skills_repository.dart';
 
 part 'ai_skills_controller.g.dart';
@@ -19,10 +20,7 @@ class AiSkillsController extends _$AiSkillsController {
     required String instructions,
   }) async {
     await _mutate(
-      (repository) => repository.create(
-        name: name,
-        instructions: instructions,
-      ),
+      (repository) => repository.create(name: name, instructions: instructions),
     );
   }
 

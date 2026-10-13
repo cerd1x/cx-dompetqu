@@ -6,7 +6,8 @@ import 'package:crypto/crypto.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/lock_method.dart';
+import '../data/datasources/app_lock_datasources.dart';
+import '../domain/entities/app_lock_state.dart';
 
 part 'app_lock_storage.g.dart';
 
@@ -25,7 +26,7 @@ const String _kLegacyLockMethodKey = 'app_lock_method';
 @Riverpod(keepAlive: true)
 AppLockStorage appLockStorage(Ref ref) => AppLockStorage();
 
-class AppLockStorage {
+class AppLockStorage implements AppLockLocalDataSource {
   Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
   // ---------------------------------------------------------------------------
@@ -37,6 +38,7 @@ class AppLockStorage {
   /// Jika app lock berstatus aktif tetapi kredensial (PIN/pola) tidak tersimpan
   /// (mis. sisa state dari mode biometric-only lama), data di-reset penuh agar
   /// aplikasi tidak terkunci selamanya tanpa jalur buka.
+  @override
   Future<void> ensureUsable() async {
     final prefs = await _prefs;
     final enabled = prefs.getBool(_kLockEnabledKey) ?? false;
@@ -48,12 +50,14 @@ class AppLockStorage {
     await _resetAll(prefs);
   }
 
+  @override
   Future<bool> isEnabled() async {
     final prefs = await _prefs;
     return prefs.getBool(_kLockEnabledKey) ?? false;
   }
 
   /// Kredensial utama (PIN/pola) dengan migrasi dari format lama.
+  @override
   Future<LockCredential> getCredential() async {
     final prefs = await _prefs;
     return _credentialOrMigrate(prefs);
@@ -80,11 +84,13 @@ class AppLockStorage {
     return credential;
   }
 
+  @override
   Future<bool> isBiometricEnabled() async {
     final prefs = await _prefs;
     return prefs.getBool(_kLockBiometricKey) ?? false;
   }
 
+  @override
   Future<bool> verifyPin(String pin) async {
     final prefs = await _prefs;
     final storedHash = prefs.getString(_kLockPinHashKey);
@@ -93,6 +99,7 @@ class AppLockStorage {
     return _hashPin(pin, salt) == storedHash;
   }
 
+  @override
   Future<bool> verifyPattern(List<int> pattern) async {
     final prefs = await _prefs;
     final storedHash = prefs.getString(_kLockPatternHashKey);
@@ -105,16 +112,19 @@ class AppLockStorage {
   // Write
   // ---------------------------------------------------------------------------
 
+  @override
   Future<void> setEnabled(bool value) async {
     final prefs = await _prefs;
     await prefs.setBool(_kLockEnabledKey, value);
   }
 
+  @override
   Future<void> setBiometricEnabled(bool value) async {
     final prefs = await _prefs;
     await prefs.setBool(_kLockBiometricKey, value);
   }
 
+  @override
   Future<void> savePin(String pin) async {
     final prefs = await _prefs;
     final salt = _generateSalt();
@@ -123,6 +133,7 @@ class AppLockStorage {
     await prefs.setString(_kLockCredentialKey, LockCredential.pin.name);
   }
 
+  @override
   Future<void> savePattern(List<int> pattern) async {
     final prefs = await _prefs;
     final salt = _generateSalt();
@@ -131,6 +142,7 @@ class AppLockStorage {
     await prefs.setString(_kLockCredentialKey, LockCredential.pattern.name);
   }
 
+  @override
   Future<void> clearAll() async {
     final prefs = await _prefs;
     await _resetAll(prefs);

@@ -8,27 +8,15 @@ part of 'ai_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
-/// ditutup (tidak ada listener) — hemat memori & mulai fresh.
-///
-/// Memakai package `google_generative_ai` (Gemini) langsung dengan API key
-/// & model yang dikonfigurasi di halaman Settings.
+/// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 
 @ProviderFor(AiController)
 final aiControllerProvider = AiControllerProvider._();
 
-/// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
-/// ditutup (tidak ada listener) — hemat memori & mulai fresh.
-///
-/// Memakai package `google_generative_ai` (Gemini) langsung dengan API key
-/// & model yang dikonfigurasi di halaman Settings.
+/// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 final class AiControllerProvider
     extends $NotifierProvider<AiController, AiState> {
-  /// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
-  /// ditutup (tidak ada listener) — hemat memori & mulai fresh.
-  ///
-  /// Memakai package `google_generative_ai` (Gemini) langsung dengan API key
-  /// & model yang dikonfigurasi di halaman Settings.
+  /// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
   AiControllerProvider._()
     : super(
         from: null,
@@ -56,13 +44,9 @@ final class AiControllerProvider
   }
 }
 
-String _$aiControllerHash() => r'2f55750d387bbf9adf8c7e671abe5650c6878180';
+String _$aiControllerHash() => r'4302388168a15234b3b8b0783249bb5070b1a1ca';
 
-/// Controller percakapan AI. AutoDispose: riwayat bersih tiap sheet
-/// ditutup (tidak ada listener) — hemat memori & mulai fresh.
-///
-/// Memakai package `google_generative_ai` (Gemini) langsung dengan API key
-/// & model yang dikonfigurasi di halaman Settings.
+/// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 
 abstract class _$AiController extends $Notifier<AiState> {
   AiState build();

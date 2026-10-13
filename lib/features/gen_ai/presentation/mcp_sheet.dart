@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
-import '../models/mcp_server.dart';
+import '../domain/entities/mcp_server.dart';
 
 sealed class McpAction {
   const McpAction();
@@ -47,9 +47,7 @@ class _McpSheetState extends State<McpSheet> {
               DecorationMix.value(
                 const BoxDecoration(
                   color: Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   border: Border(top: BorderSide(color: DompetBrand.csBorder)),
                 ),
               ),

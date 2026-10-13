@@ -1,11 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/graphql/graphql_providers.dart';
 import '../../../core/logger/app_logger.dart';
-import '../../../core/network/cookie_aware_client.dart';
-import '../data/auth_remote_source.dart';
-import '../data/passkey_service.dart';
-import '../models/user.dart';
+import '../domain/entities/auth_user.dart';
+import '../domain/failures/auth_failure.dart';
+import 'auth_providers.dart';
 
 part 'session_controller.g.dart';
 
@@ -20,7 +18,7 @@ class SessionState {
   });
 
   final AuthStatus status;
-  final User? user;
+  final AuthUser? user;
   final String? error;
   final bool busy;
 
@@ -28,7 +26,7 @@ class SessionState {
 
   SessionState copyWith({
     AuthStatus? status,
-    User? user,
+    AuthUser? user,
     String? error,
     bool? busy,
   }) => SessionState(
@@ -42,12 +40,6 @@ class SessionState {
 /// State session global — padanan session/`userStore` di web.
 @Riverpod(keepAlive: true)
 class SessionController extends _$SessionController {
-  AuthRemoteSource get _source => ref.read(authRemoteSourceProvider);
-
-  PasskeyService get _passkey => ref.read(passkeyServiceProvider);
-
-  CookieAwareClient get _cookieClient => ref.read(cookieAwareClientProvider);
-
   AppLogger get _log => AppLogger.instance;
 
   @override
@@ -60,30 +52,15 @@ class SessionController extends _$SessionController {
   Future<void> restore() async {
     state = const SessionState(status: AuthStatus.unknown);
     try {
-      await _cookieClient.restore();
-      // Refresh `__sst__` memakai `__rft__` bila session sudah usang.
-      if (!_cookieClient.isSessionValid && _cookieClient.refreshToken != null) {
-        _log.info('Session usang — refresh memakai __rft__', tag: 'Session');
-        await _cookieClient.refreshSession();
-      }
-      final authorized = await _source.checkAuthorized();
-      if (!authorized) {
+      final user = await ref.read(authUseCasesProvider).restoreSession();
+      if (user == null) {
         _log.debug('Sesi tidak terotorisasi', tag: 'Session');
         state = const SessionState(status: AuthStatus.unauthenticated);
         return;
       }
-      final user = await _source.me();
-      _log.debug(
-        'Sesi direstore: ${user?.username ?? 'tanpa user'}',
-        tag: 'Session',
-      );
-      state = SessionState(
-        status: user == null
-            ? AuthStatus.unauthenticated
-            : AuthStatus.authenticated,
-        user: user,
-      );
-    } on AuthException catch (e) {
+      _log.debug('Sesi direstore: ${user.username}', tag: 'Session');
+      state = SessionState(status: AuthStatus.authenticated, user: user);
+    } on AuthFailure catch (e) {
       _log.warn('Restore sesi gagal: ${e.message}', tag: 'Session');
       state = SessionState(
         status: AuthStatus.unauthenticated,
@@ -101,16 +78,13 @@ class SessionController extends _$SessionController {
   }) async {
     state = state.copyWith(busy: true, error: null);
     try {
-      final result = await _source.signIn(
-        username: username,
-        password: password,
-      );
-      _log.success('Sign in: ${result.user.username}', tag: 'Session');
-      await _cookieClient.setToken(result.session);
-      await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(status: AuthStatus.authenticated, user: result.user);
+      final user = await ref
+          .read(authUseCasesProvider)
+          .signIn(username: username, password: password);
+      _log.success('Sign in: ${user.username}', tag: 'Session');
+      state = SessionState(status: AuthStatus.authenticated, user: user);
       return true;
-    } on AuthException catch (e) {
+    } on AuthFailure catch (e) {
       _log.warn('Sign in gagal: ${e.message}', tag: 'Session');
       state = state.copyWith(busy: false, error: e.message);
       return false;
@@ -124,17 +98,13 @@ class SessionController extends _$SessionController {
   }) async {
     state = state.copyWith(busy: true, error: null);
     try {
-      final result = await _source.signUp(
-        name: name,
-        username: username,
-        password: password,
-      );
-      _log.success('Sign up: ${result.user.username}', tag: 'Session');
-      await _cookieClient.setToken(result.session);
-      await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(status: AuthStatus.authenticated, user: result.user);
+      final user = await ref
+          .read(authUseCasesProvider)
+          .signUp(name: name, username: username, password: password);
+      _log.success('Sign up: ${user.username}', tag: 'Session');
+      state = SessionState(status: AuthStatus.authenticated, user: user);
       return true;
-    } on AuthException catch (e) {
+    } on AuthFailure catch (e) {
       _log.warn('Sign up gagal: ${e.message}', tag: 'Session');
       state = state.copyWith(busy: false, error: e.message);
       return false;
@@ -144,13 +114,11 @@ class SessionController extends _$SessionController {
   Future<bool> signInWithPasskey() async {
     state = state.copyWith(busy: true, error: null);
     try {
-      final result = await _passkey.signInWithPasskey();
-      _log.success('Passkey sign in: ${result.user.username}', tag: 'Session');
-      await _cookieClient.setToken(result.session);
-      await _cookieClient.setRefreshToken(result.refreshToken);
-      state = SessionState(status: AuthStatus.authenticated, user: result.user);
+      final user = await ref.read(authUseCasesProvider).signInWithPasskey();
+      _log.success('Passkey sign in: ${user.username}', tag: 'Session');
+      state = SessionState(status: AuthStatus.authenticated, user: user);
       return true;
-    } on AuthException catch (e) {
+    } on AuthFailure catch (e) {
       _log.warn('Passkey sign in gagal: ${e.message}', tag: 'Session');
       state = state.copyWith(busy: false, error: e.message);
       return false;
@@ -166,13 +134,12 @@ class SessionController extends _$SessionController {
 
   Future<void> signOut() async {
     try {
-      await _source.signOut();
+      await ref.read(authUseCasesProvider).signOut();
       _log.info('Sign out server OK', tag: 'Session');
-    } on AuthException catch (e) {
+    } on AuthFailure catch (e) {
       _log.warn('Sign out server gagal: ${e.message}', tag: 'Session');
       // tetap lanjut logout lokal walaupun server menolak
     }
-    await _cookieClient.clear();
     state = const SessionState(status: AuthStatus.unauthenticated);
   }
 

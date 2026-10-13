@@ -4,9 +4,11 @@ import 'package:passkeys/types.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/logger/app_logger.dart';
+import 'datasources/auth_remote_datasource.dart';
+import 'datasources/passkey_datasource.dart';
+import 'auth_remote_source.dart';
 import '../models/passkey.dart';
 import '../models/user.dart';
-import 'auth_remote_source.dart';
 
 part 'passkey_service.g.dart';
 
@@ -14,13 +16,14 @@ part 'passkey_service.g.dart';
 ///
 /// Menggunakan paket `passkeys` (corbado) yang mengabstraksi WebAuthn native
 /// (Android Credential Manager, iOS/Web AuthenticationServices).
-class PasskeyService {
+class PasskeyService implements PasskeyDataSource {
   PasskeyService(this._source);
 
-  final AuthRemoteSource _source;
+  final AuthRemoteDataSource _source;
   final PasskeyAuthenticator _authenticator = PasskeyAuthenticator();
   final AppLogger _log = AppLogger.instance;
 
+  @override
   Future<bool> get isSupported async {
     try {
       if (kIsWeb) {
@@ -48,6 +51,7 @@ class PasskeyService {
 
   /// Alur: minta challenge dari server → platform authenticator meminta
   /// biometrik → kirim assertion JSON ke `signInWithPassKey`.
+  @override
   Future<({User user, String session, String refreshToken})>
   signInWithPasskey() async {
     _log.debug('Passkey sign-in dimulai', tag: 'Passkey');
@@ -69,6 +73,7 @@ class PasskeyService {
   }
 
   /// Alur: minta creation options dari server → daftarkan kredensial baru.
+  @override
   Future<void> registerPasskey({String? deviceName}) async {
     _log.debug('Registrasi passkey dimulai', tag: 'Passkey');
     try {
@@ -87,8 +92,10 @@ class PasskeyService {
     }
   }
 
+  @override
   Future<List<PasskeyCredential>> passkeys() => _source.passkeys();
 
+  @override
   Future<bool> deletePasskey(String credentialId) =>
       _source.deletePasskey(credentialId);
 }

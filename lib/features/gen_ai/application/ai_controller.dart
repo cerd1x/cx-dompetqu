@@ -3,12 +3,12 @@ import 'package:genkit/genkit.dart';
 import 'package:genkit_google_genai/genkit_google_genai.dart';
 import 'package:genkit_mcp/genkit_mcp.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:dompetqu/features/gen_ai/models/ai_message.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
 import 'ai_settings_controller.dart';
 import 'ai_skills_controller.dart';
 import 'mcp_controller.dart';
-import '../models/ai_skill.dart';
-import '../models/ai_settings.dart';
+import '../domain/entities/ai_skill.dart';
+import '../domain/entities/ai_settings.dart';
 
 part 'ai_controller.freezed.dart';
 part 'ai_controller.g.dart';
@@ -68,9 +68,7 @@ class AiController extends _$AiController {
       throw StateError('API key Gemini belum diatur di Pengaturan AI.');
     }
 
-    final modelName = settings.model.isEmpty
-        ? kDefaultAiModel
-        : settings.model;
+    final modelName = settings.model.isEmpty ? kDefaultAiModel : settings.model;
     final ai = Genkit(plugins: [googleAI(apiKey: settings.apiKey)]);
     final clients = <GenkitMcpClient>[];
     try {
@@ -99,7 +97,10 @@ class AiController extends _$AiController {
                 role: item.role == AiRole.user ? Role.user : Role.model,
                 content: [TextPart(text: item.text)],
               ),
-          Message(role: Role.user, content: [TextPart(text: message)]),
+          Message(
+            role: Role.user,
+            content: [TextPart(text: message)],
+          ),
         ],
         tools: tools,
         use: [retry()],

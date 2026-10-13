@@ -2,47 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:graphql/client.dart';
 
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/features/home/contacts/contacts_screen.dart';
-import 'package:dompetqu/features/home/contacts/contact_detail_screen.dart';
-import 'package:dompetqu/features/home/data/contacts_remote_source.dart';
-import 'package:dompetqu/features/home/models/contact.dart';
-import 'package:dompetqu/features/home/widgets/bottom_bar.dart';
+import 'package:dompetqu/features/contacts/presentation/contacts_screen.dart';
+import 'package:dompetqu/features/contacts/presentation/contact_detail_screen.dart';
+import 'package:dompetqu/features/dashboard/application/home_repository_provider.dart';
+import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
+import 'package:dompetqu/features/contacts/domain/entities/contact_page.dart';
+import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
+import 'package:dompetqu/features/dashboard/presentation/widgets/bottom_bar.dart';
 
-GraphQLClient _dummyClient() => GraphQLClient(
-      link: HttpLink('http://localhost:9999'),
-      cache: GraphQLCache(store: InMemoryStore()),
-    );
-
-class FakeContactsRemoteSource extends ContactsRemoteSource {
-  FakeContactsRemoteSource() : super(_dummyClient());
+class FakeContactsRepository implements HomeRepository {
+  final _contact = Contact(
+    id: 'c1',
+    name: 'Budi',
+    phones: ['0812-3456'],
+    email: 'budi@mail.com',
+    group: 'Keluarga',
+    createdAt: DateTime(2025, 1, 15),
+  );
 
   @override
-  Future<List<Contact>> contacts() async => [
-    Contact(
-      id: 'c1',
-      name: 'Budi',
-      phones: ['0812-3456'],
-      email: 'budi@mail.com',
-      group: 'Keluarga',
-      createdAt: DateTime(2025, 1, 15),
-    ),
-  ];
+  Future<List<Contact>> contacts() async => [_contact];
+
+  @override
+  Future<ContactPage> contactsPage({
+    int? first,
+    String? after,
+    int? last,
+    String? before,
+  }) async => ContactPage(
+    items: [_contact],
+    hasNextPage: false,
+    nextCursor: null,
+  );
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 void main() {
   testWidgets('tap contact item -> detail body renders', (tester) async {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       overrides: [
-        contactsRemoteSourceProvider.overrideWithValue(
-          FakeContactsRemoteSource(),
-        ),
+        homeRepositoryProvider.overrideWithValue(FakeContactsRepository()),
       ],
     );
-    addTearDown(container.dispose);
 
     tester.view.physicalSize = const Size(1080, 2400);
     tester.view.devicePixelRatio = 2.0;
@@ -51,7 +57,10 @@ void main() {
     final router = GoRouter(
       initialLocation: '/contacts',
       routes: [
-        GoRoute(path: '/contacts', builder: (_, _) => const ContactsScreen()),
+        GoRoute(
+          path: '/contacts',
+          builder: (_, _) => const Scaffold(body: ContactsScreen()),
+        ),
         GoRoute(
           path: '/contact-detail/:id',
           builder: (_, s) => ContactDetailScreen(

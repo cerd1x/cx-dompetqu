@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../models/mcp_server.dart';
+import '../domain/entities/mcp_server.dart';
+import '../domain/repositories/mcp_repository.dart';
 import '../repositories/mcp_repository.dart';
 
 part 'mcp_controller.g.dart';
@@ -14,13 +15,8 @@ class McpController extends _$McpController {
     return ref.read(mcpRepositoryProvider).loadAll();
   }
 
-  Future<void> add({
-    required String name,
-    required String url,
-  }) async {
-    await _mutate(
-      (repository) => repository.add(name: name, url: url),
-    );
+  Future<void> add({required String name, required String url}) async {
+    await _mutate((repository) => repository.add(name: name, url: url));
   }
 
   Future<void> remove(String id) async {

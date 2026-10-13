@@ -75,13 +75,31 @@ lib/
 │   ├── theme/         app_theme.dart, ui_style.dart, dompet_brand.dart, widgets/
 │   └── utils/         balance.dart, formatters.dart
 └── features/
-    ├── auth/          application/ data/ models/ presentation/
-    ├── app_lock/      application/ data/ models/ presentation/
-    ├── admin_pannel/  (screen + application/ + data/)           # layar admin + kill switch
-    ├── beta_report/, charts/
-    └── home/          application/ data/ models/ + per-screen dirs
+    ├── auth/          domain/ data/ application/ presentation/
+    ├── app_lock/      domain/ data/ application/ presentation/
+    ├── admin_pannel/  domain/ data/ application/ presentation/
+    ├── beta_report/, charts/                                    # UI-only
+    ├── gen_ai/        domain/ data/ repositories/ application/ presentation/
+    └── home/          domain/ data/ application/ + per-screen dirs
 ```
 
+- **Feature architecture:** `presentation` (screens/widgets) → `application`
+  (Riverpod controllers/state) → `domain` (entities/repository contracts);
+  implementations and SDK/network/storage adapters live in `data`. Providers
+  that compose concrete data implementations are dependency-injection
+  boundaries, not a reason for controllers or screens to call data sources.
+- **Domain types:** UI/controller state uses entities from `domain/entities`.
+  JSON/GraphQL models remain data-only (legacy files under `models/` are still
+  data models until migrated with their generated parts); conversion belongs
+  in `data/mappers` and repositories. Never import those serialized models
+  from presentation or domain.
+- **Data access:** controllers and screens call repository interfaces. GraphQL,
+  HTTP, platform SDKs, and `SharedPreferences` are behind data-source interfaces
+  and repository implementations. Preserve backend operations, routing, and
+  user-visible behavior when moving these boundaries.
+- **UI-only features:** `beta_report` and `charts` currently have no feature
+  data/business boundary; do not add repository/domain boilerplate until they
+  own feature logic or persistence.
 - **Routing:** `go_router` via `appRouterProvider` (`lib/main.dart`). Redirect
   memakai `ref.read` (bukan `ref.watch`) + `ref.listen` untuk `router.refresh()`.
   Route utama: `/auth`, `/`, `/app-lock`, `/admin`, `/admin/killswitch`,
@@ -177,3 +195,14 @@ symlink ke `.claude/skills/`). Baca sebelum mengubah area terkait:
   `x-admin-token`. Ada ketidakcocokan yang perlu dibetulkan.
 - Docs `action-ai-rules-execution` masih menyebut "/api/graphql"; nilai aktual
   `ApiConfig.graphqlEndpoint` adalah `$baseUrl/graphql`. Update bila touch.
+
+## Persetujuan Khusus Migrasi Clean Architecture
+
+Pada 13 Oktober 2026, pengguna menyetujui perubahan arsitektur lintas seluruh
+fitur aplikasi dan pemeriksaan yang diperlukan untuk menyelesaikan serta
+memverifikasi migrasi ini. Persetujuan ini terbatas pada pemisahan domain/data/
+presentation dan format/analyze/test yang terkait; tidak mengizinkan perubahan
+perilaku fitur, kontrak backend, build/run/deploy, atau commit/push. Aturan
+codegen tetap berlaku: AI tidak menjalankan `build_runner` dan tidak mengedit
+file generated; bila perubahan berikutnya memerlukan regenerasi, pengguna yang
+menjalankannya.

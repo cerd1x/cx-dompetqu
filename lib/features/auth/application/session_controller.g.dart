@@ -44,7 +44,7 @@ final class SessionControllerProvider
   }
 }
 
-String _$sessionControllerHash() => r'aea2285e4329305ae84adde72be59625d7212f2a';
+String _$sessionControllerHash() => r'c8d2ae96311c6d115287ffe692bb7409534dc1c2';
 
 /// State session global — padanan session/`userStore` di web.
 

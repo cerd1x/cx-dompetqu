@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
-import 'package:dompetqu/features/home/application/contacts_controller.dart';
-import 'package:dompetqu/features/home/data/contacts_remote_source.dart';
-import 'package:dompetqu/features/home/models/contact.dart';
-import 'package:dompetqu/features/home/models/contact_page.dart';
+import 'package:dompetqu/features/contacts/application/contacts_controller.dart';
+import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
+import 'package:dompetqu/features/contacts/data/models/contact.dart';
+import 'package:dompetqu/features/contacts/data/models/contact_page.dart';
 
 /// Response `contactConnection` sesuai bentuk di `contact.gql`.
 Map<String, dynamic> _connection({

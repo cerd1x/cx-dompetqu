@@ -3,25 +3,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/graphql/graphql_providers.dart';
 import '../../../core/logger/app_logger.dart';
+import 'datasources/auth_remote_datasource.dart';
+import '../domain/failures/auth_failure.dart';
 import '../models/passkey.dart';
 import '../models/user.dart';
 
 part 'auth_remote_source.g.dart';
 
-class AuthException implements Exception {
-  AuthException(this.message);
-
-  final String message;
-
-  @override
-  String toString() => message;
-}
-
 /// Remote source GraphQL untuk auth — padanan `auth_source.ts` + `passkey_source.ts`.
 ///
 /// Operasi dipisah per intent (data retrieval vs. side-effect) supaya cache
 /// GraphQL tidak mengganggu — mengikuti pola urql di web.
-class AuthRemoteSource {
+class AuthRemoteSource implements AuthRemoteDataSource {
   AuthRemoteSource(this._client);
 
   final GraphQLClient _client;
@@ -85,6 +78,7 @@ class AuthRemoteSource {
     }
   ''';
 
+  @override
   Future<({User user, String session, String refreshToken})> signUp({
     required String name,
     required String username,
@@ -100,7 +94,7 @@ class AuthRemoteSource {
     );
     final userJson = result.data?['signUp']?['user'];
     if (userJson == null) {
-      throw AuthException(_errorMessage(result, fallback: 'Sign up failed'));
+      throw AuthFailure(_errorMessage(result, fallback: 'Sign up failed'));
     }
     _log.success('signUp OK', tag: 'AuthRemoteSource');
     return (
@@ -110,6 +104,7 @@ class AuthRemoteSource {
     );
   }
 
+  @override
   Future<({User user, String session, String refreshToken})> signIn({
     required String username,
     required String password,
@@ -124,7 +119,7 @@ class AuthRemoteSource {
     );
     final userJson = result.data?['signIn']?['user'];
     if (userJson == null) {
-      throw AuthException(_errorMessage(result, fallback: 'Sign in failed'));
+      throw AuthFailure(_errorMessage(result, fallback: 'Sign in failed'));
     }
     _log.success('signIn OK', tag: 'AuthRemoteSource');
     return (
@@ -134,15 +129,17 @@ class AuthRemoteSource {
     );
   }
 
+  @override
   Future<void> signOut() async {
     final result = await _client.mutate(
       MutationOptions(document: gql(_signOutMutation)),
     );
     if (result.hasException) {
-      throw AuthException(_errorMessage(result, fallback: 'Sign out failed'));
+      throw AuthFailure(_errorMessage(result, fallback: 'Sign out failed'));
     }
   }
 
+  @override
   Future<bool> checkAuthorized() async {
     final result = await _client.query(
       QueryOptions(
@@ -153,6 +150,7 @@ class AuthRemoteSource {
     return result.data?['checkAuthorized'] as bool? ?? false;
   }
 
+  @override
   Future<User?> me() async {
     final result = await _client.query(
       QueryOptions(document: gql(_meQuery), fetchPolicy: FetchPolicy.noCache),
@@ -162,6 +160,7 @@ class AuthRemoteSource {
     return User.fromJson(userJson as Map<String, dynamic>);
   }
 
+  @override
   Future<PasskeyOptions> passkeyAuthenticationOptions() async {
     final result = await _client.query(
       QueryOptions(
@@ -171,11 +170,12 @@ class AuthRemoteSource {
     );
     final json = result.data?['passkeyAuthenticationOptions'];
     if (json == null) {
-      throw AuthException('Failed to start passkey authentication');
+      throw const AuthFailure('Failed to start passkey authentication');
     }
     return PasskeyOptions.fromJson(json as Map<String, dynamic>);
   }
 
+  @override
   Future<PasskeyOptions> passkeyRegistrationOptions() async {
     final result = await _client.query(
       QueryOptions(
@@ -185,11 +185,12 @@ class AuthRemoteSource {
     );
     final json = result.data?['passkeyRegistrationOptions'];
     if (json == null) {
-      throw AuthException('Failed to start passkey registration');
+      throw const AuthFailure('Failed to start passkey registration');
     }
     return PasskeyOptions.fromJson(json as Map<String, dynamic>);
   }
 
+  @override
   Future<({User user, String session, String refreshToken})> signInWithPassKey({
     required String challenge,
     required String credentialId,
@@ -209,7 +210,7 @@ class AuthRemoteSource {
     );
     final userJson = result.data?['signInWithPassKey']?['user'];
     if (userJson == null) {
-      throw AuthException(
+      throw AuthFailure(
         _errorMessage(result, fallback: 'Sign in with passkey failed'),
       );
     }
@@ -222,6 +223,7 @@ class AuthRemoteSource {
     );
   }
 
+  @override
   Future<bool> registerPasskey({
     required String challenge,
     required String attestationResponse,
@@ -240,13 +242,14 @@ class AuthRemoteSource {
       ),
     );
     if (result.hasException) {
-      throw AuthException(
+      throw AuthFailure(
         _errorMessage(result, fallback: 'Register passkey failed'),
       );
     }
     return result.data?['registerPasskey'] as bool? ?? false;
   }
 
+  @override
   Future<List<PasskeyCredential>> passkeys() async {
     final result = await _client.query(
       QueryOptions(
@@ -260,6 +263,7 @@ class AuthRemoteSource {
         .toList();
   }
 
+  @override
   Future<bool> deletePasskey(String credentialId) async {
     final result = await _client.mutate(
       MutationOptions(
@@ -268,7 +272,7 @@ class AuthRemoteSource {
       ),
     );
     if (result.hasException) {
-      throw AuthException(
+      throw AuthFailure(
         _errorMessage(result, fallback: 'Delete passkey failed'),
       );
     }

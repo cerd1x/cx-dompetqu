@@ -1,10 +1,10 @@
+import 'package:dompetqu/features/dashboard/presentation/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
-import '../../home/widgets/bottom_bar.dart';
 import '../application/ai_skills_controller.dart';
 import '../application/mcp_controller.dart';
 import 'ai_chat_sheet.dart';
@@ -47,9 +47,7 @@ class GenAiScreen extends ConsumerWidget {
                 .read(aiSkillsControllerProvider.notifier)
                 .importFromUrl(name: name, url: url);
           case DeleteAiSkill(:final id):
-            await ref
-                .read(aiSkillsControllerProvider.notifier)
-                .remove(id);
+            await ref.read(aiSkillsControllerProvider.notifier).remove(id);
         }
       } catch (error) {
         if (!context.mounted) return;
@@ -200,7 +198,10 @@ class GenAiScreen extends ConsumerWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.auto_awesome, color: DompetBrand.goldLight),
+                          Icon(
+                            Icons.auto_awesome,
+                            color: DompetBrand.goldLight,
+                          ),
                           SizedBox(height: 4),
                           Text('Skills', style: TextStyle(fontSize: 11)),
                         ],

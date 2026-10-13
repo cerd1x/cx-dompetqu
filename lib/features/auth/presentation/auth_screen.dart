@@ -7,8 +7,8 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
+import '../application/auth_providers.dart';
 import '../application/session_controller.dart';
-import '../data/passkey_service.dart';
 
 enum _AuthMode { signIn, signUp }
 
@@ -48,7 +48,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   Future<void> _checkPasskeySupport() async {
-    final supported = await ref.read(passkeyServiceProvider).isSupported;
+    final supported = await ref.read(authUseCasesProvider).isPasskeySupported();
     if (mounted) setState(() => _passkeySupported = supported);
   }
 

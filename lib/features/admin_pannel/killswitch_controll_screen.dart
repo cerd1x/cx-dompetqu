@@ -11,7 +11,9 @@ import '../../core/theme/widgets/load_view_animating_progress_ripple.dart';
 import '../../core/theme/widgets/scroll_refresh_wrapper.dart';
 import 'application/killswitch_controller.dart';
 import 'data/graphql_operations.dart';
-import 'data/killswitch_remote_source.dart';
+import 'data/killswitch_remote_source.dart'
+    show kOperationKeyPattern, killswitchAdminTokenProvider;
+import 'domain/entities/disabled_operation.dart';
 
 /// Layar kontrol kill switch — mematikan / menghidupkan root operation GraphQL
 /// tanpa deploy (lihat `domain/killswitch` di cx-services).
@@ -393,7 +395,7 @@ class _EntryCard extends StatelessWidget {
     required this.onEnable,
   });
 
-  final KillswitchEntry entry;
+  final DisabledOperation entry;
   final bool busy;
   final VoidCallback onEnable;
 

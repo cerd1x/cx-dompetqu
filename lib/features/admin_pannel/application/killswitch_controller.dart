@@ -2,10 +2,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/logger/app_logger.dart';
-import '../data/killswitch_remote_source.dart';
+import '../domain/entities/disabled_operation.dart';
+import '../domain/repositories/killswitch_repository.dart';
+import 'killswitch_repository_provider.dart';
 
 part 'killswitch_controller.freezed.dart';
 part 'killswitch_controller.g.dart';
+
+typedef KillswitchEntry = DisabledOperation;
 
 /// State layar kill switch — daftar operation yang dimatikan beserta status
 /// loading/mutating dan pesan error.
@@ -13,7 +17,7 @@ part 'killswitch_controller.g.dart';
 abstract class KillswitchState with _$KillswitchState {
   const factory KillswitchState({
     /// Daftar operation yang sedang dimatikan.
-    @Default([]) List<KillswitchEntry> entries,
+    @Default([]) List<DisabledOperation> entries,
 
     /// `true` saat memuat daftar (pertama kali / refresh).
     @Default(true) bool loading,
@@ -38,8 +42,8 @@ class KillswitchController extends _$KillswitchController {
 
   Future<void>? _inFlight;
 
-  KillswitchRemoteSource get _remote =>
-      ref.read(killswitchRemoteSourceProvider);
+  KillswitchRepository get _repository =>
+      ref.read(killswitchRepositoryProvider);
 
   /// Muat daftar operation yang dimatikan. Panggilan beruntun di-dedupe.
   Future<void> load() {
@@ -56,7 +60,7 @@ class KillswitchController extends _$KillswitchController {
 
   Future<void> _fetch() async {
     try {
-      final entries = await _remote.list();
+      final entries = await _repository.list();
       if (!ref.mounted) return;
       state = state.copyWith(entries: entries, loading: false);
     } catch (e) {
@@ -74,7 +78,7 @@ class KillswitchController extends _$KillswitchController {
   Future<bool> disable(String operation, {String? reason}) async {
     state = state.copyWith(mutating: true, error: null);
     try {
-      await _remote.disable(operation, reason: reason);
+      await _repository.disable(operation, reason: reason);
       AppLogger.instance.warn(
         'Operation dimatikan: $operation',
         tag: 'KillswitchController',
@@ -94,7 +98,7 @@ class KillswitchController extends _$KillswitchController {
   Future<bool> enable(String operation) async {
     state = state.copyWith(mutating: true, error: null);
     try {
-      await _remote.enable(operation);
+      await _repository.enable(operation);
       AppLogger.instance.info(
         'Operation dihidupkan: $operation',
         tag: 'KillswitchController',
@@ -111,7 +115,7 @@ class KillswitchController extends _$KillswitchController {
   }
 
   /// Ambil token admin aktif (untuk indikator di UI).
-  bool get hasToken => _remote.hasToken;
+  bool get hasToken => _repository.hasToken;
 
   static String _msg(Object e) => e is Exception ? e.toString() : '$e';
 }

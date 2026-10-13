@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
-import '../models/ai_skill.dart';
+import '../domain/entities/ai_skill.dart';
 
 sealed class AiSkillAction {
   const AiSkillAction();
@@ -92,14 +92,12 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
               const Divider(height: 1, color: Colors.white10),
               if (_mode == _SkillSheetMode.create)
                 AiSkillForm(
-                  onCancel: () =>
-                      setState(() => _mode = _SkillSheetMode.list),
+                  onCancel: () => setState(() => _mode = _SkillSheetMode.list),
                   onSubmit: (action) => Navigator.of(context).pop(action),
                 )
               else if (_mode == _SkillSheetMode.import)
                 AiSkillImportForm(
-                  onCancel: () =>
-                      setState(() => _mode = _SkillSheetMode.list),
+                  onCancel: () => setState(() => _mode = _SkillSheetMode.list),
                   onSubmit: (action) => Navigator.of(context).pop(action),
                 )
               else
@@ -365,8 +363,7 @@ class _AiSkillImportFormState extends State<AiSkillImportForm> {
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
                   labelText: 'URL skill',
-                  hintText:
-                      'https://raw.githubusercontent.com/.../SKILL.md',
+                  hintText: 'https://raw.githubusercontent.com/.../SKILL.md',
                 ),
                 validator: (value) => value == null || value.trim().isEmpty
                     ? 'URL wajib diisi.'

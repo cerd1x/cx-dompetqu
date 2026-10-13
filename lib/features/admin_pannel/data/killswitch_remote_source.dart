@@ -55,6 +55,13 @@ class KillswitchException implements Exception {
   String toString() => message;
 }
 
+abstract interface class KillswitchDataSource {
+  bool get hasToken;
+  Future<List<KillswitchEntry>> list();
+  Future<KillswitchEntry> disable(String operation, {String? reason});
+  Future<bool> enable(String operation);
+}
+
 /// Pola operation key yang valid — sama dengan `operationKeySchema` di backend.
 final RegExp kOperationKeyPattern = RegExp(
   r'^(Query|Mutation)\.[_A-Za-z][_0-9A-Za-z]*$',
@@ -65,7 +72,7 @@ final RegExp kOperationKeyPattern = RegExp(
 /// Sengaja REST (bukan GraphQL): jalur kontrol harus tetap bisa dipakai saat
 /// layer GraphQL yang justru bermasalah. Setiap request wajib menyertakan
 /// header `x-admin-token`.
-class KillswitchRemoteSource {
+class KillswitchRemoteSource implements KillswitchDataSource {
   KillswitchRemoteSource(this._client, {required this.adminToken});
 
   final http.Client _client;
@@ -74,6 +81,7 @@ class KillswitchRemoteSource {
   static const _timeout = Duration(seconds: 15);
 
   /// `true` bila token admin terkonfigurasi.
+  @override
   bool get hasToken => adminToken.trim().isNotEmpty;
 
   Uri get _base => Uri.parse(ApiConfig.killswitchEndpoint);
@@ -89,6 +97,7 @@ class KillswitchRemoteSource {
   };
 
   /// Ambil daftar operation yang sedang dimatikan.
+  @override
   Future<List<KillswitchEntry>> list() async {
     _ensureToken();
     final res = await _client.get(_base, headers: _headers).timeout(_timeout);
@@ -103,6 +112,7 @@ class KillswitchRemoteSource {
   }
 
   /// Matikan [operation] (idempotent). `POST /admin/killswitch/:operation`.
+  @override
   Future<KillswitchEntry> disable(String operation, {String? reason}) async {
     _ensureToken();
     final trimmed = reason?.trim();
@@ -128,6 +138,7 @@ class KillswitchRemoteSource {
   ///
   /// Mengembalikan `changed` (bagian dari `EnableOperationResult`) — `false`
   /// bila operation memang tidak sedang dimatikan.
+  @override
   Future<bool> enable(String operation) async {
     _ensureToken();
     final res = await _client

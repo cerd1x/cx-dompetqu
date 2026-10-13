@@ -48,7 +48,7 @@ final class KillswitchControllerProvider
 }
 
 String _$killswitchControllerHash() =>
-    r'0d5157ecf9d5395b2d1b61044f6aba312de5f84e';
+    r'1af1499fba7623f985aa72c6a739e7613ee63607';
 
 /// Kontrol kill switch: memuat daftar, mematikan, dan menghidupkan operation
 /// GraphQL melalui endpoint REST `{baseUrl}/admin/killswitch`.

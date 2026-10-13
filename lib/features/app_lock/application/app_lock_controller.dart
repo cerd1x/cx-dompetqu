@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../data/app_lock_storage.dart';
-import '../models/lock_method.dart';
+import '../domain/entities/app_lock_state.dart';
+import 'app_lock_repository_provider.dart';
 
 part 'app_lock_controller.g.dart';
 
@@ -16,15 +14,15 @@ const Duration _kLockoutDuration = Duration(minutes: 1);
 @Riverpod(keepAlive: true)
 class AppLockController extends _$AppLockController {
   Timer? _lockoutTimer;
-  final LocalAuthentication _localAuth = LocalAuthentication();
 
   @override
   Future<AppLockState> build() async {
-    final storage = ref.read(appLockStorageProvider);
-    await storage.ensureUsable();
-    final enabled = await storage.isEnabled();
-    final credential = await storage.getCredential();
-    final biometricEnabled = await storage.isBiometricEnabled();
+    ref.onDispose(() => _lockoutTimer?.cancel());
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.ensureUsable();
+    final enabled = await repository.isEnabled();
+    final credential = await repository.getCredential();
+    final biometricEnabled = await repository.isBiometricEnabled();
     return AppLockState(
       isEnabled: enabled,
       credential: credential,
@@ -39,10 +37,10 @@ class AppLockController extends _$AppLockController {
 
   /// Menyimpan PIN sebagai kredensial utama (opsional ditambah biometrik).
   Future<void> setupPin(String pin, {bool biometricEnabled = false}) async {
-    final storage = ref.read(appLockStorageProvider);
-    await storage.savePin(pin);
-    await storage.setBiometricEnabled(biometricEnabled);
-    await storage.setEnabled(true);
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.savePin(pin);
+    await repository.setBiometricEnabled(biometricEnabled);
+    await repository.setEnabled(true);
     state = AsyncValue.data(
       AppLockState(
         isEnabled: true,
@@ -58,10 +56,10 @@ class AppLockController extends _$AppLockController {
     List<int> pattern, {
     bool biometricEnabled = false,
   }) async {
-    final storage = ref.read(appLockStorageProvider);
-    await storage.savePattern(pattern);
-    await storage.setBiometricEnabled(biometricEnabled);
-    await storage.setEnabled(true);
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.savePattern(pattern);
+    await repository.setBiometricEnabled(biometricEnabled);
+    await repository.setEnabled(true);
     state = AsyncValue.data(
       AppLockState(
         isEnabled: true,
@@ -76,8 +74,8 @@ class AppLockController extends _$AppLockController {
   Future<void> enableBiometric() async {
     final current = state.value;
     if (current == null || !current.isEnabled) return;
-    final storage = ref.read(appLockStorageProvider);
-    await storage.setBiometricEnabled(true);
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.setBiometricEnabled(true);
     state = AsyncValue.data(current.copyWith(biometricEnabled: true));
   }
 
@@ -85,14 +83,14 @@ class AppLockController extends _$AppLockController {
   Future<void> disableBiometric() async {
     final current = state.value;
     if (current == null) return;
-    final storage = ref.read(appLockStorageProvider);
-    await storage.setBiometricEnabled(false);
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.setBiometricEnabled(false);
     state = AsyncValue.data(current.copyWith(biometricEnabled: false));
   }
 
   Future<void> disableLock() async {
-    final storage = ref.read(appLockStorageProvider);
-    await storage.clearAll();
+    final repository = ref.read(appLockRepositoryProvider);
+    await repository.clearAll();
     state = AsyncValue.data(const AppLockState());
   }
 
@@ -103,8 +101,7 @@ class AppLockController extends _$AppLockController {
   Future<bool> unlockWithPin(String pin) async {
     if (state.value?.isLockedOut == true) return false;
 
-    final storage = ref.read(appLockStorageProvider);
-    final ok = await storage.verifyPin(pin);
+    final ok = await ref.read(appLockRepositoryProvider).verifyPin(pin);
 
     if (ok) {
       _resetAttempts();
@@ -119,8 +116,7 @@ class AppLockController extends _$AppLockController {
   Future<bool> unlockWithPattern(List<int> pattern) async {
     if (state.value?.isLockedOut == true) return false;
 
-    final storage = ref.read(appLockStorageProvider);
-    final ok = await storage.verifyPattern(pattern);
+    final ok = await ref.read(appLockRepositoryProvider).verifyPattern(pattern);
 
     if (ok) {
       _resetAttempts();
@@ -141,25 +137,13 @@ class AppLockController extends _$AppLockController {
     final current = state.value;
     if (current?.isLockedOut == true) return false;
 
-    try {
-      final available = await _localAuth.canCheckBiometrics;
-      if (!available) return false;
-
-      final ok = await _localAuth.authenticate(
-        localizedReason: 'Autentikasi untuk membuka aplikasi',
-        persistAcrossBackgrounding: true,
-        biometricOnly: true,
-      );
-
-      if (ok) {
-        _resetAttempts();
-        _setLocked(false);
-        return true;
-      }
-      return false;
-    } on PlatformException {
-      return false;
-    }
+    final ok = await ref
+        .read(appLockRepositoryProvider)
+        .authenticateBiometric();
+    if (!ok) return false;
+    _resetAttempts();
+    _setLocked(false);
+    return true;
   }
 
   /// Menyelesaikan unlock tanpa memunculkan prompt autentikasi lagi.

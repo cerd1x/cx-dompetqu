@@ -6,7 +6,7 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/cs_select_picker.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../application/ai_settings_controller.dart';
-import '../models/ai_settings.dart';
+import '../domain/entities/ai_settings.dart';
 
 const List<CSSelectItem<String>> _kGeminiModels = [
   CSSelectItem(value: 'gemini-2.5-flash', label: 'Flash', symbol: '2.5'),
@@ -44,9 +44,7 @@ class AiSettingsSheet extends ConsumerWidget {
               DecorationMix.value(
                 const BoxDecoration(
                   color: Color(0xFF1A1A1A),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   border: Border(top: BorderSide(color: DompetBrand.csBorder)),
                 ),
               ),
@@ -85,9 +83,8 @@ class AiSettingsSheet extends ConsumerWidget {
                     padding: const EdgeInsets.all(16),
                     child: AiSettingsSection(settings: value),
                   ),
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (error, _) => Center(
                     child: Padding(
                       padding: const EdgeInsets.all(20),
@@ -142,8 +139,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
               tooltip: _apiKeyVisible
                   ? 'Sembunyikan API key'
                   : 'Tampilkan API key',
-              onPressed: () =>
-                  setState(() => _apiKeyVisible = !_apiKeyVisible),
+              onPressed: () => setState(() => _apiKeyVisible = !_apiKeyVisible),
               icon: Icon(
                 _apiKeyVisible
                     ? Icons.visibility_off_outlined
@@ -235,7 +231,6 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       );
     }
   }
-
 }
 
 class AiSettingRow extends StatelessWidget {

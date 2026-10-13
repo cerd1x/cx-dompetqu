@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$KillswitchState {
 
 /// Daftar operation yang sedang dimatikan.
- List<KillswitchEntry> get entries;/// `true` saat memuat daftar (pertama kali / refresh).
+ List<DisabledOperation> get entries;/// `true` saat memuat daftar (pertama kali / refresh).
  bool get loading;/// `true` saat operasi disable/enable sedang berjalan.
  bool get mutating;/// Pesan error terakhir (untuk ditampilkan di UI).
  String? get error;
@@ -55,7 +55,7 @@ abstract mixin class $KillswitchStateCopyWith<$Res>  {
   factory $KillswitchStateCopyWith(KillswitchState value, $Res Function(KillswitchState) _then) = _$KillswitchStateCopyWithImpl;
 @useResult
 $Res call({
- List<KillswitchEntry> entries, bool loading, bool mutating, String? error
+ List<DisabledOperation> entries, bool loading, bool mutating, String? error
 });
 
 
@@ -75,7 +75,7 @@ class _$KillswitchStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? entries = null,Object? loading = null,Object? mutating = null,Object? error = freezed,}) {
   return _then(KillswitchState(
 entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
-as List<KillswitchEntry>,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
+as List<DisabledOperation>,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
 as bool,mutating: null == mutating ? _self.mutating : mutating // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -163,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<KillswitchEntry> entries,  bool loading,  bool mutating,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<DisabledOperation> entries,  bool loading,  bool mutating,  String? error)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _KillswitchState() when $default != null:
 return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
@@ -184,7 +184,7 @@ return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<KillswitchEntry> entries,  bool loading,  bool mutating,  String? error)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<DisabledOperation> entries,  bool loading,  bool mutating,  String? error)  $default,) {final _that = this;
 switch (_that) {
 case _KillswitchState():
 return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
@@ -204,7 +204,7 @@ return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<KillswitchEntry> entries,  bool loading,  bool mutating,  String? error)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<DisabledOperation> entries,  bool loading,  bool mutating,  String? error)?  $default,) {final _that = this;
 switch (_that) {
 case _KillswitchState() when $default != null:
 return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
@@ -219,13 +219,13 @@ return $default(_that.entries,_that.loading,_that.mutating,_that.error);case _:
 
 
 class _KillswitchState implements KillswitchState {
-  const _KillswitchState({ List<KillswitchEntry> entries = const [], this.loading = true, this.mutating = false, this.error}): _entries = entries;
+  const _KillswitchState({ List<DisabledOperation> entries = const [], this.loading = true, this.mutating = false, this.error}): _entries = entries;
   
 
 /// Daftar operation yang sedang dimatikan.
- final  List<KillswitchEntry> _entries;
+ final  List<DisabledOperation> _entries;
 /// Daftar operation yang sedang dimatikan.
-@override@JsonKey() List<KillswitchEntry> get entries {
+@override@JsonKey() List<DisabledOperation> get entries {
   if (_entries is EqualUnmodifiableListView) return _entries;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_entries);
@@ -270,7 +270,7 @@ abstract mixin class _$KillswitchStateCopyWith<$Res> implements $KillswitchState
   factory _$KillswitchStateCopyWith(_KillswitchState value, $Res Function(_KillswitchState) _then) = __$KillswitchStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<KillswitchEntry> entries, bool loading, bool mutating, String? error
+ List<DisabledOperation> entries, bool loading, bool mutating, String? error
 });
 
 
@@ -290,7 +290,7 @@ class __$KillswitchStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? entries = null,Object? loading = null,Object? mutating = null,Object? error = freezed,}) {
   return _then(_KillswitchState(
 entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
-as List<KillswitchEntry>,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
+as List<DisabledOperation>,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
 as bool,mutating: null == mutating ? _self.mutating : mutating // ignore: cast_nullable_to_non_nullable
 as bool,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,

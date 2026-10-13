@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/features/gen_ai/application/ai_controller.dart';
-import 'package:dompetqu/features/gen_ai/models/ai_message.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 

@@ -11,7 +11,7 @@ import 'package:mix/mix.dart';
 
 import '../application/contacts_controller.dart';
 import '../domain/entities/contact.dart';
-import '../../dashboard/presentation/widgets/bottom_bar.dart';
+import '../../../core/theme/widgets/bottom_bar.dart';
 import 'contact_form.dart';
 
 /// Full screen detail kontak — route `/contact-detail/:id`.

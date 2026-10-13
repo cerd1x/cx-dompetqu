@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import '../../../../core/theme/dompet_brand.dart';
+import '../dompet_brand.dart';
 
 /// Widget pola 3×3 untuk app lock.
 /// Pengguna menggambar pola dengan menghubungkan titik-titik.

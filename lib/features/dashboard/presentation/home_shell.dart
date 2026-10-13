@@ -1,5 +1,5 @@
 import 'package:dompetqu/features/gen_ai/presentation/ai_bubble.dart';
-import 'package:dompetqu/features/dashboard/presentation/widgets/cs_nav_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

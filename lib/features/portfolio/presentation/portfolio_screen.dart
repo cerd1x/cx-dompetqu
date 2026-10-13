@@ -5,7 +5,7 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/formatters.dart';
 import '../../assets/presentation/assets_screen.dart';
-import '../../dashboard/presentation/widgets/search_field.dart';
+import '../../../core/theme/widgets/search_field.dart';
 
 class _Holding {
   const _Holding({

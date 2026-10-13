@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
-import '../../../../core/theme/dompet_brand.dart';
-import '../../../../core/theme/widgets/dompet_card.dart';
+import '../dompet_brand.dart';
+import 'dompet_card.dart';
 
 /// Widget dasar untuk tab yang belum diimplementasikan.
 class PlaceholderTab extends StatelessWidget {

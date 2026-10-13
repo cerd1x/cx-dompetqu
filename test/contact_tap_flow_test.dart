@@ -11,7 +11,7 @@ import 'package:dompetqu/features/dashboard/application/home_repository_provider
 import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
 import 'package:dompetqu/features/contacts/domain/entities/contact_page.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
-import 'package:dompetqu/features/dashboard/presentation/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 
 class FakeContactsRepository implements HomeRepository {
   final _contact = Contact(

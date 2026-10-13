@@ -6,7 +6,7 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
 import '../../inventory/domain/entities/product.dart';
-import '../../dashboard/presentation/widgets/bottom_bar.dart';
+import '../../../core/theme/widgets/bottom_bar.dart';
 import 'BookkeepingTab.dart';
 import 'DebtTab.dart';
 import 'ExpenseForm.dart';

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/theme/widgets/dompet_avatar.dart';
-import '../../../auth/application/session_controller.dart';
-import '../../../auth/domain/entities/auth_user.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
+import 'package:dompetqu/features/auth/application/session_controller.dart';
+import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
 
 /// Header yang dipakai tab-tab di dalam shell — padanan `AppBar.svelte`.
 class AppHeader extends ConsumerWidget {

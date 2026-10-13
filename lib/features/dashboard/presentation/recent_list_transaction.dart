@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/dashboard/presentation/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +12,7 @@ import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
 import '../../transactions/domain/entities/transaction.dart';
 import '../../transactions/application/transactions_controller.dart';
-import './widgets/data_states.dart';
+import '../../../core/theme/widgets/data_states.dart';
 
 /// Filter tipe transaksi.
 enum _TypeFilter { all, income, expense, transfer }

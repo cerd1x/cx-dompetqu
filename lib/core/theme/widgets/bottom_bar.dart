@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
-import '../../../../core/theme/cs_mix.dart';
+import '../cs_mix.dart';
 
 /// Bottom bar sticky di halaman tab (Contacts/Inventory/Assets).
 class TabBottomBar extends StatelessWidget {

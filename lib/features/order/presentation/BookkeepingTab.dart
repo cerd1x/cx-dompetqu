@@ -10,7 +10,7 @@ import '../../../core/utils/balance.dart';
 import '../../../core/utils/formatters.dart';
 import '../../transactions/application/transactions_controller.dart';
 import '../../transactions/domain/entities/transaction.dart';
-import '../../dashboard/presentation/widgets/data_states.dart';
+import '../../../core/theme/widgets/data_states.dart';
 import 'OrderFormWidgets.dart';
 import 'OrderTabWidgets.dart';
 

@@ -7,8 +7,8 @@ import 'recent_list_transaction.dart';
 import 'stats_grid.dart';
 import '../../statistics/application/statistics_controller.dart';
 import '../../transactions/application/transactions_controller.dart';
-import './widgets/app_header.dart';
-import './widgets/placeholders.dart';
+import '../../../core/theme/widgets/app_header.dart';
+import '../../../core/theme/widgets/placeholders.dart';
 
 /// Padanan `_dashboard/DashboardPage.svelte` + `AppBar.svelte` (restyle fluttermix).
 class DashboardScreen extends ConsumerWidget {

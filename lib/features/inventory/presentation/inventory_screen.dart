@@ -12,9 +12,9 @@ import '../../../core/utils/formatters.dart';
 import '../domain/entities/product.dart';
 import '../application/inventory_controller.dart';
 import '../../order/presentation/OrderFormWidgets.dart';
-import '../../dashboard/presentation/widgets/bottom_bar.dart';
-import '../../dashboard/presentation/widgets/data_states.dart';
-import '../../dashboard/presentation/widgets/search_field.dart';
+import '../../../core/theme/widgets/bottom_bar.dart';
+import '../../../core/theme/widgets/data_states.dart';
+import '../../../core/theme/widgets/search_field.dart';
 import 'ProductDetailView.dart';
 import 'ProductItemView.dart';
 

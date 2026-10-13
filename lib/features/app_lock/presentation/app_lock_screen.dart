@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
+import '../../../core/theme/widgets/biometric_button.dart';
+import '../../../core/theme/widgets/pattern_input_dialog.dart';
+import '../../../core/theme/widgets/pin_input.dart';
 import '../application/app_lock_controller.dart';
 import '../models/lock_method.dart';
-import 'widgets/biometric_button.dart';
-import 'widgets/pattern_input_dialog.dart';
-import 'widgets/pin_input.dart';
 
 /// Layar kunci yang muncul saat aplikasi terkunci.
 class AppLockScreen extends ConsumerStatefulWidget {

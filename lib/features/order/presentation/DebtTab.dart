@@ -14,7 +14,7 @@ import '../../contacts/application/contacts_controller.dart';
 import '../../transactions/application/transactions_controller.dart';
 import '../application/order_repository_provider.dart';
 import '../../transactions/domain/entities/transaction.dart';
-import '../../dashboard/presentation/widgets/data_states.dart';
+import '../../../core/theme/widgets/data_states.dart';
 import 'OrderTabWidgets.dart';
 import 'debt_settlements.dart';
 

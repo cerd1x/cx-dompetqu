@@ -8,10 +8,10 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
+import '../../../core/theme/widgets/pattern_input.dart';
+import '../../../core/theme/widgets/pin_input.dart';
 import '../application/app_lock_controller.dart';
 import '../models/lock_method.dart';
-import 'widgets/pattern_input.dart';
-import 'widgets/pin_input.dart';
 
 /// Layar pengaturan app lock — pilih kredensial (PIN/pola) & set biometrik.
 class AppLockSetupScreen extends ConsumerStatefulWidget {

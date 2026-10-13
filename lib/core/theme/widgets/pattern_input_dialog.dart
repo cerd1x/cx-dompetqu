@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/dompet_brand.dart';
-import '../../application/app_lock_controller.dart';
+import 'package:dompetqu/features/app_lock/application/app_lock_controller.dart';
+import '../dompet_brand.dart';
 import 'pattern_input.dart';
 
 /// Dialog modal input pola untuk layar kunci.

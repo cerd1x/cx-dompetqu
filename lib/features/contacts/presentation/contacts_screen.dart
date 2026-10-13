@@ -1,6 +1,6 @@
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/core/theme/widgets/item_menu.dart';
-import 'package:dompetqu/features/dashboard/presentation/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,8 +9,8 @@ import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../domain/entities/contact.dart';
 import '../application/contacts_controller.dart';
-import '../../dashboard/presentation/widgets/bottom_bar.dart';
-import '../../dashboard/presentation/widgets/data_states.dart';
+import '../../../core/theme/widgets/bottom_bar.dart';
+import '../../../core/theme/widgets/data_states.dart';
 import 'contacts_header.dart';
 import 'contact_item.dart';
 import 'contact_form.dart';

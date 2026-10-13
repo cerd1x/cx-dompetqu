@@ -9,8 +9,8 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_avatar.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/round_action_button.dart';
-import '../../dashboard/presentation/widgets/bottom_bar.dart';
-import '../../dashboard/presentation/widgets/search_field.dart';
+import '../../../core/theme/widgets/bottom_bar.dart';
+import '../../../core/theme/widgets/search_field.dart';
 
 /// Screen merge contact — route `/contact-merge/:id`.
 ///

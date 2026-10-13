@@ -3,7 +3,7 @@ import 'package:dompetqu/features/assets/application/assets_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/cs_dialog.dart';
-import '../../../../core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 import '../../../../core/theme/widgets/balance_input_field.dart';
 import '../../../../core/theme/widgets/dompet_text_field.dart';
 import '../../../../core/utils/formatters.dart';

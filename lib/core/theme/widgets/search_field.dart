@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/cs_mix.dart';
+import '../cs_mix.dart';
 
 /// Input pencarian — padanan search bar sticky di halaman Contacts/Inventory/Assets.
 class SearchField extends StatelessWidget {

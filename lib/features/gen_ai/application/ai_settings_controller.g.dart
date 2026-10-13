@@ -34,7 +34,7 @@ final class AiSettingsControllerProvider
 }
 
 String _$aiSettingsControllerHash() =>
-    r'2e0695680326519bc46820335bddc54888aae9bb';
+    r'ed25a7eee6cc2fcefa27b7b2026087ed3d21a78c';
 
 abstract class _$AiSettingsController extends $AsyncNotifier<AiSettings> {
   FutureOr<AiSettings> build();

@@ -1,4 +1,5 @@
 import 'package:dompetqu/features/gen_ai/presentation/ai_bubble.dart';
+import 'package:dompetqu/features/gen_ai/application/ai_settings_controller.dart';
 import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +55,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(sessionControllerProvider);
+    final showAiBubble =
+        ref.watch(aiSettingsControllerProvider).value?.showAiBubble ?? true;
 
     // Reset cache saat sign-out, warm-up ulang saat akun baru sign-in.
     ref.listen(sessionControllerProvider, (prev, next) {
@@ -111,7 +114,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                 ],
               ),
               // AI bubble section — bisa diseret ke mana saja di layar
-              AiBubble(),
+              if (showAiBubble) const AiBubble(),
             ],
           ),
         ),

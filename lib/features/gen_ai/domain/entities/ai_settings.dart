@@ -34,22 +34,26 @@ class AiSettings {
     this.apiKey = '',
     this.model = kDefaultAiModel,
     this.baseUrl = 'http://localhost:11434/v1',
+    this.showAiBubble = true,
   });
 
   final AiModelProvider provider;
   final String apiKey;
   final String model;
   final String baseUrl;
+  final bool showAiBubble;
 
   AiSettings copyWith({
     AiModelProvider? provider,
     String? apiKey,
     String? model,
     String? baseUrl,
+    bool? showAiBubble,
   }) => AiSettings(
     provider: provider ?? this.provider,
     apiKey: apiKey ?? this.apiKey,
     model: model ?? this.model,
     baseUrl: baseUrl ?? this.baseUrl,
+    showAiBubble: showAiBubble ?? this.showAiBubble,
   );
 }

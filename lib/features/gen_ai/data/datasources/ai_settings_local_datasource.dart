@@ -9,6 +9,7 @@ abstract interface class AiSettingsLocalDataSource {
   Future<void> saveApiKey(AiModelProvider provider, String value);
   Future<void> saveModel(AiModelProvider provider, String value);
   Future<void> saveBaseUrl(AiModelProvider provider, String value);
+  Future<void> saveAiBubbleVisibility(bool visible);
 }
 
 class AiProviderSettingsData {
@@ -16,11 +17,13 @@ class AiProviderSettingsData {
     required this.apiKey,
     required this.model,
     required this.baseUrl,
+    required this.showAiBubble,
   });
 
   final String apiKey;
   final String model;
   final String baseUrl;
+  final bool showAiBubble;
 }
 
 class SharedPreferencesAiSettingsDataSource
@@ -46,6 +49,7 @@ class SharedPreferencesAiSettingsDataSource
       baseUrl:
           prefs.getString(_baseUrlKey(provider)) ??
           'http://localhost:11434/v1',
+      showAiBubble: prefs.getBool('ai_bubble_enabled') ?? true,
     );
   }
 
@@ -80,6 +84,14 @@ class SharedPreferencesAiSettingsDataSource
     await (await SharedPreferences.getInstance()).setString(
       _baseUrlKey(provider),
       value,
+    );
+  }
+
+  @override
+  Future<void> saveAiBubbleVisibility(bool visible) async {
+    await (await SharedPreferences.getInstance()).setBool(
+      'ai_bubble_enabled',
+      visible,
     );
   }
 

@@ -180,6 +180,16 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
             ),
           ),
           Divider(height: 1, color: Colors.white.withValues(alpha: 0.08)),
+          AiSettingRow(
+            icon: Icons.smart_toy_outlined,
+            label: 'Tampilkan AI Bubble di Home',
+            trailing: Switch(
+              value: widget.settings.showAiBubble,
+              activeTrackColor: DompetBrand.gold,
+              onChanged: _saveAiBubbleVisibility,
+            ),
+          ),
+          Divider(height: 1, color: Colors.white.withValues(alpha: 0.08)),
           if (widget.settings.provider != AiModelProvider.ollama) ...[
             AiSettingRow(
               icon: Icons.key,
@@ -332,6 +342,19 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal menyimpan URL Ollama: $error')),
+      );
+    }
+  }
+
+  Future<void> _saveAiBubbleVisibility(bool visible) async {
+    try {
+      await ref
+          .read(aiSettingsControllerProvider.notifier)
+          .setAiBubbleVisibility(visible);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan pengaturan AI Bubble: $error')),
       );
     }
   }

@@ -44,4 +44,13 @@ class AiSettingsController extends _$AiSettingsController {
     if (!ref.mounted) return;
     state = AsyncValue.data(current.copyWith(baseUrl: value));
   }
+
+  Future<void> setAiBubbleVisibility(bool visible) async {
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveAiBubbleVisibility(visible);
+    if (!ref.mounted) return;
+    final current = state.value ?? const AiSettings();
+    state = AsyncValue.data(current.copyWith(showAiBubble: visible));
+  }
 }

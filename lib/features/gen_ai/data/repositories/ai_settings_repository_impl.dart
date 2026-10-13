@@ -16,6 +16,7 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
       apiKey: settings.apiKey,
       model: settings.model,
       baseUrl: settings.baseUrl,
+      showAiBubble: settings.showAiBubble,
     );
   }
 
@@ -34,4 +35,8 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
   @override
   Future<void> saveBaseUrl(domain.AiModelProvider provider, String value) =>
       _local.saveBaseUrl(provider, value);
+
+  @override
+  Future<void> saveAiBubbleVisibility(bool visible) =>
+      _local.saveAiBubbleVisibility(visible);
 }

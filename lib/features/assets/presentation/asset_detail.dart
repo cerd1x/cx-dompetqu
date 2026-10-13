@@ -20,7 +20,7 @@ class AssetDetail extends StatelessWidget {
       style: BoxStyler()
           .gradient(DompetBrand.gradientWithAlpha(.2))
           .padding(EdgeInsetsMix.fromLTRB(24, 28, 24, 20))
-          .borderRounded(28)
+          .borderRadius(.circular(28))
           .border(
             .all(BorderSideMix(color: DompetBrand.csBorderDark, width: 1.2)),
           ),

@@ -111,10 +111,10 @@ class AssetDetailScreen extends ConsumerWidget {
                 child: Box(
                   style: BoxStyler()
                       .gradient(DompetBrand.gradientWithAlpha(.2))
-                      .borderRounded(28)
-                      .paddingX(8)
-                      .paddingY(4)
-                      .marginTop(8),
+                      .borderRadius(.circular(28))
+                      .padding(.horizontal(8))
+                      .padding(.vertical(4))
+                      .margin(.top(8)),
                   child: AssetTransactionList(assetId: asset.id),
                 ),
               ),
@@ -122,7 +122,7 @@ class AssetDetailScreen extends ConsumerWidget {
               Align(
                 alignment: .center,
                 child: Box(
-                  style: BoxStyler().paddingAll(2),
+                  style: BoxStyler().padding(.all(2)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -106,9 +106,16 @@ class CsDialog extends StatelessWidget {
                   child: Box(
                     style: BoxStyler()
                         .gradient(DompetBrand.gradientWithAlpha(.4))
-                        .borderRounded(radius)
-                        .borderAll(color: DompetBrand.csBorder, width: 1.5)
-                        .paddingAll(padding),
+                        .borderRadius(.circular(radius))
+                        .border(
+                          .all(
+                            BorderSideMix(
+                              color: DompetBrand.csBorder,
+                              width: 1.5,
+                            ),
+                          ),
+                        )
+                        .padding(.all(padding)),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

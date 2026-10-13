@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genkit/genkit.dart';
+import 'package:genkit_anthropic/genkit_anthropic.dart';
 import 'package:genkit_google_genai/genkit_google_genai.dart';
 import 'package:genkit_mcp/genkit_mcp.dart';
+import 'package:genkit_openai/genkit_openai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
 import 'ai_settings_controller.dart';
@@ -64,12 +66,35 @@ class AiController extends _$AiController {
     final skills = await ref.read(aiSkillsControllerProvider.future);
     final mcpServers = await ref.read(mcpControllerProvider.future);
     if (!ref.mounted) return '';
-    if (settings.apiKey.isEmpty) {
-      throw StateError('API key Gemini belum diatur di Pengaturan AI.');
+    if (settings.provider != AiModelProvider.ollama &&
+        settings.apiKey.isEmpty) {
+      throw StateError(
+        'API key ${settings.provider.label} belum diatur di Pengaturan AI.',
+      );
     }
 
-    final modelName = settings.model.isEmpty ? kDefaultAiModel : settings.model;
-    final ai = Genkit(plugins: [googleAI(apiKey: settings.apiKey)]);
+    final modelName = settings.model.isEmpty
+        ? settings.provider.defaultModel
+        : settings.model;
+    final ai = switch (settings.provider) {
+      AiModelProvider.googleAi => Genkit(
+        plugins: [googleAI(apiKey: settings.apiKey)],
+      ),
+      AiModelProvider.anthropic => Genkit(
+        plugins: [anthropic(apiKey: settings.apiKey)],
+      ),
+      AiModelProvider.openAi => Genkit(
+        plugins: [openAI(apiKey: settings.apiKey)],
+      ),
+      AiModelProvider.ollama => Genkit(
+        plugins: [
+          openAI(
+            apiKey: 'ollama',
+            baseUrl: settings.baseUrl,
+          ),
+        ],
+      ),
+    };
     final clients = <GenkitMcpClient>[];
     try {
       final tools = <Tool<Map<String, dynamic>, dynamic>>[];
@@ -87,24 +112,43 @@ class AiController extends _$AiController {
         tools.addAll(await client.getActiveTools(ai));
       }
 
-      final response = await ai.generate(
-        model: googleAI.gemini(modelName),
-        system: _systemPrompt(skills),
-        messages: [
-          for (final item in history)
-            if (item.text.trim().isNotEmpty)
-              Message(
-                role: item.role == AiRole.user ? Role.user : Role.model,
-                content: [TextPart(text: item.text)],
-              ),
-          Message(
-            role: Role.user,
-            content: [TextPart(text: message)],
+      final messages = [
+        for (final item in history)
+          if (item.text.trim().isNotEmpty)
+            Message(
+              role: item.role == AiRole.user ? Role.user : Role.model,
+              content: [TextPart(text: item.text)],
+            ),
+        Message(
+          role: Role.user,
+          content: [TextPart(text: message)],
+        ),
+      ];
+      final system = _systemPrompt(skills);
+      final response = switch (settings.provider) {
+        AiModelProvider.googleAi => await ai.generate(
+          model: googleAI.gemini(modelName),
+          system: system,
+          messages: messages,
+          tools: tools,
+          use: [retry()],
+        ),
+        AiModelProvider.anthropic => await ai.generate(
+          model: anthropic.model(modelName),
+          system: system,
+          messages: messages,
+          tools: tools,
+          use: [retry()],
+        ),
+        AiModelProvider.openAi || AiModelProvider.ollama =>
+          await ai.generate(
+            model: openAI.model(modelName),
+            system: system,
+            messages: messages,
+            tools: tools,
+            use: [retry()],
           ),
-        ],
-        tools: tools,
-        use: [retry()],
-      );
+      };
 
       if (response.finishReason == FinishReason.failed) {
         throw StateError(
@@ -123,7 +167,9 @@ class AiController extends _$AiController {
 
       final reply = response.text;
       if (reply.trim().isEmpty) {
-        throw StateError('Gemini mengembalikan jawaban kosong.');
+        throw StateError(
+          '${settings.provider.label} mengembalikan jawaban kosong.',
+        );
       }
       return reply.trim();
     } finally {
@@ -146,10 +192,10 @@ class AiController extends _$AiController {
   String _friendly(String message, String model) {
     final lower = message.toLowerCase();
     if (lower.contains('api key') || lower.contains('permission')) {
-      return 'API key Gemini tidak valid.';
+      return 'API key provider AI tidak valid.';
     }
     if (lower.contains('quota') || lower.contains('resource_exhausted')) {
-      return 'Kuota Gemini habis, coba lagi nanti.';
+      return 'Kuota provider AI habis, coba lagi nanti.';
     }
     if (lower.contains('not found') || lower.contains('404')) {
       return 'Model "$model" tidak tersedia. Ganti model di Settings.';

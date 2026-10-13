@@ -130,7 +130,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                             .alignment(.center)
                             .gradient(DompetBrand.gradient)
                             .borderRadius(.circular(22))
-                            .boxShadows([
+                            .shadows([
                               BoxShadowMix(
                                 color: DompetBrand.purple.withValues(
                                   alpha: 0.45,

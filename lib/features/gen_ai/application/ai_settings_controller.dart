@@ -10,17 +10,38 @@ class AiSettingsController extends _$AiSettingsController {
   @override
   Future<AiSettings> build() => ref.read(aiSettingsRepositoryProvider).load();
 
-  Future<void> setApiKey(String value) async {
-    await ref.read(aiSettingsRepositoryProvider).saveApiKey(value);
+  Future<void> setProvider(AiModelProvider provider) async {
+    final repository = ref.read(aiSettingsRepositoryProvider);
+    await repository.saveProvider(provider);
+    final updated = await repository.load();
     if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
+  }
+
+  Future<void> setApiKey(String value) async {
     final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveApiKey(current.provider, value);
+    if (!ref.mounted) return;
     state = AsyncValue.data(current.copyWith(apiKey: value));
   }
 
   Future<void> setModel(String value) async {
-    await ref.read(aiSettingsRepositoryProvider).saveModel(value);
-    if (!ref.mounted) return;
     final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveModel(current.provider, value);
+    if (!ref.mounted) return;
     state = AsyncValue.data(current.copyWith(model: value));
+  }
+
+  Future<void> setBaseUrl(String value) async {
+    final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveBaseUrl(current.provider, value);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(current.copyWith(baseUrl: value));
   }
 }

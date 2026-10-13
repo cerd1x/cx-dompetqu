@@ -56,8 +56,10 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   flutter_spinkit: ^5.2.2
   genkit: ^1.0.0
+  genkit_anthropic: ^1.0.0
   genkit_google_genai: ^1.0.0
   genkit_mcp: ^1.0.0
+  genkit_openai: ^1.0.0
 
 dev_dependencies:
   flutter_test:

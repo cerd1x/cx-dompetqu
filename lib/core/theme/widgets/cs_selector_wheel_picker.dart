@@ -120,7 +120,11 @@ class _CsSelectorWheelPickerState<T> extends State<CsSelectorWheelPicker<T>> {
           .width(widget.wheelWidth)
           .gradient(DompetBrand.gradientWithAlpha(.4))
           .borderRadius(.circular(20))
-          .borderAll(color: DompetBrand.csBorder, width: 1.5),
+          .border(
+            .all(
+              BorderSideMix(color: DompetBrand.csBorder, width: 1.5),
+            ),
+          ),
       child: ListWheelScrollView.useDelegate(
         controller: _scrollController,
         itemExtent: 15,

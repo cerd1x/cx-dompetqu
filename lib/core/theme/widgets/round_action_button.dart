@@ -51,7 +51,7 @@ class RoundActionButton extends StatelessWidget {
             ),
           )
           .shape(.circle(side: .create(color: .value(DompetBrand.csBorder))))
-          .boxShadows([
+          .shadows([
             BoxShadowMix(
               color: Color(0x59000000),
               blurRadius: 12,

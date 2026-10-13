@@ -9,13 +9,29 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
 
   @override
   Future<domain.AiSettings> load() async {
-    final model = await _local.load();
-    return domain.AiSettings(apiKey: model.apiKey, model: model.model);
+    final provider = await _local.loadProvider();
+    final settings = await _local.loadProviderSettings(provider);
+    return domain.AiSettings(
+      provider: provider,
+      apiKey: settings.apiKey,
+      model: settings.model,
+      baseUrl: settings.baseUrl,
+    );
   }
 
   @override
-  Future<void> saveApiKey(String value) => _local.saveApiKey(value);
+  Future<void> saveProvider(domain.AiModelProvider provider) =>
+      _local.saveProvider(provider);
 
   @override
-  Future<void> saveModel(String value) => _local.saveModel(value);
+  Future<void> saveApiKey(domain.AiModelProvider provider, String value) =>
+      _local.saveApiKey(provider, value);
+
+  @override
+  Future<void> saveModel(domain.AiModelProvider provider, String value) =>
+      _local.saveModel(provider, value);
+
+  @override
+  Future<void> saveBaseUrl(domain.AiModelProvider provider, String value) =>
+      _local.saveBaseUrl(provider, value);
 }

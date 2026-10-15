@@ -12,8 +12,13 @@ class AiSettingsController extends _$AiSettingsController {
 
   Future<void> setProvider(AiModelProvider provider) async {
     final repository = ref.read(aiSettingsRepositoryProvider);
-    await repository.saveProvider(provider);
-    final updated = await repository.load();
+    final updated = await repository.changeProvider(provider);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
+  }
+
+  Future<void> reload() async {
+    final updated = await ref.read(aiSettingsRepositoryProvider).load();
     if (!ref.mounted) return;
     state = AsyncValue.data(updated);
   }
@@ -24,7 +29,10 @@ class AiSettingsController extends _$AiSettingsController {
         .read(aiSettingsRepositoryProvider)
         .saveApiKey(current.provider, value);
     if (!ref.mounted) return;
-    state = AsyncValue.data(current.copyWith(apiKey: value));
+    final updated = current.copyWith(apiKey: value);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
   }
 
   Future<void> setModel(String value) async {
@@ -33,7 +41,10 @@ class AiSettingsController extends _$AiSettingsController {
         .read(aiSettingsRepositoryProvider)
         .saveModel(current.provider, value);
     if (!ref.mounted) return;
-    state = AsyncValue.data(current.copyWith(model: value));
+    final updated = current.copyWith(model: value);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
   }
 
   Future<void> setBaseUrl(String value) async {
@@ -42,7 +53,46 @@ class AiSettingsController extends _$AiSettingsController {
         .read(aiSettingsRepositoryProvider)
         .saveBaseUrl(current.provider, value);
     if (!ref.mounted) return;
-    state = AsyncValue.data(current.copyWith(baseUrl: value));
+    final updated = current.copyWith(baseUrl: value);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
+  }
+
+  Future<void> setCustomHeaders(Map<String, String> headers) async {
+    final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveCustomHeaders(current.provider, headers);
+    if (!ref.mounted) return;
+    final updated = current.copyWith(customHeaders: headers);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
+  }
+
+  Future<void> setIncludeCustomHeaders(bool include) async {
+    final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveIncludeCustomHeaders(current.provider, include);
+    if (!ref.mounted) return;
+    final updated = current.copyWith(includeCustomHeaders: include);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
+  }
+
+  Future<void> setUseCustomModel(bool useCustom) async {
+    final current = state.value ?? const AiSettings();
+    await ref
+        .read(aiSettingsRepositoryProvider)
+        .saveUseCustomModel(current.provider, useCustom);
+    if (!ref.mounted) return;
+    final updated = current.copyWith(useCustomModel: useCustom);
+    await ref.read(aiSettingsRepositoryProvider).syncActiveProfile(updated);
+    if (!ref.mounted) return;
+    state = AsyncValue.data(updated);
   }
 
   Future<void> setAiBubbleVisibility(bool visible) async {

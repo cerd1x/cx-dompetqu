@@ -1,3 +1,7 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'ai_settings.freezed.dart';
+
 const String kDefaultAiModel = 'gemini-2.5-flash';
 
 enum AiModelProvider {
@@ -26,34 +30,25 @@ enum AiModelProvider {
     AiModelProvider.openAi => 'open_ai',
     AiModelProvider.ollama => 'ollama',
   };
+
+  String get defaultBaseUrl => switch (this) {
+    AiModelProvider.googleAi => 'https://generativelanguage.googleapis.com',
+    AiModelProvider.anthropic => 'https://api.anthropic.com',
+    AiModelProvider.openAi => 'https://api.openai.com/v1',
+    AiModelProvider.ollama => 'http://localhost:11434/v1',
+  };
 }
 
-class AiSettings {
-  const AiSettings({
-    this.provider = AiModelProvider.googleAi,
-    this.apiKey = '',
-    this.model = kDefaultAiModel,
-    this.baseUrl = 'http://localhost:11434/v1',
-    this.showAiBubble = true,
-  });
-
-  final AiModelProvider provider;
-  final String apiKey;
-  final String model;
-  final String baseUrl;
-  final bool showAiBubble;
-
-  AiSettings copyWith({
-    AiModelProvider? provider,
-    String? apiKey,
-    String? model,
-    String? baseUrl,
-    bool? showAiBubble,
-  }) => AiSettings(
-    provider: provider ?? this.provider,
-    apiKey: apiKey ?? this.apiKey,
-    model: model ?? this.model,
-    baseUrl: baseUrl ?? this.baseUrl,
-    showAiBubble: showAiBubble ?? this.showAiBubble,
-  );
+@freezed
+sealed class AiSettings with _$AiSettings {
+  const factory AiSettings({
+    @Default(AiModelProvider.googleAi) AiModelProvider provider,
+    @Default('') String apiKey,
+    @Default(kDefaultAiModel) String model,
+    @Default('https://generativelanguage.googleapis.com') String baseUrl,
+    @Default(true) bool showAiBubble,
+    @Default(false) bool includeCustomHeaders,
+    @Default(<String, String>{}) Map<String, String> customHeaders,
+    @Default(false) bool useCustomModel,
+  }) = _AiSettings;
 }

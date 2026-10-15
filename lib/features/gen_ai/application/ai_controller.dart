@@ -84,13 +84,24 @@ class AiController extends _$AiController {
         plugins: [anthropic(apiKey: settings.apiKey)],
       ),
       AiModelProvider.openAi => Genkit(
-        plugins: [openAI(apiKey: settings.apiKey)],
+        plugins: [
+          openAI(
+            apiKey: settings.apiKey,
+            baseUrl: settings.baseUrl,
+            headers: settings.includeCustomHeaders
+                ? settings.customHeaders
+                : null,
+          ),
+        ],
       ),
       AiModelProvider.ollama => Genkit(
         plugins: [
           openAI(
             apiKey: 'ollama',
             baseUrl: settings.baseUrl,
+            headers: settings.includeCustomHeaders
+                ? settings.customHeaders
+                : null,
           ),
         ],
       ),
@@ -140,14 +151,13 @@ class AiController extends _$AiController {
           tools: tools,
           use: [retry()],
         ),
-        AiModelProvider.openAi || AiModelProvider.ollama =>
-          await ai.generate(
-            model: openAI.model(modelName),
-            system: system,
-            messages: messages,
-            tools: tools,
-            use: [retry()],
-          ),
+        AiModelProvider.openAi || AiModelProvider.ollama => await ai.generate(
+          model: openAI.model(modelName),
+          system: system,
+          messages: messages,
+          tools: tools,
+          use: [retry()],
+        ),
       };
 
       if (response.finishReason == FinishReason.failed) {

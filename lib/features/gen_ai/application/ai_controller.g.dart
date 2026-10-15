@@ -44,7 +44,7 @@ final class AiControllerProvider
   }
 }
 
-String _$aiControllerHash() => r'4302388168a15234b3b8b0783249bb5070b1a1ca';
+String _$aiControllerHash() => r'acad4c64c7ee25d48631a39f8c451b84beaf6ba9';
 
 /// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 

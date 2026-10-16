@@ -55,4 +55,4 @@ final class AiSkillsRepositoryProvider
 }
 
 String _$aiSkillsRepositoryHash() =>
-    r'6221263d9e9e0acd71b63867d09bbd1a934303ae';
+    r'e767dcdfe265fe47a8c290a65ee98c31fb0d11f1';

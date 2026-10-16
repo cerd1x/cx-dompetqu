@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/entities/ai_skill.dart';
+import '../domain/entities/skill_store_entry.dart';
 import '../domain/repositories/ai_skills_repository.dart';
 import '../repositories/ai_skills_repository.dart';
 
@@ -31,6 +32,11 @@ class AiSkillsController extends _$AiSkillsController {
     await _mutate(
       (repository) => repository.importFromUrl(name: name, url: url),
     );
+  }
+
+  /// Menambahkan skill dari toko skills.sh (mode scrape atau proxy).
+  Future<void> importFromStore(SkillStoreEntry entry) async {
+    await _mutate((repository) => repository.importFromStore(entry));
   }
 
   Future<void> remove(String id) async {

@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../domain/entities/ai_skill.dart';
+import '../domain/entities/skill_store_entry.dart';
+import '../domain/repositories/skill_store_repository.dart';
 
 sealed class AiSkillAction {
   const AiSkillAction();
@@ -28,20 +32,39 @@ final class ImportAiSkill extends AiSkillAction {
   final String url;
 }
 
+/// Menambahkan skill langsung dari toko skills.sh; instruksi diunduh
+/// controller lewat repository (bukan di UI) agar tetap satu jalur simpan.
+final class ImportAiSkillFromStore extends AiSkillAction {
+  const ImportAiSkillFromStore(this.entry);
+
+  final SkillStoreEntry entry;
+}
+
 class AiSkillsSheet extends StatefulWidget {
-  const AiSkillsSheet({super.key, required this.skills});
+  const AiSkillsSheet({
+    super.key,
+    required this.skills,
+    required this.storeRepository,
+  });
 
   final List<AiSkill> skills;
+
+  /// Toko skills (skills.sh) — sumber katalog dan isi `SKILL.md`.
+  final SkillStoreRepository storeRepository;
 
   @override
   State<AiSkillsSheet> createState() => _AiSkillsSheetState();
 }
 
-/// Mode tampilan sheet skills: daftar, form buat manual, atau form impor URL.
-enum _SkillSheetMode { list, create, import }
+/// Mode tampilan sheet skills: daftar, form buat manual, form impor URL, atau
+/// katalog toko skills.sh.
+enum _SkillSheetMode { list, create, import, store }
 
 class _AiSkillsSheetState extends State<AiSkillsSheet> {
   _SkillSheetMode _mode = _SkillSheetMode.list;
+
+  String get _title =>
+      _mode == _SkillSheetMode.store ? 'Toko Skills' : 'Kelola Skills';
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +94,20 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
                 padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
                 child: Row(
                   children: [
-                    const Expanded(
+                    if (_mode == _SkillSheetMode.store)
+                      IconButton(
+                        tooltip: 'Kembali',
+                        onPressed: () =>
+                            setState(() => _mode = _SkillSheetMode.list),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    Expanded(
                       child: Text(
-                        'Kelola Skills',
-                        style: TextStyle(
+                        _title,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -100,6 +133,12 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
                   onCancel: () => setState(() => _mode = _SkillSheetMode.list),
                   onSubmit: (action) => Navigator.of(context).pop(action),
                 )
+              else if (_mode == _SkillSheetMode.store)
+                AiSkillStoreBrowser(
+                  repository: widget.storeRepository,
+                  onAdd: (entry) =>
+                      Navigator.of(context).pop(ImportAiSkillFromStore(entry)),
+                )
               else
                 AiSkillsList(
                   skills: widget.skills,
@@ -107,6 +146,8 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
                       setState(() => _mode = _SkillSheetMode.create),
                   onImport: () =>
                       setState(() => _mode = _SkillSheetMode.import),
+                  onBrowseStore: () =>
+                      setState(() => _mode = _SkillSheetMode.store),
                   onDelete: (id) =>
                       Navigator.of(context).pop(DeleteAiSkill(id)),
                 ),
@@ -124,12 +165,14 @@ class AiSkillsList extends StatelessWidget {
     required this.skills,
     required this.onCreate,
     required this.onImport,
+    required this.onBrowseStore,
     required this.onDelete,
   });
 
   final List<AiSkill> skills;
   final VoidCallback onCreate;
   final VoidCallback onImport;
+  final VoidCallback onBrowseStore;
   final ValueChanged<String> onDelete;
 
   @override
@@ -190,6 +233,12 @@ class AiSkillsList extends StatelessWidget {
                   onPressed: onCreate,
                   icon: const Icon(Icons.add),
                   label: const Text('Buat skill'),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: onBrowseStore,
+                  icon: const Icon(Icons.storefront_outlined),
+                  label: const Text('Toko skills (skills.sh)'),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
@@ -405,5 +454,236 @@ class _AiSkillImportFormState extends State<AiSkillImportForm> {
         ),
       ),
     );
+  }
+}
+
+/// Katalog toko skills.sh.
+///
+/// Widget ini hanya memilih entri (tidak mengunduh instruksi) — pengunduhan dan
+/// penyimpanan tetap di controller lewat `ImportAiSkillFromStore`, sejalan
+/// dengan pola sheet skills yang lain. Mode scrape tidak punya pencarian
+/// server-side, jadi query disaring lokal oleh repository.
+class AiSkillStoreBrowser extends StatefulWidget {
+  const AiSkillStoreBrowser({
+    super.key,
+    required this.repository,
+    required this.onAdd,
+  });
+
+  final SkillStoreRepository repository;
+  final ValueChanged<SkillStoreEntry> onAdd;
+
+  @override
+  State<AiSkillStoreBrowser> createState() => _AiSkillStoreBrowserState();
+}
+
+class _AiSkillStoreBrowserState extends State<AiSkillStoreBrowser> {
+  /// Jeda debounce pencarian, supaya tiap ketikan tidak memicu permintaan.
+  static const _searchDebounce = Duration(milliseconds: 350);
+
+  final _searchController = TextEditingController();
+  Timer? _debounce;
+  SkillStoreView _view = SkillStoreView.allTime;
+  List<SkillStoreEntry> _entries = const [];
+  bool _loading = true;
+  Object? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_load());
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    final query = _searchController.text.trim();
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
+    try {
+      final entries = query.length >= 2
+          ? await widget.repository.search(query)
+          : await widget.repository.list(_view);
+      if (!mounted) return;
+      setState(() {
+        _entries = entries;
+        _loading = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _error = error;
+        _loading = false;
+      });
+    }
+  }
+
+  void _selectView(SkillStoreView view) {
+    if (view == _view) return;
+    _searchController.clear();
+    setState(() => _view = view);
+    unawaited(_load());
+  }
+
+  void _onQueryChanged(String _) {
+    _debounce?.cancel();
+    _debounce = Timer(_searchDebounce, () => unawaited(_load()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // filter section
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SegmentedButton<SkillStoreView>(
+                  showSelectedIcon: false,
+                  style: SegmentedButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    textStyle: const TextStyle(fontSize: 12),
+                  ),
+                  segments: [
+                    for (final view in SkillStoreView.values)
+                      ButtonSegment(value: view, label: Text(view.label)),
+                  ],
+                  selected: {_view},
+                  onSelectionChanged: (selection) =>
+                      _selectView(selection.first),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _searchController,
+                  onChanged: _onQueryChanged,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    isDense: true,
+                    prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                    hintText: 'Cari skill (min. 2 huruf)',
+                    suffixIcon: IconButton(
+                      tooltip: 'Muat ulang',
+                      onPressed: () => unawaited(_load()),
+                      icon: const Icon(Icons.refresh, color: Colors.white54),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Sumber: skills.sh',
+                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Colors.white10),
+          // results section
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (_error != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+              child: Column(
+                children: [
+                  Text(
+                    'Gagal memuat toko skills.\n$_error',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white60),
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () => unawaited(_load()),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Coba lagi'),
+                  ),
+                ],
+              ),
+            )
+          else if (_entries.isEmpty)
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 28, 20, 24),
+              child: Text(
+                'Tidak ada skill yang cocok.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white60),
+              ),
+            )
+          else
+            Flexible(
+              child: ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                itemCount: _entries.length,
+                separatorBuilder: (_, _) =>
+                    const Divider(height: 1, color: Colors.white10),
+                itemBuilder: (context, index) {
+                  final entry = _entries[index];
+                  return ListTile(
+                    isThreeLine: true,
+                    title: Text(
+                      entry.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          [
+                            entry.source,
+                            if (entry.installs != null)
+                              '${_formatInstalls(entry.installs!)} pemasangan',
+                          ].join(' · '),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: Colors.white60),
+                        ),
+                        Text(
+                          entry.installCommand,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white38,
+                            fontSize: 11,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: TextButton(
+                      onPressed: () => widget.onAdd(entry),
+                      child: const Text('Tambah'),
+                    ),
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Angka pemasangan mode scrape sudah dibulatkan store (mis. `3.9M`), jadi
+  /// ditampilkan ringkas ala Indonesia.
+  String _formatInstalls(int value) {
+    if (value >= 1000000) return '${(value / 1000000).toStringAsFixed(1)} jt';
+    if (value >= 1000) return '${(value / 1000).toStringAsFixed(1)} rb';
+    return '$value';
   }
 }

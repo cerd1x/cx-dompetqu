@@ -7,6 +7,7 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../application/ai_skills_controller.dart';
 import '../application/mcp_controller.dart';
+import '../application/skill_store_repository_provider.dart';
 import 'ai_chat_sheet.dart';
 import 'ai_settings_sheet.dart';
 import 'ai_skills_sheet.dart';
@@ -25,6 +26,7 @@ class GenAiScreen extends ConsumerWidget {
     }
     if (!context.mounted) return;
 
+    final storeRepository = ref.read(skillStoreRepositoryProvider);
     while (context.mounted) {
       final skills = ref.read(aiSkillsControllerProvider).value ?? const [];
       final action = await showModalBottomSheet<AiSkillAction>(
@@ -32,7 +34,8 @@ class GenAiScreen extends ConsumerWidget {
         routeSettings: const RouteSettings(name: 'ai-skills-sheet'),
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (_) => AiSkillsSheet(skills: skills),
+        builder: (_) =>
+            AiSkillsSheet(skills: skills, storeRepository: storeRepository),
       );
       if (!context.mounted || action == null) return;
 
@@ -46,6 +49,10 @@ class GenAiScreen extends ConsumerWidget {
             await ref
                 .read(aiSkillsControllerProvider.notifier)
                 .importFromUrl(name: name, url: url);
+          case ImportAiSkillFromStore(:final entry):
+            await ref
+                .read(aiSkillsControllerProvider.notifier)
+                .importFromStore(entry);
           case DeleteAiSkill(:final id):
             await ref.read(aiSkillsControllerProvider.notifier).remove(id);
         }

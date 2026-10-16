@@ -1,15 +1,18 @@
 import '../datasources/ai_skill_import_datasource.dart';
 import '../datasources/ai_skills_local_datasource.dart';
 import '../../domain/entities/ai_skill.dart';
+import '../../domain/entities/skill_store_entry.dart';
 import '../../domain/repositories/ai_skills_repository.dart';
+import '../../domain/repositories/skill_store_repository.dart';
 import '../mappers/gen_ai_model_mapper.dart';
 import '../../models/ai_skill.dart' as data;
 
 class LocalAiSkillsRepository implements AiSkillsRepository {
-  const LocalAiSkillsRepository(this._local, this._importer);
+  const LocalAiSkillsRepository(this._local, this._importer, this._store);
 
   final AiSkillsLocalDatasource _local;
   final AiSkillImportDatasource _importer;
+  final SkillStoreRepository _store;
 
   @override
   Future<List<AiSkill>> loadAll() async =>
@@ -55,6 +58,12 @@ class LocalAiSkillsRepository implements AiSkillsRepository {
     }
     final instructions = await _importer.fetchText(uri);
     return create(name: normalizedName, instructions: instructions);
+  }
+
+  @override
+  Future<List<AiSkill>> importFromStore(SkillStoreEntry entry) async {
+    final instructions = await _store.loadInstructions(entry);
+    return create(name: entry.name, instructions: instructions);
   }
 
   @override

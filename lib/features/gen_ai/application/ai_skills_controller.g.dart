@@ -34,7 +34,7 @@ final class AiSkillsControllerProvider
 }
 
 String _$aiSkillsControllerHash() =>
-    r'6ee61f86777eeee8977021894db946e947468a80';
+    r'9a2c9e6d383f4f3832afa2de3647dd6e5061525d';
 
 abstract class _$AiSkillsController extends $AsyncNotifier<List<AiSkill>> {
   FutureOr<List<AiSkill>> build();

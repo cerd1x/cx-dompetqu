@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../application/skill_store_repository_provider.dart';
 import '../data/datasources/ai_skill_import_datasource.dart';
 import '../data/datasources/ai_skills_local_datasource.dart';
 import '../data/repositories/ai_skills_repository_impl.dart';
@@ -12,5 +13,6 @@ AiSkillsRepository aiSkillsRepository(Ref ref) {
   return LocalAiSkillsRepository(
     ref.read(aiSkillsLocalDatasourceProvider),
     ref.read(aiSkillImportDatasourceProvider),
+    ref.read(skillStoreRepositoryProvider),
   );
 }

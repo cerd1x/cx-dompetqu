@@ -87,7 +87,9 @@ class SharedPreferencesAiSettingsDataSource
   Future<List<AiSettingsProfileModel>> loadProfiles() async {
     final prefs = await SharedPreferences.getInstance();
     final encoded = prefs.getString(_profilesKey);
-    if (encoded == null) return const [];
+    // Wajib list yang bisa dimutasi: pemanggil (save/delete profil) menambah
+    // atau menghapus item dari hasil ini.
+    if (encoded == null) return <AiSettingsProfileModel>[];
 
     final decoded = jsonDecode(encoded);
     if (decoded is! List) {
@@ -115,10 +117,15 @@ class SharedPreferencesAiSettingsDataSource
     } else {
       profiles[index] = profile;
     }
-    await (await SharedPreferences.getInstance()).setString(
+    final saved = await (await SharedPreferences.getInstance()).setString(
       _profilesKey,
       jsonEncode(profiles.map((item) => item.toJson()).toList()),
     );
+    if (!saved) {
+      throw StateError(
+        'Gagal menyimpan daftar profil AI ke penyimpanan lokal.',
+      );
+    }
   }
 
   @override
@@ -142,7 +149,10 @@ class SharedPreferencesAiSettingsDataSource
       await prefs.remove(_activeProfileIdKey);
       return;
     }
-    await prefs.setString(_activeProfileIdKey, profileId);
+    final saved = await prefs.setString(_activeProfileIdKey, profileId);
+    if (!saved) {
+      throw StateError('Gagal menyimpan profil AI aktif ke penyimpanan lokal.');
+    }
   }
 
   @override

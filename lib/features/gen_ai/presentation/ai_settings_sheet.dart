@@ -46,6 +46,7 @@ const Map<AiModelProvider, String> _kProviderSymbols = {
   AiModelProvider.ollama: 'L',
 };
 
+/// Menampilkan lembar pengaturan AI beserta profil konfigurasi yang tersimpan.
 class AiSettingsSheet extends ConsumerWidget {
   const AiSettingsSheet({super.key});
 
@@ -264,6 +265,7 @@ class AiSettingsSheet extends ConsumerWidget {
   }
 }
 
+/// Mengelola pilihan provider dan input konfigurasi AI yang dapat diedit.
 class AiSettingsSection extends ConsumerStatefulWidget {
   const AiSettingsSection({
     super.key,
@@ -851,6 +853,7 @@ bool _isOpenRouterUrl(String baseUrl) {
       uri.host.toLowerCase() == 'openrouter.ai';
 }
 
+/// Menyediakan pencarian dan pemilihan model dari katalog OpenRouter.
 class _OpenRouterModelPickerDialog extends StatefulWidget {
   const _OpenRouterModelPickerDialog({
     required this.models,
@@ -965,6 +968,7 @@ class _AiHeaderField {
   }
 }
 
+/// Menyusun satu baris pengaturan dengan ikon, label, dan kontrol aksi.
 class AiSettingRow extends StatelessWidget {
   const AiSettingRow({
     super.key,

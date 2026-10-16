@@ -3,6 +3,7 @@ import '../entities/ai_settings_profile_collection.dart';
 
 abstract interface class AiSettingsRepository {
   Future<AiSettings> load();
+  Future<String> encryptSettings(AiSettings settings);
   Future<AiSettings> changeProvider(AiModelProvider provider);
   Future<AiSettingsProfileCollection> loadProfiles();
   Future<AiSettingsProfileCollection> createProfile(

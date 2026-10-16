@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ai_settings.freezed.dart';
@@ -51,4 +53,26 @@ sealed class AiSettings with _$AiSettings {
     @Default(<String, String>{}) Map<String, String> customHeaders,
     @Default(false) bool useCustomModel,
   }) = _AiSettings;
+}
+
+/// Mengubah pengaturan ke rangkaian properti berurutan yang dipisahkan `|`.
+extension AiSettingsSerialization on AiSettings {
+  /// Menghasilkan plaintext untuk dienkripsi oleh lapisan data sebelum dipakai.
+  String toPipeDelimitedString() {
+    final sortedHeaders = Map.fromEntries(
+      customHeaders.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+    );
+    final values = [
+      provider.name,
+      apiKey,
+      model,
+      baseUrl,
+      showAiBubble.toString(),
+      includeCustomHeaders.toString(),
+      jsonEncode(sortedHeaders),
+      useCustomModel.toString(),
+    ];
+
+    return values.join('|');
+  }
 }

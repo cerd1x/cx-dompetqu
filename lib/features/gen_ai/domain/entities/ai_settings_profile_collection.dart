@@ -1,6 +1,6 @@
 import 'ai_settings_profile.dart';
 
-class AiSettingsProfileCollection {
+final class AiSettingsProfileCollection {
   const AiSettingsProfileCollection({
     required this.profiles,
     required this.activeProfileId,

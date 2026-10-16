@@ -100,22 +100,18 @@ void main() {
       find.descendant(of: detail, matching: find.byType(TabBottomBar)),
       findsOneWidget,
     );
-    expect(
-      find.descendant(of: detail, matching: find.byTooltip('Edit')),
-      findsOneWidget,
+    // `RoundActionButton` default memakai `Semantics` (bukan `Tooltip`) karena
+    // tooltip `OverlayPortal` bermasalah di dalam `TabBottomBar` yang ber-blur.
+    Finder actionButton(String label) => find.descendant(
+      of: detail,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is RoundActionButton && widget.label == label,
+      ),
     );
-    expect(
-      find.descendant(of: detail, matching: find.byTooltip('Merge')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(of: detail, matching: find.byTooltip('Delete')),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(of: detail, matching: find.byTooltip('Back')),
-      findsOneWidget,
-    );
+    expect(actionButton('Edit'), findsOneWidget);
+    expect(actionButton('Merge'), findsOneWidget);
+    expect(actionButton('Delete'), findsOneWidget);
+    expect(actionButton('Back'), findsOneWidget);
     expect(
       find.descendant(of: detail, matching: find.byType(RoundActionButton)),
       findsNWidgets(4),

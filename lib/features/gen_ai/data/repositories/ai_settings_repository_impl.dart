@@ -2,13 +2,19 @@ import '../../domain/entities/ai_settings.dart' as domain;
 import '../../domain/entities/ai_settings_profile.dart';
 import '../../domain/entities/ai_settings_profile_collection.dart';
 import '../../domain/repositories/ai_settings_repository.dart';
+import '../datasources/ai_settings_crypto_service.dart';
 import '../datasources/ai_settings_local_datasource.dart';
 import '../models/ai_settings_profile_model.dart';
 
 class AiSettingsRepositoryImpl implements AiSettingsRepository {
-  const AiSettingsRepositoryImpl(this._local);
+  const AiSettingsRepositoryImpl(this._local, this._crypto);
 
   final AiSettingsLocalDataSource _local;
+  final AiSettingsCryptoService _crypto;
+
+  @override
+  Future<String> encryptSettings(domain.AiSettings settings) =>
+      _crypto.encryptSettings(settings);
 
   @override
   Future<domain.AiSettings> load() async {

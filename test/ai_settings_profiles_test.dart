@@ -30,24 +30,85 @@ void main() {
   group('AiSettingsRepository profil', () {
     setUp(() => SharedPreferences.setMockInitialValues({}));
 
-    test('createProfile menyimpan profil pertama pada penyimpanan kosong',
-        () async {
-      final repository = _repository();
+    test(
+      'createProfile menyimpan profil pertama pada penyimpanan kosong',
+      () async {
+        final repository = _repository();
 
-      final collection = await repository.createProfile(
-        'OpenRouter pribadi',
-        const AiSettings(
-          provider: AiModelProvider.openAi,
-          apiKey: 'test-key',
-          model: 'gpt-5-mini',
-          baseUrl: 'https://api.openai.com/v1',
-        ),
-      );
+        final collection = await repository.createProfile(
+          'OpenRouter pribadi',
+          const AiSettings(
+            provider: AiModelProvider.openAi,
+            apiKey: 'test-key',
+            model: 'gpt-5-mini',
+            baseUrl: 'https://api.openai.com/v1',
+          ),
+        );
 
-      expect(collection.profiles, hasLength(1));
-      expect(collection.profiles.single.name, 'OpenRouter pribadi');
-      expect(collection.activeProfileId, collection.profiles.single.id);
-    });
+        expect(collection.profiles, hasLength(1));
+        expect(collection.profiles.single.name, 'OpenRouter pribadi');
+        expect(collection.activeProfileId, collection.profiles.single.id);
+      },
+    );
+
+    test(
+      'pengaturan lama dengan API key dimigrasikan ke profil Default',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'ai_model_provider': 'openAi',
+          'ai_open_ai_api_key': 'legacy-key',
+          'ai_open_ai_model': 'gpt-5',
+        });
+        final repository = _repository();
+
+        final collection = await repository.loadProfiles();
+
+        expect(collection.profiles, hasLength(1));
+        expect(collection.profiles.single.name, 'Default');
+        expect(collection.profiles.single.apiKey, 'legacy-key');
+        expect(collection.activeProfileId, collection.profiles.single.id);
+      },
+    );
+
+    test(
+      'tidak membuat ulang profil Default setelah semua profil dihapus',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'ai_model_provider': 'openAi',
+          'ai_open_ai_api_key': 'legacy-key',
+        });
+        final repository = _repository();
+        final initial = await repository.loadProfiles();
+
+        final emptied = await repository.deleteProfile(
+          initial.profiles.single.id,
+        );
+
+        expect(emptied.profiles, isEmpty);
+        expect(emptied.activeProfileId, isNull);
+      },
+    );
+
+    test(
+      'konfigurasi yang diisi setelah pembukaan pertama jadi profil Default',
+      () async {
+        final repository = _repository();
+        expect((await repository.loadProfiles()).profiles, isEmpty);
+
+        final dataSource = SharedPreferencesAiSettingsDataSource();
+        await dataSource.saveProvider(AiModelProvider.openAi);
+        await dataSource.saveApiKey(
+          AiModelProvider.openAi,
+          'later-key',
+        );
+
+        final collection = await repository.loadProfiles();
+
+        expect(collection.profiles, hasLength(1));
+        expect(collection.profiles.single.name, 'Default');
+        expect(collection.profiles.single.apiKey, 'later-key');
+      },
+    );
 
     test('profil bertahan setelah dibaca ulang dan bisa dihapus', () async {
       final repository = _repository();
@@ -78,7 +139,9 @@ void main() {
         const AiSettings(provider: AiModelProvider.googleAi),
       );
 
-      final emptied = await repository.deleteProfile(created.profiles.single.id);
+      final emptied = await repository.deleteProfile(
+        created.profiles.single.id,
+      );
       expect(emptied.profiles, isEmpty);
       expect(emptied.activeProfileId, isNull);
 
@@ -116,5 +179,30 @@ void main() {
       expect(settings.model, 'gpt-5');
       expect(settings.apiKey, 'key-a');
     });
+
+    test(
+      'updateProfile mempertahankan nama dan mengganti pengaturan profil',
+      () async {
+        final repository = _repository();
+        final created = await repository.createProfile(
+          'Profil awal',
+          const AiSettings(apiKey: 'old-key'),
+        );
+
+        final updated = await repository.updateProfile(
+          created.profiles.single.id,
+          const AiSettings(
+            provider: AiModelProvider.anthropic,
+            apiKey: 'new-key',
+            model: 'claude-sonnet-4-5',
+          ),
+        );
+
+        expect(updated.profiles.single.name, 'Profil awal');
+        expect(updated.profiles.single.provider, AiModelProvider.anthropic);
+        expect(updated.profiles.single.apiKey, 'new-key');
+        expect(updated.activeProfileId, created.activeProfileId);
+      },
+    );
   });
 }

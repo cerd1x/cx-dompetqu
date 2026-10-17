@@ -39,7 +39,7 @@ final class AiSettingsProfilesControllerProvider
 }
 
 String _$aiSettingsProfilesControllerHash() =>
-    r'b10c4620e3e76da2ee3814f24b4d2adbc92986a7';
+    r'8d6e99e05954d7bad170c90e7630cc7ce1358aa6';
 
 abstract class _$AiSettingsProfilesController
     extends $AsyncNotifier<AiSettingsProfileCollection> {

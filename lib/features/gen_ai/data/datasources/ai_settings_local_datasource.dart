@@ -11,6 +11,8 @@ abstract interface class AiSettingsLocalDataSource {
   Future<List<AiSettingsProfileModel>> loadProfiles();
   Future<void> saveProfile(AiSettingsProfileModel profile);
   Future<void> deleteProfile(String profileId);
+  Future<bool> hasInitializedProfiles();
+  Future<void> markProfilesInitialized();
   Future<String?> loadActiveProfileId();
   Future<void> saveActiveProfileId(String? profileId);
   Future<void> saveProvider(AiModelProvider provider);
@@ -50,6 +52,7 @@ class SharedPreferencesAiSettingsDataSource
     implements AiSettingsLocalDataSource {
   static const _profilesKey = 'ai_settings_profiles';
   static const _activeProfileIdKey = 'ai_settings_active_profile_id';
+  static const _profilesInitializedKey = 'ai_settings_profiles_initialized';
 
   @override
   Future<AiProviderSettingsData> loadProviderSettings(
@@ -136,6 +139,24 @@ class SharedPreferencesAiSettingsDataSource
       _profilesKey,
       jsonEncode(profiles.map((item) => item.toJson()).toList()),
     );
+  }
+
+  @override
+  Future<bool> hasInitializedProfiles() async =>
+      (await SharedPreferences.getInstance()).getBool(
+        _profilesInitializedKey,
+      ) ??
+      false;
+
+  @override
+  Future<void> markProfilesInitialized() async {
+    final saved = await (await SharedPreferences.getInstance()).setBool(
+      _profilesInitializedKey,
+      true,
+    );
+    if (!saved) {
+      throw StateError('Gagal menandai inisialisasi profil AI.');
+    }
   }
 
   @override

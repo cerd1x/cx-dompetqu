@@ -47,7 +47,7 @@ const Map<AiModelProvider, String> _kProviderSymbols = {
 };
 
 /// Menampilkan lembar pengaturan AI beserta profil konfigurasi yang tersimpan.
-class AiSettingsSheet extends ConsumerWidget {
+class AiSettingsSheet extends ConsumerStatefulWidget {
   const AiSettingsSheet({super.key});
 
   static Future<void> show(BuildContext context) {
@@ -61,7 +61,15 @@ class AiSettingsSheet extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AiSettingsSheet> createState() => _AiSettingsSheetState();
+}
+
+class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
+  String? _editingProfileId;
+  bool _creatingProfile = false;
+
+  @override
+  Widget build(BuildContext context) {
     final settings = ref.watch(aiSettingsControllerProvider);
     final profiles = ref.watch(aiSettingsProfilesControllerProvider);
     final activeProfileId = profiles.when(
@@ -71,8 +79,10 @@ class AiSettingsSheet extends ConsumerWidget {
     );
     final maxHeight = MediaQuery.sizeOf(context).height * 0.7;
 
+    // Menjaga lembar tetap terlihat saat keyboard membuka area bawah layar.
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      // Membatasi tinggi modal agar kontennya tetap dapat digulir.
       child: Box(
         style: BoxStyler()
             .constraints(
@@ -89,9 +99,11 @@ class AiSettingsSheet extends ConsumerWidget {
             ),
         child: SafeArea(
           top: false,
+          // Menjaga header dan konten tetap tersusun dalam satu lembar modal.
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Menyediakan judul dan aksi untuk menutup pengaturan.
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
                 child: Row(
@@ -115,6 +127,7 @@ class AiSettingsSheet extends ConsumerWidget {
                 ),
               ),
               const Divider(height: 1, color: Colors.white10),
+              // Menampilkan konten sesuai status pemuatan pengaturan.
               Flexible(
                 child: settings.when(
                   data: (value) => SingleChildScrollView(
@@ -122,13 +135,20 @@ class AiSettingsSheet extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Memungkinkan profil tersimpan dipilih atau dihapus.
                         profiles.when(
                           data: (collection) => AiSettingsProfilesCard(
                             collection: collection,
                             onSelect: (profileId) =>
                                 _activateProfile(context, ref, profileId),
+                            onEdit: (profile) =>
+                                _editProfile(context, ref, profile),
                             onDelete: (profile) =>
                                 _deleteProfile(context, ref, profile),
+                            onCreateSettings: () => setState(() {
+                              _creatingProfile = true;
+                              _editingProfileId = null;
+                            }),
                           ),
                           loading: () => const Padding(
                             padding: EdgeInsets.all(12),
@@ -143,12 +163,32 @@ class AiSettingsSheet extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        AiSettingsSection(
-                          key: ValueKey((value.provider, activeProfileId)),
-                          settings: value,
-                          onSaveProfile: (snapshot) =>
-                              _createProfile(context, ref, snapshot),
-                        ),
+                        if (_editingProfileId != null || _creatingProfile)
+                          AiSettingsSection(
+                            key: ValueKey((
+                              value.provider,
+                              activeProfileId,
+                              _editingProfileId,
+                              _creatingProfile,
+                            )),
+                            settings: value,
+                            saveButtonLabel: _editingProfileId == null
+                                ? 'Simpan konfigurasi sebagai profil'
+                                : 'Simpan perubahan profil',
+                            onSaveProfile: (snapshot) {
+                              final profileId = _editingProfileId;
+                              if (profileId == null) {
+                                _createProfile(context, ref, snapshot);
+                              } else {
+                                _updateProfile(
+                                  context,
+                                  ref,
+                                  profileId,
+                                  snapshot,
+                                );
+                              }
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -193,6 +233,7 @@ class AiSettingsSheet extends ConsumerWidget {
           .read(aiSettingsProfilesControllerProvider.notifier)
           .createProfile(name, settings);
       if (!context.mounted) return;
+      setState(() => _creatingProfile = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Profil "$name" disimpan dan diaktifkan.')),
       );
@@ -214,6 +255,10 @@ class AiSettingsSheet extends ConsumerWidget {
           .read(aiSettingsProfilesControllerProvider.notifier)
           .activateProfile(profileId);
       if (!context.mounted) return;
+      setState(() {
+        _editingProfileId = null;
+        _creatingProfile = false;
+      });
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Profil AI diaktifkan.')));
@@ -221,6 +266,51 @@ class AiSettingsSheet extends ConsumerWidget {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal mengaktifkan profil AI: $error')),
+      );
+    }
+  }
+
+  Future<void> _editProfile(
+    BuildContext context,
+    WidgetRef ref,
+    AiSettingsProfile profile,
+  ) async {
+    try {
+      await ref
+          .read(aiSettingsProfilesControllerProvider.notifier)
+          .activateProfile(profile.id);
+      if (!context.mounted) return;
+      setState(() {
+        _editingProfileId = profile.id;
+        _creatingProfile = false;
+      });
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal membuka profil AI: $error')),
+      );
+    }
+  }
+
+  Future<void> _updateProfile(
+    BuildContext context,
+    WidgetRef ref,
+    String profileId,
+    AiSettings settings,
+  ) async {
+    try {
+      await ref
+          .read(aiSettingsProfilesControllerProvider.notifier)
+          .updateProfile(profileId, settings);
+      if (!context.mounted) return;
+      setState(() => _editingProfileId = null);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Profil AI diperbarui.')));
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memperbarui profil AI: $error')),
       );
     }
   }
@@ -271,10 +361,12 @@ class AiSettingsSection extends ConsumerStatefulWidget {
     super.key,
     required this.settings,
     required this.onSaveProfile,
+    this.saveButtonLabel = 'Simpan konfigurasi sebagai profil',
   });
 
   final AiSettings settings;
   final ValueChanged<AiSettings> onSaveProfile;
+  final String saveButtonLabel;
 
   @override
   ConsumerState<AiSettingsSection> createState() => _AiSettingsSectionState();
@@ -621,7 +713,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
               child: FilledButton.icon(
                 onPressed: _saveProfileSnapshot,
                 icon: const Icon(Icons.bookmark_add_outlined),
-                label: const Text('Simpan konfigurasi sebagai profil'),
+                label: Text(widget.saveButtonLabel),
               ),
             ),
           ),

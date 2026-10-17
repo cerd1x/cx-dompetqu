@@ -34,6 +34,16 @@ class AiSettingsProfilesController extends _$AiSettingsProfilesController {
     state = AsyncValue.data(collection);
   }
 
+  Future<void> updateProfile(String profileId, AiSettings settings) async {
+    final collection = await ref
+        .read(aiSettingsRepositoryProvider)
+        .updateProfile(profileId, settings);
+    if (!ref.mounted) return;
+    await ref.read(aiSettingsControllerProvider.notifier).reload();
+    if (!ref.mounted) return;
+    state = AsyncValue.data(collection);
+  }
+
   Future<void> deleteProfile(String profileId) async {
     final collection = await ref
         .read(aiSettingsRepositoryProvider)

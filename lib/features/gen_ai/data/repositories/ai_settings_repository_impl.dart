@@ -63,6 +63,37 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
 
   @override
   Future<AiSettingsProfileCollection> loadProfiles() async {
+    final models = await _local.loadProfiles();
+    final savedActiveProfileId = await _local.loadActiveProfileId();
+    if (models.isEmpty &&
+        savedActiveProfileId == null &&
+        !await _local.hasInitializedProfiles()) {
+      final provider = await _local.loadProvider();
+      final settings = await _local.loadProviderSettings(provider);
+      final hasCustomHeaders = settings.customHeaders.entries.any(
+        (entry) => entry.key.trim().isNotEmpty && entry.value.trim().isNotEmpty,
+      );
+      if (settings.apiKey.trim().isNotEmpty || hasCustomHeaders) {
+        final profile = AiSettingsProfile.fromSettings(
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
+          name: 'Default',
+          settings: domain.AiSettings(
+            provider: provider,
+            apiKey: settings.apiKey,
+            model: settings.model,
+            baseUrl: settings.baseUrl,
+            showAiBubble: settings.showAiBubble,
+            includeCustomHeaders: settings.includeCustomHeaders,
+            customHeaders: settings.customHeaders,
+            useCustomModel: settings.useCustomModel,
+          ),
+        );
+        await _local.saveProfile(AiSettingsProfileModel.fromEntity(profile));
+        await _local.saveActiveProfileId(profile.id);
+        await _local.markProfilesInitialized();
+      }
+    }
+
     final profiles = (await _local.loadProfiles())
         .map((model) => model.toEntity())
         .toList();
@@ -102,6 +133,19 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
     );
     await _local.saveProfile(AiSettingsProfileModel.fromEntity(profile));
     await _local.saveActiveProfileId(profile.id);
+    await _local.markProfilesInitialized();
+    return loadProfiles();
+  }
+
+  @override
+  Future<AiSettingsProfileCollection> updateProfile(
+    String profileId,
+    domain.AiSettings settings,
+  ) async {
+    final profile = await _findProfile(profileId);
+    await _local.saveProfile(
+      AiSettingsProfileModel.fromEntity(profile.withSettings(settings)),
+    );
     return loadProfiles();
   }
 
@@ -128,6 +172,7 @@ class AiSettingsRepositoryImpl implements AiSettingsRepository {
       await _local.saveActiveProfileId(null);
     }
     await _local.deleteProfile(profileId);
+    await _local.markProfilesInitialized();
     return loadProfiles();
   }
 

@@ -10,6 +10,10 @@ abstract interface class AiSettingsRepository {
     String name,
     AiSettings settings,
   );
+  Future<AiSettingsProfileCollection> updateProfile(
+    String profileId,
+    AiSettings settings,
+  );
   Future<AiSettingsProfileCollection> activateProfile(String profileId);
   Future<AiSettingsProfileCollection> deleteProfile(String profileId);
   Future<void> syncActiveProfile(AiSettings settings);

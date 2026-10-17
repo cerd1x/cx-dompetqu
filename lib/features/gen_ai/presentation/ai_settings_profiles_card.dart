@@ -10,12 +10,16 @@ class AiSettingsProfilesCard extends StatelessWidget {
     super.key,
     required this.collection,
     required this.onSelect,
+    required this.onEdit,
     required this.onDelete,
+    required this.onCreateSettings,
   });
 
   final AiSettingsProfileCollection collection;
   final ValueChanged<String> onSelect;
+  final ValueChanged<AiSettingsProfile> onEdit;
   final ValueChanged<AiSettingsProfile> onDelete;
+  final VoidCallback onCreateSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -75,17 +79,40 @@ class AiSettingsProfilesCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   onTap: selected ? null : () => onSelect(profile.id),
-                  trailing: IconButton(
-                    tooltip: 'Hapus profil ${profile.name}',
-                    onPressed: () => onDelete(profile),
-                    icon: const Icon(
-                      Icons.delete_outline,
-                      color: Colors.white54,
-                      size: 20,
-                    ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: 'Edit profil ${profile.name}',
+                        onPressed: () => onEdit(profile),
+                        icon: const Icon(
+                          Icons.edit_outlined,
+                          color: Colors.white54,
+                          size: 20,
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Hapus profil ${profile.name}',
+                        onPressed: () => onDelete(profile),
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.white54,
+                          size: 20,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
+            ),
+          if (collection.profiles.isEmpty)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: onCreateSettings,
+                icon: const Icon(Icons.add),
+                label: const Text('Atur AI'),
+              ),
             ),
         ],
       ),

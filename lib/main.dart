@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'core/logger/app_logger.dart';
+import 'core/logger/log_config.dart';
 import 'core/network/cookie_aware_client.dart';
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
@@ -47,6 +48,7 @@ Future<void> main() async {
   );
   await AppLogger.instance.enableFileLogging(
     directory: Directory("/home/cerd1x/Documents/cx-dompetqu"),
+    features: fileLogFeatures,
   );
 
   final cookieClient = CookieAwareClient();

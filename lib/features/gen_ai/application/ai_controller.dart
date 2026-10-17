@@ -6,6 +6,7 @@ import 'package:genkit_mcp/genkit_mcp.dart';
 import 'package:genkit_openai/genkit_openai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
+import '../../../core/logger/app_logger.dart';
 import 'ai_settings_controller.dart';
 import 'ai_skills_controller.dart';
 import 'mcp_controller.dart';
@@ -39,6 +40,8 @@ abstract class AiState with _$AiState {
 /// Controller percakapan AI. Riwayat bersih ketika sheet ditutup.
 @Riverpod()
 class AiController extends _$AiController {
+  final AppLogger _log = AppLogger.instance;
+
   @override
   AiState build() => const AiState();
 
@@ -46,17 +49,39 @@ class AiController extends _$AiController {
   /// pesan assistant agar feedback tetap terlihat di dalam chat).
   Future<void> send(String raw) async {
     final text = raw.trim();
-    if (text.isEmpty || state.sending) return;
+    if (text.isEmpty || state.sending) {
+      _log.debug(
+        'Pesan AI dilewati karena kosong atau permintaan sedang berjalan.',
+        tag: 'AiController',
+      );
+      return;
+    }
     final history = [
       ...state.messages,
       AiMessage(role: AiRole.user, text: text, at: DateTime.now()),
     ];
     state = AiState(messages: history, sending: true);
+    _log.info(
+      'Memulai permintaan chat AI.',
+      tag: 'AiController',
+      extras: {'historyCount': history.length - 1},
+    );
     try {
       // Riwayat TANPA pesan terakhir; pesan terbaru dikirim terpisah ke Genkit.
       final reply = await _ask(text, history.sublist(0, history.length - 1));
       _append(reply);
-    } catch (e) {
+      _log.info(
+        'Permintaan chat AI selesai.',
+        tag: 'AiController',
+        extras: {'responseLength': reply.length},
+      );
+    } catch (e, stackTrace) {
+      _log.error(
+        'Permintaan chat AI gagal.',
+        tag: 'AiController',
+        error: e.runtimeType.toString(),
+        stackTrace: stackTrace,
+      );
       _append('Maaf, asisten AI gagal menjawab.\n$e');
     }
   }
@@ -76,6 +101,17 @@ class AiController extends _$AiController {
     final modelName = settings.model.isEmpty
         ? settings.provider.defaultModel
         : settings.model;
+    _log.debug(
+      'Menyiapkan Genkit.',
+      tag: 'AiController',
+      extras: {
+        'provider': settings.provider.name,
+        'model': modelName,
+        'historyCount': history.length,
+        'skillCount': skills.length,
+        'mcpServerCount': mcpServers.length,
+      },
+    );
     final ai = switch (settings.provider) {
       AiModelProvider.googleAi => Genkit(
         plugins: [googleAI(apiKey: settings.apiKey)],
@@ -181,6 +217,11 @@ class AiController extends _$AiController {
           '${settings.provider.label} mengembalikan jawaban kosong.',
         );
       }
+      _log.debug(
+        'Genkit menghasilkan jawaban.',
+        tag: 'AiController',
+        extras: {'finishReason': response.finishReason.toString()},
+      );
       return reply.trim();
     } finally {
       for (final client in clients) {

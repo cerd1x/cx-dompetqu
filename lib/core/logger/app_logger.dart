@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'log_level.dart';
+import 'app_log_feature.dart';
 import 'log_record.dart';
 
 /// Logger aplikasi untuk fase beta.
@@ -14,8 +15,9 @@ import 'log_record.dart';
 /// - Selalu menulis ke console via `debugPrint` (muncul di `adb logcat`
 ///   Android termasuk build beta/release), tidak hanya saat debug.
 /// - Dapat menulis ke file (`enableFileLogging`) di direktori dokumen app
-///   dengan rotasi otomatis saat melebihi ukuran maksimal. Semua level masuk
-///   ke `dompetqu.log`; khusus level error juga dicatat ke `errors.log`.
+///   dengan rotasi otomatis saat melebihi ukuran maksimal. File hanya
+///   menerima fitur yang dipilih melalui parameter `features`; semua level
+///   fitur terpilih masuk ke `dompetqu.log`, error-nya juga ke `errors.log`.
 ///   Di Android path-nya private app (`/data/user/0/<pkg>/app_flutter/logs/`),
 ///   bisa diakses via `adb shell run-as <pkg> cat app_flutter/logs/dompetqu.log`
 ///   (atau `.../errors.log`) atau Device File Explorer di Android Studio.
@@ -53,6 +55,7 @@ class AppLogger extends ChangeNotifier {
 
   late final _FileSink _mainFile;
   late final _FileSink _errorFile;
+  Set<AppLogFeature> _fileLogFeatures = AppLogFeature.values.toSet();
 
   bool _hooksInstalled = false;
 
@@ -90,6 +93,10 @@ class AppLogger extends ChangeNotifier {
 
   /// Apakah logging error ke file terpisah aktif.
   bool get errorFileLoggingEnabled => _errorFile.enabled;
+
+  /// Fitur yang saat ini diizinkan masuk ke file log.
+  List<AppLogFeature> get fileLogFeatures =>
+      List.unmodifiable(_fileLogFeatures);
 
   /// Path file log utama saat ini, atau `null` bila logging file nonaktif.
   String? get logFilePath => _mainFile.path;
@@ -145,6 +152,7 @@ class AppLogger extends ChangeNotifier {
     LogLevel level,
     String message, {
     String? tag,
+    AppLogFeature? feature,
     StackTrace? stackTrace,
     Map<String, dynamic>? extras,
   }) {
@@ -152,6 +160,7 @@ class AppLogger extends ChangeNotifier {
     final record = LogRecord(
       level: level,
       message: message,
+      feature: feature ?? AppLogFeature.fromTag(tag),
       tag: tag,
       stackTrace: stackTrace,
       extras: extras,
@@ -161,31 +170,56 @@ class AppLogger extends ChangeNotifier {
     // Selalu kirim ke console (logcat di Android) — bukan hanya kDebugMode —
     // supaya logger bisa di-debug dari build beta/release.
     debugPrint(record.line);
-    _mainFile.writeLine(record.line);
+    if (_fileLogFeatures.contains(record.feature)) {
+      _mainFile.writeLine(record.line);
+    }
     // Error juga dicatat ke `errors.log` agar mudah diperiksa terpisah.
-    if (level == LogLevel.error) _errorFile.writeLine(record.line);
+    if (level == LogLevel.error && _fileLogFeatures.contains(record.feature)) {
+      _errorFile.writeLine(record.line);
+    }
     notifyListeners();
   }
 
-  void debug(String message, {String? tag, Map<String, dynamic>? extras}) {
-    _add(LogLevel.debug, message, tag: tag, extras: extras);
+  void debug(
+    String message, {
+    String? tag,
+    AppLogFeature? feature,
+    Map<String, dynamic>? extras,
+  }) {
+    _add(LogLevel.debug, message, tag: tag, feature: feature, extras: extras);
   }
 
-  void info(String message, {String? tag, Map<String, dynamic>? extras}) {
-    _add(LogLevel.info, message, tag: tag, extras: extras);
+  void info(
+    String message, {
+    String? tag,
+    AppLogFeature? feature,
+    Map<String, dynamic>? extras,
+  }) {
+    _add(LogLevel.info, message, tag: tag, feature: feature, extras: extras);
   }
 
-  void success(String message, {String? tag, Map<String, dynamic>? extras}) {
-    _add(LogLevel.success, message, tag: tag, extras: extras);
+  void success(
+    String message, {
+    String? tag,
+    AppLogFeature? feature,
+    Map<String, dynamic>? extras,
+  }) {
+    _add(LogLevel.success, message, tag: tag, feature: feature, extras: extras);
   }
 
-  void warn(String message, {String? tag, Map<String, dynamic>? extras}) {
-    _add(LogLevel.warn, message, tag: tag, extras: extras);
+  void warn(
+    String message, {
+    String? tag,
+    AppLogFeature? feature,
+    Map<String, dynamic>? extras,
+  }) {
+    _add(LogLevel.warn, message, tag: tag, feature: feature, extras: extras);
   }
 
   void error(
     String message, {
     String? tag,
+    AppLogFeature? feature,
     Object? error,
     StackTrace? stackTrace,
     Map<String, dynamic>? extras,
@@ -195,6 +229,7 @@ class AppLogger extends ChangeNotifier {
       LogLevel.error,
       '$message$detail',
       tag: tag,
+      feature: feature,
       stackTrace: stackTrace,
       extras: extras,
     );
@@ -233,14 +268,20 @@ class AppLogger extends ChangeNotifier {
   /// Aktifkan penulisan log ke file di direktori dokumen app (`<dir>/logs/`).
   ///
   /// Menyalakan dua file sekaligus: [logFileName] (semua level) dan
-  /// [errorLogFileName] (khusus level error). Aman dipanggil saat startup. Di
-  /// web tidak didukung (dilewati diam-diam). Rotasi otomatis ke `<file>.old`
-  /// saat melebihi [maxFileBytes].
+  /// [errorLogFileName] (khusus level error), difilter menurut [features].
+  /// Bila parameter tidak diberikan, semua fitur terdaftar ditulis. Aman
+  /// dipanggil saat startup. Di web tidak didukung (dilewati diam-diam).
+  /// Rotasi otomatis ke `<file>.old` saat melebihi [maxFileBytes].
   ///
   /// Lokasi dasar ditentukan berurutan: parameter [directory] → [logDirectory]
   /// → [defaultLogDirectory] (env `DOMPETQU_LOG_DIR` lalu default platform).
-  Future<void> enableFileLogging({Directory? directory}) async {
+  Future<void> enableFileLogging({
+    Directory? directory,
+    List<AppLogFeature> features = AppLogFeature.values,
+  }) async {
     if (kIsWeb) return;
+
+    _fileLogFeatures = features.toSet();
 
     Directory baseDir;
     try {

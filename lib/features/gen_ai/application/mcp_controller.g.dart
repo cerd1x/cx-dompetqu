@@ -33,7 +33,7 @@ final class McpControllerProvider
   McpController create() => McpController();
 }
 
-String _$mcpControllerHash() => r'92333c5e89768514bfe93abb93e36ad2b6052747';
+String _$mcpControllerHash() => r'8c370063da4cca88f0dc9311b006614b8f95aabf';
 
 abstract class _$McpController extends $AsyncNotifier<List<McpServer>> {
   FutureOr<List<McpServer>> build();

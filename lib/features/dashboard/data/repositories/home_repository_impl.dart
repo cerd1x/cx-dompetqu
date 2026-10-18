@@ -1,5 +1,4 @@
-import 'package:dompetqu/features/assets/domain/entities/asset.dart'
-    as domain;
+import 'package:dompetqu/features/assets/domain/entities/asset.dart' as domain;
 import 'package:dompetqu/features/assets/domain/entities/asset_mutation.dart'
     as domain;
 import 'package:dompetqu/features/contacts/domain/entities/contact.dart'

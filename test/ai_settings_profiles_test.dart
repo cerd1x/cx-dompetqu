@@ -97,10 +97,7 @@ void main() {
 
         final dataSource = SharedPreferencesAiSettingsDataSource();
         await dataSource.saveProvider(AiModelProvider.openAi);
-        await dataSource.saveApiKey(
-          AiModelProvider.openAi,
-          'later-key',
-        );
+        await dataSource.saveApiKey(AiModelProvider.openAi, 'later-key');
 
         final collection = await repository.loadProfiles();
 

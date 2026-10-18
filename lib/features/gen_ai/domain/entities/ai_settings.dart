@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../config/openrouter_config.dart';
+
 part 'ai_settings.freezed.dart';
 
 const String kDefaultAiModel = 'gemini-2.5-flash';
@@ -10,13 +12,16 @@ enum AiModelProvider {
   googleAi,
   anthropic,
   openAi,
-  ollama;
+  ollama,
+  // Provider eksplisit; sebelumnya OpenRouter hanya terdeteksi lewat base URL.
+  openRouter;
 
   String get label => switch (this) {
     AiModelProvider.googleAi => 'Google AI',
     AiModelProvider.anthropic => 'Anthropic',
     AiModelProvider.openAi => 'OpenAI',
     AiModelProvider.ollama => 'Ollama',
+    AiModelProvider.openRouter => OpenRouterConfig.label,
   };
 
   String get defaultModel => switch (this) {
@@ -24,6 +29,7 @@ enum AiModelProvider {
     AiModelProvider.anthropic => 'claude-sonnet-4-5',
     AiModelProvider.openAi => 'gpt-5-mini',
     AiModelProvider.ollama => 'llama3.2',
+    AiModelProvider.openRouter => OpenRouterConfig.defaultModel,
   };
 
   String get storageKey => switch (this) {
@@ -31,6 +37,7 @@ enum AiModelProvider {
     AiModelProvider.anthropic => 'anthropic',
     AiModelProvider.openAi => 'open_ai',
     AiModelProvider.ollama => 'ollama',
+    AiModelProvider.openRouter => OpenRouterConfig.storageKey,
   };
 
   String get defaultBaseUrl => switch (this) {
@@ -38,6 +45,7 @@ enum AiModelProvider {
     AiModelProvider.anthropic => 'https://api.anthropic.com',
     AiModelProvider.openAi => 'https://api.openai.com/v1',
     AiModelProvider.ollama => 'http://localhost:11434/v1',
+    AiModelProvider.openRouter => OpenRouterConfig.baseUrl,
   };
 }
 

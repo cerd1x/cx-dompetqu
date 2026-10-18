@@ -13,15 +13,23 @@ import 'package:dompetqu/features/contacts/data/models/contact_page.dart';
 /// Sumber dengan dua halaman: halaman 1 (ada berikutnya) dan halaman 2 (habis).
 class TwoPageSource extends ContactsRemoteSource {
   TwoPageSource()
-      : super(GraphQLClient(
+    : super(
+        GraphQLClient(
           link: HttpLink('http://localhost:9999'),
           cache: GraphQLCache(store: InMemoryStore()),
-        ));
+        ),
+      );
 
   static final page1 = ContactPage(
     edges: const [
-      ContactEdge(cursor: 'cur-2', node: Contact(id: 'c2', name: 'Budi')),
-      ContactEdge(cursor: 'cur-1', node: Contact(id: 'c1', name: 'Citra')),
+      ContactEdge(
+        cursor: 'cur-2',
+        node: Contact(id: 'c2', name: 'Budi'),
+      ),
+      ContactEdge(
+        cursor: 'cur-1',
+        node: Contact(id: 'c1', name: 'Citra'),
+      ),
     ],
     pageInfo: const ContactPageInfo(
       hasNextPage: true,
@@ -33,7 +41,10 @@ class TwoPageSource extends ContactsRemoteSource {
 
   static final page2 = ContactPage(
     edges: const [
-      ContactEdge(cursor: 'cur-0', node: Contact(id: 'c0', name: 'Andi')),
+      ContactEdge(
+        cursor: 'cur-0',
+        node: Contact(id: 'c0', name: 'Andi'),
+      ),
     ],
     pageInfo: const ContactPageInfo(
       hasNextPage: false,
@@ -62,7 +73,9 @@ class TwoPageSource extends ContactsRemoteSource {
 }
 
 void main() {
-  testWidgets('list kontak dimuat per halaman lalu dilanjutkan', (tester) async {
+  testWidgets('list kontak dimuat per halaman lalu dilanjutkan', (
+    tester,
+  ) async {
     final source = TwoPageSource();
     final container = ProviderContainer(
       overrides: [contactsRemoteSourceProvider.overrideWithValue(source)],

@@ -11,24 +11,29 @@ import '../domain/repositories/skill_store_repository.dart';
 /// memakai bentuk API resmi skills.sh lewat proxy milik backend, mis.:
 /// `flutter run -d linux --dart-define=SKILLS_STORE_API_BASE_URL=https://cx-web.example/api/skills`
 /// Backend yang menyisipkan token Vercel OIDC — token tidak disimpan di klien.
-const _skillsStoreApiBaseUrl = String.fromEnvironment('SKILLS_STORE_API_BASE_URL');
+const _skillsStoreApiBaseUrl = String.fromEnvironment(
+  'SKILLS_STORE_API_BASE_URL',
+);
 
 /// Titik pilih sumber toko skills: scrape (tanpa backend) atau proxy API resmi.
-final skillStoreRemoteDatasourceProvider = Provider<SkillStoreRemoteDatasource>((
-  ref,
-) {
-  final client = http.Client();
-  ref.onDispose(client.close);
+final skillStoreRemoteDatasourceProvider = Provider<SkillStoreRemoteDatasource>(
+  (ref) {
+    final client = http.Client();
+    ref.onDispose(client.close);
 
-  if (_skillsStoreApiBaseUrl.isEmpty) {
-    return SkillsShScrapeRemoteDatasource(client);
-  }
-  return SkillsShApiRemoteDatasource(
-    client,
-    baseUrl: Uri.parse(_skillsStoreApiBaseUrl),
-  );
-}, name: 'skillStoreRemoteDatasource');
+    if (_skillsStoreApiBaseUrl.isEmpty) {
+      return SkillsShScrapeRemoteDatasource(client);
+    }
+    return SkillsShApiRemoteDatasource(
+      client,
+      baseUrl: Uri.parse(_skillsStoreApiBaseUrl),
+    );
+  },
+  name: 'skillStoreRemoteDatasource',
+);
 
 final skillStoreRepositoryProvider = Provider<SkillStoreRepository>((ref) {
-  return SkillStoreRepositoryImpl(ref.watch(skillStoreRemoteDatasourceProvider));
+  return SkillStoreRepositoryImpl(
+    ref.watch(skillStoreRemoteDatasourceProvider),
+  );
 }, name: 'skillStoreRepository');

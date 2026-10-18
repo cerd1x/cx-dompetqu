@@ -31,9 +31,8 @@ class SharedPreferencesMcpLocalDatasource implements McpLocalDatasource {
     }
     return decoded
         .map(
-          (entry) => McpServer.fromJson(
-            Map<String, dynamic>.from(entry as Map),
-          ),
+          (entry) =>
+              McpServer.fromJson(Map<String, dynamic>.from(entry as Map)),
         )
         .toList(growable: false);
   }

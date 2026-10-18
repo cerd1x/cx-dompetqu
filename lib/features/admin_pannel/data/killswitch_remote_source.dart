@@ -92,8 +92,10 @@ class KillswitchRemoteSource implements KillswitchDataSource {
 
   Map<String, String> get _headers => {
     'content-type': 'application/json',
-    // 'x-admin-token': adminToken,
-    'Authorization': adminToken,
+    // Backend memeriksa `x-admin-token` (lihat `app.ts` cx-services), bukan
+    // `Authorization` — jangan kirim keduanya supaya token tidak bocor lewat
+    // header yang tidak diperiksa.
+    'x-admin-token': adminToken,
   };
 
   /// Ambil daftar operation yang sedang dimatikan.

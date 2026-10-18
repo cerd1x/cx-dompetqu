@@ -187,14 +187,72 @@ symlink ke `.claude/skills/`). Baca sebelum mengubah area terkait:
 - `building-flutter-apps` — rules R1–R27 (analyze tiap batch, codegen-only
   provider, dsb.; beberapa item mungkin bertabrakan dengan praktik lokal —
   ikuti yang berlaku nyata di kode).
+- `building-flutter-production-apps` — referensi expert Flutter production:
+  arsitektur (Clean/Hexagonal/Feature-First), performa (jank, rebuild
+  overhead), platform integration (MethodChannel/FFI), testing, CI/CD.
+  Gunakan untuk keputusan arsitektur & debugging produksi yang kompleks;
+  tetap ikuti aturan lokal di dokumen ini (Riverpod codegen, feature-first).
+- `developing-genkit-dart` — Genkit Dart SDK 1.0 untuk AI agent/flows/LLM
+  di Dart/Flutter. Relevan untuk fitur `gen_ai`; perhatikan migrasi API
+  pre-1.0 → 1.0 yang didokumentasikan di skill-nya.
+- `Flutter Enterprise Starter` — referensi penerapan Hexagonal Architecture
+  (Ports & Adapters) pada Flutter:
+  https://github.com/deveminsahin/starter_app. Gunakan prinsip batas domain,
+  application, dan adapter-nya secara pragmatis; jangan mengadopsi BLoC atau
+  CQRS dari starter tersebut.
+- `flutter-clean-riverpod-skills` — referensi state management Riverpod:
+  https://github.com/Ethiel97/flutter-clean-riverpod-skills. Gunakan Riverpod
+  sebagai pengganti BLoC karena stack aplikasi ini memakai Riverpod 3 codegen;
+  aturan dan pola khusus proyek di dokumen ini tetap menjadi acuan utama.
+
+## Arsitektur Hexagonal
+
+Aplikasi menggunakan Hexagonal Architecture secara pragmatis dalam struktur
+feature-first yang sudah ada. Prinsip boundary:
+
+- **Domain = Port.** Kontrak repository didefinisikan sebagai
+  `abstract interface class` di `lib/features/<fitur>/domain/repositories/`.
+  Domain **tidak boleh** mengimport `data/`, `application/`, atau `presentation/`.
+- **Data = Adapter.** Implementasi konkret repository dan integrasi
+  SDK/network/storage (remote/local datasource) berada di
+  `lib/features/<fitur>/data/` (termasuk `data/repositories/*_impl.dart`).
+  Data boleh mengimport domain; tidak boleh mengimport `presentation/`.
+- **Application = Boundary Komposisi.** Providers Riverpod (codegen
+  `@Riverpod`/`@riverpod` atau manual `Provider`) di `application/` bertugas
+  meng-inject dan memaparkan repository ke presentation. Presentation dan
+  controller hanya bergantung pada **interface domain**, bukan implementasi data.
+- **Presentation = UI.** Screens/widgets hanya mengonsumsi state dari
+  application (providers/controllers); tidak boleh memanggil datasource/data
+  layer langsung.
+
+**Pola komposit (agregat):**
+Beberapa fitur yang berkaitan dikelompokkan melalui `HomeRepository`
+(`lib/features/dashboard/domain/repositories/home_repository.dart`) sebagai
+**agregat port**. Implementasinya `HomeRepositoryImpl` di
+`dashboard/data/repositories/` dan di-compose dari datasource/layanan fitur
+terkait (assets/contacts/inventory/statistics/transactions). Ini sah untuk
+mengurangi coupling antar-fitur dan tetap menjaga boundary domain–data.
+
+**Catatan implementasi saat ini:**
+Sebagian fitur sudah punya pasangan interface+impl terpisah (contoh `auth`,
+`order`, `settings`, `app_lock`, `admin_pannel`, `dashboard`, `gen_ai`),
+sementara fitur lain yang hanya diakses via agregat `HomeRepository` tidak
+wajib dibuatkan repository impl terpisah selama boundary domain-data tetap
+terjaga. Jangan memecah agregat tanpa alasan yang jelas dan tanpa perubahan
+perilaku.
+
+Referensi: `Flutter Enterprise Starter` (pragmatis, bukan template utuh),
+stack tetap **Riverpod 3 codegen**, dengan `flutter-clean-riverpod-skills`
+sebagai referensi Riverpod.
 
 ## Catatan / Draf Diketahui
 
-- `KillswitchRemoteSource._headers` mengirim `Authorization: adminToken` dengan
-  baris `'x-admin-token': adminToken` dikomentari; backend memeriksa
-  `x-admin-token`. Ada ketidakcocokan yang perlu dibetulkan.
-- Docs `action-ai-rules-execution` masih menyebut "/api/graphql"; nilai aktual
-  `ApiConfig.graphqlEndpoint` adalah `$baseUrl/graphql`. Update bila touch.
+- ~~`KillswitchRemoteSource._headers` mengirim `Authorization: adminToken`~~ —
+  sudah dibetulkan (18 Okt 2026): header dikirim sebagai `x-admin-token`
+  sesuai pemeriksaan backend di `cx-services/app.ts`.
+- ~~Docs `action-ai-rules-execution` masih menyebut "/api/graphql"~~ — sudah
+  diupdate (18 Okt 2026): endpoint aktual `$baseUrl/graphql` tercatat benar
+  di docs skill tersebut.
 
 ## Persetujuan Khusus Migrasi Clean Architecture
 

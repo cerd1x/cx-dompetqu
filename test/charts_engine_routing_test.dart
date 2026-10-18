@@ -44,10 +44,7 @@ void main() {
   });
 
   group('TradingViewChart pada platform tanpa webview', () {
-    for (final platform in [
-      TargetPlatform.linux,
-      TargetPlatform.fuchsia,
-    ]) {
+    for (final platform in [TargetPlatform.linux, TargetPlatform.fuchsia]) {
       testWidgets('$platform menampilkan pesan fallback, bukan webview', (
         tester,
       ) async {

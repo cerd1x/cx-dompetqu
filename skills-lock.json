@@ -1,17 +1,17 @@
 {
   "version": 1,
   "skills": {
+    "building-flutter-production-apps": {
+      "source": "poorgramer-zack/dart-expert-skills",
+      "sourceType": "github",
+      "skillPath": "skills/flutter-expert/SKILL.md",
+      "computedHash": "6e2320fd9efd26c247ede810f186f925bebe2e1ae7136f91a55e7723e0e09853"
+    },
     "developing-genkit-dart": {
       "source": "genkit-ai/skills",
       "sourceType": "github",
       "skillPath": "skills/developing-genkit-dart/SKILL.md",
       "computedHash": "f926f5759c9c181c41fde7b467e54ac80cdbfbc77bdc3d7e9b23670a110166bc"
-    },
-    "flutter-clean-arch": {
-      "source": "duckyman-ai/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/flutter-clean-arch/SKILL.md",
-      "computedHash": "7b3a22b5428f967d0cbaa94fd300b5269179bc7a2a1f41b2955e2134883ab5a1"
     }
   }
 }

@@ -32,11 +32,8 @@ class FakeContactsRepository implements HomeRepository {
     String? after,
     int? last,
     String? before,
-  }) async => ContactPage(
-    items: [_contact],
-    hasNextPage: false,
-    nextCursor: null,
-  );
+  }) async =>
+      ContactPage(items: [_contact], hasNextPage: false, nextCursor: null);
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -63,9 +60,8 @@ void main() {
         ),
         GoRoute(
           path: '/contact-detail/:id',
-          builder: (_, s) => ContactDetailScreen(
-            contactId: s.pathParameters['id'] ?? '',
-          ),
+          builder: (_, s) =>
+              ContactDetailScreen(contactId: s.pathParameters['id'] ?? ''),
         ),
       ],
     );
@@ -73,10 +69,7 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: MaterialApp.router(
-          theme: AppTheme.dark,
-          routerConfig: router,
-        ),
+        child: MaterialApp.router(theme: AppTheme.dark, routerConfig: router),
       ),
     );
 

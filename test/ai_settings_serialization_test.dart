@@ -56,10 +56,7 @@ void main() {
       expect(payload['version'], 1);
       expect(payload['algorithm'], 'A256GCM');
       expect(payload['ciphertext'], isNot(contains('test-key')));
-      expect(
-        await crypto.decrypt(encrypted),
-        settings.toPipeDelimitedString(),
-      );
+      expect(await crypto.decrypt(encrypted), settings.toPipeDelimitedString());
     });
 
     test('uses a new nonce for each encryption', () async {

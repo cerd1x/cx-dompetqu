@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
+import '../../domain/config/openrouter_config.dart';
 import '../../domain/entities/openrouter_model.dart';
 
 abstract interface class OpenRouterModelRemoteDataSource {
@@ -87,22 +88,23 @@ class HttpOpenRouterModelRemoteDataSource
   }
 
   Uri _modelsUri(String baseUrl) {
-    final uri = Uri.tryParse(baseUrl.trim());
-    if (uri == null ||
-        uri.scheme != 'https' ||
-        uri.host.toLowerCase() != 'openrouter.ai') {
-      throw const FormatException(
-        'Base URL harus menggunakan https://openrouter.ai.',
+    if (!OpenRouterConfig.isBaseUrl(baseUrl)) {
+      throw FormatException(
+        'Base URL harus menggunakan https://${OpenRouterConfig.host}.',
       );
     }
 
+    final uri = Uri.parse(baseUrl.trim());
     var path = uri.path.replaceFirst(RegExp(r'/+$'), '');
-    if (path.endsWith('/chat/completions')) {
-      path = path.substring(0, path.length - '/chat/completions'.length);
+    if (path.endsWith(OpenRouterConfig.chatCompletionsSuffix)) {
+      path = path.substring(
+        0,
+        path.length - OpenRouterConfig.chatCompletionsSuffix.length,
+      );
     }
     if (!path.endsWith('/models')) {
       path = '$path/models';
     }
-    return Uri.https('openrouter.ai', path);
+    return Uri.https(OpenRouterConfig.host, path);
   }
 }

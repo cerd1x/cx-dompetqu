@@ -63,7 +63,9 @@ class AiSettingsCryptoService {
         decoded['nonce'] is! String ||
         decoded['ciphertext'] is! String ||
         decoded['mac'] is! String) {
-      throw const FormatException('Format data pengaturan AI terenkripsi tidak valid.');
+      throw const FormatException(
+        'Format data pengaturan AI terenkripsi tidak valid.',
+      );
     }
 
     final secretBox = SecretBox(

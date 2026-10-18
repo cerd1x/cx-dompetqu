@@ -103,6 +103,6 @@ Jangan skip urutan hanya karena command sebelumnya berhasil.
 
 ## Konfigurasi Backend
 
-- Default `API_BASE_URL` mengarah ke web app (`/api/graphql`).
-- Untuk mengarah langsung ke `cx-services`, endpoint GraphQL adalah `/graphql` tanpa prefix `/api` — `api_config.dart` saat ini selalu memakai `/api/graphql`, jadi hanya lewat web.
+- Default `API_BASE_URL` mengarah ke origin web (`cx-web`) yang mem-forward `/api/*` ke cx-services.
+- Endpoint GraphQL aktual adalah `$baseUrl/graphql` (tanpa prefix `/api`) — lihat `ApiConfig.graphqlEndpoint` di `lib/core/config/api_config.dart`. Catatan: komentar di `api_config.dart` masih menyebut "/api/graphql"; percayai kode getter-nya, bukan komentarnya.
 - Selalu cek `lib/core/config/api_config.dart` sebelum ubah base URL.

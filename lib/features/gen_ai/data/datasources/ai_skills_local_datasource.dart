@@ -32,9 +32,7 @@ class SharedPreferencesAiSkillsLocalDatasource
     }
     return decoded
         .map(
-          (entry) => AiSkill.fromJson(
-            Map<String, dynamic>.from(entry as Map),
-          ),
+          (entry) => AiSkill.fromJson(Map<String, dynamic>.from(entry as Map)),
         )
         .toList(growable: false);
   }

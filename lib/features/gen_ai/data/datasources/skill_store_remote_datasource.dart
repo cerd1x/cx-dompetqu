@@ -334,9 +334,7 @@ String htmlToPlainText(String html) {
       .replaceAll(RegExp(r'<li\b[^>]*>', caseSensitive: false), '- ')
       .replaceAll(RegExp(r'<[^>]+>'), '');
 
-  return _decodeHtmlEntities(
-        text,
-      )
+  return _decodeHtmlEntities(text)
       .split('\n')
       .map((line) => line.replaceAll(RegExp(r'[ \t]+'), ' ').trimRight())
       .join('\n')
@@ -366,19 +364,18 @@ const _namedEntities = <String, String>{
 };
 
 String _decodeHtmlEntities(String input) {
-  return input.replaceAllMapped(
-    RegExp(r'&(#x?[0-9a-fA-F]+|[a-zA-Z]+);'),
-    (match) {
-      final token = match.group(1)!;
-      if (token.startsWith('#')) {
-        final isHex = token.length > 1 && token[1].toLowerCase() == 'x';
-        final digits = isHex ? token.substring(2) : token.substring(1);
-        final code = int.tryParse(digits, radix: isHex ? 16 : 10);
-        return code == null ? match.group(0)! : String.fromCharCode(code);
-      }
-      return _namedEntities[token.toLowerCase()] ?? match.group(0)!;
-    },
-  );
+  return input.replaceAllMapped(RegExp(r'&(#x?[0-9a-fA-F]+|[a-zA-Z]+);'), (
+    match,
+  ) {
+    final token = match.group(1)!;
+    if (token.startsWith('#')) {
+      final isHex = token.length > 1 && token[1].toLowerCase() == 'x';
+      final digits = isHex ? token.substring(2) : token.substring(1);
+      final code = int.tryParse(digits, radix: isHex ? 16 : 10);
+      return code == null ? match.group(0)! : String.fromCharCode(code);
+    }
+    return _namedEntities[token.toLowerCase()] ?? match.group(0)!;
+  });
 }
 
 String _clampInstructions(String text) {

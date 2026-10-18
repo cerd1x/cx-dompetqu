@@ -28,10 +28,11 @@ const _detailHtml = '''
 </body></html>
 ''';
 
-http.Response _html(String body) =>
-    http.Response.bytes(utf8.encode(body), 200, headers: {
-      'content-type': 'text/html; charset=utf-8',
-    });
+http.Response _html(String body) => http.Response.bytes(
+  utf8.encode(body),
+  200,
+  headers: {'content-type': 'text/html; charset=utf-8'},
+);
 
 void main() {
   group('SkillsShScrapeRemoteDatasource', () {
@@ -128,9 +129,7 @@ void main() {
     });
 
     test('melempar HttpException saat katalog tidak tersedia', () async {
-      final client = MockClient(
-        (request) async => http.Response('boom', 500),
-      );
+      final client = MockClient((request) async => http.Response('boom', 500));
       final datasource = SkillsShScrapeRemoteDatasource(client);
 
       expect(

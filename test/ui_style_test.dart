@@ -50,8 +50,7 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      final controller =
-          container.read(uiStyleControllerProvider.notifier);
+      final controller = container.read(uiStyleControllerProvider.notifier);
       await container.read(uiStyleControllerProvider.future);
 
       await controller.setPrimary(const Color(0xFF123456));
@@ -73,8 +72,7 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      final controller =
-          container.read(uiStyleControllerProvider.notifier);
+      final controller = container.read(uiStyleControllerProvider.notifier);
       await container.read(uiStyleControllerProvider.future);
 
       await controller.setPrimary(const Color(0xFF123456));

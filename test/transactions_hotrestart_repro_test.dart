@@ -7,12 +7,12 @@ import 'package:dompetqu/features/transactions/domain/entities/transaction.dart'
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
 
 Transaction _tx() => Transaction(
-      id: 't1',
-      type: 'income',
-      amount: 'IDR 10000',
-      category: 'Gaji',
-      createdAt: DateTime(2026, 1, 1),
-    );
+  id: 't1',
+  type: 'income',
+  amount: 'IDR 10000',
+  category: 'Gaji',
+  createdAt: DateTime(2026, 1, 1),
+);
 
 class FakeTransactionsRepository implements HomeRepository {
   FakeTransactionsRepository({this.error});
@@ -73,21 +73,27 @@ void main() {
     expect(repositoryB.calls, 1);
   });
 
-  test('query error muncul sebagai error (tidak ditelan jadi list kosong)', () async {
-    final repository = FakeTransactionsRepository(
-      error: StateError('GraphQL query failed'),
-    );
-    final container = ProviderContainer.test(
-      overrides: [homeRepositoryProvider.overrideWithValue(repository)],
-    );
+  test(
+    'query error muncul sebagai error (tidak ditelan jadi list kosong)',
+    () async {
+      final repository = FakeTransactionsRepository(
+        error: StateError('GraphQL query failed'),
+      );
+      final container = ProviderContainer.test(
+        overrides: [homeRepositoryProvider.overrideWithValue(repository)],
+      );
 
-    container.listen(transactionsControllerProvider, (_, _) {});
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+      container.listen(transactionsControllerProvider, (_, _) {});
+      await Future<void>.delayed(const Duration(milliseconds: 300));
 
-    final state = container.read(transactionsControllerProvider);
-    expect(state.items, isEmpty);
-    expect(state.error, isNotNull,
-        reason: 'error GraphQL harus tampil, bukan diam-diam jadi list kosong');
-    expect(state.error, contains('GraphQL query failed'));
-  });
+      final state = container.read(transactionsControllerProvider);
+      expect(state.items, isEmpty);
+      expect(
+        state.error,
+        isNotNull,
+        reason: 'error GraphQL harus tampil, bukan diam-diam jadi list kosong',
+      );
+      expect(state.error, contains('GraphQL query failed'));
+    },
+  );
 }

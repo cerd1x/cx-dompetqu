@@ -8,6 +8,7 @@ import '../../../core/theme/widgets/dompet_card.dart';
 import '../application/ai_settings_controller.dart';
 import '../application/ai_settings_profiles_controller.dart';
 import '../application/ai_settings_repository_provider.dart';
+import '../domain/config/openrouter_config.dart';
 import '../domain/entities/ai_settings.dart';
 import '../domain/entities/ai_settings_profile.dart';
 import '../domain/entities/openrouter_model.dart';
@@ -36,6 +37,16 @@ const Map<AiModelProvider, List<CSSelectItem<String>>> _kProviderModels = {
     CSSelectItem(value: 'qwen2.5', label: 'Qwen', symbol: '2.5'),
     CSSelectItem(value: 'mistral', label: 'Mistral', symbol: ''),
   ],
+  // OpenRouter memakai katalog model; daftar ini hanya cadangan bila picker
+  // preset terakses (ID model OpenRouter memakai prefix vendor).
+  AiModelProvider.openRouter: [
+    CSSelectItem(
+      value: OpenRouterConfig.defaultModel,
+      label: 'Gemini',
+      symbol: '2.5',
+    ),
+    CSSelectItem(value: 'google/gemini-2.5-pro', label: 'Pro', symbol: '2.5'),
+  ],
 };
 
 // Singkatan visual provider yang ditampilkan pada picker.
@@ -44,6 +55,7 @@ const Map<AiModelProvider, String> _kProviderSymbols = {
   AiModelProvider.anthropic: 'A',
   AiModelProvider.openAi: 'O',
   AiModelProvider.ollama: 'L',
+  AiModelProvider.openRouter: 'R',
 };
 
 /// Menampilkan lembar pengaturan AI beserta profil konfigurasi yang tersimpan.
@@ -390,14 +402,19 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       _AiHeaderField(name: entry.key, value: entry.value),
   ];
 
-  bool get _isOpenRouter => _isOpenRouterUrl(widget.settings.baseUrl);
+  // Provider eksplisit menang; deteksi URL tetap dipertahankan untuk profil
+  // lama yang memakai provider lain dengan base URL OpenRouter.
+  bool get _isOpenRouter =>
+      widget.settings.provider == AiModelProvider.openRouter ||
+      OpenRouterConfig.isBaseUrl(widget.settings.baseUrl);
 
   String get _providerSettingsLabel =>
-      _isOpenRouter ? 'OpenRouter' : widget.settings.provider.label;
+      _isOpenRouter ? OpenRouterConfig.label : widget.settings.provider.label;
 
   bool get _supportsCustomHeaders =>
       widget.settings.provider == AiModelProvider.openAi ||
-      widget.settings.provider == AiModelProvider.ollama;
+      widget.settings.provider == AiModelProvider.ollama ||
+      widget.settings.provider == AiModelProvider.openRouter;
 
   List<CSSelectItem<String>> get _modelOptions {
     final options = _kProviderModels[widget.settings.provider]!;
@@ -598,7 +615,8 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
             ),
           // Endpoint dapat dikustomisasi untuk API OpenAI-compatible.
           if (widget.settings.provider == AiModelProvider.openAi ||
-              widget.settings.provider == AiModelProvider.ollama) ...[
+              widget.settings.provider == AiModelProvider.ollama ||
+              widget.settings.provider == AiModelProvider.openRouter) ...[
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Row(
@@ -936,13 +954,6 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       );
     }
   }
-}
-
-bool _isOpenRouterUrl(String baseUrl) {
-  final uri = Uri.tryParse(baseUrl.trim());
-  return uri != null &&
-      uri.scheme == 'https' &&
-      uri.host.toLowerCase() == 'openrouter.ai';
 }
 
 /// Menyediakan pencarian dan pemilihan model dari katalog OpenRouter.

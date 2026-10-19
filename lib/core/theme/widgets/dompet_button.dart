@@ -36,24 +36,19 @@ class DompetButton extends StatelessWidget {
   static const _glassEdge = Color(0x4DFFFFFF); // white 30%
   static const _glassEdgeDim = Color(0x1AFFFFFF); // white 10%
 
-  /// Gradient brand semi-transparan → blur di belakang ikut terlihat (frosted).
-  static BoxDecorationMix _gradient({
-    required double alpha,
-    required double radius,
-  }) => BoxDecorationMix(
-    gradient: LinearGradientMix(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        DompetBrand.goldLight.withValues(alpha: alpha),
-        DompetBrand.gold.withValues(alpha: alpha),
-        DompetBrand.purple.withValues(alpha: alpha),
-        DompetBrand.pink.withValues(alpha: alpha),
-      ],
-    ),
-    borderRadius: BorderRadiusGeometryMix.circular(radius),
-    border: BorderMix.all(BorderSideMix(color: _glassEdge, width: 1)),
-  );
+  /// Gradient oranye → pink; konstan untuk semua state (idle/hover/pressed).
+  static BoxDecorationMix _gradient({required double radius}) =>
+      BoxDecorationMix(
+        gradient: LinearGradientMix.value(
+          const LinearGradient(
+            colors: [Color(0xFFF97316), Color(0xFFEC4899)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
+        borderRadius: BorderRadiusGeometryMix.circular(radius),
+        border: BorderMix.all(BorderSideMix(color: _glassEdge, width: 1)),
+      );
 
   /// Panel kaca transparan dengan border khas CS glass.
   static BoxDecorationMix _glass({
@@ -87,18 +82,7 @@ class DompetButton extends StatelessWidget {
                     ),
                   )
                   .labelColor(Colors.white38)
-            : base
-                  .decoration(_gradient(alpha: 0.4, radius: DompetBrand.radius))
-                  .onHovered(
-                    ButtonStyler().decoration(
-                      _gradient(alpha: 0.45, radius: DompetBrand.radius),
-                    ),
-                  )
-                  .onPressed(
-                    ButtonStyler().decoration(
-                      _gradient(alpha: 0.3, radius: DompetBrand.radius),
-                    ),
-                  ),
+            : base.decoration(_gradient(radius: DompetBrand.radius)),
       DompetButtonVariant.outline =>
         _dimmed
             ? base

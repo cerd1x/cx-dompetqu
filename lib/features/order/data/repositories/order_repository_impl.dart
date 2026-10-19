@@ -31,6 +31,7 @@ class OrderRepositoryImpl implements OrderRepository {
     String? customerId,
     String? description,
     String? payToAssetId,
+    String? paymentStatus,
   }) => _remoteSource.createProductSale(
     productId: productId,
     itemCount: itemCount,
@@ -40,6 +41,7 @@ class OrderRepositoryImpl implements OrderRepository {
     customerId: customerId,
     description: description,
     payToAssetId: payToAssetId,
+    paymentStatus: paymentStatus,
   );
 
   @override
@@ -72,6 +74,7 @@ class OrderRepositoryImpl implements OrderRepository {
     String? customerId,
     String? description,
     String? payWithAssetId,
+    String? paymentStatus,
   }) => _remoteSource.createLoan(
     totalAmount: totalAmount,
     currency: currency,
@@ -80,5 +83,6 @@ class OrderRepositoryImpl implements OrderRepository {
     customerId: customerId,
     description: description,
     payWithAssetId: payWithAssetId,
+    paymentStatus: paymentStatus,
   );
 }

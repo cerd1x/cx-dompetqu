@@ -85,6 +85,7 @@ class OrderRemoteSource implements OrderDataSource {
     String? customerId,
     String? description,
     String? payToAssetId,
+    String? paymentStatus,
   }) async {
     final input =
         {
@@ -96,6 +97,7 @@ class OrderRemoteSource implements OrderDataSource {
           'customerId': ?customerId,
           'description': ?description,
           'payToAssetId': ?payToAssetId,
+          'paymentStatus': ?paymentStatus,
         }..removeWhere(
           (key, value) =>
               value is String &&
@@ -176,6 +178,7 @@ class OrderRemoteSource implements OrderDataSource {
     String? customerId,
     String? description,
     String? payWithAssetId,
+    String? paymentStatus,
   }) async {
     final result = await _client.mutate(
       MutationOptions(
@@ -189,6 +192,7 @@ class OrderRemoteSource implements OrderDataSource {
             'customerId': ?customerId,
             'description': ?description,
             'payWithAssetId': ?payWithAssetId,
+            'paymentStatus': ?paymentStatus,
           },
         },
       ),

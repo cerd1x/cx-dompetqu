@@ -16,6 +16,9 @@ abstract interface class OrderRepository {
     String? customerId,
     String? description,
     String? payToAssetId,
+    // Status pembayaran (`paid`/`unpaid`) — padanan `paymentStatus` di
+    // `CreateOrderProductSaleInput` backend; default DB `unpaid`.
+    String? paymentStatus,
   });
 
   Future<bool> createExpense({
@@ -37,5 +40,8 @@ abstract interface class OrderRepository {
     String? customerId,
     String? description,
     String? payWithAssetId,
+    // Status pembayaran (`paid`/`unpaid`) — padanan `paymentStatus` di
+    // `CreateOrderLoanInput` backend; default DB `unpaid`.
+    String? paymentStatus,
   });
 }

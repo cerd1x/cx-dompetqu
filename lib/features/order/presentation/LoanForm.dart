@@ -68,6 +68,9 @@ class _LoanFormState extends ConsumerState<LoanForm> {
                 ? null
                 : _notesCtrl.text.trim(),
             payWithAssetId: _payWithAssetId,
+            // Nilai segmented ('belum'/'lunas') dipetakan ke enum backend
+            // `TransactionPaymentStatus` (`unpaid`/`paid`).
+            paymentStatus: _status == 'lunas' ? 'paid' : 'unpaid',
           );
       if (!mounted) return;
       if (ok) {

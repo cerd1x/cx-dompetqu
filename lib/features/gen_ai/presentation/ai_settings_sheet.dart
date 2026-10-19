@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
@@ -120,14 +121,29 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
                 padding: const EdgeInsets.fromLTRB(20, 16, 12, 12),
                 child: Row(
                   children: [
-                    const Expanded(
-                      child: Text(
-                        'Pengaturan AI',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    Expanded(
+                      child: RowBox(
+                        style: FlexBoxStyler().spacing(12),
+                        children: [
+                          Text(
+                            'Pengaturan AI',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Pengaturan AI lanjutan',
+                      // Membuka layar penuh pengaturan AI (push agar lembar
+                      // tetap di belakang dan bisa kembali dengan tombol back).
+                      onPressed: () => context.push('/ai-settings'),
+                      icon: const Icon(
+                        Icons.settings_outlined,
+                        color: Colors.white70,
                       ),
                     ),
                     IconButton(
@@ -215,6 +231,21 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
                       ),
                     ),
                   ),
+                ),
+              ),
+              const Divider(height: 1, color: Colors.white10),
+              Box(
+                style: BoxStyler().wrap(.intrinsicWidth()).padding(.bottom(12)),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  child: Row(children: [Icon(Icons.add), StyledText("Add")]),
+                  // Membuka form konfigurasi untuk membuat profil AI baru.
+                  onPressed: () => setState(() {
+                    _creatingProfile = true;
+                    _editingProfileId = null;
+                  }),
                 ),
               ),
             ],

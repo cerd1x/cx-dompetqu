@@ -74,6 +74,9 @@ class _SaleFormState extends ConsumerState<SaleForm> {
                 ? null
                 : _notesCtrl.text.trim(),
             payToAssetId: _payToAssetId,
+            // Nilai segmented ('belum'/'lunas') dipetakan ke enum backend
+            // `TransactionPaymentStatus` (`unpaid`/`paid`).
+            paymentStatus: _status == 'lunas' ? 'paid' : 'unpaid',
           );
       if (!mounted) return;
       if (ok) {

@@ -345,16 +345,29 @@ class _LedgerRow extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 3),
-                Text(
-                  [
-                    tone.label,
-                    if (capital != null)
-                      'capital ${formatMoney(capital, currency)}',
-                    DateFormat('HH:mm').format(tx.createdAt),
-                  ].join(' · '),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 11, color: Colors.white38),
+                Row(
+                  children: [
+                    // Status pembayaran transaksi — padanan `paymentStatus`
+                    // (`TransactionPaymentStatus`) dari backend.
+                    _PaymentStatusPill(paid: tx.paymentStatus == 'paid'),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        [
+                          tone.label,
+                          if (capital != null)
+                            'capital ${formatMoney(capital, currency)}',
+                          DateFormat('HH:mm').format(tx.createdAt),
+                        ].join(' · '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white38,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -380,6 +393,49 @@ class _LedgerRow extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Pill status pembayaran transaksi — padanan `paymentStatus` di
+/// `services/domain/transactions` (`paid`/`unpaid`). Mengikuti pola
+/// `_StatusPill` pada `struct_detail_screen.dart`.
+class _PaymentStatusPill extends StatelessWidget {
+  const _PaymentStatusPill({required this.paid});
+
+  final bool paid;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = paid ? const Color(0xFF34D399) : const Color(0xFFFBBF24);
+    return Box(
+      style: BoxStyler()
+          .padding(
+            EdgeInsetsGeometryMix.value(
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            ),
+          )
+          .decoration(
+            DecorationMix.value(
+              BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: color.withValues(alpha: 0.5),
+                  width: 1,
+                ),
+              ),
+            ),
+          ),
+      child: Text(
+        paid ? 'PAID' : 'UNPAID',
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.5,
+          color: color,
+        ),
       ),
     );
   }

@@ -105,6 +105,7 @@ extension TransactionModelMapper on data.Transaction {
     paymentMethod: paymentMethod?.toEntity(),
     customerId: customerId,
     status: status,
+    paymentStatus: paymentStatus,
     createdAt: createdAt,
   );
 }

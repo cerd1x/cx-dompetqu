@@ -4,7 +4,7 @@ import '../../../core/logger/app_logger.dart';
 import '../domain/entities/contact.dart';
 import '../../dashboard/application/home_repository_provider.dart';
 
-part 'contacts_controller.g.dart';
+part 'generated/contacts_controller.g.dart';
 
 /// Jumlah kontak per halaman saat mode pagination aktif — cerminan
 /// `DEFAULT_PAGE_SIZE` di `services/domain/contacts` (`contact-page.model.ts`).

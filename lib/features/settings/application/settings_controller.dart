@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/entities/app_settings.dart';
 import 'settings_repository_provider.dart';
-part 'settings_controller.g.dart';
+part 'generated/settings_controller.g.dart';
 
 /// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
 /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.

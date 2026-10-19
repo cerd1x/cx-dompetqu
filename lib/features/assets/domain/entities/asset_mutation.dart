@@ -1,21 +1,22 @@
-class AssetMutation {
-  const AssetMutation({
-    required this.id,
-    required this.type,
-    required this.amount,
-    required this.currency,
-    required this.balanceBefore,
-    required this.balanceAfter,
-    required this.description,
-    required this.createdAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String type;
-  final String amount;
-  final String currency;
-  final String balanceBefore;
-  final String balanceAfter;
-  final String? description;
-  final DateTime? createdAt;
+part 'generated/asset_mutation.freezed.dart';
+
+/// Satu mutasi saldo aset — padanan data model
+/// `features/assets/data/models/asset_mutation.dart` (tanpa JSON: konversi
+/// ada di mapper/repository, bukan di domain).
+@freezed
+abstract class AssetMutation with _$AssetMutation {
+  const factory AssetMutation({
+    required String id,
+    required String type,
+    required String amount,
+    required String currency,
+    required String balanceBefore,
+    required String balanceAfter,
+    required String? description,
+    required DateTime? createdAt,
+  }) = _AssetMutation;
+
+  const AssetMutation._();
 }

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/mcp_server.dart';
 
-part 'mcp_local_datasource.g.dart';
+part 'generated/mcp_local_datasource.g.dart';
 
 abstract interface class McpLocalDatasource {
   Future<List<McpServer>> loadAll();

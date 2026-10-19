@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/ai_skill.dart';
 
-part 'ai_skills_local_datasource.g.dart';
+part 'generated/ai_skills_local_datasource.g.dart';
 
 abstract interface class AiSkillsLocalDatasource {
   Future<List<AiSkill>> loadAll();

@@ -1,17 +1,20 @@
-class Statistics {
-  const Statistics({
-    this.totalIncome = 0,
-    this.totalExpense = 0,
-    this.totalProfit = 0,
-    this.totalLoan = 0,
-    this.totalCash = 0,
-    this.totalAsset = 0,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final num totalIncome;
-  final num totalExpense;
-  final num totalProfit;
-  final num totalLoan;
-  final num totalCash;
-  final num totalAsset;
+part 'generated/statistics.freezed.dart';
+
+/// Ringkasan statistik keuangan — padanan data model
+/// `features/statistics/data/models/statistics.dart` (tanpa JSON: konversi
+/// ada di mapper/repository, bukan di domain).
+@freezed
+abstract class Statistics with _$Statistics {
+  const factory Statistics({
+    @Default(0) num totalIncome,
+    @Default(0) num totalExpense,
+    @Default(0) num totalProfit,
+    @Default(0) num totalLoan,
+    @Default(0) num totalCash,
+    @Default(0) num totalAsset,
+  }) = _Statistics;
+
+  const Statistics._();
 }

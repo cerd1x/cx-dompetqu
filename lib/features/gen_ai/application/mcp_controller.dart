@@ -5,7 +5,7 @@ import '../domain/entities/mcp_server.dart';
 import '../domain/repositories/mcp_repository.dart';
 import '../repositories/mcp_repository.dart';
 
-part 'mcp_controller.g.dart';
+part 'generated/mcp_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class McpController extends _$McpController {

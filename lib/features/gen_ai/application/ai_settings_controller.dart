@@ -4,7 +4,7 @@ import '../../../core/logger/app_logger.dart';
 import '../domain/entities/ai_settings.dart';
 import 'ai_settings_repository_provider.dart';
 
-part 'ai_settings_controller.g.dart';
+part 'generated/ai_settings_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class AiSettingsController extends _$AiSettingsController {

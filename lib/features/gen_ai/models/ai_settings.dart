@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'ai_settings.freezed.dart';
+part 'generated/ai_settings.freezed.dart';
 
 const String kAiApiKeyPrefsKey = 'ai_api_key';
 const String kAiModelPrefsKey = 'ai_model';

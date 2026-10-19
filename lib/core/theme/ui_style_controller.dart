@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ui_style.dart';
 
-part 'ui_style_controller.g.dart';
+part 'generated/ui_style_controller.g.dart';
 
 const String kUiStylePrefsKey = 'ui_style';
 

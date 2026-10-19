@@ -7,7 +7,7 @@ import '../models/asset.dart';
 import '../models/asset_mutation.dart';
 import '../../../../core/graphql/gql_result.dart';
 
-part 'assets_remote_source.g.dart';
+part 'generated/assets_remote_source.g.dart';
 
 /// Remote source GraphQL untuk modul assets — padanan `sources/assets_source.ts`.
 class AssetsRemoteSource implements AssetsDataSource {

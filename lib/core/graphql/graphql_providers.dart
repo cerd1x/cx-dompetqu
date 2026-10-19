@@ -5,7 +5,7 @@ import '../config/api_config.dart';
 import '../logger/app_logger.dart';
 import '../network/cookie_aware_client.dart';
 
-part 'graphql_providers.g.dart';
+part 'generated/graphql_providers.g.dart';
 
 /// Parser respons GraphQL yang toleran terhadap error tanpa field `message`.
 ///

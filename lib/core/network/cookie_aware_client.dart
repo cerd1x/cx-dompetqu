@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
 import '../logger/app_logger.dart';
 
-part 'cookie_aware_client.g.dart';
+part 'generated/cookie_aware_client.g.dart';
 
 /// Mengelola cookie session (`__sst__`) & refresh (`__rft__`) dari backend.
 ///

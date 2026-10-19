@@ -6,8 +6,8 @@ import '../domain/entities/disabled_operation.dart';
 import '../domain/repositories/killswitch_repository.dart';
 import 'killswitch_repository_provider.dart';
 
-part 'killswitch_controller.freezed.dart';
-part 'killswitch_controller.g.dart';
+part 'generated/killswitch_controller.freezed.dart';
+part 'generated/killswitch_controller.g.dart';
 
 typedef KillswitchEntry = DisabledOperation;
 

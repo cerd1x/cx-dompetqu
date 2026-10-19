@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/datasources/app_lock_datasources.dart';
 import '../domain/entities/app_lock_state.dart';
 
-part 'app_lock_storage.g.dart';
+part 'generated/app_lock_storage.g.dart';
 
 const String _kLockEnabledKey = 'app_lock_enabled';
 const String _kLockCredentialKey = 'app_lock_credential';

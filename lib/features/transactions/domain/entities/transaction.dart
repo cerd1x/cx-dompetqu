@@ -1,34 +1,39 @@
-class Transaction {
-  const Transaction({
-    required this.id,
-    this.type = 'income',
-    this.amount = 'IDR 0',
-    this.capital,
-    this.description,
-    this.category,
-    this.paymentMethod,
-    this.customerId,
-    this.status = 'success',
-    required this.createdAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String type;
-  final String amount;
-  final String? capital;
-  final String? description;
-  final String? category;
-  final PaymentMethod? paymentMethod;
-  final String? customerId;
-  final String status;
-  final DateTime createdAt;
+part 'generated/transaction.freezed.dart';
+
+/// Satu transaksi pada domain aplikasi — padanan data model
+/// `features/transactions/data/models/transaction.dart` (tanpa JSON: konversi
+/// ada di mapper/repository, bukan di domain).
+@freezed
+abstract class Transaction with _$Transaction {
+  const factory Transaction({
+    required String id,
+    @Default('income') String type,
+    @Default('IDR 0') String amount,
+    String? capital,
+    String? description,
+    String? category,
+    PaymentMethod? paymentMethod,
+    String? customerId,
+    @Default('success') String status,
+    // Status pembayaran transaksi (`paid`/`unpaid`) — enum
+    // `TransactionPaymentStatus` di backend; default DB `unpaid`.
+    @Default('unpaid') String paymentStatus,
+    required DateTime createdAt,
+  }) = _Transaction;
+
+  const Transaction._();
 
   String get displayName => description ?? category ?? type;
 }
 
-class PaymentMethod {
-  const PaymentMethod({this.type = 'cash', this.assetId});
+@freezed
+abstract class PaymentMethod with _$PaymentMethod {
+  const factory PaymentMethod({
+    @Default('cash') String type,
+    String? assetId,
+  }) = _PaymentMethod;
 
-  final String type;
-  final String? assetId;
+  const PaymentMethod._();
 }

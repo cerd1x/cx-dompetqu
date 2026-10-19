@@ -1,11 +1,15 @@
-class OpenRouterModel {
-  const OpenRouterModel({
-    required this.id,
-    required this.name,
-    this.contextLength,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final int? contextLength;
+part 'generated/openrouter_model.freezed.dart';
+
+/// Satu model yang tersedia di katalog OpenRouter.
+@freezed
+abstract class OpenRouterModel with _$OpenRouterModel {
+  const factory OpenRouterModel({
+    required String id,
+    required String name,
+    int? contextLength,
+  }) = _OpenRouterModel;
+
+  const OpenRouterModel._();
 }

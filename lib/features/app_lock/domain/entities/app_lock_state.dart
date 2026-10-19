@@ -1,3 +1,7 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'generated/app_lock_state.freezed.dart';
+
 /// Kredensial utama pengunci aplikasi (PIN atau pola).
 enum LockCredential {
   pin,
@@ -9,22 +13,23 @@ enum LockCredential {
   };
 }
 
-class AppLockState {
-  const AppLockState({
-    this.isEnabled = false,
-    this.credential = LockCredential.pin,
-    this.biometricEnabled = false,
-    this.locked = true,
-    this.failedAttempts = 0,
-    this.lockoutUntil,
-  });
+/// Status penguncian aplikasi.
+///
+/// `copyWith` dibuat manual (generated copyWith dimatikan) karena ada
+/// kebutuhan meng-clear `lockoutUntil` ke null lewat flag `clearLockout` —
+/// generated copyWith Freezed tidak bisa meng-null-kan field nullable.
+@Freezed(copyWith: false)
+abstract class AppLockState with _$AppLockState {
+  const factory AppLockState({
+    @Default(false) bool isEnabled,
+    @Default(LockCredential.pin) LockCredential credential,
+    @Default(false) bool biometricEnabled,
+    @Default(true) bool locked,
+    @Default(0) int failedAttempts,
+    DateTime? lockoutUntil,
+  }) = _AppLockState;
 
-  final bool isEnabled;
-  final LockCredential credential;
-  final bool biometricEnabled;
-  final bool locked;
-  final int failedAttempts;
-  final DateTime? lockoutUntil;
+  const AppLockState._();
 
   bool get isLockedOut =>
       lockoutUntil != null && DateTime.now().isBefore(lockoutUntil!);

@@ -1,13 +1,17 @@
-class AuthUser {
-  const AuthUser({
-    required this.id,
-    required this.name,
-    required this.username,
-    this.avatarUrl,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final String username;
-  final String? avatarUrl;
+part 'generated/auth_user.freezed.dart';
+
+/// Data user yang sedang login — padanan hasil query `CheckAuthorized`
+/// di backend.
+@freezed
+abstract class AuthUser with _$AuthUser {
+  const factory AuthUser({
+    required String id,
+    required String name,
+    required String username,
+    String? avatarUrl,
+  }) = _AuthUser;
+
+  const AuthUser._();
 }

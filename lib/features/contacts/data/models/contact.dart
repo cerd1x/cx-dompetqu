@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'contact.freezed.dart';
-part 'contact.g.dart';
+part 'generated/contact.freezed.dart';
+part 'generated/contact.g.dart';
 
 /// Padanan `Contact` di schema GraphQL (`services/domain/contacts`).
 @freezed

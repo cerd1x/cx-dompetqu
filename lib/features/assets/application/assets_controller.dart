@@ -5,7 +5,7 @@ import '../domain/entities/asset.dart';
 import '../../dashboard/application/home_repository_provider.dart';
 import '../../transactions/application/transactions_controller.dart';
 
-part 'assets_controller.g.dart';
+part 'generated/assets_controller.g.dart';
 
 /// State aset — padanan `assetStore` di web.
 class AssetsState {

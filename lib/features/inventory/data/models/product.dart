@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'product.freezed.dart';
-part 'product.g.dart';
+part 'generated/product.freezed.dart';
+part 'generated/product.g.dart';
 
 /// Padanan `Product` di schema GraphQL (`services/domain/products`).
 @freezed

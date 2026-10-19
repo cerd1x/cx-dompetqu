@@ -1,11 +1,15 @@
-class AiSkill {
-  const AiSkill({
-    required this.id,
-    required this.name,
-    required this.instructions,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final String instructions;
+part 'generated/ai_skill.freezed.dart';
+
+/// Satu skill yang terpasang/tersedia untuk agen AI.
+@freezed
+abstract class AiSkill with _$AiSkill {
+  const factory AiSkill({
+    required String id,
+    required String name,
+    required String instructions,
+  }) = _AiSkill;
+
+  const AiSkill._();
 }

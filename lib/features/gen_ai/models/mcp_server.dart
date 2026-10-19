@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'mcp_server.freezed.dart';
-part 'mcp_server.g.dart';
+part 'generated/mcp_server.freezed.dart';
+part 'generated/mcp_server.g.dart';
 
 /// Satu server MCP — endpoint HTTP yang didaftarkan user. Dipakai controller,
 /// repository, dan datasource (persist JSON di SharedPreferences).

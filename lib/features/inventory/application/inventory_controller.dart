@@ -4,7 +4,7 @@ import '../../../core/logger/app_logger.dart';
 import '../domain/entities/product.dart';
 import '../../dashboard/application/home_repository_provider.dart';
 
-part 'inventory_controller.g.dart';
+part 'generated/inventory_controller.g.dart';
 
 /// State inventory — padanan `inventoryStore` di web.
 class InventoryState {

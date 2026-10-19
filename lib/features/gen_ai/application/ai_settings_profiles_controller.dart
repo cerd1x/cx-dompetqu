@@ -6,7 +6,7 @@ import '../domain/entities/ai_settings_profile_collection.dart';
 import 'ai_settings_controller.dart';
 import 'ai_settings_repository_provider.dart';
 
-part 'ai_settings_profiles_controller.g.dart';
+part 'generated/ai_settings_profiles_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class AiSettingsProfilesController extends _$AiSettingsProfilesController {

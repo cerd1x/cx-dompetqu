@@ -7,8 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/config/api_config.dart';
 
-part 'killswitch_remote_source.freezed.dart';
-part 'killswitch_remote_source.g.dart';
+part 'generated/killswitch_remote_source.freezed.dart';
+part 'generated/killswitch_remote_source.g.dart';
 
 /// Terima `disabledAt` sebagai ISO string (serialisasi Date) atau unix detik.
 DateTime? _parseDate(Object? value) {

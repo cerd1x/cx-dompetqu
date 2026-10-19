@@ -7,7 +7,7 @@ import '../models/contact.dart';
 import '../models/contact_page.dart';
 import '../../../../core/graphql/gql_result.dart';
 
-part 'contacts_remote_source.g.dart';
+part 'generated/contacts_remote_source.g.dart';
 
 /// Remote source GraphQL untuk modul contacts — padanan `sources/contacts_source.ts`.
 class ContactsRemoteSource implements ContactsDataSource {

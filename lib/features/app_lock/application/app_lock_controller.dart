@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../domain/entities/app_lock_state.dart';
 import 'app_lock_repository_provider.dart';
 
-part 'app_lock_controller.g.dart';
+part 'generated/app_lock_controller.g.dart';
 
 const int _kMaxFailedAttempts = 5;
 const Duration _kLockoutDuration = Duration(minutes: 1);

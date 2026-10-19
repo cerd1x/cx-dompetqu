@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'asset.freezed.dart';
-part 'asset.g.dart';
+part 'generated/asset.freezed.dart';
+part 'generated/asset.g.dart';
 
 /// Padanan `Asset` di schema GraphQL (`services/domain/assets`).
 ///

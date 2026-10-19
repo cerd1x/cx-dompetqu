@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'ai_skill.freezed.dart';
-part 'ai_skill.g.dart';
+part 'generated/ai_skill.freezed.dart';
+part 'generated/ai_skill.g.dart';
 
 /// Satu skill AI — instruksi khusus yang disimpan per user. Dipakai
 /// controller, repository, dan datasource (persist JSON di SharedPreferences).

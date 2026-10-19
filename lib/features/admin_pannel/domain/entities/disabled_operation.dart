@@ -1,11 +1,15 @@
-class DisabledOperation {
-  const DisabledOperation({
-    required this.operation,
-    this.reason,
-    this.disabledAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String operation;
-  final String? reason;
-  final DateTime? disabledAt;
+part 'generated/disabled_operation.freezed.dart';
+
+/// Satu operation GraphQL yang sedang dimatikan lewat kill switch.
+@freezed
+abstract class DisabledOperation with _$DisabledOperation {
+  const factory DisabledOperation({
+    required String operation,
+    String? reason,
+    DateTime? disabledAt,
+  }) = _DisabledOperation;
+
+  const DisabledOperation._();
 }

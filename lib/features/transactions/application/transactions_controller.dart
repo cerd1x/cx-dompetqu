@@ -5,8 +5,8 @@ import '../../../core/logger/app_logger.dart';
 import '../domain/entities/transaction.dart';
 import '../../dashboard/application/home_repository_provider.dart';
 
-part 'transactions_controller.freezed.dart';
-part 'transactions_controller.g.dart';
+part 'generated/transactions_controller.freezed.dart';
+part 'generated/transactions_controller.g.dart';
 
 /// Jumlah transaksi per halaman saat mode pagination aktif — cerminan
 /// `DEFAULT_PAGE_SIZE` di `services/domain/transactions` (`transaction-page.model.ts`).

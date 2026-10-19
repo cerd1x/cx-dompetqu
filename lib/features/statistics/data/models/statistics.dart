@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'statistics.freezed.dart';
-part 'statistics.g.dart';
+part 'generated/statistics.freezed.dart';
+part 'generated/statistics.g.dart';
 
 /// Padanan `Statistic` di schema GraphQL (`services/domain/statistic`).
 @freezed

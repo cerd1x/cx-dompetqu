@@ -10,7 +10,7 @@ import 'auth_remote_source.dart';
 import '../models/passkey.dart';
 import '../models/user.dart';
 
-part 'passkey_service.g.dart';
+part 'generated/passkey_service.g.dart';
 
 /// Klien passkey — padanan `@simplewebauthn/browser` di web.
 ///

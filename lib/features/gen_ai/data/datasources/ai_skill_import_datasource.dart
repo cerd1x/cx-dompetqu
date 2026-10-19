@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'ai_skill_import_datasource.g.dart';
+part 'generated/ai_skill_import_datasource.g.dart';
 
 abstract interface class AiSkillImportDatasource {
   Future<String> fetchText(Uri uri);

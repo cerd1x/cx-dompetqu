@@ -9,8 +9,8 @@ import 'mcp_controller.dart';
 import '../domain/entities/ai_skill.dart';
 import '../domain/entities/ai_settings.dart';
 
-part 'ai_controller.freezed.dart';
-part 'ai_controller.g.dart';
+part 'generated/ai_controller.freezed.dart';
+part 'generated/ai_controller.g.dart';
 
 /// Persona & batasan asisten AI.
 const String _kSystemInstruction = '''

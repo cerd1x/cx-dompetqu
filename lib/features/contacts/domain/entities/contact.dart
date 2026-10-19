@@ -1,23 +1,23 @@
-class Contact {
-  const Contact({
-    required this.id,
-    required this.name,
-    this.email,
-    this.phone,
-    this.phones = const [],
-    this.group,
-    this.avatar,
-    this.createdAt,
-    this.updatedAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String name;
-  final String? email;
-  final String? phone;
-  final List<String> phones;
-  final String? group;
-  final String? avatar;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+part 'generated/contact.freezed.dart';
+
+/// Satu kontak pada domain — padanan data model
+/// `features/contacts/data/models/contact.dart` (tanpa JSON: konversi ada di
+/// mapper/repository, bukan di domain).
+@freezed
+abstract class Contact with _$Contact {
+  const factory Contact({
+    required String id,
+    required String name,
+    String? email,
+    String? phone,
+    @Default(<String>[]) List<String> phones,
+    String? group,
+    String? avatar,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) = _Contact;
+
+  const Contact._();
 }

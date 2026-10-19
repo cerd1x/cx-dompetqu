@@ -1,0 +1,21 @@
+# Lokasi output codegen dipindahkan ke sub-folder `generated/` di tiap folder
+# source. Memakai fitur resmi source_gen "Generating files in different
+# directories" (opsi `build_extensions` per builder):
+# - freezed menulis part `.freezed.dart`
+# - source_gen:combining_builder menulis part `.g.dart` akhir (riverpod_generator
+#   & json_serializable menghasilkan `.g.part` ke cache, digabung di sini)
+# Konsekuensi: setiap direktif `part` di source harus menulis
+# 'generated/<nama>.<ekstensi>' sesuai lokasi baru ini.
+targets:
+  $default:
+    builders:
+      freezed:
+        options:
+          build_extensions:
+            '^lib/{{dir}}/{{file}}.dart': 'lib/{{dir}}/generated/{{file}}.freezed.dart'
+            '^lib/main.dart': 'lib/generated/main.freezed.dart'
+      source_gen:combining_builder:
+        options:
+          build_extensions:
+            '^lib/{{dir}}/{{file}}.dart': 'lib/{{dir}}/generated/{{file}}.g.dart'
+            '^lib/main.dart': 'lib/generated/main.g.dart'

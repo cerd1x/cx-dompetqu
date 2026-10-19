@@ -6,7 +6,7 @@ import '../data/datasources/ai_skills_local_datasource.dart';
 import '../data/repositories/ai_skills_repository_impl.dart';
 import '../domain/repositories/ai_skills_repository.dart';
 
-part 'ai_skills_repository.g.dart';
+part 'generated/ai_skills_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 AiSkillsRepository aiSkillsRepository(Ref ref) {

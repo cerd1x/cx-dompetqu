@@ -34,9 +34,10 @@ import 'features/settings/presentation/appearance_screen.dart';
 import 'features/settings/presentation/profile_screen.dart';
 import 'features/settings/presentation/settings_screen.dart';
 import 'features/charts/charts_trading.dart';
+import 'features/gen_ai/presentation/ai_setting_screen.dart';
 import 'features/gen_ai/presentation/gen_ai_screen.dart';
 
-part 'main.g.dart';
+part 'generated/main.g.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -146,6 +147,10 @@ GoRouter appRouter(Ref ref) {
         builder: (_, _) => const ProfileScreen(),
       ),
       GoRoute(path: '/gen-ai', builder: (_, _) => const GenAiScreen()),
+      GoRoute(
+        path: '/ai-settings',
+        builder: (_, _) => const AiSettingScreen(),
+      ),
       GoRoute(
         path: '/order',
         builder: (_, state) {

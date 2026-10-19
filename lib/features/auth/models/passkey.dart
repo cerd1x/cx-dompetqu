@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'passkey.freezed.dart';
-part 'passkey.g.dart';
+part 'generated/passkey.freezed.dart';
+part 'generated/passkey.g.dart';
 
 /// JSON string (W3C WebAuthn Level 3) untuk diteruskan ke platform authenticator.
 @freezed

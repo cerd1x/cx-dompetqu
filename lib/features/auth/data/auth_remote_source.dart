@@ -8,7 +8,7 @@ import '../domain/failures/auth_failure.dart';
 import '../models/passkey.dart';
 import '../models/user.dart';
 
-part 'auth_remote_source.g.dart';
+part 'generated/auth_remote_source.g.dart';
 
 /// Remote source GraphQL untuk auth — padanan `auth_source.ts` + `passkey_source.ts`.
 ///

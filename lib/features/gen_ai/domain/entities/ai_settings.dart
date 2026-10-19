@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../config/openrouter_config.dart';
 
-part 'ai_settings.freezed.dart';
+part 'generated/ai_settings.freezed.dart';
 
 const String kDefaultAiModel = 'gemini-2.5-flash';
 

@@ -1,11 +1,15 @@
-class AuthPasskeyCredential {
-  const AuthPasskeyCredential({
-    required this.id,
-    this.deviceName,
-    this.createdAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final String id;
-  final String? deviceName;
-  final DateTime? createdAt;
+part 'generated/auth_passkey_credential.freezed.dart';
+
+/// Satu kredensial passkey yang terdaftar pada user.
+@freezed
+abstract class AuthPasskeyCredential with _$AuthPasskeyCredential {
+  const factory AuthPasskeyCredential({
+    required String id,
+    String? deviceName,
+    DateTime? createdAt,
+  }) = _AuthPasskeyCredential;
+
+  const AuthPasskeyCredential._();
 }

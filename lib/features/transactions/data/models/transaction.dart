@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'transaction.freezed.dart';
-part 'transaction.g.dart';
+part 'generated/transaction.freezed.dart';
+part 'generated/transaction.g.dart';
 
 /// Padanan `Transaction` di schema GraphQL (`services/domain/transactions`).
 @freezed
@@ -16,6 +16,9 @@ abstract class Transaction with _$Transaction {
     PaymentMethod? paymentMethod,
     @JsonKey(fromJson: _toId) String? customerId,
     @Default('success') String status,
+    // Padanan `paymentStatus` (enum `TransactionPaymentStatus`: paid/unpaid)
+    // di schema GraphQL `services/domain/transactions`; default DB `unpaid`.
+    @Default('unpaid') String paymentStatus,
     @JsonKey(fromJson: _dateOrNow) required DateTime createdAt,
   }) = _Transaction;
 

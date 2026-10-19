@@ -7,7 +7,7 @@ import '../models/transaction.dart';
 import '../models/transaction_page.dart';
 import '../../../../core/graphql/gql_result.dart';
 
-part 'transactions_remote_source.g.dart';
+part 'generated/transactions_remote_source.g.dart';
 
 /// Remote source GraphQL untuk modul transactions — padanan `sources/transaction_source.ts`.
 class TransactionsRemoteSource implements TransactionsDataSource {
@@ -27,6 +27,7 @@ class TransactionsRemoteSource implements TransactionsDataSource {
         paymentMethod { type assetId }
         customerId
         status
+        paymentStatus
         createdAt
       }
     }
@@ -35,7 +36,7 @@ class TransactionsRemoteSource implements TransactionsDataSource {
   static const _transactionsPageQuery = r'''
     query TransactionsPage($first: Int, $after: String, $last: Int, $before: String) {
       transactionConnection(first: $first, after: $after, last: $last, before: $before) {
-        edges { cursor node { id type amount capital description category paymentMethod { type assetId } customerId status createdAt } }
+        edges { cursor node { id type amount capital description category paymentMethod { type assetId } customerId status paymentStatus createdAt } }
         pageInfo { hasNextPage hasPreviousPage startCursor endCursor }
       }
     }

@@ -5,7 +5,7 @@ import '../domain/entities/auth_user.dart';
 import '../domain/failures/auth_failure.dart';
 import 'auth_providers.dart';
 
-part 'session_controller.g.dart';
+part 'generated/session_controller.g.dart';
 
 enum AuthStatus { unknown, unauthenticated, authenticated }
 

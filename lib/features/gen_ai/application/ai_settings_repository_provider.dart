@@ -9,7 +9,7 @@ import '../data/repositories/openrouter_model_repository_impl.dart';
 import '../domain/repositories/ai_settings_repository.dart';
 import '../domain/repositories/openrouter_model_repository.dart';
 
-part 'ai_settings_repository_provider.g.dart';
+part 'generated/ai_settings_repository_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 AiSettingsRepository aiSettingsRepository(Ref ref) {

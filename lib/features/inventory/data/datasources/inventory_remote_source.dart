@@ -6,7 +6,7 @@ import '../../../dashboard/data/datasources/home_datasources.dart';
 import '../models/product.dart';
 import '../../../../core/graphql/gql_result.dart';
 
-part 'inventory_remote_source.g.dart';
+part 'generated/inventory_remote_source.g.dart';
 
 /// Remote source GraphQL untuk modul products/inventory — padanan `sources/inventory_source.ts`.
 class InventoryRemoteSource implements InventoryDataSource {

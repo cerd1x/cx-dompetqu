@@ -6,7 +6,7 @@ import '../domain/entities/skill_store_entry.dart';
 import '../domain/repositories/ai_skills_repository.dart';
 import '../repositories/ai_skills_repository.dart';
 
-part 'ai_skills_controller.g.dart';
+part 'generated/ai_skills_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class AiSkillsController extends _$AiSkillsController {

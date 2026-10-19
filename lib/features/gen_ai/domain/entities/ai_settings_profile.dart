@@ -1,27 +1,25 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'ai_settings.dart';
 
-class AiSettingsProfile {
-  const AiSettingsProfile({
-    required this.id,
-    required this.name,
-    required this.provider,
-    required this.apiKey,
-    required this.model,
-    required this.baseUrl,
-    required this.includeCustomHeaders,
-    required this.customHeaders,
-    required this.useCustomModel,
-  });
+part 'generated/ai_settings_profile.freezed.dart';
 
-  final String id;
-  final String name;
-  final AiModelProvider provider;
-  final String apiKey;
-  final String model;
-  final String baseUrl;
-  final bool includeCustomHeaders;
-  final Map<String, String> customHeaders;
-  final bool useCustomModel;
+/// Satu profil pengaturan AI (named profile dari `AiSettings`).
+@freezed
+abstract class AiSettingsProfile with _$AiSettingsProfile {
+  const factory AiSettingsProfile({
+    required String id,
+    required String name,
+    required AiModelProvider provider,
+    required String apiKey,
+    required String model,
+    required String baseUrl,
+    required bool includeCustomHeaders,
+    required Map<String, String> customHeaders,
+    required bool useCustomModel,
+  }) = _AiSettingsProfile;
+
+  const AiSettingsProfile._();
 
   factory AiSettingsProfile.fromSettings({
     required String id,

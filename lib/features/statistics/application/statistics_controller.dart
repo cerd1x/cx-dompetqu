@@ -4,7 +4,7 @@ import '../../../core/logger/app_logger.dart';
 import '../domain/entities/statistics.dart';
 import '../../dashboard/application/home_repository_provider.dart';
 
-part 'statistics_controller.g.dart';
+part 'generated/statistics_controller.g.dart';
 
 /// State statistik dashboard — padanan bagian `assetStore.queryStatistics` di web.
 class StatisticsState {

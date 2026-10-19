@@ -6,7 +6,7 @@ import '../../../dashboard/data/datasources/home_datasources.dart';
 import '../models/statistics.dart';
 import '../../../../core/graphql/gql_result.dart';
 
-part 'statistics_remote_source.g.dart';
+part 'generated/statistics_remote_source.g.dart';
 
 /// Remote source GraphQL untuk modul statistic — padanan `sources/statistic_source.ts`.
 class StatisticsRemoteSource implements StatisticsDataSource {

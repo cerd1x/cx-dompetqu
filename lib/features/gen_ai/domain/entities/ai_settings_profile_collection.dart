@@ -1,11 +1,16 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'ai_settings_profile.dart';
 
-final class AiSettingsProfileCollection {
-  const AiSettingsProfileCollection({
-    required this.profiles,
-    required this.activeProfileId,
-  });
+part 'generated/ai_settings_profile_collection.freezed.dart';
 
-  final List<AiSettingsProfile> profiles;
-  final String? activeProfileId;
+/// Kumpulan profil AI plus penanda profil yang sedang aktif.
+@freezed
+abstract class AiSettingsProfileCollection with _$AiSettingsProfileCollection {
+  const factory AiSettingsProfileCollection({
+    required List<AiSettingsProfile> profiles,
+    required String? activeProfileId,
+  }) = _AiSettingsProfileCollection;
+
+  const AiSettingsProfileCollection._();
 }

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
+import '../domain/entities/payment_method_type.dart';
 import '../domain/entities/transaction.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
@@ -67,7 +68,7 @@ class TransactionDetailScreen extends StatelessWidget {
             if (transaction.paymentMethod != null)
               _DetailRow(
                 label: 'Metode',
-                value: transaction.paymentMethod!.type,
+                value: _paymentMethodLabel(transaction.paymentMethod!.type),
               ),
           ],
         ),
@@ -108,6 +109,12 @@ class TransactionDetailScreen extends StatelessWidget {
         return Icons.swap_horiz_rounded;
     }
   }
+
+  /// Tampilkan label Bahasa Indonesia; wire value yang belum dikenal (backend
+  /// menambah metode baru) tetap ditampilkan apa adanya agar tidak
+  /// disamarkan jadi metode lain.
+  static String _paymentMethodLabel(String raw) =>
+      PaymentMethodType.fromRaw(raw)?.label ?? raw;
 }
 
 class _DetailRow extends StatelessWidget {

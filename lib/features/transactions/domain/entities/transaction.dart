@@ -28,12 +28,13 @@ abstract class Transaction with _$Transaction {
   String get displayName => description ?? category ?? type;
 }
 
+/// Metode pembayaran pada transaksi — `type` adalah wire value backend dan
+/// WAJIB salah satu nilai dari enum `PaymentMethodType`
+/// (`domain/entities/payment_method_type.dart`), yang juga memuat label UI.
 @freezed
 abstract class PaymentMethod with _$PaymentMethod {
-  const factory PaymentMethod({
-    @Default('cash') String type,
-    String? assetId,
-  }) = _PaymentMethod;
+  const factory PaymentMethod({@Default('cash') String type, String? assetId}) =
+      _PaymentMethod;
 
   const PaymentMethod._();
 }

@@ -61,6 +61,19 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
       _month.year == DateTime.now().year &&
       _month.month == DateTime.now().month;
 
+  /// Desktop (termasuk web di desktop) memakai double-tap untuk membuka menu
+  /// baris; mobile tetap long-press. `Theme.platform` dipakai — bukan
+  /// `defaultTargetPlatform` langsung — supaya override tema (mis. di test)
+  /// tetap dihormati.
+  bool get _isDesktop => switch (Theme.of(context).platform) {
+    TargetPlatform.linux ||
+    TargetPlatform.macOS ||
+    TargetPlatform.windows => true,
+    TargetPlatform.android ||
+    TargetPlatform.iOS ||
+    TargetPlatform.fuchsia => false,
+  };
+
   /// Transaksi pada bulan terpilih, terbaru dulu.
   List<Transaction> _monthItems(List<Transaction> items) {
     final filtered = items.where((tx) {
@@ -243,13 +256,21 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         )
         ..addAll([
           for (final tx in list)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _LedgerRow(
-                tx: tx,
-                balance: balances[tx.id] ?? 0,
-                currency: selectedCurrency(ref),
-                onTap: () => context.push('/struct-details', extra: tx),
+            // `Builder` memberi context yang menunjuk ke render box baris,
+            // dipakai sebagai jangkar popup menu long-press.
+            Builder(
+              builder: (rowContext) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _LedgerRow(
+                  tx: tx,
+                  balance: balances[tx.id] ?? 0,
+                  currency: selectedCurrency(ref),
+                  onTap: () => context.push('/struct-details', extra: tx),
+                  onLongPress: () => _showLedgerActions(rowContext, tx),
+                  onDoubleTap: _isDesktop
+                      ? () => _showLedgerActions(rowContext, tx)
+                      : null,
+                ),
               ),
             ),
         ]);
@@ -258,6 +279,87 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     return ListView(
       padding: const EdgeInsets.only(bottom: 24),
       children: children,
+    );
+  }
+
+  /// Menu aksi baris ledger: ubah status pembayaran transaksi.
+  ///
+  /// Dibuka lewat long-press (mobile) atau double-tap (desktop).
+  /// `unpaid` → "Mark as paid", `paid` → "Mark as unpaid" — padanan
+  /// `paymentStatus` (`TransactionPaymentStatus`) di backend.
+  Future<void> _showLedgerActions(
+    BuildContext rowContext,
+    Transaction tx,
+  ) async {
+    final isPaid = tx.paymentStatus == 'paid';
+    final selected = await showMenu<bool>(
+      context: context,
+      position: _menuPosition(rowContext),
+      color: const Color(0xFF141414),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      items: [
+        PopupMenuItem<bool>(
+          value: true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isPaid
+                    ? Icons.undo_rounded
+                    : Icons.check_circle_outline_rounded,
+                size: 18,
+                color: isPaid
+                    ? const Color(0xFFFBBF24)
+                    : const Color(0xFF34D399),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                isPaid ? 'Mark as unpaid' : 'Mark as paid',
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+    if (selected != true || !mounted) return;
+
+    final nextStatus = isPaid ? 'unpaid' : 'paid';
+    // Controller melakukan update optimistis; pill status berubah lebih dulu
+    // lalu dikembalikan bila mutation ke backend gagal.
+    final ok = await ref
+        .read(transactionsControllerProvider.notifier)
+        .updatePaymentStatus(tx, paymentStatus: nextStatus);
+    if (!mounted) return;
+    final message = ok
+        ? (isPaid ? 'Marked as unpaid' : 'Marked as paid')
+        : 'Failed to update payment status';
+    _toast(message);
+  }
+
+  /// Posisi popup menu relatif terhadap overlay, dihitung dari render box
+  /// baris yang di-long-press.
+  RelativeRect _menuPosition(BuildContext rowContext) {
+    final box = rowContext.findRenderObject() as RenderBox?;
+    final overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (box == null || overlay == null) {
+      return const RelativeRect.fromLTRB(24, 240, 24, 0);
+    }
+    final topLeft = box.localToGlobal(Offset.zero, ancestor: overlay);
+    return RelativeRect.fromRect(
+      Rect.fromLTWH(topLeft.dx, topLeft.dy, box.size.width, box.size.height),
+      Offset.zero & overlay.size,
+    );
+  }
+
+  void _toast(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(fontSize: 12.5)),
+        backgroundColor: Colors.black87,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -290,6 +392,8 @@ class _LedgerRow extends StatelessWidget {
     required this.balance,
     required this.currency,
     this.onTap,
+    this.onLongPress,
+    this.onDoubleTap,
   });
 
   final Transaction tx;
@@ -297,17 +401,22 @@ class _LedgerRow extends StatelessWidget {
   final String currency;
   final VoidCallback? onTap;
 
+  /// Aksi long-press baris (mobile): membuka popup menu ubah status pembayaran.
+  final VoidCallback? onLongPress;
+
+  /// Aksi double-tap baris (desktop) — aksi yang sama dengan [onLongPress].
+  final VoidCallback? onDoubleTap;
+
   @override
   Widget build(BuildContext context) {
     final tone = txTone(tx.type);
     final amount = formatMoney(txAmount(tx), currency);
     final capital = _capitalOf(tx);
 
-    return DompetCard(
+    final card = DompetCard(
       variant: DompetCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      onTap: onTap,
       child: Row(
         children: [
           Box(
@@ -394,6 +503,18 @@ class _LedgerRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    // Satu `GestureDetector` untuk seluruh gesture baris: tap (buka detail),
+    // long-press (mobile) dan double-tap (desktop) untuk menu aksi. Digabung
+    // di satu arena supaya Flutter bisa menunda tap saat menunggu tap kedua;
+    // bila `onDoubleTap` null (mobile) tap tetap instan.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onDoubleTap: onDoubleTap,
+      child: card,
     );
   }
 }

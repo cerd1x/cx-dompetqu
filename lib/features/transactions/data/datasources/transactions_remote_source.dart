@@ -42,6 +42,16 @@ class TransactionsRemoteSource implements TransactionsDataSource {
     }
   ''';
 
+  static const _updatePaymentStatusMutation = r'''
+    mutation UpdateTransactionPaymentStatus($id: ID!, $input: UpdateTransactionInput!) {
+      updateTransaction(id: $id, input: $input) {
+        id
+        paymentStatus
+        customerId
+      }
+    }
+  ''';
+
   @override
   Future<List<Transaction>> transactions() async {
     final result = await _client.query(
@@ -97,6 +107,42 @@ class TransactionsRemoteSource implements TransactionsDataSource {
       );
     }
     return TransactionPage.fromJson(connection as Map<String, dynamic>);
+  }
+
+  /// Ubah status pembayaran transaksi (`unpaid` ↔ `paid`).
+  ///
+  /// `UpdateTransactionInput.customerId` bertipe non-null (`ID!`) di SDL
+  /// `services/domain/transactions/adapters/driving/graphql/transaction.gql`,
+  /// padahal transaksi tanpa pelanggan tidak menyimpan nilai apa pun. Karena
+  /// resolver backend memperlakukan nilai falsy sebagai "tidak diubah"
+  /// (`input.customerId ? ID.new(...) : undefined`), transaksi tanpa pelanggan
+  /// dikirim sebagai string kosong — relasi pelanggan tidak ikut berubah.
+  @override
+  Future<Transaction> updatePaymentStatus(
+    String id, {
+    required String paymentStatus,
+    String? customerId,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(_updatePaymentStatusMutation),
+        variables: {
+          'id': id,
+          'input': {
+            'paymentStatus': paymentStatus,
+            'customerId': customerId ?? '',
+          },
+        },
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    final updated = result.data?['updateTransaction'];
+    if (updated == null) {
+      throw StateError(
+        gqlErrorMessage(result, fallback: 'Gagal mengubah status pembayaran'),
+      );
+    }
+    return Transaction.fromJson(updated as Map<String, dynamic>);
   }
 }
 

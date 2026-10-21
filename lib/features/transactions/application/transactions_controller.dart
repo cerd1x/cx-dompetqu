@@ -232,5 +232,57 @@ class TransactionsController extends _$TransactionsController {
     }
   }
 
+  /// Ubah status pembayaran satu transaksi (`unpaid` ↔ `paid`).
+  ///
+  /// Optimistis: daftar lokal langsung diperbarui supaya pill status berubah
+  /// tanpa menunggu jaringan; bila mutation gagal nilai lama dikembalikan.
+  /// Mengembalikan `true` saat server mengonfirmasi perubahan.
+  Future<bool> updatePaymentStatus(
+    Transaction tx, {
+    required String paymentStatus,
+  }) async {
+    if (tx.paymentStatus == paymentStatus) return true;
+    final previous = tx.paymentStatus;
+    _patchPaymentStatus(tx.id, paymentStatus);
+    try {
+      final updated = await ref
+          .read(homeRepositoryProvider)
+          .updatePaymentStatus(
+            tx.id,
+            paymentStatus: paymentStatus,
+            customerId: tx.customerId,
+          );
+      if (!ref.mounted) return true;
+      // Server bisa menormalkan nilai (mis. menolak transisi tertentu) —
+      // pakai hasil akhirnya sebagai sumber kebenaran.
+      _patchPaymentStatus(tx.id, updated.paymentStatus);
+      AppLogger.instance.success(
+        'status pembayaran transaksi diperbarui (${updated.paymentStatus})',
+        tag: 'TransactionsController',
+      );
+      return true;
+    } catch (e) {
+      if (!ref.mounted) return false;
+      _patchPaymentStatus(tx.id, previous);
+      AppLogger.instance.error(
+        'Gagal mengubah status pembayaran transaksi',
+        tag: 'TransactionsController',
+        error: e,
+      );
+      return false;
+    }
+  }
+
+  /// Ganti `paymentStatus` satu item di [TransactionsState.items] tanpa
+  /// menyentuh field lain (dipakai update optimistis & rollback).
+  void _patchPaymentStatus(String id, String paymentStatus) {
+    state = state.copyWith(
+      items: [
+        for (final item in state.items)
+          item.id == id ? item.copyWith(paymentStatus: paymentStatus) : item,
+      ],
+    );
+  }
+
   static String _msg(Object e) => e is Exception ? e.toString() : '$e';
 }

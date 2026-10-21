@@ -89,4 +89,13 @@ abstract interface class TransactionsDataSource {
     int? last,
     String? before,
   });
+
+  /// Ubah status pembayaran satu transaksi — padanan mutation
+  /// `updateTransaction` (`UpdateTransactionInput.paymentStatus`) di
+  /// `services/domain/transactions`.
+  Future<Transaction> updatePaymentStatus(
+    String id, {
+    required String paymentStatus,
+    String? customerId,
+  });
 }

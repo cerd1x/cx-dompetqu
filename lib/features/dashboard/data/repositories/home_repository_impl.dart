@@ -198,4 +198,15 @@ class HomeRepositoryImpl implements HomeRepository {
     last: last,
     before: before,
   )).toEntity();
+
+  @override
+  Future<domain.Transaction> updatePaymentStatus(
+    String id, {
+    required String paymentStatus,
+    String? customerId,
+  }) async => (await _transactions.updatePaymentStatus(
+    id,
+    paymentStatus: paymentStatus,
+    customerId: customerId,
+  )).toEntity();
 }

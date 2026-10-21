@@ -80,4 +80,12 @@ abstract interface class HomeRepository {
     int? last,
     String? before,
   });
+
+  /// Ubah status pembayaran transaksi (`paid`/`unpaid`) — padanan mutation
+  /// `updateTransaction` di `services/domain/transactions`.
+  Future<Transaction> updatePaymentStatus(
+    String id, {
+    required String paymentStatus,
+    String? customerId,
+  });
 }

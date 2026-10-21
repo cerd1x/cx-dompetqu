@@ -5,7 +5,7 @@ import 'package:graphql/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:dompetqu/core/network/cookie_aware_client.dart';
-import 'package:dompetqu/features/auth/application/session_controller.dart';
+import 'package:dompetqu/features/auth/stores/session_store.dart';
 import 'package:dompetqu/features/auth/data/auth_remote_source.dart';
 import 'package:dompetqu/features/auth/models/user.dart';
 import 'package:dompetqu/features/assets/data/datasources/assets_remote_source.dart';
@@ -119,7 +119,7 @@ void main() {
       // Jika ada self-read saat build (riverpod 3), restore() akan gagal dan
       // status tetap unknown — uncaught zone error juga menggagalkan test.
       expect(
-        container.read(sessionControllerProvider).status,
+        container.read(sessionStoreProvider).status,
         AuthStatus.authenticated,
       );
       expect(container.read(appRouterProvider).state.uri.path, '/');

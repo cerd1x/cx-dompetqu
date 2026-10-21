@@ -9,9 +9,9 @@ import '../../../core/logger/app_logger.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
-import '../../inventory/application/inventory_controller.dart';
-import '../../transactions/application/transactions_controller.dart';
-import '../application/order_repository_provider.dart';
+import '../../inventory/stores/inventory_store.dart';
+import '../../transactions/stores/transactions_store.dart';
+import '../stores/order_repository_provider.dart';
 import '../../inventory/domain/entities/product.dart';
 import 'OrderFormWidgets.dart';
 
@@ -80,8 +80,8 @@ class _SaleFormState extends ConsumerState<SaleForm> {
           );
       if (!mounted) return;
       if (ok) {
-        ref.invalidate(transactionsControllerProvider);
-        ref.invalidate(inventoryControllerProvider);
+        ref.invalidate(transactionsStoreProvider);
+        ref.invalidate(inventoryStoreProvider);
         context.pop();
       } else {
         setState(() => _error = 'Gagal membuat transaksi');

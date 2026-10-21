@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:dompetqu/features/transactions/application/transactions_controller.dart';
-import 'package:dompetqu/features/dashboard/application/home_repository_provider.dart';
+import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
 
@@ -39,11 +39,11 @@ void main() {
       overrides: [homeRepositoryProvider.overrideWithValue(repository)],
     );
 
-    container.listen(transactionsControllerProvider, (_, _) {});
+    container.listen(transactionsStoreProvider, (_, _) {});
     // buang waktu untuk microtask + fetch 50ms
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
-    final state = container.read(transactionsControllerProvider);
+    final state = container.read(transactionsStoreProvider);
     expect(state.items, hasLength(1), reason: 'data harus termuat');
     expect(state.loading, isFalse);
     expect(repository.calls, 1);
@@ -54,9 +54,9 @@ void main() {
     final containerA = ProviderContainer.test(
       overrides: [homeRepositoryProvider.overrideWithValue(repositoryA)],
     );
-    containerA.listen(transactionsControllerProvider, (_, _) {});
+    containerA.listen(transactionsStoreProvider, (_, _) {});
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    expect(containerA.read(transactionsControllerProvider).items, hasLength(1));
+    expect(containerA.read(transactionsStoreProvider).items, hasLength(1));
     containerA.dispose();
 
     // Simulasi hot restart: fresh container baru (state Dart di-reset).
@@ -64,10 +64,10 @@ void main() {
     final containerB = ProviderContainer.test(
       overrides: [homeRepositoryProvider.overrideWithValue(repositoryB)],
     );
-    containerB.listen(transactionsControllerProvider, (_, _) {});
+    containerB.listen(transactionsStoreProvider, (_, _) {});
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
-    final stateB = containerB.read(transactionsControllerProvider);
+    final stateB = containerB.read(transactionsStoreProvider);
     expect(stateB.items, hasLength(1), reason: 'container baru harus termuat');
     expect(stateB.loading, isFalse);
     expect(repositoryB.calls, 1);
@@ -83,10 +83,10 @@ void main() {
         overrides: [homeRepositoryProvider.overrideWithValue(repository)],
       );
 
-      container.listen(transactionsControllerProvider, (_, _) {});
+      container.listen(transactionsStoreProvider, (_, _) {});
       await Future<void>.delayed(const Duration(milliseconds: 300));
 
-      final state = container.read(transactionsControllerProvider);
+      final state = container.read(transactionsStoreProvider);
       expect(state.items, isEmpty);
       expect(
         state.error,

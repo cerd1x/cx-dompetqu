@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/features/app_lock/application/app_lock_controller.dart';
+import 'package:dompetqu/features/app_lock/stores/app_lock_store.dart';
 import '../dompet_brand.dart';
 import 'pattern_input.dart';
 
@@ -23,7 +23,7 @@ class _PatternInputDialogState extends ConsumerState<PatternInputDialog> {
 
   Future<void> _onPatternCompleted(List<int> pattern) async {
     final ok = await ref
-        .read(appLockControllerProvider.notifier)
+        .read(appLockStoreProvider.notifier)
         .unlockWithPattern(pattern);
     if (!mounted) return;
 
@@ -37,7 +37,7 @@ class _PatternInputDialogState extends ConsumerState<PatternInputDialog> {
       _resetTick++;
     });
 
-    final current = ref.read(appLockControllerProvider).value;
+    final current = ref.read(appLockStoreProvider).value;
     if (current?.isLockedOut == true) {
       // Tutup dialog agar layar lockout (countdown) tetap terlihat.
       Navigator.of(context).pop(false);

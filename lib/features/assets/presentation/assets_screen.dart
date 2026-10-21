@@ -7,7 +7,7 @@ import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/scroll_refresh_wrapper.dart';
 import '../domain/entities/asset.dart';
-import '../application/assets_controller.dart';
+import '../stores/assets_store.dart';
 import '../../../core/theme/widgets/bottom_bar.dart';
 import '../../../core/theme/widgets/data_states.dart';
 import '../../../core/theme/widgets/search_field.dart';
@@ -65,7 +65,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(dialogCtx).pop();
-              ref.read(assetsControllerProvider.notifier).remove(asset.name);
+              ref.read(assetsStoreProvider.notifier).remove(asset.name);
             },
             style: TextButton.styleFrom(foregroundColor: DompetBrand.pink),
             child: const Text('Hapus'),
@@ -96,8 +96,8 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(assetsControllerProvider);
-    final controller = ref.read(assetsControllerProvider.notifier);
+    final state = ref.watch(assetsStoreProvider);
+    final controller = ref.read(assetsStoreProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -141,14 +141,14 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     if (state.error != null) {
       return ErrorState(
         message: state.error!,
-        onRetry: () => ref.read(assetsControllerProvider.notifier).load(),
+        onRetry: () => ref.read(assetsStoreProvider.notifier).load(),
       );
     }
     final assets = state.filtered.reversed.toList();
     // empty section
     if (assets.isEmpty) {
       return ScrollRefreshWrapper(
-        onRefresh: () => ref.read(assetsControllerProvider.notifier).load(),
+        onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: const [
@@ -160,7 +160,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     }
     // asset list section
     return ScrollRefreshWrapper(
-      onRefresh: () => ref.read(assetsControllerProvider.notifier).load(),
+      onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),

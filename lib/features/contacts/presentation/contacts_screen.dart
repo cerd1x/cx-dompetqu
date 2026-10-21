@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../domain/entities/contact.dart';
-import '../application/contacts_controller.dart';
+import '../stores/contacts_store.dart';
 import '../../../core/theme/widgets/bottom_bar.dart';
 import '../../../core/theme/widgets/data_states.dart';
 import 'contacts_header.dart';
@@ -33,7 +33,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
     // Daftar kontak dimuat per halaman (`contactsPage`) alih-alih seluruhnya,
     // lalu dilanjutkan lewat tombol "Muat lebih banyak" di bawah list.
     Future.microtask(
-      () => ref.read(contactsControllerProvider.notifier).loadPage(),
+      () => ref.read(contactsStoreProvider.notifier).loadPage(),
     );
   }
 
@@ -45,10 +45,10 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
 
   Future<void> _openForm({Contact? contact}) async {
     // Deteksi duplikat butuh daftar lengkap, sedangkan list dimuat per halaman.
-    await ref.read(contactsControllerProvider.notifier).ensureAllLoaded();
+    await ref.read(contactsStoreProvider.notifier).ensureAllLoaded();
     if (!mounted) return;
     final groups = ref
-        .read(contactsControllerProvider.notifier)
+        .read(contactsStoreProvider.notifier)
         .findDuplicates();
     if (groups.isNotEmpty) {
       Navigator.of(context).push(
@@ -76,7 +76,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   ) async {
     for (final duplicate in duplicates) {
       final outcome = await ref
-          .read(contactsControllerProvider.notifier)
+          .read(contactsStoreProvider.notifier)
           .merge(
             primaryId: primary.id,
             duplicateId: duplicate.id,
@@ -144,7 +144,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            ref.read(contactsControllerProvider.notifier).remove(contact.id);
+            ref.read(contactsStoreProvider.notifier).remove(contact.id);
           },
           style: TextButton.styleFrom(foregroundColor: DompetBrand.pink),
           child: const Text('Hapus'),
@@ -156,7 +156,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(contactsControllerProvider);
+    final state = ref.watch(contactsStoreProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -178,7 +178,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
                     controller: _searchCtrl,
                     hint: 'Search contacts...',
                     onChanged: (v) => ref
-                        .read(contactsControllerProvider.notifier)
+                        .read(contactsStoreProvider.notifier)
                         .setSearch(v),
                   ),
                 ),
@@ -210,7 +210,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
     if (state.error != null) {
       return ErrorState(
         message: state.error!,
-        onRetry: () => ref.read(contactsControllerProvider.notifier).load(),
+        onRetry: () => ref.read(contactsStoreProvider.notifier).load(),
       );
     }
     final contacts = state.filtered;
@@ -235,14 +235,14 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   /// Footer "muat lebih banyak" — hanya muncul saat mode pagination aktif
-  /// (`ContactsController.loadPage`) dan masih ada halaman berikutnya.
+  /// (`ContactsStore.loadPage`) dan masih ada halaman berikutnya.
   Widget _loadMoreButton(ContactsState state) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: OutlinedButton.icon(
         onPressed: state.loadingMore
             ? null
-            : () => ref.read(contactsControllerProvider.notifier).loadMore(),
+            : () => ref.read(contactsStoreProvider.notifier).loadMore(),
         icon: state.loadingMore
             ? const SizedBox(
                 width: 16,

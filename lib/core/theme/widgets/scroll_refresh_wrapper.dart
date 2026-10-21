@@ -24,7 +24,7 @@ enum ScrollRefreshMode {
 ///
 /// ```dart
 /// ScrollRefreshWrapper(
-///   onRefresh: () => ref.read(assetsControllerProvider.notifier).load(),
+///   onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
 ///   child: ListView.builder(...),
 /// )
 /// ```

@@ -75,25 +75,25 @@ lib/
 │   ├── theme/         app_theme.dart, ui_style.dart, dompet_brand.dart, widgets/
 │   └── utils/         balance.dart, formatters.dart
 └── features/
-    ├── auth/          domain/ data/ application/ presentation/
-    ├── app_lock/      domain/ data/ application/ presentation/
-    ├── admin_pannel/  domain/ data/ application/ presentation/
+    ├── auth/          domain/ data/ stores/ presentation/
+    ├── app_lock/      domain/ data/ stores/ presentation/
+    ├── admin_pannel/  domain/ data/ stores/ presentation/
     ├── beta_report/, charts/                                    # UI-only
-    ├── gen_ai/        domain/ data/ repositories/ application/ presentation/
-    └── home/          domain/ data/ application/ + per-screen dirs
+    ├── gen_ai/        domain/ data/ repositories/ stores/ presentation/
+    └── home/          domain/ data/ stores/ + per-screen dirs
 ```
 
-- **Feature architecture:** `presentation` (screens/widgets) → `application`
-  (Riverpod controllers/state) → `domain` (entities/repository contracts);
+- **Feature architecture:** `presentation` (screens/widgets) → `stores`
+  (Riverpod stores/state) → `domain` (entities/repository contracts);
   implementations and SDK/network/storage adapters live in `data`. Providers
   that compose concrete data implementations are dependency-injection
-  boundaries, not a reason for controllers or screens to call data sources.
-- **Domain types:** UI/controller state uses entities from `domain/entities`.
+  boundaries, not a reason for stores or screens to call data sources.
+- **Domain types:** UI/store state uses entities from `domain/entities`.
   JSON/GraphQL models remain data-only (legacy files under `models/` are still
   data models until migrated with their generated parts); conversion belongs
   in `data/mappers` and repositories. Never import those serialized models
   from presentation or domain.
-- **Data access:** controllers and screens call repository interfaces. GraphQL,
+- **Data access:** stores and screens call repository interfaces. GraphQL,
   HTTP, platform SDKs, and `SharedPreferences` are behind data-source interfaces
   and repository implementations. Preserve backend operations, routing, and
   user-visible behavior when moving these boundaries.
@@ -128,12 +128,12 @@ lib/
 - **Section comment** dalam `build()`/layout: `// header section`,
   `// stats section`, dst.
 - Widget internal privat ber-prefix `_` (contoh `_AdminHeader`, `_TokenField`).
-- Freezed state: `@Default` untuk nilai awal; controller memanggil
+- Freezed state: `@Default` untuk nilai awal; store memanggil
   `Future.microtask(load)` di dalam `build()` (menghindari "uninitialized
   provider" di Riverpod 3) dan menjaga `ref.mounted` pada async gap; pola
   dedupe request via `_inFlight` future.
 - Logger: `AppLogger.instance` (delegasikan ke field `final _log = ...`),
-  selalu sertakan `tag:` (contoh `'GraphQL'`, `'TransactionsController'`,
+  selalu sertakan `tag:` (contoh `'GraphQL'`, `'TransactionsStore'`,
   `'CookieClient'`). `success` = normal, `error` = gagal, `warn` = tak fatal.
   Lihat `docs-dev/app-logger.md`.
 - Generate file: `/* GENERATED CODE - DO NOT MODIFY BY HAND */` — jangan ubah.
@@ -212,17 +212,17 @@ feature-first yang sudah ada. Prinsip boundary:
 
 - **Domain = Port.** Kontrak repository didefinisikan sebagai
   `abstract interface class` di `lib/features/<fitur>/domain/repositories/`.
-  Domain **tidak boleh** mengimport `data/`, `application/`, atau `presentation/`.
+  Domain **tidak boleh** mengimport `data/`, `stores/`, atau `presentation/`.
 - **Data = Adapter.** Implementasi konkret repository dan integrasi
   SDK/network/storage (remote/local datasource) berada di
   `lib/features/<fitur>/data/` (termasuk `data/repositories/*_impl.dart`).
   Data boleh mengimport domain; tidak boleh mengimport `presentation/`.
-- **Application = Boundary Komposisi.** Providers Riverpod (codegen
-  `@Riverpod`/`@riverpod` atau manual `Provider`) di `application/` bertugas
+- **Stores = Boundary Komposisi.** Providers Riverpod (codegen
+  `@Riverpod`/`@riverpod` atau manual `Provider`) di `stores/` bertugas
   meng-inject dan memaparkan repository ke presentation. Presentation dan
-  controller hanya bergantung pada **interface domain**, bukan implementasi data.
+  store hanya bergantung pada **interface domain**, bukan implementasi data.
 - **Presentation = UI.** Screens/widgets hanya mengonsumsi state dari
-  application (providers/controllers); tidak boleh memanggil datasource/data
+  stores (provider/store); tidak boleh memanggil datasource/data
   layer langsung.
 
 **Pola komposit (agregat):**

@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import '../application/contacts_controller.dart';
+import '../stores/contacts_store.dart';
 import '../domain/entities/contact.dart';
 import '../../../core/theme/widgets/bottom_bar.dart';
 import 'contact_form.dart';
@@ -51,8 +51,8 @@ class ContactDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(contactsControllerProvider);
-    final controller = ref.read(contactsControllerProvider.notifier);
+    final state = ref.watch(contactsStoreProvider);
+    final controller = ref.read(contactsStoreProvider.notifier);
 
     if (state.loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));

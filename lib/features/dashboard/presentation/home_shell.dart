@@ -1,13 +1,13 @@
 import 'package:dompetqu/features/gen_ai/presentation/ai_bubble.dart';
-import 'package:dompetqu/features/gen_ai/application/ai_settings_controller.dart';
+import 'package:dompetqu/features/gen_ai/stores/ai_settings_store.dart';
 import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../auth/application/session_controller.dart';
+import '../../auth/stores/session_store.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
-import '../application/bootstrap.dart';
+import '../stores/bootstrap.dart';
 import '../../contacts/presentation/contacts_screen.dart';
 import '../../dashboard/presentation/dashboard_screen.dart';
 import '../../inventory/presentation/inventory_screen.dart';
@@ -30,7 +30,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     super.initState();
     // Warm-up data setelah frame pertama supaya app terbuka tanpa hambatan.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (ref.read(sessionControllerProvider).isAuthenticated) {
+      if (ref.read(sessionStoreProvider).isAuthenticated) {
         bootstrapDompetData(ref);
       }
     });
@@ -54,12 +54,12 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    final session = ref.watch(sessionControllerProvider);
+    final session = ref.watch(sessionStoreProvider);
     final showAiBubble =
-        ref.watch(aiSettingsControllerProvider).value?.showAiBubble ?? true;
+        ref.watch(aiSettingsStoreProvider).value?.showAiBubble ?? true;
 
     // Reset cache saat sign-out, warm-up ulang saat akun baru sign-in.
-    ref.listen(sessionControllerProvider, (prev, next) {
+    ref.listen(sessionStoreProvider, (prev, next) {
       if (next.status == AuthStatus.unauthenticated) {
         resetDompetData(ref);
       } else if (next.status == AuthStatus.authenticated &&

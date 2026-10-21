@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
-import '../application/ai_skills_controller.dart';
-import '../application/mcp_controller.dart';
-import '../application/skill_store_repository_provider.dart';
+import '../stores/ai_skills_store.dart';
+import '../stores/mcp_store.dart';
+import '../stores/skill_store_repository_provider.dart';
 import 'ai_chat_sheet.dart';
 import 'ai_settings_sheet.dart';
 import 'ai_skills_sheet.dart';
@@ -18,7 +18,7 @@ class GenAiScreen extends ConsumerWidget {
 
   Future<void> _openSkills(BuildContext context, WidgetRef ref) async {
     try {
-      await ref.read(aiSkillsControllerProvider.future);
+      await ref.read(aiSkillsStoreProvider.future);
     } catch (error) {
       if (!context.mounted) return;
       _showError(context, 'Gagal memuat skills', error);
@@ -28,7 +28,7 @@ class GenAiScreen extends ConsumerWidget {
 
     final storeRepository = ref.read(skillStoreRepositoryProvider);
     while (context.mounted) {
-      final skills = ref.read(aiSkillsControllerProvider).value ?? const [];
+      final skills = ref.read(aiSkillsStoreProvider).value ?? const [];
       final action = await showModalBottomSheet<AiSkillAction>(
         context: context,
         routeSettings: const RouteSettings(name: 'ai-skills-sheet'),
@@ -43,18 +43,18 @@ class GenAiScreen extends ConsumerWidget {
         switch (action) {
           case CreateAiSkill(:final name, :final instructions):
             await ref
-                .read(aiSkillsControllerProvider.notifier)
+                .read(aiSkillsStoreProvider.notifier)
                 .create(name: name, instructions: instructions);
           case ImportAiSkill(:final name, :final url):
             await ref
-                .read(aiSkillsControllerProvider.notifier)
+                .read(aiSkillsStoreProvider.notifier)
                 .importFromUrl(name: name, url: url);
           case ImportAiSkillFromStore(:final entry):
             await ref
-                .read(aiSkillsControllerProvider.notifier)
+                .read(aiSkillsStoreProvider.notifier)
                 .importFromStore(entry);
           case DeleteAiSkill(:final id):
-            await ref.read(aiSkillsControllerProvider.notifier).remove(id);
+            await ref.read(aiSkillsStoreProvider.notifier).remove(id);
         }
       } catch (error) {
         if (!context.mounted) return;
@@ -67,7 +67,7 @@ class GenAiScreen extends ConsumerWidget {
 
   Future<void> _openMcp(BuildContext context, WidgetRef ref) async {
     try {
-      await ref.read(mcpControllerProvider.future);
+      await ref.read(mcpStoreProvider.future);
     } catch (error) {
       if (!context.mounted) return;
       _showError(context, 'Gagal memuat konfigurasi MCP', error);
@@ -76,7 +76,7 @@ class GenAiScreen extends ConsumerWidget {
     if (!context.mounted) return;
 
     while (context.mounted) {
-      final servers = ref.read(mcpControllerProvider).value ?? const [];
+      final servers = ref.read(mcpStoreProvider).value ?? const [];
       final action = await showModalBottomSheet<McpAction>(
         context: context,
         routeSettings: const RouteSettings(name: 'mcp-management-sheet'),
@@ -90,10 +90,10 @@ class GenAiScreen extends ConsumerWidget {
         switch (action) {
           case AddMcpServer(:final name, :final url):
             await ref
-                .read(mcpControllerProvider.notifier)
+                .read(mcpStoreProvider.notifier)
                 .add(name: name, url: url);
           case RemoveMcpServer(:final id):
-            await ref.read(mcpControllerProvider.notifier).remove(id);
+            await ref.read(mcpStoreProvider.notifier).remove(id);
         }
       } catch (error) {
         if (!context.mounted) return;

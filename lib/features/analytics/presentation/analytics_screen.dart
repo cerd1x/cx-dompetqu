@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/formatters.dart';
-import '../../statistics/application/statistics_controller.dart';
-import '../../transactions/application/transactions_controller.dart';
+import '../../statistics/stores/statistics_store.dart';
+import '../../transactions/stores/transactions_store.dart';
 import 'analytics_data.dart';
 
 const _kIncome = Color(0xFF34D399);
@@ -32,8 +32,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final stats = ref.watch(statisticsControllerProvider);
-    final transactions = ref.watch(transactionsControllerProvider);
+    final stats = ref.watch(statisticsStoreProvider);
+    final transactions = ref.watch(transactionsStoreProvider);
     final series = buildSeries(transactions.items);
 
     return Scaffold(

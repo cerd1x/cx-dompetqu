@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../application/debt_settlements_repository_provider.dart';
+import '../stores/debt_settlements_repository_provider.dart';
 
 /// Status pelunasan satu utang — dipakai untuk menandai lunas/tunggakan.
 enum DebtStatus { outstanding, settled }

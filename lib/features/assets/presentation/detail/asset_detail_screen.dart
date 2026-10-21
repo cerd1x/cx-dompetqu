@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/features/assets/application/assets_controller.dart';
+import 'package:dompetqu/features/assets/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/presentation/asset_detail.dart';
 import 'package:dompetqu/features/assets/presentation/asset_form_dialog.dart';
 import 'package:dompetqu/features/assets/presentation/add_balance_dialog.dart';
@@ -21,8 +21,8 @@ class AssetDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(assetsControllerProvider);
-    final controller = ref.read(assetsControllerProvider.notifier);
+    final state = ref.watch(assetsStoreProvider);
+    final controller = ref.read(assetsStoreProvider.notifier);
 
     if (state.loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -80,7 +80,7 @@ class AssetDetailScreen extends ConsumerWidget {
 
     void openSwap(
       BuildContext context,
-      AssetsController controller,
+      AssetsStore controller,
       List items,
     ) {
       showDialog<void>(

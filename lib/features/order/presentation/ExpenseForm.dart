@@ -7,9 +7,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
-import '../../assets/application/assets_controller.dart';
-import '../../transactions/application/transactions_controller.dart';
-import '../application/order_repository_provider.dart';
+import '../../assets/stores/assets_store.dart';
+import '../../transactions/stores/transactions_store.dart';
+import '../stores/order_repository_provider.dart';
 import 'OrderFormWidgets.dart';
 
 /// Form Expense — padanan `FormExpense.svelte`.
@@ -58,8 +58,8 @@ class _ExpenseFormState extends ConsumerState<ExpenseForm> {
           );
       if (!mounted) return;
       if (ok) {
-        ref.invalidate(transactionsControllerProvider);
-        ref.invalidate(assetsControllerProvider);
+        ref.invalidate(transactionsStoreProvider);
+        ref.invalidate(assetsStoreProvider);
         context.pop();
       } else {
         setState(() => _error = 'Gagal membuat transaksi');

@@ -5,7 +5,7 @@ import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
-import '../../auth/application/session_controller.dart';
+import '../../auth/stores/session_store.dart';
 
 /// Halaman Profile — padanan `src/routes/dompet/settings/profile/+page.svelte`.
 class ProfileScreen extends ConsumerWidget {
@@ -13,7 +13,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(sessionControllerProvider).user;
+    final user = ref.watch(sessionStoreProvider).user;
 
     return Scaffold(
       body: Box(

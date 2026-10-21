@@ -11,7 +11,7 @@ Fitur ini dipisah menjadi 4 lapisan di `lib/features/app_lock/`:
 | --------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
 | `models/`       | `lock_method.dart`                                                | Enum `LockCredential` + `AppLockState`                     |
 | `data/`         | `app_lock_storage.dart`                                           | Persistensi via `SharedPreferences`, hashing SHA-256       |
-| `application/`  | `app_lock_controller.dart`                                        | Sebagai **satu-satunya sumber state** dan logika bisnis    |
+| `stores/`       | `app_lock_store.dart`                                             | Sebagai **satu-satunya sumber state** dan logika bisnis    |
 | `presentation/` | `app_lock_screen.dart`, `app_lock_setup_screen.dart`, `widgets/*` | UI layar kunci & pengaturan                                |
 
 Semua state hidup di Riverpod: `AppLockController` (`@Riverpod(keepAlive: true)`)
@@ -34,7 +34,7 @@ class AppLockState {
 
 `isLockedOut` = `lockoutUntil != null && DateTime.now() < lockoutUntil`.
 
-Saat controller dibangun (`build()`), ia membaca storage dan menghasilkan:
+Saat store dibangun (`build()`), ia membaca storage dan menghasilkan:
 `enabled`, `credential`, `biometricEnabled`, `locked = enabled`.
 
 ### Model kombinasi
@@ -214,7 +214,7 @@ Key lama (`app_lock_method`) dihapus setelah migrasi.
 
 ### Perbaikan otomatis (self-healing reset)
 
-`ensureUsable()` (dipanggil di `build()` controller saat startup) mengecek:
+`ensureUsable()` (dipanggil di `build()` store saat startup) mengecek:
 jika app lock **aktif** tetapi salt/hash kredensial (PIN/pola) **tidak
 tersimpan** (mis. sisa data dari mode biometric-only lama), seluruh data app
 lock di-reset penuh (`_resetAll`) sehingga aplikasi jadi terbuka dan user bisa

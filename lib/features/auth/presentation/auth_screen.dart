@@ -7,8 +7,8 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
-import '../application/auth_providers.dart';
-import '../application/session_controller.dart';
+import '../stores/auth_providers.dart';
+import '../stores/session_store.dart';
 
 enum _AuthMode { signIn, signUp }
 
@@ -71,7 +71,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   Future<void> _submit() async {
     if (!_validate()) return;
-    final controller = ref.read(sessionControllerProvider.notifier);
+    final controller = ref.read(sessionStoreProvider.notifier);
     final username = _usernameCtrl.text.trim();
     final password = _passwordCtrl.text;
 
@@ -91,7 +91,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   Future<void> _passkeySignIn() async {
     final ok = await ref
-        .read(sessionControllerProvider.notifier)
+        .read(sessionStoreProvider.notifier)
         .signInWithPasskey();
     if (!ok && mounted) setState(() {});
   }
@@ -109,7 +109,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(sessionControllerProvider);
+    final state = ref.watch(sessionStoreProvider);
     return Scaffold(
       body: DompetGradientBackground(
         child: SafeArea(

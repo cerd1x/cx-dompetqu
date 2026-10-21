@@ -1,5 +1,5 @@
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/features/assets/application/assets_controller.dart';
+import 'package:dompetqu/features/assets/stores/assets_store.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/cs_dialog.dart';
@@ -15,7 +15,7 @@ class SwapBalanceDialog extends StatefulWidget {
     required this.items,
   });
 
-  final AssetsController controller;
+  final AssetsStore controller;
   final List items;
 
   @override

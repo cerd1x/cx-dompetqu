@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/contacts/application/contacts_controller.dart';
+import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,7 +70,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
     setState(() => _busy = true);
     final ok = _isEdit
         ? await ref
-              .read(contactsControllerProvider.notifier)
+              .read(contactsStoreProvider.notifier)
               .update(
                 widget.contact!.id,
                 name: name,
@@ -80,7 +80,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
                 phones: phones,
               )
         : await ref
-              .read(contactsControllerProvider.notifier)
+              .read(contactsStoreProvider.notifier)
               .create(
                 name: name,
                 email: _emailCtrl.text.trim().isEmpty

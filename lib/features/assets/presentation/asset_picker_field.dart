@@ -5,10 +5,10 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/cs_modal_top_sheet.dart';
 import '../../../core/utils/balance.dart';
-import '../application/assets_controller.dart';
+import '../stores/assets_store.dart';
 import '../domain/entities/asset.dart';
 
-/// Picker aset dari [assetsControllerProvider] — padanan `AssetPicker.svelte`.
+/// Picker aset dari [assetsStoreProvider] — padanan `AssetPicker.svelte`.
 class AssetPickerField extends ConsumerWidget {
   const AssetPickerField({
     super.key,
@@ -28,7 +28,7 @@ class AssetPickerField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final assets = ref.watch(assetsControllerProvider).items;
+    final assets = ref.watch(assetsStoreProvider).items;
     Asset? selected;
     for (final a in assets) {
       if (a.id == selectedId) {
@@ -153,7 +153,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
   }
 
   Future<void> _refresh() async {
-    await ref.read(assetsControllerProvider.notifier).load();
+    await ref.read(assetsStoreProvider.notifier).load();
   }
 
   String _formatBalance(String raw) {
@@ -182,7 +182,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(assetsControllerProvider);
+    final controller = ref.watch(assetsStoreProvider);
     final assets = controller.items;
     final filtered = _query.isEmpty
         ? assets

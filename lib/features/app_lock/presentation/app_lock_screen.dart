@@ -9,7 +9,7 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/biometric_button.dart';
 import '../../../core/theme/widgets/pattern_input_dialog.dart';
 import '../../../core/theme/widgets/pin_input.dart';
-import '../application/app_lock_controller.dart';
+import '../stores/app_lock_store.dart';
 import '../models/lock_method.dart';
 
 /// Layar kunci yang muncul saat aplikasi terkunci.
@@ -34,7 +34,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final lockAsync = ref.watch(appLockControllerProvider);
+    final lockAsync = ref.watch(appLockStoreProvider);
     final lockState = lockAsync.value;
 
     _schedulePatternDialogIfNeeded(lockState);
@@ -138,7 +138,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
             padding: const EdgeInsets.only(bottom: 32),
             child: BiometricButton(
               onAuthenticated: () {
-                ref.read(appLockControllerProvider.notifier).completeUnlock();
+                ref.read(appLockStoreProvider.notifier).completeUnlock();
               },
             ),
           ),
@@ -153,7 +153,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
         key: _pinKey,
         onCompleted: (pin) async {
           final ok = await ref
-              .read(appLockControllerProvider.notifier)
+              .read(appLockStoreProvider.notifier)
               .unlockWithPin(pin);
           if (!ok && mounted) {
             setState(() {
@@ -178,7 +178,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
   }
 
   Widget _buildLockout() {
-    final lockState = ref.watch(appLockControllerProvider).value;
+    final lockState = ref.watch(appLockStoreProvider).value;
     final remaining = lockState?.lockoutUntil?.difference(DateTime.now());
     final minutes = remaining?.inMinutes ?? 0;
     final seconds = (remaining?.inSeconds ?? 0) % 60;
@@ -250,7 +250,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
     if (_countdownTimer != null) return;
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
-      final current = ref.read(appLockControllerProvider).value;
+      final current = ref.read(appLockStoreProvider).value;
       if (current == null || !current.isLockedOut) {
         _countdownTimer?.cancel();
         _countdownTimer = null;

@@ -86,7 +86,7 @@ lib/features/gen_ai/
 │   │     ├── SkillsShScrapeRemoteDatasource        (mode A — HTML SSR)
 │   │     └── SkillsShApiRemoteDatasource           (mode B — bentuk API resmi)
 │   └── repositories/skill_store_repository_impl.dart  # penerus tipis ke datasource
-├── application/
+├── stores/
 │   ├── skill_store_repository_provider.dart    # provider POLOS (tanpa codegen) + pemilih mode
 │   └── ai_skills_controller.dart               # + importFromStore(entry)
 └── presentation/
@@ -100,14 +100,14 @@ Alur pemanggilan saat user menekan **Tambah**:
 AiSkillStoreBrowser (UI)
   → pop(ImportAiSkillFromStore(entry))
   → gen_ai_screen.dart: aiSkillsControllerProvider.notifier.importFromStore(entry)
-  → AiSkillsController.importFromStore(entry)          (application)
+  → AiSkillsStore.importFromStore(entry)          (stores)
   → LocalAiSkillsRepository.importFromStore(entry)     (data)
       → SkillStoreRepository.loadInstructions(entry)   (domain → datasource)
       → create(name: entry.name, instructions: ...)    (simpan seperti skill biasa)
 ```
 
 **Pemilih mode** (satu-satunya tempat mode ditentukan) ada di
-`lib/features/gen_ai/application/skill_store_repository_provider.dart`
+`lib/features/gen_ai/stores/skill_store_repository_provider.dart`
 (di bawah ini disederhanakan, tanpa `name:` dan penyesuaian format):
 
 ```dart
@@ -426,7 +426,7 @@ abstraksi `SkillStoreRemoteDatasource`.
 4. `SKILLS_STORE_API_BASE_URL` mengabaikan path dari base URL (lihat 6.3) — saat ini
    harus berupa origin.
 5. Contoh `--dart-define` di doc comment
-   `application/skill_store_repository_provider.dart` saat ini menulis
+   `stores/skill_store_repository_provider.dart` saat ini menulis
    `https://cx-web.example/api/skills`, padahal menurut perilaku di poin 4 seharusnya
    `https://cx-web.example`. **Perlu diperbaiki** (lihat TODO).
 

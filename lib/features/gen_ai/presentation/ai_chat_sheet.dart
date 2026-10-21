@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/features/gen_ai/application/ai_controller.dart';
+import 'package:dompetqu/features/gen_ai/stores/ai_store.dart';
 import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
 
 import '../../../core/theme/dompet_brand.dart';
@@ -49,12 +49,12 @@ class _AiChatConversationState extends ConsumerState<AiChatConversation> {
     final text = _inputCtrl.text.trim();
     if (text.isEmpty) return;
     _inputCtrl.clear();
-    ref.read(aiControllerProvider.notifier).send(text);
+    ref.read(aiStoreProvider.notifier).send(text);
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(aiControllerProvider);
+    final state = ref.watch(aiStoreProvider);
     final mq = MediaQuery.sizeOf(context);
     final conversation = Column(
       mainAxisSize: widget.isSheet ? MainAxisSize.min : MainAxisSize.max,

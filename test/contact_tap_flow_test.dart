@@ -7,7 +7,7 @@ import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/features/contacts/presentation/contacts_screen.dart';
 import 'package:dompetqu/features/contacts/presentation/contact_detail_screen.dart';
-import 'package:dompetqu/features/dashboard/application/home_repository_provider.dart';
+import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
 import 'package:dompetqu/features/contacts/domain/entities/contact_page.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';

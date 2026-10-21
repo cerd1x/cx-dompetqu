@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'quick_actions.dart';
 import 'recent_list_transaction.dart';
 import 'stats_grid.dart';
-import '../../statistics/application/statistics_controller.dart';
-import '../../transactions/application/transactions_controller.dart';
+import '../../statistics/stores/statistics_store.dart';
+import '../../transactions/stores/transactions_store.dart';
 import '../../../core/theme/widgets/app_header.dart';
 import '../../../core/theme/widgets/placeholders.dart';
 
@@ -16,8 +16,8 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stats = ref.watch(statisticsControllerProvider);
-    final transactions = ref.watch(transactionsControllerProvider);
+    final stats = ref.watch(statisticsStoreProvider);
+    final transactions = ref.watch(transactionsStoreProvider);
 
     return TabScaffold(
       // header section

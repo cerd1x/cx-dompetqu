@@ -11,7 +11,7 @@ import '../../../core/theme/widgets/dompet_badge.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
 import '../../transactions/domain/entities/transaction.dart';
-import '../../transactions/application/transactions_controller.dart';
+import '../../transactions/stores/transactions_store.dart';
 import '../../../core/theme/widgets/data_states.dart';
 
 /// Filter tipe transaksi.

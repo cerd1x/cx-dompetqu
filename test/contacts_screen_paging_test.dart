@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
 import 'package:dompetqu/core/theme/app_theme.dart';
-import 'package:dompetqu/features/contacts/application/contacts_controller.dart';
+import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/presentation/contacts_screen.dart';
 import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
 import 'package:dompetqu/features/contacts/data/models/contact.dart';
@@ -106,7 +106,7 @@ void main() {
     expect(find.text('Citra'), findsOneWidget);
     expect(find.text('Andi'), findsNothing);
     expect(find.text('Muat lebih banyak'), findsOneWidget);
-    expect(container.read(contactsControllerProvider).hasMore, isTrue);
+    expect(container.read(contactsStoreProvider).hasMore, isTrue);
 
     await tester.tap(find.text('Muat lebih banyak'));
     for (var i = 0; i < 10; i++) {
@@ -116,7 +116,7 @@ void main() {
     // Halaman kedua append, tombol load more hilang (tidak ada halaman lagi).
     expect(find.text('Andi'), findsOneWidget);
     expect(find.text('Muat lebih banyak'), findsNothing);
-    final state = container.read(contactsControllerProvider);
+    final state = container.read(contactsStoreProvider);
     expect(state.items.map((c) => c.id).toList(), ['c2', 'c1', 'c0']);
     expect(state.hasMore, isFalse);
     // `after` memakai endCursor halaman pertama.

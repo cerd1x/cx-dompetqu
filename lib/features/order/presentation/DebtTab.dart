@@ -10,9 +10,9 @@ import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
 import '../../../core/utils/formatters.dart';
-import '../../contacts/application/contacts_controller.dart';
-import '../../transactions/application/transactions_controller.dart';
-import '../application/order_repository_provider.dart';
+import '../../contacts/stores/contacts_store.dart';
+import '../../transactions/stores/transactions_store.dart';
+import '../stores/order_repository_provider.dart';
 import '../../transactions/domain/entities/transaction.dart';
 import '../../../core/theme/widgets/data_states.dart';
 import 'OrderTabWidgets.dart';
@@ -52,7 +52,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
     super.initState();
     // Nama kontak untuk setiap utang butuh daftar kontak penuh.
     Future.microtask(
-      () => ref.read(contactsControllerProvider.notifier).ensureAllLoaded(),
+      () => ref.read(contactsStoreProvider.notifier).ensureAllLoaded(),
     );
   }
 
@@ -108,8 +108,8 @@ class _DebtTabState extends ConsumerState<DebtTab> {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = ref.watch(transactionsControllerProvider);
-    final contacts = ref.watch(contactsControllerProvider);
+    final transactions = ref.watch(transactionsStoreProvider);
+    final contacts = ref.watch(contactsStoreProvider);
     final settledIds = ref.watch(debtSettlementsProvider);
     final names = {for (final c in contacts.items) c.id: c.name};
 
@@ -295,7 +295,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
       }
       await ref.read(debtSettlementsProvider.notifier).markSettled(debt.tx.id);
       // Pembayaran baru tercatat di ledger → muat ulang transaksi.
-      ref.invalidate(transactionsControllerProvider);
+      ref.invalidate(transactionsStoreProvider);
       _toast('Debt settled');
     } catch (e) {
       if (mounted) _toast(e is Exception ? '$e' : '$e');
@@ -344,7 +344,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
           failed.add(debt);
         }
       }
-      if (failed.isEmpty) ref.invalidate(transactionsControllerProvider);
+      if (failed.isEmpty) ref.invalidate(transactionsStoreProvider);
       if (!mounted) return;
       if (failed.isEmpty) {
         _toast('All debts settled');

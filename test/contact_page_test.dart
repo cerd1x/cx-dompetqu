@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
-import 'package:dompetqu/features/contacts/application/contacts_controller.dart';
+import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
 import 'package:dompetqu/features/contacts/data/models/contact.dart';
 import 'package:dompetqu/features/contacts/data/models/contact_page.dart';
@@ -263,7 +263,7 @@ void main() {
     });
   });
 
-  group('ContactsController pagination', () {
+  group('ContactsStore pagination', () {
     /// Container dengan sumber palsu; load awal dari `build()` sudah selesai.
     Future<ProviderContainer> containerWith(
       FakePagedContactsSource source,
@@ -289,10 +289,10 @@ void main() {
       final container = await containerWith(source);
 
       await container
-          .read(contactsControllerProvider.notifier)
+          .read(contactsStoreProvider.notifier)
           .loadPage(pageSize: 2);
 
-      final state = container.read(contactsControllerProvider);
+      final state = container.read(contactsStoreProvider);
       expect(state.items.map((c) => c.id).toList(), ['c3', 'c2']);
       expect(state.hasMore, isTrue);
       expect(state.nextCursor, 'cur-c2');
@@ -311,12 +311,12 @@ void main() {
         _page([(id: 'c1', name: 'Andi')]),
       ]);
       final container = await containerWith(source);
-      final controller = container.read(contactsControllerProvider.notifier);
+      final controller = container.read(contactsStoreProvider.notifier);
 
       await controller.loadPage(pageSize: 2);
       final loaded = await controller.loadMore();
 
-      final state = container.read(contactsControllerProvider);
+      final state = container.read(contactsStoreProvider);
       expect(loaded, isTrue);
       expect(state.items.map((c) => c.id).toList(), ['c3', 'c2', 'c1']);
       expect(state.hasMore, isFalse);
@@ -331,14 +331,14 @@ void main() {
         _page([(id: 'c1', name: 'Andi')]),
       ]);
       final container = await containerWith(source);
-      final controller = container.read(contactsControllerProvider.notifier);
+      final controller = container.read(contactsStoreProvider.notifier);
 
       await controller.loadPage(pageSize: 2);
       final loaded = await controller.loadMore();
 
       expect(loaded, isFalse);
       expect(source.calls, hasLength(1));
-      expect(container.read(contactsControllerProvider).items, hasLength(1));
+      expect(container.read(contactsStoreProvider).items, hasLength(1));
     });
 
     test('loadMore mengabaikan kontak duplikat antar halaman', () async {
@@ -352,13 +352,13 @@ void main() {
         _page([(id: 'c1', name: 'Andi'), (id: 'c0', name: 'Zaki')]),
       ]);
       final container = await containerWith(source);
-      final controller = container.read(contactsControllerProvider.notifier);
+      final controller = container.read(contactsStoreProvider.notifier);
 
       await controller.loadPage(pageSize: 2);
       await controller.loadMore();
 
       expect(
-        container.read(contactsControllerProvider).items.map((c) => c.id),
+        container.read(contactsStoreProvider).items.map((c) => c.id),
         ['c2', 'c1', 'c0'],
       );
     });
@@ -373,12 +373,12 @@ void main() {
         _page([(id: 'c0', name: 'Zaki')]),
       ]);
       final container = await containerWith(source);
-      final controller = container.read(contactsControllerProvider.notifier);
+      final controller = container.read(contactsStoreProvider.notifier);
 
       await controller.loadPage(pageSize: 2);
       await controller.load();
 
-      final state = container.read(contactsControllerProvider);
+      final state = container.read(contactsStoreProvider);
       // `load()` mengikuti mode aktif: halaman pertama, bukan daftar penuh.
       expect(state.items.map((c) => c.id).toList(), ['c0']);
       expect(state.hasMore, isFalse);
@@ -396,12 +396,12 @@ void main() {
           ),
         ]);
         final container = await containerWith(source);
-        final controller = container.read(contactsControllerProvider.notifier);
+        final controller = container.read(contactsStoreProvider.notifier);
 
         await controller.loadPage(pageSize: 2);
         await controller.loadAll();
 
-        final state = container.read(contactsControllerProvider);
+        final state = container.read(contactsStoreProvider);
         expect(controller.isPaged, isFalse);
         expect(state.items, hasLength(1));
         expect(state.hasMore, isFalse);
@@ -418,14 +418,14 @@ void main() {
         ),
       ]);
       final container = await containerWith(source);
-      final controller = container.read(contactsControllerProvider.notifier);
+      final controller = container.read(contactsStoreProvider.notifier);
 
       await controller.loadPage(pageSize: 2);
       expect(source.calls, hasLength(1));
 
       await controller.ensureAllLoaded();
       expect(source.calls, hasLength(1));
-      expect(container.read(contactsControllerProvider).hasMore, isFalse);
+      expect(container.read(contactsStoreProvider).hasMore, isFalse);
 
       // Panggil kedua no-op: sudah dimuat penuh.
       await controller.ensureAllLoaded();

@@ -10,7 +10,7 @@ import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/theme/widgets/pattern_input.dart';
 import '../../../core/theme/widgets/pin_input.dart';
-import '../application/app_lock_controller.dart';
+import '../stores/app_lock_store.dart';
 import '../models/lock_method.dart';
 
 /// Layar pengaturan app lock — pilih kredensial (PIN/pola) & set biometrik.
@@ -56,7 +56,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final lockAsync = ref.watch(appLockControllerProvider);
+    final lockAsync = ref.watch(appLockStoreProvider);
     final lockState = lockAsync.value;
     final isAlreadySetup = lockState?.isEnabled == true;
 
@@ -252,7 +252,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                       _selectedCredential = m.$1;
                       _biometricOption =
                           ref
-                              .read(appLockControllerProvider)
+                              .read(appLockStoreProvider)
                               .value
                               ?.biometricEnabled ??
                           false;
@@ -418,7 +418,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                       setState(() => _biometricOption = value);
                     } else {
                       final notifier = ref.read(
-                        appLockControllerProvider.notifier,
+                        appLockStoreProvider.notifier,
                       );
                       if (value) {
                         notifier.enableBiometric();
@@ -440,7 +440,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
   /// biometrik yang sedang aktif.
   bool _effectiveBiometricOption() {
     if (_selectedCredential == null) {
-      return ref.read(appLockControllerProvider).value?.biometricEnabled ??
+      return ref.read(appLockStoreProvider).value?.biometricEnabled ??
           false;
     }
     return _biometricOption;
@@ -457,7 +457,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
     } else {
       if (pin == _firstInput) {
         ref
-            .read(appLockControllerProvider.notifier)
+            .read(appLockStoreProvider.notifier)
             .setupPin(pin, biometricEnabled: _effectiveBiometricOption());
         _showSuccessAndPop();
       } else {
@@ -483,7 +483,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
       final confirmStr = pattern.join(',');
       if (confirmStr == _firstInput) {
         ref
-            .read(appLockControllerProvider.notifier)
+            .read(appLockStoreProvider.notifier)
             .setupPattern(pattern, biometricEnabled: _biometricOption);
         _showSuccessAndPop();
       } else {
@@ -530,7 +530,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
     );
     if (confirmed != true || !mounted) return;
 
-    await ref.read(appLockControllerProvider.notifier).disableLock();
+    await ref.read(appLockStoreProvider.notifier).disableLock();
     if (!mounted) return;
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()

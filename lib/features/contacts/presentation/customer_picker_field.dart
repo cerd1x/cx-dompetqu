@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/widgets/cs_modal_top_sheet.dart';
-import '../application/contacts_controller.dart';
+import '../stores/contacts_store.dart';
 import '../domain/entities/contact.dart';
 
-/// Picker customer dari [contactsControllerProvider].
+/// Picker customer dari [contactsStoreProvider].
 class CustomerPickerField extends ConsumerWidget {
   const CustomerPickerField({
     super.key,
@@ -19,7 +19,7 @@ class CustomerPickerField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contacts = ref.watch(contactsControllerProvider).items;
+    final contacts = ref.watch(contactsStoreProvider).items;
     Contact? selected;
     for (final c in contacts) {
       if (c.id == selectedId) {
@@ -35,9 +35,9 @@ class CustomerPickerField extends ConsumerWidget {
       onTap: () async {
         // Picker harus memuat seluruh kontak, bukan hanya halaman list yang
         // sudah tampil.
-        await ref.read(contactsControllerProvider.notifier).ensureAllLoaded();
+        await ref.read(contactsStoreProvider.notifier).ensureAllLoaded();
         if (!context.mounted) return;
-        final all = ref.read(contactsControllerProvider).items;
+        final all = ref.read(contactsStoreProvider).items;
         final picked = await showCsModalTopBar<String>(
           context: context,
           builder: (sheetCtx) =>

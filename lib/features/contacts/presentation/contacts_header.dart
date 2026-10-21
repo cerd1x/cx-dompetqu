@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
-import '../application/contacts_controller.dart';
+import '../stores/contacts_store.dart';
 
 /// Header kecil untuk halaman Contacts.
 class ContactsHeader extends ConsumerWidget {
@@ -11,7 +11,7 @@ class ContactsHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(
-      contactsControllerProvider.select((s) => s.items.length),
+      contactsStoreProvider.select((s) => s.items.length),
     );
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),

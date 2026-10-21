@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/balance_input_field.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
-import '../application/settings_controller.dart';
+import '../stores/settings_store.dart';
 
 /// Seksi mata uang dengan dropdown expandable — padanan web.
 class CurrencyPickerSection extends ConsumerStatefulWidget {
@@ -81,7 +81,7 @@ class _CurrencyPickerSectionState extends ConsumerState<CurrencyPickerSection> {
                       for (final c in kBalanceCurrencies)
                         InkWell(
                           onTap: () => ref
-                              .read(settingsControllerProvider.notifier)
+                              .read(settingsStoreProvider.notifier)
                               .setCurrency(c.code),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(

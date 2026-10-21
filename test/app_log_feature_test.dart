@@ -6,9 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AppLogFeature', () {
     test('maps known logger tags to their registered features', () {
-      expect(AppLogFeature.fromTag('AiController'), AppLogFeature.genAi);
+      expect(AppLogFeature.fromTag('AiStore'), AppLogFeature.genAi);
       expect(
-        AppLogFeature.fromTag('TransactionsController'),
+        AppLogFeature.fromTag('TransactionsStore'),
         AppLogFeature.transactions,
       );
       expect(AppLogFeature.fromTag('Session'), AppLogFeature.auth);
@@ -21,7 +21,7 @@ void main() {
         level: LogLevel.info,
         message: 'Pengaturan AI dimuat.',
         feature: AppLogFeature.genAi,
-        tag: 'AiSettingsController',
+        tag: 'AiSettingsStore',
       );
 
       expect(record.line, contains('[genAi]'));

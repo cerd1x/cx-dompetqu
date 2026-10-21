@@ -7,11 +7,11 @@ import 'package:mix/mix.dart';
 
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/utils/formatters.dart';
-import '../../settings/application/settings_controller.dart';
+import '../../settings/stores/settings_store.dart';
 
 /// Mata uang dari preferensi lokal — padanan `settingStore.selectedCurrency`.
 String selectedCurrency(WidgetRef ref) =>
-    ref.watch(settingsControllerProvider).value?.currency ?? 'IDR';
+    ref.watch(settingsStoreProvider).value?.currency ?? 'IDR';
 
 /// Kartu profit — padanan baris "Profit" di web.
 class ProfitCard extends StatelessWidget {

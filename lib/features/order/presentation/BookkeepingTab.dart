@@ -8,7 +8,7 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
 import '../../../core/utils/balance.dart';
 import '../../../core/utils/formatters.dart';
-import '../../transactions/application/transactions_controller.dart';
+import '../../transactions/stores/transactions_store.dart';
 import '../../transactions/domain/entities/transaction.dart';
 import '../../../core/theme/widgets/data_states.dart';
 import 'OrderFormWidgets.dart';
@@ -27,7 +27,7 @@ String _filterLabel(_LedgerFilter f) => switch (f) {
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
 /// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
 ///
-/// Sumber data: `transactionsControllerProvider`. Mode pagination di matikan
+/// Sumber data: `transactionsStoreProvider`. Mode pagination di matikan
 /// (`ensureAllLoaded`) karena ringkasan bulanan butuh transaksi di luar halaman
 /// yang tampil.
 class BookkeepingTab extends ConsumerStatefulWidget {
@@ -49,7 +49,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     super.initState();
     // Ringkasan bulanan butuh daftar penuh, bukan hanya halaman pertama.
     Future.microtask(
-      () => ref.read(transactionsControllerProvider.notifier).ensureAllLoaded(),
+      () => ref.read(transactionsStoreProvider.notifier).ensureAllLoaded(),
     );
   }
 
@@ -92,7 +92,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = ref.watch(transactionsControllerProvider);
+    final transactions = ref.watch(transactionsStoreProvider);
     final currency = selectedCurrency(ref);
     final items = _monthItems(transactions.items);
 
@@ -328,7 +328,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     // Controller melakukan update optimistis; pill status berubah lebih dulu
     // lalu dikembalikan bila mutation ke backend gagal.
     final ok = await ref
-        .read(transactionsControllerProvider.notifier)
+        .read(transactionsStoreProvider.notifier)
         .updatePaymentStatus(tx, paymentStatus: nextStatus);
     if (!mounted) return;
     final message = ok

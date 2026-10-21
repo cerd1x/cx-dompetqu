@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/contacts/application/contacts_controller.dart';
+import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +45,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
     // Kandidat duplikat harus mencakup seluruh kontak, bukan hanya halaman
     // list yang sedang tampil.
     Future.microtask(
-      () => ref.read(contactsControllerProvider.notifier).ensureAllLoaded(),
+      () => ref.read(contactsStoreProvider.notifier).ensureAllLoaded(),
     );
   }
 
@@ -88,7 +88,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
       _error = null;
     });
     final outcome = await ref
-        .read(contactsControllerProvider.notifier)
+        .read(contactsStoreProvider.notifier)
         .merge(
           primaryId: primary.id,
           duplicateId: duplicate.id,
@@ -123,7 +123,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
   }
 
   Contact? get _primary {
-    final state = ref.read(contactsControllerProvider);
+    final state = ref.read(contactsStoreProvider);
     for (final c in state.items) {
       if (c.id == widget.contactId) return c;
     }
@@ -132,7 +132,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(contactsControllerProvider);
+    final state = ref.watch(contactsStoreProvider);
     if (state.loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }

@@ -5,7 +5,7 @@ import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
 import '../../../core/utils/balance.dart';
-import '../application/assets_controller.dart';
+import '../stores/assets_store.dart';
 import '../domain/entities/asset.dart';
 
 /// Dialog tambah saldo asset — padanan `_assets/FormAddBalance.svelte`.
@@ -37,7 +37,7 @@ class _AddBalanceDialogState extends ConsumerState<AddBalanceDialog> {
 
     setState(() => _busy = true);
     final ok = await ref
-        .read(assetsControllerProvider.notifier)
+        .read(assetsStoreProvider.notifier)
         .addBalance(widget.asset.id, '${balance.code} $amount');
     if (!mounted) return;
     setState(() => _busy = false);

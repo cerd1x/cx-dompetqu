@@ -1,5 +1,5 @@
 import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
-import 'package:dompetqu/features/dashboard/application/home_repository_provider.dart';
+import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/assets/domain/entities/asset_mutation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

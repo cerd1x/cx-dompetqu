@@ -10,7 +10,7 @@ import '../../../core/theme/widgets/dompet_text_field.dart';
 import '../../../core/theme/widgets/scroll_refresh_wrapper.dart';
 import '../../../core/utils/formatters.dart';
 import '../domain/entities/product.dart';
-import '../application/inventory_controller.dart';
+import '../stores/inventory_store.dart';
 import '../../order/presentation/OrderFormWidgets.dart';
 import '../../../core/theme/widgets/bottom_bar.dart';
 import '../../../core/theme/widgets/data_states.dart';
@@ -63,7 +63,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
             onPressed: () {
               Navigator.of(dialogCtx).pop();
               ref
-                  .read(inventoryControllerProvider.notifier)
+                  .read(inventoryStoreProvider.notifier)
                   .remove(product.id!);
             },
             style: TextButton.styleFrom(foregroundColor: DompetBrand.pink),
@@ -77,8 +77,8 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(inventoryControllerProvider);
-    final controller = ref.read(inventoryControllerProvider.notifier);
+    final state = ref.watch(inventoryStoreProvider);
+    final controller = ref.read(inventoryStoreProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,14 +127,14 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     if (state.error != null) {
       return ErrorState(
         message: state.error!,
-        onRetry: () => ref.read(inventoryControllerProvider.notifier).load(),
+        onRetry: () => ref.read(inventoryStoreProvider.notifier).load(),
       );
     }
     final products = state.filtered;
     // empty section
     if (products.isEmpty) {
       return ScrollRefreshWrapper(
-        onRefresh: () => ref.read(inventoryControllerProvider.notifier).load(),
+        onRefresh: () => ref.read(inventoryStoreProvider.notifier).load(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: const [
@@ -146,7 +146,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     }
     // product list section
     return ScrollRefreshWrapper(
-      onRefresh: () => ref.read(inventoryControllerProvider.notifier).load(),
+      onRefresh: () => ref.read(inventoryStoreProvider.notifier).load(),
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -304,7 +304,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
     setState(() => _busy = true);
     final ok = _isEdit
         ? await ref
-              .read(inventoryControllerProvider.notifier)
+              .read(inventoryStoreProvider.notifier)
               .update(
                 widget.product!.id!,
                 name: name,
@@ -317,7 +317,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
                 trackStock: _trackStock,
               )
         : await ref
-              .read(inventoryControllerProvider.notifier)
+              .read(inventoryStoreProvider.notifier)
               .create(
                 name: name,
                 description: _descCtrl.text.trim().isEmpty

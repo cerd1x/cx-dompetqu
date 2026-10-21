@@ -6,7 +6,7 @@ import '../../../core/theme/widgets/balance_input_field.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
 import '../../../core/theme/widgets/dompet_text_field.dart';
 import '../../../core/utils/balance.dart';
-import '../application/assets_controller.dart';
+import '../stores/assets_store.dart';
 import '../domain/entities/asset.dart';
 
 const _assetTypes = ['bank', 'ewallet', 'cash', 'crypto', 'loan'];
@@ -57,10 +57,10 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
     setState(() => _busy = true);
     final ok = _isEdit
         ? await ref
-              .read(assetsControllerProvider.notifier)
+              .read(assetsStoreProvider.notifier)
               .update(widget.asset!.id, name: name, type: _type)
         : await ref
-              .read(assetsControllerProvider.notifier)
+              .read(assetsStoreProvider.notifier)
               .create(
                 name: name,
                 type: _type,

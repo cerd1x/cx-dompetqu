@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/features/auth/application/session_controller.dart';
+import 'package:dompetqu/features/auth/stores/session_store.dart';
 import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
 
 /// Header yang dipakai tab-tab di dalam shell — padanan `AppBar.svelte`.
@@ -16,7 +16,7 @@ class AppHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(sessionControllerProvider).user;
+    final user = ref.watch(sessionStoreProvider).user;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
       child: Row(

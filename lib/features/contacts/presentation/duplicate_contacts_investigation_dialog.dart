@@ -4,7 +4,7 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_button.dart';
-import '../application/contacts_controller.dart';
+import '../stores/contacts_store.dart';
 import '../domain/entities/contact.dart';
 
 /// Dialog investigasi kontak duplikat — menampilkan grup kontak yang

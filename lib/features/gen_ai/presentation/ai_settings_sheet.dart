@@ -6,9 +6,9 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/cs_select_picker.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
-import '../application/ai_settings_controller.dart';
-import '../application/ai_settings_profiles_controller.dart';
-import '../application/ai_settings_repository_provider.dart';
+import '../stores/ai_settings_store.dart';
+import '../stores/ai_settings_profiles_store.dart';
+import '../stores/ai_settings_repository_provider.dart';
 import '../domain/config/openrouter_config.dart';
 import '../domain/entities/ai_settings.dart';
 import '../domain/entities/ai_settings_profile.dart';
@@ -83,8 +83,8 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(aiSettingsControllerProvider);
-    final profiles = ref.watch(aiSettingsProfilesControllerProvider);
+    final settings = ref.watch(aiSettingsStoreProvider);
+    final profiles = ref.watch(aiSettingsProfilesStoreProvider);
     final activeProfileId = profiles.when(
       data: (collection) => collection.activeProfileId,
       loading: () => null,
@@ -273,7 +273,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
     }
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .createProfile(name, settings);
       if (!context.mounted) return;
       setState(() => _creatingProfile = false);
@@ -295,7 +295,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .activateProfile(profileId);
       if (!context.mounted) return;
       setState(() {
@@ -320,7 +320,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .activateProfile(profile.id);
       if (!context.mounted) return;
       setState(() {
@@ -343,7 +343,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .updateProfile(profileId, settings);
       if (!context.mounted) return;
       setState(() => _editingProfileId = null);
@@ -383,7 +383,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
     if (!context.mounted || confirmed != true) return;
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .deleteProfile(profile.id);
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -811,7 +811,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveApiKey() async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setApiKey(_apiKeyCtrl.text);
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -827,7 +827,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
 
   Future<void> _saveModel(String model) async {
     try {
-      await ref.read(aiSettingsControllerProvider.notifier).setModel(model);
+      await ref.read(aiSettingsStoreProvider.notifier).setModel(model);
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -880,7 +880,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveProvider(AiModelProvider provider) async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setProvider(provider);
     } catch (error) {
       if (!mounted) return;
@@ -893,7 +893,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveBaseUrl(String baseUrl) async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setBaseUrl(baseUrl.trim());
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -920,7 +920,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveIncludeCustomHeaders(bool include) async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setIncludeCustomHeaders(include);
     } catch (error) {
       if (!mounted) return;
@@ -933,7 +933,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveUseCustomModel(bool useCustom) async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setUseCustomModel(useCustom);
     } catch (error) {
       if (!mounted) return;
@@ -959,7 +959,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
     }
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setCustomHeaders(headers);
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -976,7 +976,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
   Future<void> _saveAiBubbleVisibility(bool visible) async {
     try {
       await ref
-          .read(aiSettingsControllerProvider.notifier)
+          .read(aiSettingsStoreProvider.notifier)
           .setAiBubbleVisibility(visible);
     } catch (error) {
       if (!mounted) return;

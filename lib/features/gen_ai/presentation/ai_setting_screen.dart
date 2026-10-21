@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/widgets/dompet_gradient_background.dart';
-import '../application/ai_settings_controller.dart';
-import '../application/ai_settings_profiles_controller.dart';
+import '../stores/ai_settings_store.dart';
+import '../stores/ai_settings_profiles_store.dart';
 import '../domain/entities/ai_settings.dart';
 import '../domain/entities/ai_settings_profile.dart';
 import 'ai_settings_profiles_card.dart';
@@ -26,8 +26,8 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(aiSettingsControllerProvider);
-    final profiles = ref.watch(aiSettingsProfilesControllerProvider);
+    final settings = ref.watch(aiSettingsStoreProvider);
+    final profiles = ref.watch(aiSettingsProfilesStoreProvider);
     final activeProfileId = profiles.when(
       data: (collection) => collection.activeProfileId,
       loading: () => null,
@@ -163,7 +163,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
     }
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .createProfile(name, settings);
       if (!context.mounted) return;
       setState(() => _creatingProfile = false);
@@ -185,7 +185,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .activateProfile(profileId);
       if (!context.mounted) return;
       setState(() {
@@ -210,7 +210,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .activateProfile(profile.id);
       if (!context.mounted) return;
       setState(() {
@@ -233,7 +233,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
   ) async {
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .updateProfile(profileId, settings);
       if (!context.mounted) return;
       setState(() => _editingProfileId = null);
@@ -273,7 +273,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
     if (!context.mounted || confirmed != true) return;
     try {
       await ref
-          .read(aiSettingsProfilesControllerProvider.notifier)
+          .read(aiSettingsProfilesStoreProvider.notifier)
           .deleteProfile(profile.id);
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../auth/application/auth_providers.dart';
+import '../../auth/stores/auth_providers.dart';
 import '../../auth/domain/entities/auth_passkey_credential.dart';
 import '../../auth/domain/failures/auth_failure.dart';
 import '../../auth/domain/usecases/auth_use_cases.dart';

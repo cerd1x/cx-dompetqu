@@ -16,7 +16,7 @@ import 'core/network/cookie_aware_client.dart';
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
 import 'package:dompetqu/core/theme/ui_style_controller.dart';
-import 'features/auth/application/session_controller.dart';
+import 'features/auth/stores/session_store.dart';
 import 'features/auth/presentation/auth_screen.dart';
 import 'features/admin_pannel/admin_pannel_screen.dart';
 import 'features/admin_pannel/killswitch_controll_screen.dart';
@@ -27,9 +27,9 @@ import 'features/dashboard/presentation/home_shell.dart';
 import 'features/transactions/domain/entities/transaction.dart';
 import 'features/order/presentation/order_screen.dart';
 import 'features/order/presentation/order_tab.dart';
-import 'features/app_lock/application/app_lock_controller.dart';
+import 'features/app_lock/stores/app_lock_store.dart';
 import 'features/app_lock/presentation/app_lock_screen.dart';
-import 'features/settings/application/settings_controller.dart';
+import 'features/settings/stores/settings_store.dart';
 import 'features/settings/presentation/appearance_screen.dart';
 import 'features/settings/presentation/profile_screen.dart';
 import 'features/settings/presentation/settings_screen.dart';
@@ -69,7 +69,7 @@ class DompetQuApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-    final settings = ref.watch(settingsControllerProvider).value;
+    final settings = ref.watch(settingsStoreProvider).value;
     final darkMode = settings?.darkMode ?? true;
     final uiStyle =
         ref.watch(uiStyleControllerProvider).value ?? const UiStyle();
@@ -97,7 +97,7 @@ GoRouter appRouter(Ref ref) {
   final router = GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
-      final session = ref.read(sessionControllerProvider);
+      final session = ref.read(sessionStoreProvider);
       if (session.status == AuthStatus.unknown) return null;
       final onAuth = state.matchedLocation == '/auth';
       final onLock = state.matchedLocation == '/app-lock';
@@ -109,14 +109,14 @@ GoRouter appRouter(Ref ref) {
       }
       // Show app lock screen if app lock is enabled and user is authenticated
       if (session.status == AuthStatus.authenticated && !onAuth && !onLock) {
-        final lockState = ref.read(appLockControllerProvider).value;
+        final lockState = ref.read(appLockStoreProvider).value;
         if (lockState?.isEnabled == true && lockState?.locked == true) {
           return '/app-lock';
         }
       }
       // Go home once the app is no longer locked (unlocked or lock disabled).
       if (session.status == AuthStatus.authenticated && onLock) {
-        final lockState = ref.read(appLockControllerProvider).value;
+        final lockState = ref.read(appLockStoreProvider).value;
         if (lockState != null &&
             (lockState.isEnabled != true || lockState.locked != true)) {
           return '/';
@@ -206,13 +206,13 @@ GoRouter appRouter(Ref ref) {
     ],
   );
 
-  ref.listen(sessionControllerProvider, (previous, next) {
+  ref.listen(sessionStoreProvider, (previous, next) {
     if (previous?.status != next.status) {
       router.refresh();
     }
   });
 
-  ref.listen(appLockControllerProvider, (previous, next) {
+  ref.listen(appLockStoreProvider, (previous, next) {
     final prevLocked = previous?.value?.locked;
     final nextLocked = next.value?.locked;
     if (prevLocked != nextLocked) {

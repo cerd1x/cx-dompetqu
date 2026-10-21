@@ -9,7 +9,7 @@ import '../../core/theme/widgets/dompet_card.dart';
 import '../../core/theme/widgets/dompet_combobox.dart';
 import '../../core/theme/widgets/load_view_animating_progress_ripple.dart';
 import '../../core/theme/widgets/scroll_refresh_wrapper.dart';
-import 'application/killswitch_controller.dart';
+import 'stores/killswitch_store.dart';
 import 'data/graphql_operations.dart';
 import 'data/killswitch_remote_source.dart'
     show kOperationKeyPattern, killswitchAdminTokenProvider;
@@ -45,8 +45,8 @@ class _KillswitchControllScreenState
     super.dispose();
   }
 
-  KillswitchController get _controller =>
-      ref.read(killswitchControllerProvider.notifier);
+  KillswitchStore get _controller =>
+      ref.read(killswitchStoreProvider.notifier);
 
   Future<void> _saveToken() async {
     final value = _tokenCtrl.text.trim();
@@ -116,7 +116,7 @@ class _KillswitchControllScreenState
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(killswitchControllerProvider);
+    final state = ref.watch(killswitchStoreProvider);
     final token = ref.watch(killswitchAdminTokenProvider);
     final hasToken = token.trim().isNotEmpty;
 

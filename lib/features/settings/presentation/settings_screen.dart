@@ -6,13 +6,13 @@ import 'package:mix/mix.dart';
 import '../../../core/theme/cs_dialog.dart';
 import '../../../core/theme/dompet_brand.dart';
 import '../../../core/theme/widgets/dompet_card.dart';
-import '../../auth/application/session_controller.dart';
+import '../../auth/stores/session_store.dart';
 import '../../app_lock/presentation/app_lock_setup_screen.dart';
 import '../domain/entities/app_settings.dart';
 import 'passkey_settings_section.dart';
 import 'row_currency_picker_view.dart';
 import 'row_notifications_view.dart';
-import '../application/settings_controller.dart';
+import '../stores/settings_store.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';
@@ -24,7 +24,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings =
-        ref.watch(settingsControllerProvider).value ?? const AppSettings();
+        ref.watch(settingsStoreProvider).value ?? const AppSettings();
 
     return Scaffold(
       body: Box(
@@ -64,7 +64,7 @@ class SettingsScreen extends ConsumerWidget {
                         trailing: Switch(
                           value: settings.darkMode,
                           onChanged: (v) => ref
-                              .read(settingsControllerProvider.notifier)
+                              .read(settingsStoreProvider.notifier)
                               .setDarkMode(v),
                           activeThumbColor: DompetBrand.purple,
                         ),
@@ -170,7 +170,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             onPressed: () {
               Navigator.of(dialogCtx).pop();
-              ref.read(sessionControllerProvider.notifier).signOut();
+              ref.read(sessionStoreProvider.notifier).signOut();
             },
             child: const Text('LOGOUT'),
           ),

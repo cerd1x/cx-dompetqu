@@ -6,7 +6,7 @@ const String kAiApiKeyPrefsKey = 'ai_api_key';
 const String kAiModelPrefsKey = 'ai_model';
 const String kDefaultAiModel = 'gemini-2.5-flash';
 
-/// Pengaturan AI (API key & model Gemini) — dipakai `ai_settings_controller`
+/// Pengaturan AI (API key & model Gemini) — dipakai `ai_settings_store`
 /// dan form di `ai_settings_sheet`.
 @freezed
 abstract class AiSettings with _$AiSettings {

@@ -30,19 +30,27 @@ class OrderRepositoryImpl implements OrderRepository {
     String? paymentMethod,
     String? customerId,
     String? description,
+    String? payWithAssetId,
     String? payToAssetId,
     String? paymentStatus,
-  }) => _remoteSource.createProductSale(
-    productId: productId,
-    itemCount: itemCount,
-    totalAmount: totalAmount,
-    currency: currency,
-    paymentMethod: paymentMethod,
-    customerId: customerId,
-    description: description,
-    payToAssetId: payToAssetId,
-    paymentStatus: paymentStatus,
-  );
+  }) {
+    final effectivePayWithAssetId =
+        (payWithAssetId != null && payWithAssetId.isNotEmpty)
+        ? payWithAssetId
+        : ((payToAssetId != null && payToAssetId.isNotEmpty) ? payToAssetId : null);
+    return _remoteSource.createProductSale(
+      productId: productId,
+      itemCount: itemCount,
+      totalAmount: totalAmount,
+      currency: currency,
+      paymentMethod: paymentMethod,
+      customerId: customerId,
+      description: description,
+      payWithAssetId: effectivePayWithAssetId,
+      payToAssetId: effectivePayWithAssetId,
+      paymentStatus: paymentStatus,
+    );
+  }
 
   @override
   Future<bool> createExpense({

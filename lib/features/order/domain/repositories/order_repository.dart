@@ -15,6 +15,7 @@ abstract interface class OrderRepository {
     String? paymentMethod,
     String? customerId,
     String? description,
+    String? payWithAssetId,
     String? payToAssetId,
     // Status pembayaran (`paid`/`unpaid`) — padanan `paymentStatus` di
     // `CreateOrderProductSaleInput` backend; default DB `unpaid`.

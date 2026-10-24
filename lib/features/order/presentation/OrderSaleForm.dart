@@ -33,7 +33,7 @@ class _SaleFormState extends ConsumerState<SaleForm> {
   );
   String _status = 'belum';
   DateTime _date = DateTime.now();
-  String? _payToAssetId;
+  String? _payWithAssetId;
   String? _customerId;
   bool _busy = false;
   String? _error;
@@ -53,7 +53,7 @@ class _SaleFormState extends ConsumerState<SaleForm> {
       setState(() => _error = 'Pilih customer terlebih dahulu');
       return;
     }
-    if (_payToAssetId == null || _payToAssetId!.trim().isEmpty) {
+    if (_payWithAssetId == null || _payWithAssetId!.trim().isEmpty) {
       setState(() => _error = 'Pilih Pay From Aset terlebih dahulu');
       return;
     }
@@ -73,7 +73,7 @@ class _SaleFormState extends ConsumerState<SaleForm> {
             description: _notesCtrl.text.trim().isEmpty
                 ? null
                 : _notesCtrl.text.trim(),
-            payToAssetId: _payToAssetId,
+            payWithAssetId: _payWithAssetId,
             // Nilai segmented ('belum'/'lunas') dipetakan ke enum backend
             // `TransactionPaymentStatus` (`unpaid`/`paid`).
             paymentStatus: _status == 'lunas' ? 'paid' : 'unpaid',
@@ -156,8 +156,8 @@ class _SaleFormState extends ConsumerState<SaleForm> {
         const SizedBox(height: 12),
         AssetPickerField(
           title: 'Pay From Aset',
-          selectedId: _payToAssetId,
-          onChanged: (v) => setState(() => _payToAssetId = v),
+          selectedId: _payWithAssetId,
+          onChanged: (v) => setState(() => _payWithAssetId = v),
           minBalance: _amount,
         ),
         const SizedBox(height: 12),

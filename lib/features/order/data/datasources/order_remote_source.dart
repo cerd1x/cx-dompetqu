@@ -84,9 +84,14 @@ class OrderRemoteSource implements OrderDataSource {
     String? paymentMethod,
     String? customerId,
     String? description,
+    String? payWithAssetId,
     String? payToAssetId,
     String? paymentStatus,
   }) async {
+    final effectivePayWithAssetId =
+        (payWithAssetId != null && payWithAssetId.isNotEmpty)
+        ? payWithAssetId
+        : ((payToAssetId != null && payToAssetId.isNotEmpty) ? payToAssetId : null);
     final input =
         {
           'productId': productId,
@@ -96,12 +101,12 @@ class OrderRemoteSource implements OrderDataSource {
           'paymentMethod': ?paymentMethod,
           'customerId': ?customerId,
           'description': ?description,
-          'payToAssetId': ?payToAssetId,
+          'payWithAssetId': ?effectivePayWithAssetId,
           'paymentStatus': ?paymentStatus,
         }..removeWhere(
           (key, value) =>
               value is String &&
-              (key == 'customerId' || key == 'payToAssetId') &&
+              (key == 'customerId') &&
               value.trim().isEmpty,
         );
     AppLogger.instance.info(

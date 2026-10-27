@@ -259,32 +259,58 @@ class _RecentListTransactionState extends State<RecentListTransaction> {
       return const EmptyState(label: 'Transaction Masih Kosong...');
     }
     // transaction list section — grouped by tanggal (terbaru dulu,
-    // urutan grup mengikuti kemunculan pertama item).
+    // urutan grup mengikuti kemunculan pertama item). Di-flatten jadi satu
+    // list supaya `ListView.builder` bisa membangun baris secara lazy.
     final groups = <String, List<Transaction>>{};
     for (final tx in items) {
       final key = DateFormat('yyyy-MM-dd').format(tx.createdAt);
       (groups[key] ??= []).add(tx);
     }
-    final children = <Widget>[];
+    final entries = <_ListEntry>[];
     groups.forEach((_, list) {
-      children
-        ..add(_DateHeader(date: list.first.createdAt))
-        ..addAll([
-          for (final tx in list)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: TransactionRow(
-                tx: tx,
-                onTap: () => context.push('/struct-details', extra: tx),
-              ),
-            ),
-        ]);
+      entries
+        ..add(_HeaderEntry(list.first.createdAt))
+        ..addAll(list.map(_RowEntry.new));
     });
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.only(bottom: 4),
-      children: children,
+      itemCount: entries.length,
+      itemBuilder: (context, i) => switch (entries[i]) {
+        _HeaderEntry(:final date) => _DateHeader(date: date),
+        // `RepaintBoundary` memisahkan layer tiap baris sehingga perubahan
+        // satu baris tidak memicu repaint seluruh viewport.
+        _RowEntry(:final tx) => RepaintBoundary(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: TransactionRow(
+              tx: tx,
+              onTap: () => context.push('/struct-details', extra: tx),
+            ),
+          ),
+        ),
+      },
     );
   }
+}
+
+/// Satu entri datar di daftar transaksi: header tanggal atau baris transaksi.
+///
+/// Daftar di-flatten begini supaya `ListView` bisa lazy; kalau disusun sebagai
+/// `children: [...]` semua transaksi dibangun sekaligus di frame pertama.
+sealed class _ListEntry {
+  const _ListEntry();
+}
+
+class _HeaderEntry extends _ListEntry {
+  const _HeaderEntry(this.date);
+
+  final DateTime date;
+}
+
+class _RowEntry extends _ListEntry {
+  const _RowEntry(this.tx);
+
+  final Transaction tx;
 }
 
 /// Header grup tanggal — "Hari ini"/"Kemarin"/tanggal lengkap.

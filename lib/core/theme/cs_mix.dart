@@ -7,16 +7,23 @@ import 'dompet_brand.dart';
 
 /// Efek frosted glass — padanan `backdrop-blur-[6.1px]` di web.
 ///
-/// Memblurkan konten di belakang container transparan. Radius clip harus
-/// sama dengan radius container agar blur mengikuti sudut membulat.
-/// Opsional [shadow] dilukis DI LUAR area blur (tidak ikut ter-clip),
-/// jadi drop shadow panel/kartu tetap terlihat.
+/// Radius clip harus sama dengan radius container agar blur mengikuti sudut
+/// membulat. Opsional [shadow] dilukis DI LUAR area blur (tidak ikut
+/// ter-clip), jadi drop shadow panel/kartu tetap terlihat.
+///
+/// **[blur] default 0 = tanpa `BackdropFilter`.** Alasannya biaya: backdrop
+/// blur dieksekusi ulang setiap frame, dan pada target 120 fps anggaran satu
+/// frame hanya 8,33 ms. Di dalam konten yang scroll, efek blur nyaris tidak
+/// terlihat (latar kartu adalah gradient halus) tapi biayanya penuh. Jadi
+/// blur sekarang opt-in: hanya untuk overlay kecil yang jarang bergerak
+/// (dialog, bottom sheet, nav bar) yang memang butuh mengaburkan konten di
+/// belakangnya. Isi `blur: 12` secara eksplisit untuk memakainya.
 class CsFrost extends StatelessWidget {
   const CsFrost({
     super.key,
     required this.child,
     this.radius = DompetBrand.radius,
-    this.blur = 6.1,
+    this.blur = 0,
     this.shadow,
     this.opacity = 1.0,
   });
@@ -29,12 +36,22 @@ class CsFrost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // `Opacity(1.0)` tetap membuat render object tambahan; baru dipakai bila
+    // memang ada transparansi.
+    Widget content = opacity < 1
+        ? Opacity(opacity: opacity, child: child)
+        : child;
+
+    if (blur > 0) {
+      content = BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+        child: content,
+      );
+    }
+
     final frosted = ClipRRect(
       borderRadius: BorderRadius.circular(radius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Opacity(opacity: opacity, child: child),
-      ),
+      child: content,
     );
     if (shadow == null || shadow!.isEmpty) return frosted;
     return DecoratedBox(

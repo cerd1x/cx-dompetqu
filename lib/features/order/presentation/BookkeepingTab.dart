@@ -245,40 +245,44 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
       (groups[DateFormat('yyyy-MM-dd').format(tx.createdAt)] ??= []).add(tx);
     }
 
-    final children = <Widget>[];
+    // Di-flatten jadi satu list supaya `ListView.builder` bisa lazy.
+    final entries = <_LedgerEntry>[];
     groups.forEach((_, list) {
-      children
+      entries
         ..add(
-          OrderGroupHeader(
-            title: _dayLabel(list.first.createdAt),
-            subtitle: '${list.length} transactions',
-          ),
+          _LedgerHeaderEntry(date: list.first.createdAt, count: list.length),
         )
-        ..addAll([
-          for (final tx in list)
-            // `Builder` memberi context yang menunjuk ke render box baris,
-            // dipakai sebagai jangkar popup menu long-press.
-            Builder(
-              builder: (rowContext) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _LedgerRow(
-                  tx: tx,
-                  balance: balances[tx.id] ?? 0,
-                  currency: selectedCurrency(ref),
-                  onTap: () => context.push('/struct-details', extra: tx),
-                  onLongPress: () => _showLedgerActions(rowContext, tx),
-                  onDoubleTap: _isDesktop
-                      ? () => _showLedgerActions(rowContext, tx)
-                      : null,
-                ),
-              ),
-            ),
-        ]);
+        ..addAll(list.map(_LedgerRowEntry.new));
     });
 
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.only(bottom: 24),
-      children: children,
+      itemCount: entries.length,
+      itemBuilder: (context, i) => switch (entries[i]) {
+        _LedgerHeaderEntry(:final date, :final count) => OrderGroupHeader(
+          title: _dayLabel(date),
+          subtitle: '$count transactions',
+        ),
+        _LedgerRowEntry(:final tx) => RepaintBoundary(
+          // `Builder` memberi context yang menunjuk ke render box baris,
+          // dipakai sebagai jangkar popup menu long-press.
+          child: Builder(
+            builder: (rowContext) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _LedgerRow(
+                tx: tx,
+                balance: balances[tx.id] ?? 0,
+                currency: selectedCurrency(ref),
+                onTap: () => context.push('/struct-details', extra: tx),
+                onLongPress: () => _showLedgerActions(rowContext, tx),
+                onDoubleTap: _isDesktop
+                    ? () => _showLedgerActions(rowContext, tx)
+                    : null,
+              ),
+            ),
+          ),
+        ),
+      },
     );
   }
 
@@ -560,4 +564,22 @@ class _PaymentStatusPill extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Satu entri datar pada buku besar: header hari atau baris transaksi.
+sealed class _LedgerEntry {
+  const _LedgerEntry();
+}
+
+class _LedgerHeaderEntry extends _LedgerEntry {
+  const _LedgerHeaderEntry({required this.date, required this.count});
+
+  final DateTime date;
+  final int count;
+}
+
+class _LedgerRowEntry extends _LedgerEntry {
+  const _LedgerRowEntry(this.tx);
+
+  final Transaction tx;
 }

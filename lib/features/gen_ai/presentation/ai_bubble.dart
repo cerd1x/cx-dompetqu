@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
@@ -12,13 +11,20 @@ import 'package:dompetqu/features/gen_ai/presentation/ai_chat_sheet.dart';
 /// di sekitar layar.
 ///
 /// Tampilan & animasi:
-/// - Elips frosted-glass (BackdropFilter blur kecil) dengan ring gradient
-///   brand yang ter-blend (gold → purple → pink) + kilau cahaya menyapu.
+/// - Elips kaca gelap dengan ring gradient brand yang ter-blend
+///   (gold → purple → pink) + kilau cahaya menyapu.
 /// - Animasi idle: napas skala halus, mengambang naik-turun, dan ikon
 ///   robot menoleh kiri-kanan (wiggle).
 /// - Saat digenggam membesar sedikit (springy); saat dilepas MELEKAT ke
 ///   tepi kiri/kanan terdekat sebagai setengah elips di luar layar.
-/// - Setelah 5 detik tanpa interaksi, opacity menurun otomatis.
+/// - Setelah 5 detik tanpa interaksi, opacity menurun otomatis **dan ticker
+///   dihentikan** sehingga tidak ada frame yang diproduksi saat diam.
+///
+/// Catatan performa: elemen ini hidup di seluruh tab (lihat `HomeShell`), jadi
+/// biaya per-frame-nya dibayar terus-menerus. Karena itu (1) tidak memakai
+/// `BackdropFilter` — blur backdrop pada elemen yang beranimasi terus akan
+/// dihitung ulang tiap frame, dan (2) shell kaca di-cache `RepaintBoundary`
+/// supaya tiap tick hanya memperbarui matriks `Transform`.
 ///
 /// Dipasang di dalam Stack body [HomeShell] — area di luar bubble tetap
 /// tembus untuk sentuhan (Positioned, bukan full-screen hit test).
@@ -93,9 +99,18 @@ class _AiBubbleState extends State<AiBubble>
   void _resetIdle() {
     _idleTimer?.cancel();
     if (mounted && _dimmed) setState(() => _dimmed = false);
-    _idleTimer = Timer(AiBubble.fadeAfter, () {
-      if (mounted) setState(() => _dimmed = true);
-    });
+    // Ticker hanya hidup saat bubble aktif; lihat [_onIdle].
+    if (!_fx.isAnimating) _fx.repeat();
+    _idleTimer = Timer(AiBubble.fadeAfter, _onIdle);
+  }
+
+  /// Sudah [AiBubble.fadeAfter] tanpa interaksi: redupkan, lalu hentikan
+  /// ticker. Setelah redup tidak ada yang berubah, jadi tidak perlu
+  /// memproduksi frame sama sekali — ini yang membebaskan anggaran 120 fps.
+  void _onIdle() {
+    if (!mounted) return;
+    setState(() => _dimmed = true);
+    _fx.stop();
   }
 
   void _onPanStart(DragStartDetails d) {
@@ -163,31 +178,31 @@ class _AiBubbleState extends State<AiBubble>
 
   // ── tampilan ────────────────────────────────────────────────────────
 
-  /// Elips frosted-glass dengan 4 animasi dari satu controller:
+  /// Elips kaca dengan 4 animasi dari satu controller:
   /// napas skala, mengambang, wiggle ikon, dan sheen menyapu permukaan.
+  ///
+  /// Shell kaca dibangun sekali lalu di-cache `RepaintBoundary`, sehingga
+  /// tiap tick hanya memperbarui matriks `Transform` — tanpa build/layout
+  /// ulang pohon Mix di dalamnya.
   Widget _buildFace() {
     return AnimatedBuilder(
       animation: _fx,
-      builder: (_, _) {
+      builder: (_, child) {
         final t = _fx.value;
         final breathe = 1 + 0.045 * math.sin(t * 2 * math.pi);
         final scale = _dragging ? breathe * 1.07 : breathe;
         final bob = 2.4 * math.sin(t * 2 * math.pi);
-        final wiggle = 0.14 * math.sin((t % 0.5) * 4 * math.pi);
-        final sheen = ((t * 1.6) % 1.0) * 2 - 1; // -1 .. 1 menyapu
 
         return Transform.translate(
           offset: Offset(0, _dragging ? 0 : bob),
-          child: Transform.scale(
-            scale: scale,
-            child: _glassBody(wiggle, sheen),
-          ),
+          child: Transform.scale(scale: scale, child: child),
         );
       },
+      child: RepaintBoundary(child: _glassShell()),
     );
   }
 
-  Widget _glassBody(double iconTilt, double sheen) {
+  Widget _glassShell() {
     final w = AiBubble.width;
     final h = AiBubble.height;
     final radius = BorderRadius.all(Radius.elliptical(w / 2, h / 2));
@@ -236,84 +251,93 @@ class _AiBubbleState extends State<AiBubble>
           ),
       child: ClipRRect(
         borderRadius: radius,
-        child: BackdropFilter(
-          // frosted glass sungguhan — blur konten di belakang bubble.
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Box(
-            style: BoxStyler()
-                .alignment(Alignment.center)
-                .padding(
-                  EdgeInsetsGeometryMix.value(
-                    EdgeInsets.fromLTRB(iconShift, 0, iconShiftRight, 0),
-                  ),
-                )
-                .decoration(
-                  DecorationMix.value(
-                    BoxDecoration(
-                      borderRadius: radius,
-                      // blend gradient semi transparan di atas hasil blur.
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.white.withValues(alpha: 0.20),
-                          DompetBrand.goldLight.withValues(alpha: 0.14),
-                          DompetBrand.purple.withValues(alpha: 0.16),
-                          DompetBrand.blackBg.withValues(alpha: 0.34),
-                        ],
-                        stops: const [0.0, 0.42, 0.72, 1.0],
-                      ),
-                    ),
-                  ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // base section — pengganti backdrop blur: pekat hangat supaya
+            // teks/konten di belakang tidak terbaca menembus elips, tanpa
+            // biaya gaussian per frame.
+            const ColoredBox(color: Color(0xE614110C)),
+            // tint section — blend gradient semi transparan di atas base.
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.white.withValues(alpha: 0.22),
+                    DompetBrand.goldLight.withValues(alpha: 0.20),
+                    DompetBrand.purple.withValues(alpha: 0.24),
+                    DompetBrand.blackBg.withValues(alpha: 0.20),
+                  ],
+                  stops: const [0.0, 0.42, 0.72, 1.0],
                 ),
-            child: Stack(
-              children: [
-                // sheen section — kilau menyapu melintasi permukaan
-                Positioned.fill(
-                  child: Transform.translate(
+              ),
+            ),
+            // sheen section — kilau menyapu melintasi permukaan. Hanya
+            // `Transform` yang berubah tiap tick; gradient-nya dicache.
+            Positioned.fill(
+              child: AnimatedBuilder(
+                animation: _fx,
+                builder: (_, child) {
+                  final sheen = ((_fx.value * 1.6) % 1.0) * 2 - 1;
+                  return Transform.translate(
                     offset: Offset(sheen * w, 0),
-                    child: IgnorePointer(
-                      child: Box(
-                        style: BoxStyler().decoration(
-                          DecorationMix.value(
-                            BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.white.withValues(alpha: 0.28),
-                                  Colors.transparent,
-                                ],
-                                stops: const [0.35, 0.5, 0.65],
-                              ),
-                            ),
+                    child: child,
+                  );
+                },
+                child: IgnorePointer(
+                  child: Box(
+                    style: BoxStyler().decoration(
+                      DecorationMix.value(
+                        const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.transparent,
+                              Color(0x47FFFFFF),
+                              Colors.transparent,
+                            ],
+                            stops: [0.35, 0.5, 0.65],
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                // icon section — robot lucu menoleh kiri-kanan
-                Center(
-                  child: Transform.rotate(
-                    angle: iconTilt,
-                    child: Icon(
-                      Icons.smart_toy_rounded,
-                      size: 26,
-                      color: DompetBrand.goldLight,
-                      shadows: [
-                        Shadow(
-                          color: DompetBrand.primary.withValues(alpha: 0.8),
-                          blurRadius: 12,
-                        ),
-                      ],
-                    ),
+              ),
+            ),
+            // icon section — robot lucu menoleh kiri-kanan
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: iconShift,
+                  right: iconShiftRight,
+                ),
+                child: AnimatedBuilder(
+                  animation: _fx,
+                  builder: (_, child) {
+                    final wiggle =
+                        0.14 * math.sin((_fx.value % 0.5) * 4 * math.pi);
+                    return Transform.rotate(angle: wiggle, child: child);
+                  },
+                  child: Icon(
+                    Icons.smart_toy_rounded,
+                    size: 26,
+                    color: DompetBrand.goldLight,
+                    shadows: [
+                      Shadow(
+                        color: DompetBrand.primary.withValues(alpha: 0.8),
+                        blurRadius: 12,
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

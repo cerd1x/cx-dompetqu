@@ -113,7 +113,7 @@ class DompetBrand {
     border: BorderMix.all(BorderSideMix(color: csBorder, width: 1)),
     boxShadow: [
       BoxShadowMix(
-        blurRadius: 30,
+        blurRadius: 14,
         color: csShadow,
         offset: const Offset(0, 4),
         spreadRadius: 0,
@@ -129,7 +129,7 @@ class DompetBrand {
         border: BorderMix.all(BorderSideMix(color: csBorder, width: 1)),
         boxShadow: [
           BoxShadowMix(
-            blurRadius: 30,
+            blurRadius: 14,
             color: csShadow,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -145,7 +145,7 @@ class DompetBrand {
         border: BorderMix.all(BorderSideMix(color: csBorder, width: 1)),
         boxShadow: [
           BoxShadowMix(
-            blurRadius: 30,
+            blurRadius: 14,
             color: csShadow,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -161,7 +161,7 @@ class DompetBrand {
         border: BorderMix.all(BorderSideMix(color: csBorder, width: 1)),
         boxShadow: [
           BoxShadowMix(
-            blurRadius: 30,
+            blurRadius: 14,
             color: csShadow,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -176,7 +176,7 @@ class DompetBrand {
     border: BorderMix.all(BorderSideMix(color: csBorder, width: 1)),
     boxShadow: [
       BoxShadowMix(
-        blurRadius: 30,
+        blurRadius: 14,
         color: csShadow,
         offset: const Offset(0, 4),
         spreadRadius: 0,

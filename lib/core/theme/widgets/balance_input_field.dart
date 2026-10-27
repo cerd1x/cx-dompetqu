@@ -288,7 +288,7 @@ class _BalanceInputFieldState extends State<BalanceInputField> {
       shadow: const [
         BoxShadow(
           color: DompetBrand.csShadowDark,
-          blurRadius: 30,
+          blurRadius: 14,
           offset: Offset(0, 4),
         ),
       ],
@@ -408,7 +408,7 @@ class _BalanceInputFieldState extends State<BalanceInputField> {
               : const BoxShadow(
                   color: DompetBrand
                       .csShadow, // shadow-[0_4px_30px_rgba(0,0,0,0.1)]
-                  blurRadius: 30,
+                  blurRadius: 14,
                   offset: Offset(0, 4),
                 ),
         ],

@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
@@ -103,51 +101,51 @@ class _CsTopBarDragHandle extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(20),
               ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                child: Box(
-                  style: BoxStyler().decoration(
-                    DecorationMix.value(
-                      BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            DompetBrand.gold.withValues(alpha: 0.4),
-                            Colors.purple.shade900.withValues(alpha: 0.4),
-                            Colors.black.withValues(alpha: 0.4),
-                            DompetBrand.pink.withValues(alpha: 0.4),
-                          ],
-                        ),
-                        borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(20),
-                        ),
-                        border: Border(
-                          bottom: BorderSide(
-                            color: DompetBrand.csBorder,
-                            width: 1,
-                          ),
-                          left: BorderSide(
-                            color: DompetBrand.csBorder,
-                            width: 1,
-                          ),
-                          right: BorderSide(
-                            color: DompetBrand.csBorder,
-                            width: 1,
-                          ),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0x99000000),
-                            blurRadius: 24,
-                            offset: const Offset(0, 10),
-                          ),
+              child: Box(
+                style: BoxStyler().decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      // Warna sudah di-precomposite di atas latar gelap
+                      // (brand 40% + background gelap), jadi panel tetap
+                      // terbaca sebagai kaca berwarna tanpa `BackdropFilter`.
+                      // Blur backdrop di sheet ini ikut di-render ulang tiap
+                      // frame selama animasi slide; tiga nilai pertama adalah
+                      // hasil komposisi 0.4 * brand + 0.6 * #0A0A0A.
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF5A472F),
+                          Color(0xFF24113F),
+                          Colors.black,
+                          Color(0xFF65455B),
                         ],
                       ),
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(20),
+                      ),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: DompetBrand.csBorder,
+                          width: 1,
+                        ),
+                        left: BorderSide(color: DompetBrand.csBorder, width: 1),
+                        right: BorderSide(
+                          color: DompetBrand.csBorder,
+                          width: 1,
+                        ),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0x99000000),
+                          blurRadius: 14,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
                   ),
-                  child: content,
                 ),
+                child: content,
               ),
             ),
           ),

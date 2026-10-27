@@ -227,42 +227,42 @@ class _DebtTabState extends ConsumerState<DebtTab> {
       );
     }
 
-    final children = <Widget>[];
+    final entries = <_DebtEntry>[];
     for (final group in groups) {
-      children
-        ..add(
-          OrderGroupHeader(
-            title: names[group.customerId] ?? 'Unknown contact',
-            subtitle:
-                '${group.debts.length} debts · '
-                '${group.settledCount} settled',
-            trailing: _filter == _DebtFilter.outstanding
-                ? _SettleAllButton(
-                    busy: group.debts.any((d) => _busy.contains(d.tx.id)),
-                    onPressed: () => _settleAll(group, names),
-                  )
-                : null,
-          ),
-        )
-        ..addAll([
-          for (final debt in group.debts)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _DebtRow(
-                debt: debt,
-                busy: _busy.contains(debt.tx.id),
-                onSettle: () => _settle(debt, names[group.customerId]),
-                onReopen: () => ref
-                    .read(debtSettlementsProvider.notifier)
-                    .revert(debt.tx.id),
-              ),
-            ),
-        ]);
+      entries
+        ..add(_DebtHeaderEntry(group))
+        ..addAll(group.debts.map((debt) => _DebtRowEntry(group, debt)));
     }
 
-    return ListView(
+    return ListView.builder(
       padding: const EdgeInsets.only(bottom: 24),
-      children: children,
+      itemCount: entries.length,
+      itemBuilder: (context, i) => switch (entries[i]) {
+        _DebtHeaderEntry(:final group) => OrderGroupHeader(
+          title: names[group.customerId] ?? 'Unknown contact',
+          subtitle:
+              '${group.debts.length} debts · '
+              '${group.settledCount} settled',
+          trailing: _filter == _DebtFilter.outstanding
+              ? _SettleAllButton(
+                  busy: group.debts.any((d) => _busy.contains(d.tx.id)),
+                  onPressed: () => _settleAll(group, names),
+                )
+              : null,
+        ),
+        _DebtRowEntry(:final group, :final debt) => RepaintBoundary(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _DebtRow(
+              debt: debt,
+              busy: _busy.contains(debt.tx.id),
+              onSettle: () => _settle(debt, names[group.customerId]),
+              onReopen: () =>
+                  ref.read(debtSettlementsProvider.notifier).revert(debt.tx.id),
+            ),
+          ),
+        ),
+      },
     );
   }
 
@@ -562,4 +562,22 @@ class _SettleAllButton extends StatelessWidget {
       height: 30,
     );
   }
+}
+
+/// Satu entri datar di daftar utang: header grup pelanggan atau baris utang.
+sealed class _DebtEntry {
+  const _DebtEntry();
+}
+
+class _DebtHeaderEntry extends _DebtEntry {
+  const _DebtHeaderEntry(this.group);
+
+  final _DebtGroup group;
+}
+
+class _DebtRowEntry extends _DebtEntry {
+  const _DebtRowEntry(this.group, this.debt);
+
+  final _DebtGroup group;
+  final _Debt debt;
 }

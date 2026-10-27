@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui' show ImageFilter;
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:flutter/material.dart';
@@ -89,65 +88,62 @@ class _CSNavBarState extends State<CSNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    // Tanpa `BackdropFilter`: bar ini selalu menempel di atas konten yang
+    // scroll, jadi blur akan dieksekusi ulang tiap frame. Alpha gradient
+    // dinaikkan supaya konten di belakang tidak terbaca menembus bar.
     return ClipRRect(
       borderRadius: BorderRadius.circular(_kBarRadius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Box(
-          style: BoxStyler()
-              .padding(
-                EdgeInsetsGeometryMix.value(
-                  const EdgeInsets.fromLTRB(14, _kBarPadding, 14, _kBarPadding),
-                ),
-              )
-              .constraints(
-                BoxConstraintsMix.value(
-                  (const BoxConstraints()).tighten(
-                    width: null,
-                    height: _kBarHeight,
-                  ),
-                ),
-              )
-              .decoration(
-                DecorationMix.value(
-                  BoxDecoration(
-                    borderRadius: BorderRadius.circular(_kBarRadius),
-                    gradient: const LinearGradient(
-                      colors: [Color(0x99CC5500), Color(0x40000000)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    border: Border.all(
-                      color: const Color(0xCC8B5CF6),
-                      width: 1,
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x99000000),
-                        blurRadius: 24,
-                        offset: Offset(0, 10),
-                      ),
-                      BoxShadow(
-                        color: Color(0x408B5CF6),
-                        blurRadius: 28,
-                        spreadRadius: -6,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
+      child: Box(
+        style: BoxStyler()
+            .padding(
+              EdgeInsetsGeometryMix.value(
+                const EdgeInsets.fromLTRB(14, _kBarPadding, 14, _kBarPadding),
+              ),
+            )
+            .constraints(
+              BoxConstraintsMix.value(
+                (const BoxConstraints()).tighten(
+                  width: null,
+                  height: _kBarHeight,
                 ),
               ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Row(
-                spacing: _kSpacing,
-                children: [
-                  for (int i = 0; i < widget.navs.length; i++)
-                    _buildItem(i, constraints),
-                ],
-              );
-            },
-          ),
+            )
+            .decoration(
+              DecorationMix.value(
+                BoxDecoration(
+                  borderRadius: BorderRadius.circular(_kBarRadius),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xF2CC5500), Color(0xF2000000)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  border: Border.all(color: const Color(0xCC8B5CF6), width: 1),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x99000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 10),
+                    ),
+                    BoxShadow(
+                      color: Color(0x408B5CF6),
+                      blurRadius: 28,
+                      spreadRadius: -6,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              spacing: _kSpacing,
+              children: [
+                for (int i = 0; i < widget.navs.length; i++)
+                  _buildItem(i, constraints),
+              ],
+            );
+          },
         ),
       ),
     );

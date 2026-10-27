@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
-import '../cs_mix.dart';
 import '../dompet_brand.dart';
 
 enum DompetCardVariant { solid, glass, csGlassCard, csGlassSurface }
 
 /// Kartu glassmorphism — padanan `card-sf` / `bg-white/4` di web.
+///
+/// Varian `glass`/`csGlassCard`/`csGlassSurface` mengandalkan fill translusen
+/// + border tipis, **bukan** `BackdropFilter`. Blur backdrop sengaja tidak
+/// dipakai di sini: kartu berada di dalam konten yang scroll, jadi blur akan
+/// dieksekusi ulang tiap frame tanpa terlihat bedanya di atas latar gradient.
+/// Butuh blur sungguhan? Bungkus sendiri dengan `CsFrost(blur: 12)`.
 class DompetCard extends StatelessWidget {
   const DompetCard({
     super.key,
@@ -48,34 +53,11 @@ class DompetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = RemixCard(style: _style, child: child);
-
-    Widget result = switch (variant) {
-      DompetCardVariant.solid => card,
-      DompetCardVariant.glass => CsFrost(
-        radius: radius,
-        shadow: const [
-          BoxShadow(
-            color: Color(0x4D000000),
-            blurRadius: 0,
-            offset: Offset(0, 8),
-          ),
-        ],
-        child: card,
-      ),
-      DompetCardVariant.csGlassCard ||
-      DompetCardVariant.csGlassSurface => CsFrost(
-        radius: radius,
-        shadow: const [
-          BoxShadow(
-            color: DompetBrand.csShadow,
-            blurRadius: 30,
-            offset: Offset(0, 4),
-          ),
-        ],
-        child: card,
-      ),
-    };
+    // Setiap varian sudah membawa fill + border + shadow di decoration-nya
+    // sendiri. Wrapper `CsFrost` dulu menambahkan shadow kedua yang identik
+    // dan — karena memakai `ClipRRect` — memotong shadow milik decoration
+    // (shadow digambar di luar bounds). Jadi kartu dikembalikan apa adanya.
+    final Widget result = RemixCard(style: _style, child: child);
 
     if (onTap == null) return result;
     return GestureDetector(onTap: onTap, child: result);

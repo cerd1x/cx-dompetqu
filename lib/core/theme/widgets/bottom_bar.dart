@@ -6,14 +6,19 @@ import 'package:remix/remix.dart';
 import '../cs_mix.dart';
 
 /// Bottom bar sticky di halaman tab (Contacts/Inventory/Assets).
+///
+/// [blur] default 0 dan [opacity] default 1: bar ini menempel di atas list
+/// yang scroll, sementara gradient-nya sudah nyaris opak
+/// (`gradientDarkWithAlpha`). Backdrop blur di sini hanya membakar frame tanpa
+/// perubahan visual berarti. Isi [blur] > 0 kalau memang butuh efek kaca.
 class TabBottomBar extends StatelessWidget {
   const TabBottomBar({
     super.key,
     required this.child,
     this.paddingX = 16,
     this.paddingY = 6,
-    this.blur = 12,
-    this.opacity = .7,
+    this.blur = 0,
+    this.opacity = 1,
   });
 
   final Widget child;

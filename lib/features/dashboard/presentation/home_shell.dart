@@ -25,6 +25,11 @@ class HomeShell extends ConsumerStatefulWidget {
 class _HomeShellState extends ConsumerState<HomeShell> {
   int _index = 0;
 
+  /// Tab yang sudah pernah dibuka. Tab lain dibiarkan belum dibangun supaya
+  /// frame pertama tidak perlu me-layout lima layar sekaligus (`IndexedStack`
+  /// tetap menyimpan state tab yang sudah pernah dibuka).
+  final Set<int> _visited = {0};
+
   @override
   void initState() {
     super.initState();
@@ -93,7 +98,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                 children: [
                   // pages section
                   Expanded(
-                    child: IndexedStack(index: _index, children: _pages),
+                    child: IndexedStack(
+                      index: _index,
+                      children: [
+                        for (var i = 0; i < _pages.length; i++)
+                          if (_visited.contains(i))
+                            _pages[i]
+                          else
+                            const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                   // nav bar section
                   Padding(
@@ -107,7 +121,10 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                       child: CSNavBar(
                         stateActive: _index,
                         navs: _tabs,
-                        onPressed: (i) => setState(() => _index = i),
+                        onPressed: (i) => setState(() {
+                          _index = i;
+                          _visited.add(i);
+                        }),
                       ),
                     ),
                   ),

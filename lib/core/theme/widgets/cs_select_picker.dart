@@ -174,7 +174,7 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
       shadow: const [
         BoxShadow(
           color: DompetBrand.csShadowDark,
-          blurRadius: 30,
+          blurRadius: 14,
           offset: Offset(0, 4),
         ),
       ],

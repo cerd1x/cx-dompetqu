@@ -96,8 +96,7 @@ class OrderRemoteSource implements OrderDataSource {
         {
           'productId': productId,
           'itemCount': itemCount,
-          'totalAmount': totalAmount.toDouble(),
-          'currency': currency,
+          'price': _priceWire(currency, totalAmount, itemCount),
           'paymentMethod': ?paymentMethod,
           'customerId': ?customerId,
           'description': ?description,
@@ -150,19 +149,23 @@ class OrderRemoteSource implements OrderDataSource {
     String? payWithAssetId,
     String? payToAssetId,
   }) async {
+    // Input server hanya punya `payWithAssetId` — `payToAssetId` (nama lama)
+    // dipetakan dulu sebagai fallback sebelum dikirim.
+    final effectivePayWithAssetId =
+        (payWithAssetId != null && payWithAssetId.isNotEmpty)
+        ? payWithAssetId
+        : ((payToAssetId != null && payToAssetId.isNotEmpty) ? payToAssetId : null);
     final result = await _client.mutate(
       MutationOptions(
         document: gql(_expenseMutation),
         variables: {
           'input': {
-            'totalAmount': totalAmount.toDouble(),
-            'currency': currency,
+            'price': _priceWire(currency, totalAmount, itemCount),
             'itemCount': itemCount,
             'description': ?description,
             'paymentMethod': ?paymentMethod,
             'customerId': ?customerId,
-            'payWithAssetId': ?payWithAssetId,
-            'payToAssetId': ?payToAssetId,
+            'payWithAssetId': ?effectivePayWithAssetId,
           },
         },
       ),
@@ -190,8 +193,7 @@ class OrderRemoteSource implements OrderDataSource {
         document: gql(_loanMutation),
         variables: {
           'input': {
-            'totalAmount': totalAmount.toDouble(),
-            'currency': currency,
+            'price': _priceWire(currency, totalAmount, itemCount),
             'itemCount': itemCount,
             'paymentMethod': ?paymentMethod,
             'customerId': ?customerId,
@@ -219,6 +221,16 @@ class OrderRemoteSource implements OrderDataSource {
     }
     return result.data?[key] != null;
   }
+}
+
+/// Bentuk nilai wire scalar `Money` server (`"KODE NOMINAL"`, mis. `"IDR 15000"`).
+///
+/// `CreateOrder*Input.price` adalah harga PER ITEM — server menghitung ulang
+/// total = `price × itemCount` (usecase `create_order_*`) — jadi nominal yang
+/// dikirim adalah total dibagi `itemCount`.
+String _priceWire(String currency, num totalAmount, int itemCount) {
+  final unitPrice = itemCount > 0 ? totalAmount / itemCount : totalAmount;
+  return '${currency.toUpperCase()} $unitPrice';
 }
 
 final orderRemoteSourceProvider = Provider<OrderRemoteSource>(

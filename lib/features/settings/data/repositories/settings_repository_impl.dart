@@ -17,10 +17,20 @@ class SettingsRepositoryImpl implements SettingsRepository {
       await _local.readString(kCurrencyPrefsKey) ?? 'IDR';
 
   @override
+  Future<bool> loadShowFps() async =>
+      // Default ON: key belum pernah ditulis (null) dianggap tampil,
+      // sesuai permintaan indikator FPS tampil terus-menerus.
+      (await _local.readString(kShowFpsPrefsKey)) != 'off';
+
+  @override
   Future<void> saveDarkMode(bool value) =>
       _local.writeString(kThemePrefsKey, value ? 'dark' : 'light');
 
   @override
   Future<void> saveCurrency(String code) =>
       _local.writeString(kCurrencyPrefsKey, code);
+
+  @override
+  Future<void> saveShowFps(bool value) =>
+      _local.writeString(kShowFpsPrefsKey, value ? 'on' : 'off');
 }

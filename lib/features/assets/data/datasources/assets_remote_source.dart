@@ -36,13 +36,13 @@ class AssetsRemoteSource implements AssetsDataSource {
   ''';
 
   static const _addBalanceMutation = r'''
-    mutation AddBalance($assetId: ID!, $amount: String!) {
+    mutation AddBalance($assetId: ID!, $amount: Money!) {
       addBalance(assetId: $assetId, amount: $amount) { id name type balance }
     }
   ''';
 
   static const _swapBalanceMutation = r'''
-    mutation SwapBalance($fromAssetId: ID!, $toAssetId: ID!, $amount: String!) {
+    mutation SwapBalance($fromAssetId: ID!, $toAssetId: ID!, $amount: Money!) {
       swapBalance(fromAssetId: $fromAssetId, toAssetId: $toAssetId, amount: $amount) {
         from { id name type balance }
         to { id name type balance }

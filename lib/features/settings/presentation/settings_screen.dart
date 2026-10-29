@@ -13,6 +13,7 @@ import 'passkey_settings_section.dart';
 import 'row_currency_picker_view.dart';
 import 'row_notifications_view.dart';
 import '../stores/settings_store.dart';
+import '../stores/fps_indicator_store.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';
@@ -25,6 +26,8 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings =
         ref.watch(settingsStoreProvider).value ?? const AppSettings();
+    // Toggle tampil/sembunyi overlay FPS (persist ke prefs). Default ON.
+    final showFps = ref.watch(fpsIndicatorStoreProvider).value ?? true;
 
     return Scaffold(
       body: Box(
@@ -66,6 +69,18 @@ class SettingsScreen extends ConsumerWidget {
                           onChanged: (v) => ref
                               .read(settingsStoreProvider.notifier)
                               .setDarkMode(v),
+                          activeThumbColor: DompetBrand.purple,
+                        ),
+                      ),
+                      // fps indicator section — overlay debug framerate
+                      _SettingsRow(
+                        icon: Icons.speed_outlined,
+                        label: 'Indikator FPS',
+                        trailing: Switch(
+                          value: showFps,
+                          onChanged: (v) => ref
+                              .read(fpsIndicatorStoreProvider.notifier)
+                              .setVisible(v),
                           activeThumbColor: DompetBrand.purple,
                         ),
                       ),

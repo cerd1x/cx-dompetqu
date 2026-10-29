@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'core/diagnostics/fps_indicator.dart';
 import 'core/logger/app_logger.dart';
 import 'core/logger/log_config.dart';
 import 'core/network/cookie_aware_client.dart';
@@ -30,6 +31,7 @@ import 'features/order/presentation/order_tab.dart';
 import 'features/app_lock/stores/app_lock_store.dart';
 import 'features/app_lock/presentation/app_lock_screen.dart';
 import 'features/settings/stores/settings_store.dart';
+import 'features/settings/stores/fps_indicator_store.dart';
 import 'features/settings/presentation/appearance_screen.dart';
 import 'features/settings/presentation/profile_screen.dart';
 import 'features/settings/presentation/settings_screen.dart';
@@ -71,6 +73,8 @@ class DompetQuApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final settings = ref.watch(settingsStoreProvider).value;
     final darkMode = settings?.darkMode ?? true;
+    // Toggle tampil/sembunyi overlay FPS (persist ke prefs). Default ON.
+    final showFps = ref.watch(fpsIndicatorStoreProvider).value ?? true;
     final uiStyle =
         ref.watch(uiStyleControllerProvider).value ?? const UiStyle();
     return MaterialApp.router(
@@ -81,6 +85,16 @@ class DompetQuApp extends ConsumerWidget {
       ),
       routerConfig: router,
       debugShowCheckedModeBanner: false,
+      // Overlay FPS dipasang di sini (bukan di `main()`) supaya berada di
+      // dalam `MediaQuery`/`Directionality` milik `MaterialApp` dan tetap
+      // terlihat di semua route, termasuk `/auth` dan `/app-lock`.
+      // Visibilitas dikontrol runtime lewat toggle di Settings
+      // (`fpsIndicatorStoreProvider`), jadi overlay ini juga bisa tampil di
+      // build release; saat toggle mati widget hanya meneruskan `child`.
+      builder: (context, child) => FpsIndicator(
+        visible: showFps,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }

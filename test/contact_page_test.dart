@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
+import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
+import 'package:dompetqu/features/auth/stores/session_store.dart';
 import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
 import 'package:dompetqu/features/contacts/data/models/contact.dart';
@@ -110,6 +113,15 @@ ContactPage _page(
     hasPreviousPage: false,
     startCursor: nodes.isEmpty ? null : 'cur-${nodes.first.id}',
     endCursor: nodes.isEmpty ? null : (endCursor ?? 'cur-${nodes.last.id}'),
+  ),
+);
+
+/// Sesi authenticated palsu — `ContactsStore.build()` hanya auto-load setelah
+/// login; override ini sekaligus mencegah `restore()` menyentuh jaringan.
+Override _authenticatedSession() => sessionStoreProvider.overrideWithValue(
+  const SessionState(
+    status: AuthStatus.authenticated,
+    user: AuthUser(id: 'u1', name: 'Test', username: 'test'),
   ),
 );
 
@@ -269,7 +281,10 @@ void main() {
       FakePagedContactsSource source,
     ) async {
       final container = ProviderContainer(
-        overrides: [contactsRemoteSourceProvider.overrideWithValue(source)],
+        overrides: [
+          contactsRemoteSourceProvider.overrideWithValue(source),
+          _authenticatedSession(),
+        ],
       );
       addTearDown(container.dispose);
       // `build()` menunda `load()` ke microtask — biarkan selesai dulu agar

@@ -53,6 +53,10 @@ class SessionStore extends _$SessionStore {
     state = const SessionState(status: AuthStatus.unknown);
     try {
       final user = await ref.read(authUseCasesProvider).restoreSession();
+      // Container bisa di-dispose saat request restore masih berjalan (hot
+      // restart atau test yang menutup `ProviderContainer`). Menulis `state`
+      // setelah itu hanya melempar `UnmountedRefException`.
+      if (!ref.mounted) return;
       if (user == null) {
         _log.debug('Sesi tidak terotorisasi', tag: 'Session');
         state = const SessionState(status: AuthStatus.unauthenticated);
@@ -61,12 +65,14 @@ class SessionStore extends _$SessionStore {
       _log.debug('Sesi direstore: ${user.username}', tag: 'Session');
       state = SessionState(status: AuthStatus.authenticated, user: user);
     } on AuthFailure catch (e) {
+      if (!ref.mounted) return;
       _log.warn('Restore sesi gagal: ${e.message}', tag: 'Session');
       state = SessionState(
         status: AuthStatus.unauthenticated,
         error: e.message,
       );
     } catch (e) {
+      if (!ref.mounted) return;
       _log.error('Restore sesi error tak terduga', tag: 'Session', error: e);
       state = const SessionState(status: AuthStatus.unauthenticated);
     }

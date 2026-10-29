@@ -33,6 +33,15 @@ class CookieAwareClient extends http.BaseClient {
   final Map<String, String> _cookies = {};
   final AppLogger _log = AppLogger.instance;
 
+  /// Refresh yang sedang berjalan — mendedupe pemanggilan `send()` yang
+  /// terjadi bersamaan saat expiry terdeteksi.
+  Future<bool>? _refreshInFlight;
+
+  /// Nilai `__sst__` yang sudah dicoba di-refresh tapi gagal. Dicegah dicoba
+  /// ulang pada request berikutnya supaya tidak membanjiri server; di-reset
+  /// saat token baru masuk (`setToken`) atau refresh sukses.
+  String? _refreshFailedFor;
+
   /// Mengembalikan salinan cookie yang tersimpan (untuk persistence/debug).
   Map<String, String> get cookies => Map.unmodifiable(_cookies);
 
@@ -70,6 +79,8 @@ class CookieAwareClient extends http.BaseClient {
   /// Menyimpan session token ke cookie `__sst__` (persist ke disk).
   Future<void> setToken(String? value) async {
     _setCookie(sessionCookieName, value);
+    // Token baru layak dicoba refresh lagi bila nanti kedaluwarsa.
+    _refreshFailedFor = null;
     await _persist();
   }
 
@@ -108,10 +119,27 @@ class CookieAwareClient extends http.BaseClient {
   /// perlu GraphQL client — token baru di-capture dari Set-Cookie.
   ///
   /// Mengembalikan `true` bila `__sst__` kini valid.
-  Future<bool> refreshSession() async {
-    if (isSessionValid) return true;
+  ///
+  /// Dipublikasikan seperti semula; pemanggilan yang datang saat refresh
+  /// berjalan menunggu refresh yang sama (dedupe).
+  Future<bool> refreshSession() {
+    final inFlight = _refreshInFlight;
+    if (inFlight != null) return inFlight;
+    final future = _refreshSession();
+    _refreshInFlight = future;
+    return future.whenComplete(() {
+      if (identical(_refreshInFlight, future)) _refreshInFlight = null;
+    });
+  }
+
+  Future<bool> _refreshSession() async {
+    if (isSessionValid) {
+      _markRefreshResult(true);
+      return true;
+    }
     if (refreshToken == null || refreshToken!.isEmpty) {
       _log.warn('Refresh gagal: tidak ada __rft__', tag: 'CookieClient');
+      _markRefreshResult(false);
       return false;
     }
     _log.debug('Session usang — refresh memakai __rft__', tag: 'CookieClient');
@@ -135,11 +163,21 @@ class CookieAwareClient extends http.BaseClient {
         'Refresh session: ${ok ? 'OK' : 'gagal'}',
         tag: 'CookieClient',
       );
+      _markRefreshResult(ok);
       return ok;
     } catch (e) {
+      // Kegagalan transport (jaringan/server down) bersifat sesaat: TIDAK
+      // ditandai sebagai throttled supaya request berikutnya mencoba refresh
+      // lagi. Throttle hanya untuk hasil "resmi" (token/refresh ditolak).
       _log.warn('Refresh session gagal: $e', tag: 'CookieClient');
       return false;
     }
+  }
+
+  /// Catat hasil refresh untuk [send] — sukses me-reset throttle, gagal
+  /// menandai token yang sudah dicoba supaya tidak di-refresh ulang tiap request.
+  void _markRefreshResult(bool ok) {
+    _refreshFailedFor = ok ? null : _cookies[sessionCookieName];
   }
 
   Future<void> _persist() async {
@@ -161,12 +199,27 @@ class CookieAwareClient extends http.BaseClient {
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    // Rotasi `__sst__` yang sudah lewat expiry lokal SEBELUM request utama.
+    // Tanpa ini token expired dikirim apa adanya → backend melempar
+    // "Missing or expired token" padahal `__rft__` masih berlaku, dan sesi
+    // tetap dianggap authenticated sehingga error tampil terus (refresh
+    // sebelumnya hanya berjalan sekali saat restore awal).
+    final sessionSebelum = _cookies[sessionCookieName];
+    if (sessionSebelum != null &&
+        sessionSebelum.isNotEmpty &&
+        !isSessionValid &&
+        (refreshToken?.isNotEmpty ?? false) &&
+        _refreshFailedFor != sessionSebelum) {
+      await refreshSession();
+    }
     if (_cookies.isNotEmpty) {
       request.headers.putIfAbsent(
         'cookie',
         () => _cookies.entries.map((e) => '${e.key}=${e.value}').join('; '),
       );
     }
+    // Dibaca ulang setelah potensi rotasi di atas — `Bearer` harus memakai
+    // token terbaru, bukan yang sudah kedaluwarsa.
     final session = _cookies[sessionCookieName];
     if (session != null) {
       request.headers.putIfAbsent('authorization', () => 'Bearer $session');
@@ -216,7 +269,18 @@ class CookieAwareClient extends http.BaseClient {
         final key = cookie.substring(0, eq).trim();
         final val = cookie.substring(eq + 1).trim();
         if (val.isEmpty) {
-          _cookies.remove(key);
+          // Abaikan penghapusan cookie sesi oleh Set-Cookie kosong.
+          // Backend mengirim `__sst__=; Max-Age=0` pada SEMUA kegagalan
+          // `authorize()` (termasuk gangguan sesaat, lihat blok catch di
+          // `createContext` cx-services/shared/infra/graphql/yoga-context.ts).
+          // Menghapus cookie di sini memutus jalur refresh: rotasi `__sst__`
+          // di backend justru membutuhkan cookie usang tersebut dikirim ulang,
+          // sehingga satu kegagalan sesaat memaksa login manual. Sign-out
+          // eksplisit tetap aman — `AuthRepositoryImpl.signOut()` membersihkan
+          // cookie secara lokal lewat `clear()`.
+          if (key != sessionCookieName && key != refreshCookieName) {
+            _cookies.remove(key);
+          }
         } else {
           _cookies[key] = val;
         }

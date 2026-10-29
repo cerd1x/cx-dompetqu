@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/logger/app_logger.dart';
 import '../domain/entities/asset.dart';
+import '../../auth/stores/session_store.dart';
 import '../../dashboard/stores/home_repository_provider.dart';
 import '../../transactions/stores/transactions_store.dart';
 
@@ -49,7 +50,15 @@ class AssetsStore extends _$AssetsStore {
   AssetsState build() {
     // Defer ke microtask: membaca `state` di dalam `build()` (riverpod 3)
     // melempar "uninitialized provider" karena state belum di-commit.
-    Future.microtask(load);
+    // Auto-load hanya setelah sesi terautentikasi — query tanpa cookie
+    // `__sst__` membuat backend melempar "Missing or expired token" dan
+    // error basi ini menempel di state (keepAlive). Reload setelah sign-in
+    // ditangani `bootstrapDompetData` dari `HomeShell`.
+    Future.microtask(() {
+      if (ref.mounted && ref.read(sessionStoreProvider).isAuthenticated) {
+        load();
+      }
+    });
     return const AssetsState();
   }
 

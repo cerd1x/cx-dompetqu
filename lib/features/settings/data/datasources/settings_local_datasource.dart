@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const String kThemePrefsKey = 'theme';
 const String kCurrencyPrefsKey = 'currency';
+const String kShowFpsPrefsKey = 'show_fps';
 
 abstract interface class SettingsLocalDataSource {
   Future<String?> readString(String key);

@@ -41,7 +41,7 @@ final class StatisticsStoreProvider
   }
 }
 
-String _$statisticsStoreHash() => r'abe7101aea717f80ffcc67ec8ba236a4259cd095';
+String _$statisticsStoreHash() => r'346c71c9ed507a83c8a266c3b618c93361593c7b';
 
 abstract class _$StatisticsStore extends $Notifier<StatisticsState> {
   StatisticsState build();

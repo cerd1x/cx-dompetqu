@@ -73,7 +73,12 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       }
     });
 
-    if (session.status == AuthStatus.unknown) {
+    // Blokir sampai sesi benar-benar terautentikasi. Saat `unauthenticated`,
+    // `IndexedStack` tetap membangun tab yang sudah dikunjungi → store
+    // keepAlive di dalamnya auto-load tanpa cookie `__sst__` dan backend
+    // melempar "Missing or expired token" (error basi yang menempel di state
+    // sampai login berikutnya). Router tetap mengarahkan ke `/auth`.
+    if (session.status != AuthStatus.authenticated) {
       // loading section
       return const Scaffold(
         body: Center(

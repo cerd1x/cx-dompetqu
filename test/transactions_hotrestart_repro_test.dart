@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
+import 'package:dompetqu/features/auth/stores/session_store.dart';
 import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
 import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
@@ -12,6 +15,16 @@ Transaction _tx() => Transaction(
   amount: 'IDR 10000',
   category: 'Gaji',
   createdAt: DateTime(2026, 1, 1),
+);
+
+/// Sesi authenticated palsu — `build()` store hanya auto-load setelah login,
+/// jadi test perlu meng-override state sesi agar tidak memicu restore ke
+/// server sungguhan dan tetap menguji auto-load.
+Override _authenticatedSession() => sessionStoreProvider.overrideWithValue(
+  const SessionState(
+    status: AuthStatus.authenticated,
+    user: AuthUser(id: 'u1', name: 'Test', username: 'test'),
+  ),
 );
 
 class FakeTransactionsRepository implements HomeRepository {
@@ -36,7 +49,10 @@ void main() {
   test('cold start: provider load memuat data', () async {
     final repository = FakeTransactionsRepository();
     final container = ProviderContainer.test(
-      overrides: [homeRepositoryProvider.overrideWithValue(repository)],
+      overrides: [
+        homeRepositoryProvider.overrideWithValue(repository),
+        _authenticatedSession(),
+      ],
     );
 
     container.listen(transactionsStoreProvider, (_, _) {});
@@ -52,7 +68,10 @@ void main() {
   test('hot-restart-like: container kedua juga harus load', () async {
     final repositoryA = FakeTransactionsRepository();
     final containerA = ProviderContainer.test(
-      overrides: [homeRepositoryProvider.overrideWithValue(repositoryA)],
+      overrides: [
+        homeRepositoryProvider.overrideWithValue(repositoryA),
+        _authenticatedSession(),
+      ],
     );
     containerA.listen(transactionsStoreProvider, (_, _) {});
     await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -62,7 +81,10 @@ void main() {
     // Simulasi hot restart: fresh container baru (state Dart di-reset).
     final repositoryB = FakeTransactionsRepository();
     final containerB = ProviderContainer.test(
-      overrides: [homeRepositoryProvider.overrideWithValue(repositoryB)],
+      overrides: [
+        homeRepositoryProvider.overrideWithValue(repositoryB),
+        _authenticatedSession(),
+      ],
     );
     containerB.listen(transactionsStoreProvider, (_, _) {});
     await Future<void>.delayed(const Duration(milliseconds: 300));
@@ -80,7 +102,10 @@ void main() {
         error: StateError('GraphQL query failed'),
       );
       final container = ProviderContainer.test(
-        overrides: [homeRepositoryProvider.overrideWithValue(repository)],
+        overrides: [
+          homeRepositoryProvider.overrideWithValue(repository),
+          _authenticatedSession(),
+        ],
       );
 
       container.listen(transactionsStoreProvider, (_, _) {});

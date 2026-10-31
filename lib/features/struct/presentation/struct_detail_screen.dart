@@ -288,8 +288,14 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ok = status.toLowerCase() == 'success';
-    final color = ok ? const Color(0xFF34D399) : const Color(0xFFFBBF24);
+    // Tiga nada status transaksi (`TransactionStatus` di backend):
+    // `success` hijau, `failed` merah, `pending` dan lainnya kuning.
+    final normalized = status.toLowerCase();
+    final color = switch (normalized) {
+      'success' => const Color(0xFF34D399),
+      'failed' => const Color(0xFFF87171),
+      _ => const Color(0xFFFBBF24),
+    };
     return Box(
       style: BoxStyler()
           .padding(

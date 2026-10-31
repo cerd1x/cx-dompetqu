@@ -15,13 +15,14 @@ import 'OrderFormWidgets.dart';
 import 'OrderTabWidgets.dart';
 
 /// Filter tipe transaksi pada buku besar.
-enum _LedgerFilter { all, income, expense, transfer }
+enum _LedgerFilter { all, income, expense, transfer, failed }
 
 String _filterLabel(_LedgerFilter f) => switch (f) {
   _LedgerFilter.all => 'All',
   _LedgerFilter.income => 'Income',
   _LedgerFilter.expense => 'Expense',
   _LedgerFilter.transfer => 'Transfer',
+  _LedgerFilter.failed => 'Failed',
 };
 
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
@@ -83,6 +84,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
       }
       return switch (_filter) {
         _LedgerFilter.all => true,
+        _LedgerFilter.failed => tx.paymentStatus.toLowerCase() == 'failed',
         _ => tx.type == _filter.name,
       };
     }).toList();
@@ -151,6 +153,30 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
 
   /// Ringkasan pemasukan, pengeluaran, dan selisihnya untuk bulan aktif.
   Widget _buildSummary(List<Transaction> items, String currency) {
+    if (_filter == _LedgerFilter.failed) {
+      return Row(
+        children: [
+          Expanded(
+            child: OrderStatTile(
+              label: 'Failed Transactions',
+              value: items.length.toString(),
+              color: const Color(0xFFF87171),
+              icon: Icons.error_outline_rounded,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: OrderStatTile(
+              label: 'Retry Available',
+              value: 'Long-press row',
+              color: const Color(0xFFFBBF24),
+              icon: Icons.refresh_rounded,
+            ),
+          ),
+        ],
+      );
+    }
+
     var income = 0.0;
     var expense = 0.0;
     for (final tx in items) {
@@ -216,12 +242,18 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   Widget _buildLedger(List<Transaction> items, bool loading) {
     if (loading) return const SkeletonList(count: 4);
     if (items.isEmpty) {
+      if (_filter == _LedgerFilter.failed) {
+        return EmptyState(
+          icon: Icons.error_outline_rounded,
+          label: 'No failed transactions\nLong-press a row to retry payment status update',
+        );
+      }
       return EmptyState(
         icon: Icons.menu_book_outlined,
         label: _filter == _LedgerFilter.all
             ? 'No transactions in ${DateFormat('MMMM yyyy').format(_month)}'
             : 'No ${_filter.name} transactions in '
-                  '${DateFormat('MMMM yyyy').format(_month)}',
+                '${DateFormat('MMMM yyyy').format(_month)}',
       );
     }
 
@@ -289,12 +321,13 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   /// Menu aksi baris ledger: ubah status pembayaran transaksi.
   ///
   /// Dibuka lewat long-press (mobile) atau double-tap (desktop).
-  /// `unpaid` → "Mark as paid", `paid` → "Mark as unpaid" — padanan
-  /// `paymentStatus` (`TransactionPaymentStatus`) di backend.
+  /// `unpaid` → "Mark as paid", `paid` → "Mark as unpaid", `failed` → toggle ke `paid`/`unpaid`.
+  /// Selalu bisa diretry: row tidak disabled setelah gagal.
   Future<void> _showLedgerActions(
     BuildContext rowContext,
     Transaction tx,
   ) async {
+    final isFailed = tx.paymentStatus == 'failed';
     final isPaid = tx.paymentStatus == 'paid';
     final selected = await showMenu<bool>(
       context: context,
@@ -308,17 +341,23 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                isPaid
-                    ? Icons.undo_rounded
-                    : Icons.check_circle_outline_rounded,
+                isFailed
+                    ? Icons.refresh_rounded
+                    : (isPaid
+                        ? Icons.undo_rounded
+                        : Icons.check_circle_outline_rounded),
                 size: 18,
-                color: isPaid
+                color: isFailed
                     ? const Color(0xFFFBBF24)
-                    : const Color(0xFF34D399),
+                    : (isPaid
+                        ? const Color(0xFFFBBF24)
+                        : const Color(0xFF34D399)),
               ),
               const SizedBox(width: 10),
               Text(
-                isPaid ? 'Mark as unpaid' : 'Mark as paid',
+                isFailed
+                    ? 'Retry payment status'
+                    : (isPaid ? 'Mark as unpaid' : 'Mark as paid'),
                 style: const TextStyle(fontSize: 13),
               ),
             ],
@@ -328,7 +367,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     );
     if (selected != true || !mounted) return;
 
-    final nextStatus = isPaid ? 'unpaid' : 'paid';
+    final nextStatus = isFailed ? 'unpaid' : (isPaid ? 'unpaid' : 'paid');
     // Controller melakukan update optimistis; pill status berubah lebih dulu
     // lalu dikembalikan bila mutation ke backend gagal.
     final ok = await ref
@@ -336,7 +375,11 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         .updatePaymentStatus(tx, paymentStatus: nextStatus);
     if (!mounted) return;
     final message = ok
-        ? (isPaid ? 'Marked as unpaid' : 'Marked as paid')
+        ? (isFailed
+            ? nextStatus == 'paid'
+                ? 'Marked as paid'
+                : 'Marked as unpaid'
+                : (isPaid ? 'Marked as unpaid' : 'Marked as paid'))
         : 'Failed to update payment status';
     _toast(message);
   }
@@ -462,7 +505,7 @@ class _LedgerRow extends StatelessWidget {
                   children: [
                     // Status pembayaran transaksi — padanan `paymentStatus`
                     // (`TransactionPaymentStatus`) dari backend.
-                    _PaymentStatusPill(paid: tx.paymentStatus == 'paid'),
+                    _PaymentStatusPill(status: tx.paymentStatus),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
@@ -524,16 +567,22 @@ class _LedgerRow extends StatelessWidget {
 }
 
 /// Pill status pembayaran transaksi — padanan `paymentStatus` di
-/// `services/domain/transactions` (`paid`/`unpaid`). Mengikuti pola
-/// `_StatusPill` pada `struct_detail_screen.dart`.
+/// `services/domain/transactions`. Saat ini enum backend hanya `paid`/`unpaid`,
+/// tapi pill menerima string apa pun secara defensif: `paid` hijau, `failed`
+/// merah, selain itu (termasuk `unpaid`) kuning. Mengikuti pola `_StatusPill`
+/// pada `struct_detail_screen.dart`.
 class _PaymentStatusPill extends StatelessWidget {
-  const _PaymentStatusPill({required this.paid});
+  const _PaymentStatusPill({required this.status});
 
-  final bool paid;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
-    final color = paid ? const Color(0xFF34D399) : const Color(0xFFFBBF24);
+    final color = switch (status.toLowerCase()) {
+      'paid' => const Color(0xFF34D399),
+      'failed' => const Color(0xFFF87171),
+      _ => const Color(0xFFFBBF24),
+    };
     return Box(
       style: BoxStyler()
           .padding(
@@ -554,7 +603,7 @@ class _PaymentStatusPill extends StatelessWidget {
             ),
           ),
       child: Text(
-        paid ? 'PAID' : 'UNPAID',
+        status.toUpperCase(),
         style: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w700,

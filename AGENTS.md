@@ -434,6 +434,8 @@ symlink ke `.claude/skills/`). Baca sebelum mengubah area terkait:
   https://github.com/Ethiel97/flutter-clean-riverpod-skills. Gunakan Riverpod
   sebagai pengganti BLoC karena stack aplikasi ini memakai Riverpod 3 codegen;
   aturan dan pola khusus proyek di dokumen ini tetap menjadi acuan utama.
+- `code_style.md` — panduan lengkap gaya penulisan code, critical rules R1–R27,
+  dan konvensi Riverpod 2025. Lihat `docs-dev/code_style.md` untuk detail.
 
 ## Arsitektur Hexagonal
 

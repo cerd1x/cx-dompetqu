@@ -5,8 +5,24 @@ mengubah kode. Detail tambahan ada di `.agents/skills/` (lihat bagian "Skill").
 
 ## Ringkasan Proyek
 
-Aplikasi dompet (finansial) — port dari modul `/dompet` SvelteKit ke Flutter.
-Desktop (Linux/Windows/macOS) & mobile memakai Riverpod + go_router yang sama.
+Aplikasi dompet (finansial) — aplikasi Flutter untuk desktop (Linux/Windows/macOS) & mobile memakai Riverpod + go_router.
+
+Aplikasi ini adalah sistem manajemen keuangan pribadi / bisnis kecil yang memungkinkan
+pengguna mencatat, melacak, dan mengelola transaksi keuangan (pemasukan, pengeluaran,
+transfer, hutang, dan piutang) secara terstruktur. Fitur utama meliputi:
+
+- **Auth & App Lock** — autentikasi pengguna dan kunci aplikasi berbasis PIN/biometrik.
+- **Order & Bookkeeping** — pembuatan transaksi penjualan, pengeluaran, pinjaman, dan
+  pembayaran hutang; buku besar (ledger) dengan status pembayaran (`paid`/`unpaid`/`failed`)
+  dan opsi retry manual melalui long-press/double-tap pada baris transaksi.
+- **Dashboard & Statistik** — ringkasan bulanan pemasukan, pengeluaran, dan keuntungan
+  dengan daftar transaksi terbaru.
+- **Asset & Detail Transaksi** — tampilan detail aset dan riwayat transaksi per item.
+- **Analytics & Charts** — visualisasi data keuangan (UI-only fitur tambahan).
+- **Admin Panel & Kill Switch** — kontrol kill switch REST (`x-admin-token`) untuk
+  admin, dapat mematikan/mengaktifkan operasi root GraphQL saat darurat.
+- **Gen AI** — fitur AI generatif untuk asisten keuangan (Genkit Dart SDK 1.0).
+- **Beta Report** — fitur pelaporan versi beta (UI-only).
 
 Topologi backend (tanpa deploy, hanya HTTP/GraphQL):
 

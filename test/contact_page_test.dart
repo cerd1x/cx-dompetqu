@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
-import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
-import 'package:dompetqu/features/auth/stores/session_store.dart';
-import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
-import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
-import 'package:dompetqu/features/contacts/data/models/contact.dart';
-import 'package:dompetqu/features/contacts/data/models/contact_page.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:dompetqu/features/contacts/adapters/datasources/contacts_remote_source.dart';
+import 'package:dompetqu/features/contacts/adapters/models/contact.dart';
+import 'package:dompetqu/features/contacts/adapters/models/contact_page.dart';
 
 /// Response `contactConnection` sesuai bentuk di `contact.gql`.
 Map<String, dynamic> _connection({

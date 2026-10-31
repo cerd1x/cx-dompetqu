@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:dompetqu/features/auth/domain/entities/auth_user.dart';
-import 'package:dompetqu/features/auth/stores/session_store.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
-import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
+import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
 

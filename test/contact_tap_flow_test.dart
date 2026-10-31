@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/features/contacts/presentation/contacts_screen.dart';
-import 'package:dompetqu/features/contacts/presentation/contact_detail_screen.dart';
-import 'package:dompetqu/features/dashboard/stores/home_repository_provider.dart';
-import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
-import 'package:dompetqu/features/contacts/domain/entities/contact_page.dart';
+import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
+import 'package:dompetqu/features/contacts/view/screens/contact_detail_screen.dart';
+import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
+import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:dompetqu/features/contacts/domain/models/contact_page.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 

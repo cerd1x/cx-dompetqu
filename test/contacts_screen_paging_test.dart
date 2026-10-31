@@ -4,11 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 
 import 'package:dompetqu/core/theme/app_theme.dart';
-import 'package:dompetqu/features/contacts/stores/contacts_store.dart';
-import 'package:dompetqu/features/contacts/presentation/contacts_screen.dart';
-import 'package:dompetqu/features/contacts/data/datasources/contacts_remote_source.dart';
-import 'package:dompetqu/features/contacts/data/models/contact.dart';
-import 'package:dompetqu/features/contacts/data/models/contact_page.dart';
+import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
+import 'package:dompetqu/features/contacts/adapters/datasources/contacts_remote_source.dart';
+import 'package:dompetqu/features/contacts/adapters/models/contact.dart';
+import 'package:dompetqu/features/contacts/adapters/models/contact_page.dart';
 
 /// Sumber dengan dua halaman: halaman 1 (ada berikutnya) dan halaman 2 (habis).
 class TwoPageSource extends ContactsRemoteSource {

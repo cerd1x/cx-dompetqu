@@ -1,18 +1,18 @@
 // ignore_for_file: file_names
-import 'package:dompetqu/features/assets/presentation/asset_picker_field.dart';
-import 'package:dompetqu/features/contacts/presentation/customer_picker_field.dart';
+import 'package:dompetqu/features/assets/view/widgets/asset_picker_field.dart';
+import 'package:dompetqu/features/contacts/view/widgets/customer_picker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/logger/app_logger.dart';
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_button.dart';
-import '../../../core/theme/widgets/dompet_text_field.dart';
-import '../../inventory/stores/inventory_store.dart';
-import '../../transactions/stores/transactions_store.dart';
-import '../stores/order_repository_provider.dart';
-import '../../inventory/domain/entities/product.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/features/inventory/stores/inventory_store.dart';
+import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/order/stores/order_repository_provider.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
 import 'OrderFormWidgets.dart';
 
 /// Form Sale — padanan `FormSale.svelte`.

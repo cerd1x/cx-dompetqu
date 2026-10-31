@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import '../../utils/formatters.dart';
-import '../cs_mix.dart';
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/core/theme/cs_mix.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Mata uang untuk picker — padanan `currencies` di `setting_store.svelte`.
 class BalanceCurrency {

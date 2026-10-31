@@ -3,17 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/cs_dialog.dart';
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../auth/stores/session_store.dart';
-import '../../app_lock/presentation/app_lock_setup_screen.dart';
-import '../domain/entities/app_settings.dart';
+import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/features/app_lock/view/screens/app_lock_setup_screen.dart';
+import 'package:dompetqu/features/settings/domain/entities/app_settings.dart';
 import 'passkey_settings_section.dart';
 import 'row_currency_picker_view.dart';
 import 'row_notifications_view.dart';
-import '../stores/settings_store.dart';
-import '../stores/fps_indicator_store.dart';
+import 'package:dompetqu/features/settings/stores/settings_store.dart';
+import 'package:dompetqu/features/settings/stores/fps_indicator_store.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';

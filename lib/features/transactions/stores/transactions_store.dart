@@ -1,10 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/logger/app_logger.dart';
-import '../domain/entities/transaction.dart';
-import '../../auth/stores/session_store.dart';
-import '../../dashboard/stores/home_repository_provider.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 
 part 'generated/transactions_store.freezed.dart';
 part 'generated/transactions_store.g.dart';

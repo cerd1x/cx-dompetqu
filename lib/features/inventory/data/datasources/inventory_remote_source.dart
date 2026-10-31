@@ -1,10 +1,10 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/graphql/graphql_providers.dart';
-import '../../../dashboard/data/datasources/home_datasources.dart';
-import '../models/product.dart';
-import '../../../../core/graphql/gql_result.dart';
+import 'package:dompetqu/core/graphql/graphql_providers.dart';
+import 'package:dompetqu/features/dashboard/adapters/datasources/home_datasources.dart';
+import 'package:dompetqu/features/inventory/data/models/product.dart';
+import 'package:dompetqu/core/graphql/gql_result.dart';
 
 part 'generated/inventory_remote_source.g.dart';
 

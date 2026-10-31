@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../domain/entities/app_settings.dart';
+import 'package:dompetqu/features/settings/domain/entities/app_settings.dart';
 import 'settings_repository_provider.dart';
 part 'generated/settings_store.g.dart';
 

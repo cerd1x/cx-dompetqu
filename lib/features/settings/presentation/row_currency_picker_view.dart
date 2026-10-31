@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/balance_input_field.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../stores/settings_store.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/balance_input_field.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/features/settings/stores/settings_store.dart';
 
 /// Seksi mata uang dengan dropdown expandable — padanan web.
 class CurrencyPickerSection extends ConsumerStatefulWidget {

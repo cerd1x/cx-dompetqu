@@ -1,5 +1,5 @@
-import '../entities/auth_passkey_credential.dart';
-import '../entities/auth_user.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_passkey_credential.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
 
 abstract interface class AuthRepository {
   Future<AuthUser?> restoreSession();

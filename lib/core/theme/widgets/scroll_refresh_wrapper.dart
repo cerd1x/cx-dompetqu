@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mix/mix.dart';
 
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Cara memicu refresh pada [ScrollRefreshWrapper].
 enum ScrollRefreshMode {

@@ -4,17 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/cs_dialog.dart';
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_button.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../../core/utils/balance.dart';
-import '../../../core/utils/formatters.dart';
-import '../../contacts/stores/contacts_store.dart';
-import '../../transactions/stores/transactions_store.dart';
-import '../stores/order_repository_provider.dart';
-import '../../transactions/domain/entities/transaction.dart';
-import '../../../core/theme/widgets/data_states.dart';
+import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/order/stores/order_repository_provider.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'OrderTabWidgets.dart';
 import 'debt_settlements.dart';
 

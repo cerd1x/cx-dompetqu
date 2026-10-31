@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../../core/utils/balance.dart';
-import '../../transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 
 /// Layar detail struktur transaksi + fitur ekspor ke PNG/img.
 ///

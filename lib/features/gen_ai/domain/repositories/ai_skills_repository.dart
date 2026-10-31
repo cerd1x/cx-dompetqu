@@ -1,5 +1,5 @@
-import '../entities/ai_skill.dart';
-import '../entities/skill_store_entry.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_skill.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/skill_store_entry.dart';
 
 abstract interface class AiSkillsRepository {
   Future<List<AiSkill>> loadAll();

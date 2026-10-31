@@ -1,6 +1,6 @@
-import '../entities/auth_passkey_credential.dart';
-import '../entities/auth_user.dart';
-import '../repositories/auth_repository.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_passkey_credential.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
+import 'package:dompetqu/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthUseCases {
   const AuthUseCases(this._repository);

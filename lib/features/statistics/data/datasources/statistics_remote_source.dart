@@ -1,10 +1,10 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/graphql/graphql_providers.dart';
-import '../../../dashboard/data/datasources/home_datasources.dart';
-import '../models/statistics.dart';
-import '../../../../core/graphql/gql_result.dart';
+import 'package:dompetqu/core/graphql/graphql_providers.dart';
+import 'package:dompetqu/features/dashboard/adapters/datasources/home_datasources.dart';
+import 'package:dompetqu/features/statistics/data/models/statistics.dart';
+import 'package:dompetqu/core/graphql/gql_result.dart';
 
 part 'generated/statistics_remote_source.g.dart';
 

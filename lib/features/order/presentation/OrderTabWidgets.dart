@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_badge.dart';
-import '../../../core/utils/balance.dart';
-import '../../transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 
 /// Warna/label/ikon transaksi per tipe — dipakai bersama tab Bookkeeping & Debt.
 typedef TxTone = ({Color color, String sign, String label, IconData icon});

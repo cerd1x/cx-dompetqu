@@ -35,6 +35,268 @@ Backend kontrak hidup di repo sibling `../cx-services` (Elysia + GraphQL Yoga +
 Drizzle pada Cloudflare D1). Verifikasi endpoint/tipe ke `cx-services/*.md`,
 `app.ts`, dan `domain/*/adapters/driving/graphql/*.gql` bila ragu.
 
+## Arsitektur Aplikasi
+
+Aplikasi ini menggunakan **Hexagonal Architecture** (Ports & Adapters) dengan pendekatan **Feature-First** yang dipadukan dengan Riverpod 3 untuk state management. Arsitektur ini memisahkan kode menjadi layer yang jelas untuk memudahkan pengembangan, testing, dan pemeliharaan.
+
+### Prinsip Arsitektur
+
+Aplikasi mengikuti pola **Presentation → Stores → Domain → Data**:
+
+1. **Presentation Layer** (UI) — Screens dan widgets yang mengonsumsi state dari stores
+2. **Stores Layer** (State Management) — Riverpod providers yang mengkomposisi repository dan memaparkan state ke UI
+3. **Domain Layer** (Business Logic) — Entitas dan kontrak repository (interface), tanpa ketergantungan external
+4. **Data Layer** (Implementation) — Implementasi repository, datasource, SDK, network, dan storage
+
+**Catatan Penting**: AI agent **WAJIB** mengecek dan memperbarui AGENTS.md setiap kali ada perubahan infrastructure (struktur folder, naming convention, arsitektur layer) agar dokumentasi selalu sinkron dengan kondisi aktual aplikasi.
+
+### Struktur Folder Per Fitur (Target)
+
+Struktur folder standar yang digunakan untuk fitur-fitur yang telah bermigrasi ke pola baru:
+
+```
+<fitur>/
+├── domain/
+│   ├── models/                # Domain entities (contoh: Freezed immutable state)
+│   ├── repositories/          # Repository interfaces (kontrak, abstract interface class)
+│   └── usecases/              # Business use cases
+├── adapters/                  # Data layer (implementasi konkret)
+│   ├── datasources/           # Remote/local datasources
+│   ├── models/                # Data models (JSON/GraphQL models)
+│   ├── mappers/               # JSON/GraphQL → Entity converters
+│   ├── repositories/          # Repository implementations (*Impl)
+│   └── generated/             # Generated files (Freezed/json_serializable)
+└── view/                      # UI layer
+    ├── screens/                # Screens
+    ├── widgets/                # Widget komponen
+    └── stores/                 # Riverpod stores (@Riverpod providers)
+```
+
+Status migrasi struktur per fitur:
+
+| Fitur        | Struktur                                          | Keterangan                                       |
+| ------------ | ------------------------------------------------- | ------------------------------------------------ |
+| admin_pannel | domain/adapters/view                              | Sudah migrasi                                    |
+| app_lock     | domain/adapters/view                              | Sudah migrasi                                    |
+| assets       | domain/adapters/view                              | Sudah migrasi                                    |
+| analytics    | domain/adapters                                   | UI-only, belum lengkap                           |
+| auth         | domain/adapters/view + legacy stores/             | Sudah migrasi, tersisa legacy `stores/` di root  |
+| beta_report  | view (screens)                                    | UI-only, belum lengkap                           |
+| charts       | view (screens)                                    | UI-only, belum lengkap                           |
+| contacts     | domain/adapters/view                              | Sudah migrasi                                    |
+| dashboard    | domain/adapters/view                              | Sudah migrasi                                    |
+| gen_ai       | domain/adapters/view + legacy presentation/stores | Sedang migrasi                                   |
+| inventory    | domain/data/presentation                          | Belum migrasi (gunakan `data/`, `presentation/`) |
+| order        | domain/data/presentation                          | Belum migrasi                                    |
+| portfolio    | domain/data/presentation                          | Belum migrasi                                    |
+| settings     | domain/data/presentation                          | Belum migrasi                                    |
+| statistics   | domain/data/presentation                          | Belum migrasi                                    |
+| struct       | domain/data/presentation                          | Belum migrasi                                    |
+| transactions | domain/data/presentation                          | Belum migrasi                                    |
+
+Features `analytics`, `beta_report`, dan `charts` adalah UI-only, hanya memiliki layer presentation tanpa repository/domain boilerplate.
+
+### Teknologi Utama
+
+- **Framework**: Flutter (desktop & mobile)
+- **State Management**: Riverpod 3 dengan codegen (`@Riverpod`, `@riverpod`)
+- **Routing**: go_router dengan `appRouterProvider`
+- **State Models**: Freezed 4 untuk immutable state dengan `@Default`
+- **Serialization**: json_serializable untuk JSON/GraphQL models
+- **Networking**: GraphQL (manual string queries) + HTTP untuk REST endpoints
+- **Session Management**: Cookie-based dengan `CookieAwareClient`
+- **Theme**: Custom design system dengan paket `mix` untuk styling
+
+## Struktur Folder
+
+```
+lib/
+├── main.dart                          # Entry point aplikasi, inisialisasi router
+│
+├── core/                              # Layer core yang digunakan seluruh fitur
+│   ├── config/                        # Konfigurasi aplikasi
+│   │   └── api_config.dart           # baseUrl, graphqlEndpoint, killswitchEndpoint
+│   │
+│   ├── graphql/                       # GraphQL client & utilities
+│   │   ├── graphql_providers.dart    # GraphQLClient tunggal (HttpLink + cookie client)
+│   │   └── generated/                 # Generated Riverpod providers
+│   │
+│   ├── logger/                        # Logging system
+│   │   ├── app_logger.dart           # Singleton logger
+│   │   ├── log_level.dart            # Definisi level log
+│   │   ├── log_record.dart           # Model log record
+│   │   └── log_config.dart           # Konfigurasi logger
+│   │
+│   ├── network/                       # Network layer
+│   │   ├── cookie_aware_client.dart  # HTTP client dengan cookie management
+│   │   └── generated/                 # Generated Freezed models
+│   │
+│   ├── theme/                         # Design system & styling
+│   │   ├── app_theme.dart            # Theme configuration
+│   │   ├── ui_style.dart             # Sumber kebenaran look & feel
+│   │   ├── ui_style_controller.dart  # Riverpod controller untuk UiStyle
+│   │   ├── dompet_brand.dart         # Brand colors & constants
+│   │   ├── cs_mix.dart               # Konfigurasi paket mix
+│   │   ├── cs_dialog.dart            # Dialog utilities
+│   │   └── widgets/                  # Reusable brand widgets
+│   │       ├── dompet_button.dart
+│   │       ├── dompet_card.dart
+│   │       ├── dompet_text_field.dart
+│   │       ├── dompet_avatar.dart
+│   │       ├── dompet_badge.dart
+│   │       ├── dompet_combobox.dart
+│   │       ├── dompet_gradient_background.dart
+│   │       ├── balance_input_field.dart
+│   │       ├── pin_input.dart
+│   │       ├── biometric_button.dart
+│   │       ├── cs_glass.dart
+│   │       ├── cs_dialog.dart
+│   │       ├── cs_nav_bar.dart
+│   │       ├── scroll_refresh_wrapper.dart
+│   │       ├── round_action_button.dart
+│   │       ├── item_menu.dart
+│   │       ├── data_states.dart
+│   │       └── placeholders.dart
+│   │
+│   ├── utils/                         # Utility functions
+│   │   ├── balance.dart              # Format & hitung balance
+│   │   └── formatters.dart           # Format tanggal, angka, dll.
+│   │
+│   └── diagnostics/                   # Development tools
+│       └── fps_indicator.dart        # FPS monitoring (dev only)
+│
+└── features/                          # Feature-based modules
+    │
+    ├── auth/                          # Fitur autentikasi
+    │   ├── domain/                    # Business logic & entities
+    │   │   ├── entities/              # Domain entities (pure Dart)
+    │   │   │   └── generated/         # Freezed generated files
+    │   │   ├── failures/              # Error definitions
+    │   │   ├── repositories/         # Repository interfaces (contracts)
+    │   │   └── usecases/              # Business use cases
+    │   │
+    │   ├── data/                      # Data layer implementation
+    │   │   ├── datasources/           # Remote/local data sources
+    │   │   ├── repositories/          # Repository implementations
+    │   │   ├── mappers/               # JSON/GraphQL → Entity converters
+    │   │   └── generated/             # Freezed/json_serializable generated
+    │   │
+    │   ├── stores/                    # Riverpod state management
+    │   │   ├── *_store.dart           # Store dengan @Riverpod
+    │   │   ├── *_repository_provider.dart # DI untuk repository
+    │   │   └── generated/             # Riverpod codegen
+    │   │
+    │   ├── presentation/              # UI layer
+    │   │   ├── auth_screen.dart       # Screens
+    │   │   └── ...                    # Widgets komponen
+    │   │
+    │   └── models/                    # Legacy data models (sebagian)
+    │       └── generated/            # Generated files
+    │
+    ├── app_lock/                      # Fitur kunci aplikasi (PIN/biometrik)
+    │   ├── domain/
+    │   │   ├── entities/              # AppLockState entity
+    │   │   └── repositories/          # AppLockRepository interface
+    │   ├── data/
+    │   │   ├── datasources/           # Local & biometric datasources
+    │   │   ├── repositories/          # AppLockRepositoryImpl
+    │   │   └── generated/
+    │   ├── stores/                    # Riverpod stores
+    │   ├── presentation/              # Screens (AppLockScreen, SetupScreen)
+    │   └── models/                    # LockMethod enum
+    │
+    ├── admin_pannel/                  # Fitur admin panel (typo "panel")
+    │   ├── domain/
+    │   │   ├── entities/              # DisabledOperation entity
+    │   │   └── repositories/          # KillswitchRepository interface
+    │   ├── data/
+    │   │   ├── datasources/           # KillswitchRemoteSource (REST)
+    │   │   ├── repositories/          # KillswitchRepositoryImpl
+    │   │   ├── graphql_operations.dart # Daftar 74 operation root
+    │   │   └── generated/
+    │   ├── stores/                    # Riverpod stores
+    │   └── presentation/              # AdminScreen, KillswitchControllScreen
+    │
+    ├── assets/                        # Fitur manajemen aset (SUDAH MIGRASI KE STRUKTUR BARU)
+    │   ├── domain/
+    │   │   ├── models/                # Asset, AssetMutation entities (sebelumnya entities/)
+    │   │   ├── repositories/          # AssetRepository interface
+    │   │   └── usecases/              # Business use cases (kosong untuk sekarang)
+    │   ├── adapters/                  # Data layer (sebelumnya data/)
+    │   │   ├── datasources/           # AssetsRemoteSource (GraphQL)
+    │   │   ├── models/                # Asset, AssetMutation data models
+    │   │   ├── mappers/               # JSON/GraphQL → Entity converters
+    │   │   ├── repositories/          # Repository implementations
+    │   │   └── generated/             # Freezed/json_serializable generated
+    │   └── view/                      # UI layer (sebelumnya presentation/ + stores/)
+    │       ├── screens/                # AssetsScreen, AssetDetailScreen, dialogs
+    │       ├── widgets/                # Widget komponen (dialogs, forms, dll)
+    │       └── stores/                # Riverpod stores
+    │
+    ├── dashboard/                     # Fitur dashboard/statistik
+    │   ├── domain/
+    │   │   ├── repositories/          # HomeRepository (agregat port)
+    │   │   └── entities/              # Dashboard entities
+    │   ├── data/
+    │   │   └── repositories/          # HomeRepositoryImpl (komposisi fitur)
+    │   ├── stores/                    # Riverpod stores
+    │   └── presentation/              # Dashboard screen & widgets
+    │
+    ├── gen_ai/                        # Fitur AI generatif (Genkit Dart SDK 1.0)
+    │   ├── domain/
+    │   │   ├── entities/              # AI-related entities
+    │   │   └── repositories/          # AI repository interfaces
+    │   ├── data/
+    │   │   ├── repositories/          # AI repository implementations
+    │   │   └── generated/
+    │   ├── stores/                    # Riverpod stores
+    │   └── presentation/              # AI assistant screens
+    │
+    ├── order/                         # Fitur order & transaksi
+    │   ├── domain/
+    │   │   ├── entities/              # Order, Transaction entities
+    │   │   └── repositories/          # OrderRepository interface
+    │   ├── data/
+    │   │   ├── datasources/           # OrderRemoteSource (GraphQL)
+    │   │   ├── repositories/          # OrderRepositoryImpl
+    │   │   └── generated/
+    │   ├── stores/                    # Riverpod stores
+    │   └── presentation/              # Order screen & widgets
+    │
+    ├── settings/                      # Fitur pengaturan
+    │   ├── domain/
+    │   │   └── repositories/          # SettingsRepository interface
+    │   ├── data/
+    │   │   └── repositories/          # SettingsRepositoryImpl
+    │   ├── stores/                    # Riverpod stores
+    │   └── presentation/              # Settings screen
+    │
+    ├── analytics/                     # Fitur analytics (UI-only)
+    │   └── presentation/
+    │       ├── analytics_screen.dart
+    │       └── analytics_data.dart
+    │
+    ├── charts/                        # Fitur charts (UI-only)
+    │   └── presentation/              # Chart screens & widgets
+    │
+    └── beta_report/                   # Fitur beta report (UI-only)
+        └── presentation/              # Beta report screen
+```
+
+### Catatan Penting
+
+1. **Generated Files**: Setiap folder dengan nama `generated/` berisi file yang di-generate oleh `build_runner` (`.g.dart`, `.freezed.dart`). File ini **JANGAN diedit manual**.
+
+2. **Nama Folder yang "Salah"**: Beberapa nama folder dipertahankan karena sudah digunakan di routing:
+   - `admin_pannel` (typo "panel")
+   - `KillswitchControllScreen` (typo "Control")
+
+3. **UI-Only Features**: `beta_report` dan `charts` saat ini hanya memiliki layer presentation. Tidak perlu menambahkan repository/domain boilerplate sampai fitur ini memiliki logic business atau persistence sendiri.
+
+4. **Pola Komposit (Agregat)**: `HomeRepository` di `dashboard/domain/repositories/` adalah agregat port yang menggabungkan beberapa fitur terkait (assets, contacts, inventory, statistics, transactions). Ini sah untuk mengurangi coupling antar-fitur.
+
+5. **Status Migrasi Struktur**: Sebagian fitur sudah bermigrasi ke struktur baru (`domain/adapters/view`), sementara yang lain masih menggunakan struktur lama (`domain/data/presentation`). Lihat tabel status migrasi di atas untuk detail tiap fitur.
+
 ## Workflow Tim (Aturan Wajib)
 
 1. **Paparkan error/analisis dulu.** Saat diminta memperbaiki/mengubah kode,
@@ -55,6 +317,15 @@ Drizzle pada Cloudflare D1). Verifikasi endpoint/tipe ke `cx-services/*.md`,
    diedit manual; review diff-nya sebelum commit.
 7. **Jangan log data sensitif** (token, password, PIN, nomor kartu) ke
    `AppLogger` maupun ke source code.
+8. **Wajib perbarui AGENTS.md saat perubahan infrastructure.** Jika ada
+   perubahan struktur folder, naming convention, atau arsitektur aplikasi,
+   AI **WAJIB** mengecek dan memperbarui AGENTS.md agar selalu sinkron dengan
+   kondisi aktual infrastructure. Ini termasuk:
+   - Perubahan struktur folder fitur (domain/data/presentation → domain/adapters/view)
+   - Perubahan naming convention (entities → models, data → adapters, dll)
+   - Perubahan arsitektur layer
+   - Penambahan fitur baru dengan struktur berbeda
+   - Update contoh struktur folder di dokumen ini
 
 ## Command yang Digunakan
 
@@ -77,63 +348,6 @@ flutter run -d linux --dart-define=API_BASE_URL=http://localhost:8787
 ```
 
 Jangan hardcode secret; jangan cetak env sensitif.
-
-## Arsitektur Aplikasi
-
-```
-lib/
-├── main.dart                       # bootstrap + router (appRouterProvider, keepAlive)
-├── core/
-│   ├── config/        api_config.dart      # baseUrl, graphqlEndpoint, killswitchEndpoint
-│   ├── graphql/       graphql_providers.dart (+ main.g.dart)  # GraphQLClient tunggal
-│   ├── logger/        app_logger.dart, log_level.dart, log_record.dart
-│   ├── network/       cookie_aware_client.dart (+ .g.dart)     # sesi cookie __sst__/__rft__
-│   ├── theme/         app_theme.dart, ui_style.dart, dompet_brand.dart, widgets/
-│   └── utils/         balance.dart, formatters.dart
-└── features/
-    ├── auth/          domain/ data/ stores/ presentation/
-    ├── app_lock/      domain/ data/ stores/ presentation/
-    ├── admin_pannel/  domain/ data/ stores/ presentation/
-    ├── beta_report/, charts/                                    # UI-only
-    ├── gen_ai/        domain/ data/ repositories/ stores/ presentation/
-    └── home/          domain/ data/ stores/ + per-screen dirs
-```
-
-- **Feature architecture:** `presentation` (screens/widgets) → `stores`
-  (Riverpod stores/state) → `domain` (entities/repository contracts);
-  implementations and SDK/network/storage adapters live in `data`. Providers
-  that compose concrete data implementations are dependency-injection
-  boundaries, not a reason for stores or screens to call data sources.
-- **Domain types:** UI/store state uses entities from `domain/entities`.
-  JSON/GraphQL models remain data-only (legacy files under `models/` are still
-  data models until migrated with their generated parts); conversion belongs
-  in `data/mappers` and repositories. Never import those serialized models
-  from presentation or domain.
-- **Data access:** stores and screens call repository interfaces. GraphQL,
-  HTTP, platform SDKs, and `SharedPreferences` are behind data-source interfaces
-  and repository implementations. Preserve backend operations, routing, and
-  user-visible behavior when moving these boundaries.
-- **UI-only features:** `beta_report` and `charts` currently have no feature
-  data/business boundary; do not add repository/domain boilerplate until they
-  own feature logic or persistence.
-- **Routing:** `go_router` via `appRouterProvider` (`lib/main.dart`). Redirect
-  memakai `ref.read` (bukan `ref.watch`) + `ref.listen` untuk `router.refresh()`.
-  Route utama: `/auth`, `/`, `/app-lock`, `/admin`, `/admin/killswitch`,
-  `/settings*`, `/order`, `/asset-detail/:id`, `/analytics`, `/charts`, dll.
-- **State:** Riverpod 3 **codegen** (`@Riverpod(keepAlive: true)` /
-  `@riverpod`) + `part '<file>.g.dart'`. State & model memakai **Freezed 4**
-  (`@freezed abstract class ... with _$X`, `@Default(...)`) + `json_serializable`
-  (`part '<file>.freezed.dart'` + `.g.dart`).
-- **Data layer:** query/mutation GraphQL **ditulis manual** sebagai string `gql`
-  di `lib/features/*/data/*_remote_source.dart`. TIDAK ada GraphQL codegen.
-- **GraphQL client:** `graphQLClientProvider` (`lib/core/graphql/graphql_providers.dart`)
-  — HttpLink + cookie client, timeout 30s, parser error toleran.
-- **Sesi:** `CookieAwareClient` (`lib/core/network/cookie_aware_client.dart`)
-  mengelola cookie `__sst__`/`__rft__`, persist ke SharedPreferences;
-  `refreshSession()` memakai query `CheckAuthorized` via HTTP mentah.
-- **Kill switch (REST):** sengaja REST (bukan GraphQL) supaya tetap hidup saat
-  GraphQL bermasalah. Header `x-admin-token`. Lihat
-  `lib/features/admin_pannel/data/killswitch_remote_source.dart`.
 
 ## Konvensi Kode
 

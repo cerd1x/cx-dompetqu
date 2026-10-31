@@ -1,0 +1,146 @@
+import 'package:dompetqu/features/gen_ai/view/ai_bubble.dart';
+import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
+import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
+import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
+import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
+import 'package:dompetqu/features/dashboard/view/widgets/dashboard_screen.dart';
+import 'package:dompetqu/features/inventory/presentation/inventory_screen.dart';
+import 'package:dompetqu/features/order/presentation/order_screen.dart';
+import 'package:dompetqu/features/portfolio/presentation/portfolio_screen.dart';
+
+/// Shell utama — padanan `+layout.svelte` + tab NavigationBar di `/dompet`.
+class HomeShell extends ConsumerStatefulWidget {
+  const HomeShell({super.key});
+
+  @override
+  ConsumerState<HomeShell> createState() => _HomeShellState();
+}
+
+class _HomeShellState extends ConsumerState<HomeShell> {
+  int _index = 0;
+
+  /// Tab yang sudah pernah dibuka. Tab lain dibiarkan belum dibangun supaya
+  /// frame pertama tidak perlu me-layout lima layar sekaligus (`IndexedStack`
+  /// tetap menyimpan state tab yang sudah pernah dibuka).
+  final Set<int> _visited = {0};
+
+  @override
+  void initState() {
+    super.initState();
+    // Warm-up data setelah frame pertama supaya app terbuka tanpa hambatan.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref.read(sessionStoreProvider).isAuthenticated) {
+        bootstrapDompetData(ref);
+      }
+    });
+  }
+
+  static const _tabs = <NavItem>[
+    NavItem(icon: Icons.space_dashboard_outlined, name: 'Dashboard'),
+    NavItem(icon: Icons.inventory_2_outlined, name: 'Inventory'),
+    NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
+    NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
+    NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
+  ];
+
+  static final _pages = <Widget>[
+    const DashboardScreen(),
+    const InventoryScreen(),
+    const ContactsScreen(),
+    const OrderScreen(embedded: true),
+    const PortfolioScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final session = ref.watch(sessionStoreProvider);
+    final showAiBubble =
+        ref.watch(aiSettingsStoreProvider).value?.showAiBubble ?? true;
+
+    // Reset cache saat sign-out, warm-up ulang saat akun baru sign-in.
+    ref.listen(sessionStoreProvider, (prev, next) {
+      if (next.status == AuthStatus.unauthenticated) {
+        resetDompetData(ref);
+      } else if (next.status == AuthStatus.authenticated &&
+          prev?.status != AuthStatus.authenticated) {
+        bootstrapDompetData(ref);
+      }
+    });
+
+    // Blokir sampai sesi benar-benar terautentikasi. Saat `unauthenticated`,
+    // `IndexedStack` tetap membangun tab yang sudah dikunjungi → store
+    // keepAlive di dalamnya auto-load tanpa cookie `__sst__` dan backend
+    // melempar "Missing or expired token" (error basi yang menempel di state
+    // sampai login berikutnya). Router tetap mengarahkan ke `/auth`.
+    if (session.status != AuthStatus.authenticated) {
+      // loading section
+      return const Scaffold(
+        body: Center(
+          child: SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              color: DompetBrand.purple,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: SafeArea(
+        child: DompetGradientBackground(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  // pages section
+                  Expanded(
+                    child: IndexedStack(
+                      index: _index,
+                      children: [
+                        for (var i = 0; i < _pages.length; i++)
+                          if (_visited.contains(i))
+                            _pages[i]
+                          else
+                            const SizedBox.shrink(),
+                      ],
+                    ),
+                  ),
+                  // nav bar section
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      bottom: 14,
+                      top: 8,
+                    ),
+                    child: Center(
+                      child: CSNavBar(
+                        stateActive: _index,
+                        navs: _tabs,
+                        onPressed: (i) => setState(() {
+                          _index = i;
+                          _visited.add(i);
+                        }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // AI bubble section — bisa diseret ke mana saja di layar
+              if (showAiBubble) const AiBubble(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

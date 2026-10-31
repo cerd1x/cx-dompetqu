@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../config/openrouter_config.dart';
+import 'package:dompetqu/features/gen_ai/domain/config/openrouter_config.dart';
 
 part 'generated/ai_settings.freezed.dart';
 

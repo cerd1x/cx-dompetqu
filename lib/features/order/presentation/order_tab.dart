@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../inventory/domain/entities/product.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
 
 /// Tab layar order/transaksi — padanan tab di
 /// `_routes/dompet/create-transaction/+page.svelte`.

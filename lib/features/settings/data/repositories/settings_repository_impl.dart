@@ -1,5 +1,5 @@
-import '../../domain/repositories/settings_repository.dart';
-import '../datasources/settings_local_datasource.dart';
+import 'package:dompetqu/features/settings/domain/repositories/settings_repository.dart';
+import 'package:dompetqu/features/settings/data/datasources/settings_local_datasource.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
   const SettingsRepositoryImpl(this._local);

@@ -1,6 +1,6 @@
-import '../entities/ai_message.dart';
-import '../entities/ai_settings.dart';
-import '../entities/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/mcp_server.dart';
 
 abstract interface class AiChatRepository {
   Future<String> generateReply({

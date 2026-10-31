@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_gradient_background.dart';
-import '../../inventory/domain/entities/product.dart';
-import '../../../core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
+import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'BookkeepingTab.dart';
 import 'DebtTab.dart';
 import 'ExpenseForm.dart';

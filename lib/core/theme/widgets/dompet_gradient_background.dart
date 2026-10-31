@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Latar halaman: gradient ungu lembut di atas dasar gelap (mirip web).
 /// Memenuhi seluruh layar — elemen lain (mis. nav bar) ditumpuk di atasnya.

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mix/mix.dart';
 
-import '../cs_mix.dart';
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/cs_mix.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Generic item untuk [CSSelectPicker].
 class CSSelectItem<T> {

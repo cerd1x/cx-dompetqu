@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/ui_style.dart';
-import '../../../core/theme/ui_style_controller.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/ui_style.dart';
+import 'package:dompetqu/core/theme/ui_style_controller.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
 
 /// Palet preset untuk color picker — kombinasi gold/purple/pink & warna netral.
 const List<Color> kUiPalette = [

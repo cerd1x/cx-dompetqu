@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/logger/app_logger.dart';
-import '../domain/entities/statistics.dart';
-import '../../auth/stores/session_store.dart';
-import '../../dashboard/stores/home_repository_provider.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:dompetqu/features/statistics/domain/entities/statistics.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 
 part 'generated/statistics_store.g.dart';
 
@@ -72,10 +72,7 @@ class StatisticsStore extends _$StatisticsStore {
       final statistics = await ref.read(homeRepositoryProvider).statistics();
       if (!ref.mounted) return;
       state = state.copyWith(statistics: statistics, loading: false);
-      AppLogger.instance.success(
-        'statistics dimuat',
-        tag: 'StatisticsStore',
-      );
+      AppLogger.instance.success('statistics dimuat', tag: 'StatisticsStore');
     } catch (e) {
       if (!ref.mounted) return;
       AppLogger.instance.error(

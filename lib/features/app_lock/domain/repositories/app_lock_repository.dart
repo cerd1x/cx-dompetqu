@@ -1,4 +1,4 @@
-import '../entities/app_lock_state.dart';
+import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
 
 abstract interface class AppLockRepository {
   Future<void> ensureUsable();

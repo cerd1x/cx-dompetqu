@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../../core/utils/balance.dart';
-import '../domain/entities/payment_method_type.dart';
-import '../domain/entities/transaction.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/features/transactions/domain/entities/payment_method_type.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   const TransactionDetailScreen({super.key, required this.transaction});

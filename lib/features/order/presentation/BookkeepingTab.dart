@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../../core/utils/balance.dart';
-import '../../../core/utils/formatters.dart';
-import '../../transactions/stores/transactions_store.dart';
-import '../../transactions/domain/entities/transaction.dart';
-import '../../../core/theme/widgets/data_states.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'OrderFormWidgets.dart';
 import 'OrderTabWidgets.dart';
 
@@ -40,10 +40,8 @@ class BookkeepingTab extends ConsumerStatefulWidget {
 
 class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   /// Bulan pertama yang sedang dilihat (selalu tanggal 1).
-  late DateTime _month = _monthOf(DateTime.now());
+  late DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
   _LedgerFilter _filter = _LedgerFilter.all;
-
-  static DateTime _monthOf(DateTime d) => DateTime(d.year, d.month);
 
   @override
   void initState() {
@@ -144,7 +142,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         ),
         if (!_isCurrentMonth)
           TextButton(
-            onPressed: () => setState(() => _month = _monthOf(DateTime.now())),
+            onPressed: () => setState(() => _month = DateTime(DateTime.now().year, DateTime.now().month)),
             child: const Text('This month', style: TextStyle(fontSize: 12)),
           ),
       ],

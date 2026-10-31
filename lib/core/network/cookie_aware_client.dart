@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../config/api_config.dart';
-import '../logger/app_logger.dart';
+import 'package:dompetqu/core/config/api_config.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
 
 part 'generated/cookie_aware_client.g.dart';
 

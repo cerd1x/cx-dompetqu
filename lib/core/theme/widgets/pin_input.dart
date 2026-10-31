@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mix/mix.dart';
 
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Input numerik 6 digit untuk PIN lock screen.
 class PinInput extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'dompet_card.dart';
 
 /// Widget dasar untuk tab yang belum diimplementasikan.

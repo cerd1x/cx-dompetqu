@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../auth/stores/auth_providers.dart';
-import '../../auth/domain/entities/auth_passkey_credential.dart';
-import '../../auth/domain/failures/auth_failure.dart';
-import '../../auth/domain/usecases/auth_use_cases.dart';
-import '../../../core/theme/dompet_brand.dart';
+import 'package:dompetqu/features/auth/view/stores/auth_providers.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_passkey_credential.dart';
+import 'package:dompetqu/features/auth/domain/failures/auth_failure.dart';
+import 'package:dompetqu/features/auth/domain/usecases/auth_use_cases.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Bagian kelola passkey — padanan `PasskeySettings.svelte` di web.
 class PasskeySettingsSection extends ConsumerStatefulWidget {

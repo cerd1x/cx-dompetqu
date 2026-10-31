@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/logger/app_logger.dart';
-import '../domain/entities/product.dart';
-import '../../auth/stores/session_store.dart';
-import '../../dashboard/stores/home_repository_provider.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 
 part 'generated/inventory_store.g.dart';
 

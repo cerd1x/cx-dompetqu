@@ -1,0 +1,100 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_skill.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/skill_store_entry.dart';
+import 'package:dompetqu/features/gen_ai/domain/repositories/ai_skills_repository.dart';
+import 'package:dompetqu/features/gen_ai/repositories/ai_skills_repository.dart';
+
+part 'generated/ai_skills_store.g.dart';
+
+@Riverpod(keepAlive: true)
+class AiSkillsStore extends _$AiSkillsStore {
+  final AppLogger _log = AppLogger.instance;
+  bool _mutationInFlight = false;
+
+  @override
+  Future<List<AiSkill>> build() async {
+    _log.debug('Memuat skill AI.', tag: 'AiSkillsStore');
+    try {
+      final skills = await ref.read(aiSkillsRepositoryProvider).loadAll();
+      _log.info(
+        'Skill AI dimuat.',
+        tag: 'AiSkillsStore',
+        extras: {'skillCount': skills.length},
+      );
+      return skills;
+    } catch (error, stackTrace) {
+      _log.error(
+        'Gagal memuat skill AI.',
+        tag: 'AiSkillsStore',
+        error: error.runtimeType.toString(),
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  Future<void> create({
+    required String name,
+    required String instructions,
+  }) async {
+    await _mutate(
+      (repository) => repository.create(name: name, instructions: instructions),
+    );
+  }
+
+  Future<void> importFromUrl({
+    required String name,
+    required String url,
+  }) async {
+    await _mutate(
+      (repository) => repository.importFromUrl(name: name, url: url),
+    );
+  }
+
+  /// Menambahkan skill dari toko skills.sh (mode scrape atau proxy).
+  Future<void> importFromStore(SkillStoreEntry entry) async {
+    await _mutate((repository) => repository.importFromStore(entry));
+  }
+
+  Future<void> remove(String id) async {
+    await _mutate((repository) => repository.remove(id));
+  }
+
+  Future<void> _mutate(
+    Future<List<AiSkill>> Function(AiSkillsRepository repository) operation,
+  ) async {
+    if (_mutationInFlight) {
+      _log.warn(
+        'Perubahan skill AI ditolak karena mutasi lain sedang berjalan.',
+        tag: 'AiSkillsStore',
+      );
+      throw StateError('Perubahan skill sedang diproses.');
+    }
+    _mutationInFlight = true;
+    _log.debug('Memulai perubahan skill AI.', tag: 'AiSkillsStore');
+    try {
+      final updated = await operation(ref.read(aiSkillsRepositoryProvider));
+      if (!ref.mounted) return;
+      state = AsyncValue.data(updated);
+      _log.info(
+        'Perubahan skill AI selesai.',
+        tag: 'AiSkillsStore',
+        extras: {'skillCount': updated.length},
+      );
+    } catch (error, stackTrace) {
+      _log.error(
+        'Perubahan skill AI gagal.',
+        tag: 'AiSkillsStore',
+        error: error.runtimeType.toString(),
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    } finally {
+      if (ref.mounted) {
+        _mutationInFlight = false;
+      }
+    }
+  }
+}

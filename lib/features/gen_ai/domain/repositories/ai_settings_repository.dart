@@ -1,5 +1,5 @@
-import '../entities/ai_settings.dart';
-import '../entities/ai_settings_profile_collection.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings_profile_collection.dart';
 
 abstract interface class AiSettingsRepository {
   Future<AiSettings> load();

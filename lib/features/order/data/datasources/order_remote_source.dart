@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql/client.dart';
 
-import '../../../../core/graphql/graphql_providers.dart';
-import '../../../../core/logger/app_logger.dart';
+import 'package:dompetqu/core/graphql/graphql_providers.dart';
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'order_datasource.dart';
-import '../../../../core/graphql/gql_result.dart';
+import 'package:dompetqu/core/graphql/gql_result.dart';
 
 /// Remote source GraphQL untuk modul order — padanan `sources/order_source.ts`.
 ///

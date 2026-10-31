@@ -1,4 +1,4 @@
-import '../entities/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/domain/entities/mcp_server.dart';
 
 abstract interface class McpRepository {
   Future<List<McpServer>> loadAll();

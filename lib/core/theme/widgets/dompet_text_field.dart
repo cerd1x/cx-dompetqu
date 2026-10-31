@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
-import '../cs_mix.dart';
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/cs_mix.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'balance_input_field.dart';
 
 enum DompetTextFieldVariant { glass, csGlassInput, csInput }

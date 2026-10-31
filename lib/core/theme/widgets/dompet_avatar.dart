@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
-import '../dompet_brand.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Avatar brand dengan latar gradient — padanan avatar inisial di web.
 class DompetAvatar extends StatelessWidget {

@@ -1,7 +1,7 @@
-import 'package:dompetqu/features/assets/domain/entities/asset.dart';
-import 'package:dompetqu/features/assets/domain/entities/asset_mutation.dart';
-import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
-import 'package:dompetqu/features/contacts/domain/entities/contact_page.dart';
+import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:dompetqu/features/assets/domain/models/asset_mutation.dart';
+import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:dompetqu/features/contacts/domain/models/contact_page.dart';
 import 'package:dompetqu/features/inventory/domain/entities/product.dart';
 import 'package:dompetqu/features/statistics/domain/entities/statistics.dart';
 import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';

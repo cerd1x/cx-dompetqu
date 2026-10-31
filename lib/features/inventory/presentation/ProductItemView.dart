@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_avatar.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../../core/theme/widgets/item_menu.dart';
-import '../../../core/utils/formatters.dart';
-import '../domain/entities/product.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
 
 /// Baris item product di daftar inventory — padanan `_inventory/InventoryPage.svelte`.
 class ProductItemView extends StatelessWidget {

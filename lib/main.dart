@@ -1,8 +1,20 @@
 import 'dart:io';
 
-import 'package:dompetqu/features/assets/presentation/detail/asset_detail_screen.dart';
-import 'package:dompetqu/features/analytics/presentation/analytics_screen.dart';
-import 'package:dompetqu/features/contacts/domain/entities/contact.dart';
+import 'package:dompetqu/features/assets/view/screens/asset_detail_screen.dart';
+import 'package:dompetqu/features/analytics/view/screens/analytics_screen.dart';
+import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:dompetqu/features/dashboard/view/widgets/home_shell.dart';
+import 'package:dompetqu/features/gen_ai/view/ai_setting_screen.dart';
+import 'package:dompetqu/features/gen_ai/view/gen_ai_screen.dart';
+import 'package:dompetqu/features/order/presentation/order_screen.dart';
+import 'package:dompetqu/features/order/presentation/order_tab.dart'
+    show OrderRouteArgs, OrderTab;
+import 'package:dompetqu/features/settings/presentation/appearance_screen.dart';
+import 'package:dompetqu/features/settings/presentation/profile_screen.dart';
+import 'package:dompetqu/features/settings/presentation/settings_screen.dart';
+import 'package:dompetqu/features/settings/stores/fps_indicator_store.dart';
+import 'package:dompetqu/features/settings/stores/settings_store.dart';
+import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
 import 'package:dompetqu/features/transactions/presentation/transaction_detail_screen.dart';
 import 'package:dompetqu/features/struct/presentation/struct_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,27 +29,16 @@ import 'core/network/cookie_aware_client.dart';
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
 import 'package:dompetqu/core/theme/ui_style_controller.dart';
-import 'features/auth/stores/session_store.dart';
-import 'features/auth/presentation/auth_screen.dart';
-import 'features/admin_pannel/admin_pannel_screen.dart';
-import 'features/admin_pannel/killswitch_controll_screen.dart';
-import 'features/beta_report/beta_report_screen.dart';
-import 'features/contacts/presentation/contact_detail_screen.dart';
-import 'features/contacts/presentation/contact_merge.dart';
-import 'features/dashboard/presentation/home_shell.dart';
-import 'features/transactions/domain/entities/transaction.dart';
-import 'features/order/presentation/order_screen.dart';
-import 'features/order/presentation/order_tab.dart';
-import 'features/app_lock/stores/app_lock_store.dart';
-import 'features/app_lock/presentation/app_lock_screen.dart';
-import 'features/settings/stores/settings_store.dart';
-import 'features/settings/stores/fps_indicator_store.dart';
-import 'features/settings/presentation/appearance_screen.dart';
-import 'features/settings/presentation/profile_screen.dart';
-import 'features/settings/presentation/settings_screen.dart';
-import 'features/charts/charts_trading.dart';
-import 'features/gen_ai/presentation/ai_setting_screen.dart';
-import 'features/gen_ai/presentation/gen_ai_screen.dart';
+import 'features/auth/view/stores/session_store.dart';
+import 'features/auth/view/screens/auth_screen.dart';
+import 'package:dompetqu/features/admin_pannel/view/screens/admin_pannel_screen.dart';
+import 'package:dompetqu/features/admin_pannel/view/screens/killswitch_controll_screen.dart';
+import 'package:dompetqu/features/beta_report/view/screens/beta_report_screen.dart';
+import 'features/contacts/view/screens/contact_detail_screen.dart';
+import 'features/contacts/view/screens/contact_merge.dart';
+import 'features/app_lock/view/stores/app_lock_store.dart';
+import 'features/app_lock/view/screens/app_lock_screen.dart';
+import 'features/charts/view/screens/charts_trading.dart';
 
 part 'generated/main.g.dart';
 
@@ -161,10 +162,7 @@ GoRouter appRouter(Ref ref) {
         builder: (_, _) => const ProfileScreen(),
       ),
       GoRoute(path: '/gen-ai', builder: (_, _) => const GenAiScreen()),
-      GoRoute(
-        path: '/ai-settings',
-        builder: (_, _) => const AiSettingScreen(),
-      ),
+      GoRoute(path: '/ai-settings', builder: (_, _) => const AiSettingScreen()),
       GoRoute(
         path: '/order',
         builder: (_, state) {

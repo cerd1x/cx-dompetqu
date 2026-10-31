@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_avatar.dart';
-import '../../../core/theme/widgets/dompet_button.dart';
-import '../../../core/utils/formatters.dart';
-import '../domain/entities/product.dart';
-import '../../order/presentation/order_tab.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/features/inventory/domain/entities/product.dart';
+import 'package:dompetqu/features/order/presentation/order_tab.dart';
 
 /// Dialog detail product — padanan popup detail di web.
 class ProductDetailView extends StatelessWidget {

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import '../../../core/theme/dompet_brand.dart';
-import '../../../core/theme/widgets/dompet_card.dart';
-import '../../auth/stores/session_store.dart';
+import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 
 /// Halaman Profile — padanan `src/routes/dompet/settings/profile/+page.svelte`.
 class ProfileScreen extends ConsumerWidget {

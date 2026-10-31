@@ -35,9 +35,20 @@ class AssetsRemoteSource implements AssetsDataSource {
     mutation DeleteAsset($name: String!) { deleteAsset(name: $name) }
   ''';
 
-  static const _addBalanceMutation = r'''
-    mutation AddBalance($assetId: ID!, $amount: Money!) {
-      addBalance(assetId: $assetId, amount: $amount) { id name type balance }
+  static const _mutateAssetMutation = r'''
+    mutation MutateAsset($input: MutateAssetInput!) {
+      mutateAsset(input: $input) {
+        __typename
+        ... on AssetSingleMutationResult {
+          code
+          asset { id name type balance }
+        }
+        ... on AssetTransferResult {
+          code
+          from { id name type balance }
+          to { id name type balance }
+        }
+      }
     }
   ''';
 
@@ -150,17 +161,26 @@ class AssetsRemoteSource implements AssetsDataSource {
   Future<Asset> addBalance(String assetId, String amount) async {
     final result = await _client.mutate(
       MutationOptions(
-        document: gql(_addBalanceMutation),
-        variables: {'assetId': assetId, 'amount': amount},
+        document: gql(_mutateAssetMutation),
+        variables: {
+          'input': {
+            'code': 'CR',
+            'assetId': assetId,
+            'amount': amount,
+          }
+        },
       ),
     );
-    final json = result.data?['addBalance'];
+    final json = result.data?['mutateAsset'];
     if (json == null) {
       throw StateError(
         gqlErrorMessage(result, fallback: 'Gagal menambah saldo'),
       );
     }
-    return Asset.fromJson(json as Map<String, dynamic>);
+    if (json['__typename'] == 'AssetSingleMutationResult') {
+      return Asset.fromJson(json['asset'] as Map<String, dynamic>);
+    }
+    throw StateError('Gagal menambah saldo');
   }
 
   @override

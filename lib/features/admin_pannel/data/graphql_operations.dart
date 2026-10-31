@@ -47,7 +47,6 @@ const List<String> kGraphqlQueryOperations = [
 
 /// Root field bertipe `Mutation`.
 const List<String> kGraphqlMutationOperations = [
-  'Mutation.addBalance',
   'Mutation.adminDeleteUser',
   'Mutation.adminSetUserRole',
   'Mutation.cancelInvoice',
@@ -71,6 +70,7 @@ const List<String> kGraphqlMutationOperations = [
   'Mutation.importProductFromCSV',
   'Mutation.issueInvoice',
   'Mutation.mergeContacts',
+  'Mutation.mutateAsset',
   'Mutation.processPayment',
   'Mutation.registerPasskey',
   'Mutation.retryPayment',
@@ -78,7 +78,6 @@ const List<String> kGraphqlMutationOperations = [
   'Mutation.signInWithPassKey',
   'Mutation.signOut',
   'Mutation.signUp',
-  'Mutation.subtractBalance',
   'Mutation.swapBalance',
   'Mutation.updateAsset',
   'Mutation.updateContact',

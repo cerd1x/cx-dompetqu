@@ -58,14 +58,15 @@ class PaymentStatusPill extends StatelessWidget {
 
 /// Baris satu payment gagal: judul, metode, sisa retry, waktu, dan nominal.
 ///
-/// Read-only — belum ada tombol retry; data berasal dari
-/// `failedPaymentsProvider` (query `paymentsByStatus`). Nominal memakai
+/// [onTap] membuka layar detail (`DetailPaymentFailedView`) tempat retry dan
+/// report dilakukan; row sendiri tetap tidak mengubah data. Nominal memakai
 /// `payment.currency` dari backend karena payment bisa beda mata uang dengan
 /// preferensi tampilan aplikasi.
 class FailedPaymentRow extends StatelessWidget {
-  const FailedPaymentRow({super.key, required this.payment});
+  const FailedPaymentRow({super.key, required this.payment, this.onTap});
 
   final Payment payment;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +79,7 @@ class FailedPaymentRow extends StatelessWidget {
       variant: DompetCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      onTap: onTap,
       child: Row(
         children: [
           // icon section

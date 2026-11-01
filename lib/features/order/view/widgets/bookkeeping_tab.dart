@@ -358,7 +358,10 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
           itemCount: items.length,
           separatorBuilder: (_, _) => const SizedBox(height: 8),
           itemBuilder: (_, i) => RepaintBoundary(
-            child: FailedPaymentRow(payment: items[i]),
+            child: FailedPaymentRow(
+              payment: items[i],
+              onTap: () => context.push('/payment-failed', extra: items[i]),
+            ),
           ),
         );
       },

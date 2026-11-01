@@ -10,8 +10,8 @@ part 'generated/payments_remote_source.g.dart';
 /// Remote source GraphQL untuk domain payment — padanan
 /// `sources/payment_source.ts` di web.
 ///
-/// Hanya query baca yang dipakai aplikasi; mutasi `retryPayment` belum
-/// diekspos karena tab Failed masih read-only.
+/// Baca: `paymentsByStatus`; tulis: `retryPayment` (dipakai layar detail
+/// payment gagal).
 class PaymentsRemoteSource {
   PaymentsRemoteSource(this._client);
 
@@ -56,6 +56,48 @@ class PaymentsRemoteSource {
     return (list as List<dynamic>)
         .map((e) => _toPayment(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// Cerminan `retryPayment(paymentId)` di
+  /// `services/domain/payment/adapters/driving/graphql/payment.gql`.
+  static const _retryPaymentMutation = r'''
+    mutation RetryPayment($paymentId: ID!) {
+      retryPayment(paymentId: $paymentId) {
+        id
+        invoiceId
+        amount
+        currency
+        method
+        status
+        gatewayRef
+        description
+        retryCount
+        maxRetries
+        createdAt
+        updatedAt
+      }
+    }
+  ''';
+
+  /// Coba ulang payment gagal; mengembalikan payment terbaru dari backend.
+  ///
+  /// Backend menolak (GraphQL error) bila `retryCount >= maxRetries`, jadi
+  /// guard `Payment.canRetry` di UI hanya optimistis — error tetap ditampilkan.
+  Future<Payment> retry(String id) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: gql(_retryPaymentMutation),
+        variables: {'paymentId': id},
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
+    final json = result.data?['retryPayment'];
+    if (json == null) {
+      throw StateError(
+        gqlErrorMessage(result, fallback: 'Gagal retry payment'),
+      );
+    }
+    return _toPayment(json as Map<String, dynamic>);
   }
 }
 

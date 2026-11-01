@@ -88,7 +88,7 @@ Status migrasi struktur per fitur:
 | gen_ai       | domain/adapters/view                              | Sudah migrasi, 2 provider store masih manual (R2) |
 | inventory    | domain/adapters/view                              | Sudah migrasi                                    |
 | order        | domain/adapters/view                              | Sudah migrasi, 4 provider masih manual (R2)      |
-| payments     | domain/adapters/view                              | Sudah migrasi, read-only (`paymentsByStatus`)    |
+| payments     | domain/adapters/view                              | Sudah migrasi, `paymentsByStatus` + `retryPayment` |
 | portfolio    | view (screens)                                    | UI-only, hanya 1 screen                          |
 | settings     | domain/adapters/view                              | Sudah migrasi                                    |
 | statistics   | domain/adapters/view                              | Sudah migrasi                                    |

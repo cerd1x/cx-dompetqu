@@ -9,8 +9,9 @@ part 'generated/failed_payments_store.g.dart';
 /// Payment berstatus `failed` pada [month] — query langsung ke backend
 /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
 ///
-/// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-/// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+/// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+/// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+/// ulang setiap tab Failed dibuka atau bulan diganti.
 @riverpod
 Future<List<Payment>> failedPayments(Ref ref, DateTime month) async {
   final log = AppLogger.instance;

@@ -6,7 +6,9 @@ import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/features/dashboard/view/widgets/home_shell.dart';
 import 'package:dompetqu/features/gen_ai/view/screens/ai_setting_screen.dart';
 import 'package:dompetqu/features/gen_ai/view/screens/gen_ai_screen.dart';
+import 'package:dompetqu/features/order/view/screens/detail_payment_failed_view.dart';
 import 'package:dompetqu/features/order/view/screens/order_screen.dart';
+import 'package:dompetqu/features/payments/domain/models/payment.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart'
     show OrderRouteArgs, OrderTab;
 import 'package:dompetqu/features/settings/view/screens/appearance_screen.dart';
@@ -188,6 +190,13 @@ GoRouter appRouter(Ref ref) {
         path: '/transaction-detail',
         builder: (_, state) =>
             TransactionDetailScreen(transaction: state.extra as Transaction),
+      ),
+      GoRoute(
+        path: '/payment-failed',
+        // Payment dikirim utuh lewat `extra` — data sudah ada di daftar Failed,
+        // jadi tidak perlu query ulang hanya untuk membuka detail.
+        builder: (_, state) =>
+            DetailPaymentFailedView(payment: state.extra as Payment),
       ),
       GoRoute(path: '/analytics', builder: (_, _) => const AnalyticsScreen()),
       GoRoute(

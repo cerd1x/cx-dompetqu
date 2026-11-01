@@ -11,8 +11,9 @@ part of '../failed_payments_store.dart';
 /// Payment berstatus `failed` pada [month] — query langsung ke backend
 /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
 ///
-/// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-/// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+/// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+/// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+/// ulang setiap tab Failed dibuka atau bulan diganti.
 
 @ProviderFor(failedPayments)
 final failedPaymentsProvider = FailedPaymentsFamily._();
@@ -20,8 +21,9 @@ final failedPaymentsProvider = FailedPaymentsFamily._();
 /// Payment berstatus `failed` pada [month] — query langsung ke backend
 /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
 ///
-/// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-/// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+/// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+/// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+/// ulang setiap tab Failed dibuka atau bulan diganti.
 
 final class FailedPaymentsProvider
     extends
@@ -34,8 +36,9 @@ final class FailedPaymentsProvider
   /// Payment berstatus `failed` pada [month] — query langsung ke backend
   /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
   ///
-  /// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-  /// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+  /// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+  /// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+  /// ulang setiap tab Failed dibuka atau bulan diganti.
   FailedPaymentsProvider._({
     required FailedPaymentsFamily super.from,
     required DateTime super.argument,
@@ -85,8 +88,9 @@ String _$failedPaymentsHash() => r'f98492b9bb2b415954996edad71c6cd12f879499';
 /// Payment berstatus `failed` pada [month] — query langsung ke backend
 /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
 ///
-/// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-/// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+/// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+/// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+/// ulang setiap tab Failed dibuka atau bulan diganti.
 
 final class FailedPaymentsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Payment>>, DateTime> {
@@ -102,8 +106,9 @@ final class FailedPaymentsFamily extends $Family
   /// Payment berstatus `failed` pada [month] — query langsung ke backend
   /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.
   ///
-  /// Read-only: retry payment belum diekspos di UI. Provider auto-dispose,
-  /// jadi daftar diambil ulang setiap tab Failed dibuka atau bulan diganti.
+  /// Read-only di tingkat daftar: retry dan report dilakukan dari layar detail
+  /// (`DetailPaymentFailedView`). Provider auto-dispose, jadi daftar diambil
+  /// ulang setiap tab Failed dibuka atau bulan diganti.
 
   FailedPaymentsProvider call(DateTime month) =>
       FailedPaymentsProvider._(argument: month, from: this);

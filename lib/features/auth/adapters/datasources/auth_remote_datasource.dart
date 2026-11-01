@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/auth/models/passkey.dart';
-import 'package:dompetqu/features/auth/models/user.dart';
+import 'package:dompetqu/features/auth/adapters/models/passkey.dart';
+import 'package:dompetqu/features/auth/adapters/models/user.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<({User user, String session, String refreshToken})> signUp({

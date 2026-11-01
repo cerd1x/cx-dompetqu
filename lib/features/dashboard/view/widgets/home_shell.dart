@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/gen_ai/view/ai_bubble.dart';
+import 'package:dompetqu/features/gen_ai/view/widgets/ai_bubble.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
 import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +10,9 @@ import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
 import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
 import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
 import 'package:dompetqu/features/dashboard/view/widgets/dashboard_screen.dart';
-import 'package:dompetqu/features/inventory/presentation/inventory_screen.dart';
-import 'package:dompetqu/features/order/presentation/order_screen.dart';
-import 'package:dompetqu/features/portfolio/presentation/portfolio_screen.dart';
+import 'package:dompetqu/features/inventory/view/screens/inventory_screen.dart';
+import 'package:dompetqu/features/order/view/screens/order_screen.dart';
+import 'package:dompetqu/features/portfolio/view/screens/portfolio_screen.dart';
 
 /// Shell utama — padanan `+layout.svelte` + tab NavigationBar di `/dompet`.
 class HomeShell extends ConsumerStatefulWidget {

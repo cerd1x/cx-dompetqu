@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'ai_settings_repository_provider.dart';
 
 part 'generated/ai_settings_store.g.dart';

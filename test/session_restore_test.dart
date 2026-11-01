@@ -6,18 +6,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:dompetqu/core/network/cookie_aware_client.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/features/auth/adapters/auth_remote_source.dart';
-import 'package:dompetqu/features/auth/models/user.dart';
+import 'package:dompetqu/features/auth/adapters/datasources/auth_remote_source.dart';
+import 'package:dompetqu/features/auth/adapters/models/user.dart';
 import 'package:dompetqu/features/assets/adapters/datasources/assets_remote_source.dart';
 import 'package:dompetqu/features/contacts/adapters/datasources/contacts_remote_source.dart';
-import 'package:dompetqu/features/inventory/data/datasources/inventory_remote_source.dart';
-import 'package:dompetqu/features/statistics/data/datasources/statistics_remote_source.dart';
-import 'package:dompetqu/features/transactions/data/datasources/transactions_remote_source.dart';
+import 'package:dompetqu/features/inventory/adapters/datasources/inventory_remote_source.dart';
+import 'package:dompetqu/features/statistics/adapters/datasources/statistics_remote_source.dart';
+import 'package:dompetqu/features/transactions/adapters/datasources/transactions_remote_source.dart';
 import 'package:dompetqu/features/assets/adapters/models/asset.dart';
 import 'package:dompetqu/features/contacts/adapters/models/contact.dart';
-import 'package:dompetqu/features/inventory/data/models/product.dart';
-import 'package:dompetqu/features/statistics/data/models/statistics.dart';
-import 'package:dompetqu/features/transactions/data/models/transaction.dart';
+import 'package:dompetqu/features/inventory/adapters/models/product.dart';
+import 'package:dompetqu/features/statistics/adapters/models/statistics.dart';
+import 'package:dompetqu/features/transactions/adapters/models/transaction.dart';
 import 'package:dompetqu/main.dart';
 
 GraphQLClient _dummyClient() => GraphQLClient(

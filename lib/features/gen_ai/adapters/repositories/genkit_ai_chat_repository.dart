@@ -5,9 +5,9 @@ import 'package:genkit_mcp/genkit_mcp.dart';
 import 'package:genkit_openai/genkit_openai.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_message.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/ai_chat_repository.dart';
 
 class GenkitAiChatRepository implements AiChatRepository {

@@ -11,20 +11,20 @@ import 'package:dompetqu/features/contacts/domain/models/contact.dart'
     as domain;
 import 'package:dompetqu/features/contacts/domain/models/contact_page.dart'
     as domain;
-import 'package:dompetqu/features/inventory/data/models/product.dart' as data;
-import 'package:dompetqu/features/inventory/domain/entities/product.dart'
+import 'package:dompetqu/features/inventory/adapters/models/product.dart' as data;
+import 'package:dompetqu/features/inventory/domain/models/product.dart'
     as domain;
-import 'package:dompetqu/features/statistics/data/models/statistics.dart'
+import 'package:dompetqu/features/statistics/adapters/models/statistics.dart'
     as data;
-import 'package:dompetqu/features/statistics/domain/entities/statistics.dart'
+import 'package:dompetqu/features/statistics/domain/models/statistics.dart'
     as domain;
-import 'package:dompetqu/features/transactions/data/models/transaction.dart'
+import 'package:dompetqu/features/transactions/adapters/models/transaction.dart'
     as data;
-import 'package:dompetqu/features/transactions/data/models/transaction_page.dart'
+import 'package:dompetqu/features/transactions/adapters/models/transaction_page.dart'
     as data;
-import 'package:dompetqu/features/transactions/domain/entities/transaction.dart'
+import 'package:dompetqu/features/transactions/domain/models/transaction.dart'
     as domain;
-import 'package:dompetqu/features/transactions/domain/entities/transaction_page.dart'
+import 'package:dompetqu/features/transactions/domain/models/transaction_page.dart'
     as domain;
 
 extension AssetModelMapper on data.Asset {

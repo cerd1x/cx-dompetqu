@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'package:dompetqu/features/gen_ai/domain/config/openrouter_config.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/openrouter_model.dart';
+import 'package:dompetqu/core/config/openrouter_config.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 
 abstract interface class OpenRouterModelRemoteDataSource {
   Future<List<OpenRouterModel>> loadModels({

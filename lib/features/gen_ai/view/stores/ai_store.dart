@@ -1,13 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_message.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_message.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'ai_chat_repository_provider.dart';
 import 'ai_settings_store.dart';
 import 'ai_skills_store.dart';
 import 'mcp_store.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_skill.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 
 part 'generated/ai_store.freezed.dart';
 part 'generated/ai_store.g.dart';

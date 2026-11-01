@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/gen_ai/domain/entities/skill_store_entry.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
 import 'package:dompetqu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
 

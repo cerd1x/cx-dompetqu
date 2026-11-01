@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/gen_ai/domain/entities/openrouter_model.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/openrouter_model_repository.dart';
 import 'package:dompetqu/features/gen_ai/adapters/datasources/openrouter_model_remote_datasource.dart';
 

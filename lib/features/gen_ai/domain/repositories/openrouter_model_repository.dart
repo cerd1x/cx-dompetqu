@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/gen_ai/domain/entities/openrouter_model.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 
 abstract interface class OpenRouterModelRepository {
   Future<List<OpenRouterModel>> loadModels({

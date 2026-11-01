@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 
 abstract interface class AiSettingsSecretKeyStore {
   Future<String?> read(String key);

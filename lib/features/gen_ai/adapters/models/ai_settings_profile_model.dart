@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings_profile.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 
 class AiSettingsProfileModel {
   const AiSettingsProfileModel({

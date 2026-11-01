@@ -79,22 +79,25 @@ Status migrasi struktur per fitur:
 | admin_pannel | domain/adapters/view                              | Sudah migrasi                                    |
 | app_lock     | domain/adapters/view                              | Sudah migrasi                                    |
 | assets       | domain/adapters/view                              | Sudah migrasi                                    |
-| analytics    | domain/adapters                                   | UI-only, belum lengkap                           |
-| auth         | domain/adapters/view + legacy stores/             | Sudah migrasi, tersisa legacy `stores/` di root  |
+| analytics    | domain/adapters/view (kerangka kosong)            | UI-only, belum lengkap                           |
+| auth         | domain/adapters/view                              | Sudah migrasi                                    |
 | beta_report  | view (screens)                                    | UI-only, belum lengkap                           |
 | charts       | view (screens)                                    | UI-only, belum lengkap                           |
-| contacts     | domain/adapters/view                              | Sudah migrasi                                    |
+| contacts     | domain/adapters/view                              | Sudah migrasi (`domain/entities/` kosong)        |
 | dashboard    | domain/adapters/view                              | Sudah migrasi                                    |
-| gen_ai       | domain/adapters/view + legacy presentation/stores | Sedang migrasi                                   |
-| inventory    | domain/data/presentation                          | Belum migrasi (gunakan `data/`, `presentation/`) |
-| order        | domain/data/presentation                          | Belum migrasi                                    |
-| portfolio    | domain/data/presentation                          | Belum migrasi                                    |
-| settings     | domain/data/presentation                          | Belum migrasi                                    |
-| statistics   | domain/data/presentation                          | Belum migrasi                                    |
-| struct       | domain/data/presentation                          | Belum migrasi                                    |
-| transactions | domain/data/presentation                          | Belum migrasi                                    |
+| gen_ai       | domain/adapters/view                              | Sudah migrasi, 2 provider store masih manual (R2) |
+| inventory    | domain/adapters/view                              | Sudah migrasi                                    |
+| order        | domain/adapters/view                              | Sudah migrasi, 4 provider masih manual (R2)      |
+| payments     | domain/adapters/view                              | Sudah migrasi, read-only (`paymentsByStatus`)    |
+| portfolio    | view (screens)                                    | UI-only, hanya 1 screen                          |
+| settings     | domain/adapters/view                              | Sudah migrasi                                    |
+| statistics   | domain/adapters/view                              | Sudah migrasi                                    |
+| struct       | view (screens)                                    | UI-only, hanya 1 screen                          |
+| transactions | domain/adapters/view                              | Sudah migrasi                                    |
 
 Features `analytics`, `beta_report`, dan `charts` adalah UI-only, hanya memiliki layer presentation tanpa repository/domain boilerplate.
+
+**Konvensi model domain:** acuan resmi adalah `domain/models/`. Folder `domain/entities/` adalah nama lama dan sudah tidak dipakai isinya; sisa direktori kosong `contacts/domain/entities/` boleh dihapus kapan saja.
 
 ### Teknologi Utama
 
@@ -168,54 +171,42 @@ lib/
 └── features/                          # Feature-based modules
     │
     ├── auth/                          # Fitur autentikasi
-    │   ├── domain/                    # Business logic & entities
-    │   │   ├── entities/              # Domain entities (pure Dart)
-    │   │   │   └── generated/         # Freezed generated files
-    │   │   ├── failures/              # Error definitions
-    │   │   ├── repositories/         # Repository interfaces (contracts)
-    │   │   └── usecases/              # Business use cases
-    │   │
-    │   ├── data/                      # Data layer implementation
-    │   │   ├── datasources/           # Remote/local data sources
-    │   │   ├── repositories/          # Repository implementations
-    │   │   ├── mappers/               # JSON/GraphQL → Entity converters
-    │   │   └── generated/             # Freezed/json_serializable generated
-    │   │
-    │   ├── stores/                    # Riverpod state management
-    │   │   ├── *_store.dart           # Store dengan @Riverpod
-    │   │   ├── *_repository_provider.dart # DI untuk repository
-    │   │   └── generated/             # Riverpod codegen
-    │   │
-    │   ├── presentation/              # UI layer
-    │   │   ├── auth_screen.dart       # Screens
-    │   │   └── ...                    # Widgets komponen
-    │   │
-    │   └── models/                    # Legacy data models (sebagian)
-    │       └── generated/            # Generated files
+    │   ├── domain/
+    │   │   ├── models/                # AuthUser, AuthPasskeyCredential, AuthFailure
+    │   │   ├── repositories/          # AuthRepository interface
+    │   │   └── usecases/              # Auth use cases
+    │   ├── adapters/
+    │   │   ├── datasources/           # Remote/session/passkey datasources
+    │   │   ├── models/                # User, Passkey (data model)
+    │   │   ├── mappers/               # data model → domain model
+    │   │   └── repositories/          # AuthRepositoryImpl
+    │   └── view/
+    │       ├── screens/               # AuthScreen
+    │       └── stores/                # auth_providers, session_store, app_theme
     │
     ├── app_lock/                      # Fitur kunci aplikasi (PIN/biometrik)
     │   ├── domain/
-    │   │   ├── entities/              # AppLockState entity
+    │   │   ├── models/                # AppLockState
     │   │   └── repositories/          # AppLockRepository interface
-    │   ├── data/
+    │   ├── adapters/
+    │   │   ├── app_lock_storage.dart  # Penyimpanan PIN (belum di datasources/)
     │   │   ├── datasources/           # Local & biometric datasources
-    │   │   ├── repositories/          # AppLockRepositoryImpl
-    │   │   └── generated/
-    │   ├── stores/                    # Riverpod stores
-    │   ├── presentation/              # Screens (AppLockScreen, SetupScreen)
-    │   └── models/                    # LockMethod enum
+    │   │   └── repositories/          # AppLockRepositoryImpl
+    │   └── view/
+    │       ├── screens/               # AppLockScreen, SetupScreen
+    │       └── stores/                # Riverpod stores
     │
     ├── admin_pannel/                  # Fitur admin panel (typo "panel")
     │   ├── domain/
-    │   │   ├── entities/              # DisabledOperation entity
+    │   │   ├── models/                # DisabledOperation
     │   │   └── repositories/          # KillswitchRepository interface
-    │   ├── data/
-    │   │   ├── datasources/           # KillswitchRemoteSource (REST)
-    │   │   ├── repositories/          # KillswitchRepositoryImpl
-    │   │   ├── graphql_operations.dart # Daftar 74 operation root
-    │   │   └── generated/
-    │   ├── stores/                    # Riverpod stores
-    │   └── presentation/              # AdminScreen, KillswitchControllScreen
+    │   ├── adapters/
+    │   │   ├── graphql_operations.dart # Daftar 74 operation root (belum di datasources/)
+    │   │   ├── killswitch_remote_source.dart # REST (belum di datasources/)
+    │   │   └── repositories/          # KillswitchRepositoryImpl
+    │   └── view/
+    │       ├── screens/               # AdminScreen, KillswitchControllScreen
+    │       └── stores/                # Riverpod stores
     │
     ├── assets/                        # Fitur manajemen aset (SUDAH MIGRASI KE STRUKTUR BARU)
     │   ├── domain/
@@ -235,52 +226,113 @@ lib/
     │
     ├── dashboard/                     # Fitur dashboard/statistik
     │   ├── domain/
-    │   │   ├── repositories/          # HomeRepository (agregat port)
-    │   │   └── entities/              # Dashboard entities
-    │   ├── data/
+    │   │   └── repositories/          # HomeRepository (agregat port)
+    │   ├── adapters/
+    │   │   ├── datasources/           # Agregat datasource fitur terkait
+    │   │   ├── mappers/               # JSON → model dashboard
     │   │   └── repositories/          # HomeRepositoryImpl (komposisi fitur)
-    │   ├── stores/                    # Riverpod stores
-    │   └── presentation/              # Dashboard screen & widgets
+    │   └── view/
+    │       ├── stores/                # Riverpod stores
+    │       └── widgets/               # Dashboard screen & widget (dashboard_screen.dart)
     │
     ├── gen_ai/                        # Fitur AI generatif (Genkit Dart SDK 1.0)
     │   ├── domain/
-    │   │   ├── entities/              # AI-related entities
-    │   │   └── repositories/          # AI repository interfaces
-    │   ├── data/
-    │   │   ├── repositories/          # AI repository implementations
-    │   │   └── generated/
-    │   ├── stores/                    # Riverpod stores
-    │   └── presentation/              # AI assistant screens
+    │   │   ├── models/                # AI-related domain models
+    │   │   └── repositories/          # Port AI (chat, settings, skills, MCP, dst.)
+    │   ├── adapters/
+    │   │   ├── datasources/           # Lokal, OpenRouter, skill store, crypto
+    │   │   ├── models/                # AiSkill, McpServer, AiSettings (data model)
+    │   │   ├── mappers/               # data model → domain model
+    │   │   └── repositories/          # Implementasi port AI
+    │   └── view/
+    │       ├── screens/               # GenAiScreen, AiSettingScreen
+    │       ├── widgets/               # Bubble, sheet, profiles card
+    │       └── stores/                # Store + provider (2 provider masih manual/R2)
+    │
+    ├── inventory/                     # Fitur inventori produk
+    │   ├── domain/
+    │   │   └── models/                # Product
+    │   ├── adapters/
+    │   │   ├── datasources/           # InventoryRemoteSource (GraphQL)
+    │   │   └── models/                # Product (data model)
+    │   └── view/
+    │       ├── screens/               # InventoryScreen
+    │       ├── widgets/               # ProductDetailView, ProductItemView
+    │       └── stores/                # inventory_store
+    │
+    ├── statistics/                    # Fitur statistik
+    │   ├── domain/
+    │   │   └── models/                # Statistics
+    │   ├── adapters/
+    │   │   ├── datasources/           # StatisticsRemoteSource (GraphQL)
+    │   │   └── models/                # Statistics (data model)
+    │   └── view/
+    │       └── stores/                # statistics_store
+    │
+    ├── transactions/                  # Fitur transaksi
+    │   ├── domain/
+    │   │   └── models/                # Transaction, TransactionPage, PaymentMethodType
+    │   ├── adapters/
+    │   │   ├── datasources/           # TransactionsRemoteSource (GraphQL)
+    │   │   └── models/                # Transaction, TransactionPage (data model)
+    │   └── view/
+    │       ├── screens/               # TransactionDetailScreen
+    │       └── stores/                # transactions_store
+    │
+    ├── portfolio/                     # Fitur portfolio (UI-only)
+    │   └── view/
+    │       └── screens/               # PortfolioScreen
+    │
+    ├── struct/                        # Fitur struct (UI-only)
+    │   └── view/
+    │       └── screens/               # StructDetailScreen
     │
     ├── order/                         # Fitur order & transaksi
     │   ├── domain/
-    │   │   ├── entities/              # Order, Transaction entities
-    │   │   └── repositories/          # OrderRepository interface
-    │   ├── data/
-    │   │   ├── datasources/           # OrderRemoteSource (GraphQL)
-    │   │   ├── repositories/          # OrderRepositoryImpl
-    │   │   └── generated/
-    │   ├── stores/                    # Riverpod stores
-    │   └── presentation/              # Order screen & widgets
+    │   │   └── repositories/          # OrderRepository, DebtSettlementsRepository
+    │   ├── adapters/
+    │   │   ├── datasources/           # OrderRemoteSource (GraphQL), debt settlement local
+    │   │   └── repositories/          # OrderRepositoryImpl, DebtSettlementsRepositoryImpl
+    │   └── view/
+    │       ├── screens/               # OrderScreen
+    │       ├── stores/                # Repository providers, debtSettlementsProvider
+    │       └── widgets/               # bookkeeping_tab, debt_tab, order_tab, form widgets
+    │
+    ├── payments/                      # Fitur payment (read-only)
+    │   ├── domain/
+    │   │   ├── models/                # Payment (status/retry)
+    │   │   └── repositories/          # PaymentsRepository interface
+    │   ├── adapters/
+    │   │   ├── datasources/           # PaymentsRemoteSource (paymentsByStatus)
+    │   │   └── repositories/          # PaymentsRepositoryImpl
+    │   └── view/
+    │       ├── stores/                # failedPaymentsProvider + repo provider (manual)
+    │       └── widgets/               # FailedPaymentRow, PaymentStatusPill
     │
     ├── settings/                      # Fitur pengaturan
     │   ├── domain/
+    │   │   ├── models/                # AppSettings
     │   │   └── repositories/          # SettingsRepository interface
-    │   ├── data/
+    │   ├── adapters/
+    │   │   ├── datasources/           # SettingsLocalDatasource
     │   │   └── repositories/          # SettingsRepositoryImpl
-    │   ├── stores/                    # Riverpod stores
-    │   └── presentation/              # Settings screen
+    │   └── view/
+    │       ├── screens/               # SettingsScreen, AppearanceScreen, ProfileScreen
+    │       ├── widgets/               # Passkey section, row picker/toggle
+    │       └── stores/                # settings_store, settings_repository_provider, fps_indicator
     │
-    ├── analytics/                     # Fitur analytics (UI-only)
-    │   └── presentation/
-    │       ├── analytics_screen.dart
-    │       └── analytics_data.dart
+    ├── analytics/                     # Fitur analytics (UI-only, kerangka kosong)
+    │   └── view/
+    │       ├── screens/               # analytics_screen.dart
+    │       └── widgets/               # analytics_data.dart
     │
     ├── charts/                        # Fitur charts (UI-only)
-    │   └── presentation/              # Chart screens & widgets
+    │   └── view/
+    │       └── screens/               # Chart screens
     │
     └── beta_report/                   # Fitur beta report (UI-only)
-        └── presentation/              # Beta report screen
+        └── view/
+            └── screens/               # Beta report screen
 ```
 
 ### Catatan Penting
@@ -291,11 +343,11 @@ lib/
    - `admin_pannel` (typo "panel")
    - `KillswitchControllScreen` (typo "Control")
 
-3. **UI-Only Features**: `beta_report` dan `charts` saat ini hanya memiliki layer presentation. Tidak perlu menambahkan repository/domain boilerplate sampai fitur ini memiliki logic business atau persistence sendiri.
+3. **UI-Only Features**: `beta_report`, `charts`, `portfolio`, `struct`, dan `analytics` hanya memiliki layer `view/` tanpa repository/domain boilerplate. Tidak perlu menambahkan port/adapter sampai fitur ini memiliki logic business atau persistence sendiri.
 
 4. **Pola Komposit (Agregat)**: `HomeRepository` di `dashboard/domain/repositories/` adalah agregat port yang menggabungkan beberapa fitur terkait (assets, contacts, inventory, statistics, transactions). Ini sah untuk mengurangi coupling antar-fitur.
 
-5. **Status Migrasi Struktur**: Sebagian fitur sudah bermigrasi ke struktur baru (`domain/adapters/view`), sementara yang lain masih menggunakan struktur lama (`domain/data/presentation`). Lihat tabel status migrasi di atas untuk detail tiap fitur.
+5. **Status Migrasi Struktur**: Seluruh fitur sudah memakai struktur target (`domain/adapters/view`); lihat tabel status migrasi di atas untuk catatan per fitur (UI-only dan utang provider manual).
 
 ## Workflow Tim (Aturan Wajib)
 
@@ -401,7 +453,7 @@ Jangan hardcode secret; jangan cetak env sensitif.
 - Kill switch: only root `Query.*` / `Mutation.*`; fail-open; cache TTL ±5s per
   isolate; error GraphQL ditandai `extensions.code = 503` (HTTP tetap 200).
 - Daftar 74 operation root (`34 Query + 40 Mutation`) di
-  `lib/features/admin_pannel/data/graphql_operations.dart` — **disinkron manual**
+  `lib/features/admin_pannel/adapters/graphql_operations.dart` — **disinkron manual**
   dari SDL `cx-services`; perbarui bila SDL berubah.
 - `{baseUrl}/graphql` = endpoint GraphQL utama; relay-style pagination;
   direktif `@authorized` (pengecualian `signIn`/`signUp`).
@@ -444,34 +496,39 @@ feature-first yang sudah ada. Prinsip boundary:
 
 - **Domain = Port.** Kontrak repository didefinisikan sebagai
   `abstract interface class` di `lib/features/<fitur>/domain/repositories/`.
-  Domain **tidak boleh** mengimport `data/`, `stores/`, atau `presentation/`.
+  Domain **tidak boleh** mengimport `adapters/`, `view/`, atau layer UI lain.
 - **Data = Adapter.** Implementasi konkret repository dan integrasi
   SDK/network/storage (remote/local datasource) berada di
-  `lib/features/<fitur>/data/` (termasuk `data/repositories/*_impl.dart`).
-  Data boleh mengimport domain; tidak boleh mengimport `presentation/`.
+  `lib/features/<fitur>/adapters/` (termasuk `adapters/repositories/*_impl.dart`).
+  Adapter boleh mengimport domain; tidak boleh mengimport `view/`.
 - **Stores = Boundary Komposisi.** Providers Riverpod (codegen
-  `@Riverpod`/`@riverpod` atau manual `Provider`) di `stores/` bertugas
+  `@Riverpod`/`@riverpod` atau manual `Provider`) di `view/stores/` bertugas
   meng-inject dan memaparkan repository ke presentation. Presentation dan
   store hanya bergantung pada **interface domain**, bukan implementasi data.
 - **Presentation = UI.** Screens/widgets hanya mengonsumsi state dari
-  stores (provider/store); tidak boleh memanggil datasource/data
+  stores (provider/store); tidak boleh memanggil datasource/adapter
   layer langsung.
 
 **Pola komposit (agregat):**
 Beberapa fitur yang berkaitan dikelompokkan melalui `HomeRepository`
 (`lib/features/dashboard/domain/repositories/home_repository.dart`) sebagai
 **agregat port**. Implementasinya `HomeRepositoryImpl` di
-`dashboard/data/repositories/` dan di-compose dari datasource/layanan fitur
+`dashboard/adapters/repositories/` dan di-compose dari datasource/layanan fitur
 terkait (assets/contacts/inventory/statistics/transactions). Ini sah untuk
 mengurangi coupling antar-fitur dan tetap menjaga boundary domain–data.
 
 **Catatan implementasi saat ini:**
 Sebagian fitur sudah punya pasangan interface+impl terpisah (contoh `auth`,
-`order`, `settings`, `app_lock`, `admin_pannel`, `dashboard`, `gen_ai`),
-sementara fitur lain yang hanya diakses via agregat `HomeRepository` tidak
-wajib dibuatkan repository impl terpisah selama boundary domain-data tetap
-terjaga. Jangan memecah agregat tanpa alasan yang jelas dan tanpa perubahan
-perilaku.
+`order`, `settings`, `app_lock`, `admin_pannel`, `dashboard`, `gen_ai`,
+`payments`), sementara fitur lain yang hanya diakses via agregat
+`HomeRepository` (`assets`, `contacts`, `inventory`, `statistics`,
+`transactions`) tidak wajib dibuatkan repository impl terpisah selama boundary
+domain–adapter tetap terjaga. Jangan memecah agregat tanpa alasan yang jelas
+dan tanpa perubahan perilaku.
+
+Utang boundary yang masih ada: `auth`, `gen_ai`, dan `settings` punya provider
+di `view/stores/` yang mengimpor `adapters/datasources/` secara langsung
+(komposisi adapter, bukan lewat port); rapikan bertahap tanpa mengubah perilaku.
 
 Referensi: `Flutter Enterprise Starter` (pragmatis, bukan template utuh),
 stack tetap **Riverpod 3 codegen**, dengan `flutter-clean-riverpod-skills`

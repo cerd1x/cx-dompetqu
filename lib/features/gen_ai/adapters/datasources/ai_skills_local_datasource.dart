@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:dompetqu/features/gen_ai/models/ai_skill.dart';
+import 'package:dompetqu/features/gen_ai/adapters/models/ai_skill.dart';
 
 part 'generated/ai_skills_local_datasource.g.dart';
 

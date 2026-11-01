@@ -1,8 +1,8 @@
 import 'package:dompetqu/features/gen_ai/adapters/datasources/mcp_local_datasource.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/mcp_repository.dart';
 import 'package:dompetqu/features/gen_ai/adapters/mappers/gen_ai_model_mapper.dart';
-import 'package:dompetqu/features/gen_ai/models/mcp_server.dart' as data;
+import 'package:dompetqu/features/gen_ai/adapters/models/mcp_server.dart' as data;
 
 class LocalMcpRepository implements McpRepository {
   const LocalMcpRepository(this._local);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/statistics/stores/statistics_store.dart';
+import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
 
 /// Grid statistik dashboard — padanan `_dashboard` stats cards di web.
 class StatsGrid extends StatelessWidget {

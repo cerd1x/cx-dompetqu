@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:dompetqu/features/gen_ai/models/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/adapters/models/mcp_server.dart';
 
 part 'generated/mcp_local_datasource.g.dart';
 

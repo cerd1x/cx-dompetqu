@@ -1,5 +1,5 @@
 import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
+import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 
 /// Titik data harian hasil agregasi transaksi.
 class DailyPoint {

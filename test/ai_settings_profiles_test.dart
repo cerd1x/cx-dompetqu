@@ -1,7 +1,7 @@
 import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_crypto_service.dart';
 import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_local_datasource.dart';
 import 'package:dompetqu/features/gen_ai/adapters/repositories/ai_settings_repository_impl.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

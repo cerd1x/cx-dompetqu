@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/features/order/presentation/order_tab.dart';
+import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
 
 /// Padanan tombol aksi cepat di dashboard (`_dashboard/DashboardPage.svelte`).
 class QuickActions extends StatelessWidget {

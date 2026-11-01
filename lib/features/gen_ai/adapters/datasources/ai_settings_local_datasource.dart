@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:dompetqu/features/gen_ai/domain/entities/ai_settings.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
 
 abstract interface class AiSettingsLocalDataSource {

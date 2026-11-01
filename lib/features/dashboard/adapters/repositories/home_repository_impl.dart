@@ -7,12 +7,12 @@ import 'package:dompetqu/features/contacts/domain/models/contact_page.dart'
 import 'package:dompetqu/features/dashboard/adapters/datasources/home_datasources.dart';
 import 'package:dompetqu/features/dashboard/adapters/mappers/home_model_mapper.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
-import 'package:dompetqu/features/inventory/domain/entities/product.dart' as domain;
-import 'package:dompetqu/features/statistics/domain/entities/statistics.dart'
+import 'package:dompetqu/features/inventory/domain/models/product.dart' as domain;
+import 'package:dompetqu/features/statistics/domain/models/statistics.dart'
     as domain;
-import 'package:dompetqu/features/transactions/domain/entities/transaction.dart'
+import 'package:dompetqu/features/transactions/domain/models/transaction.dart'
     as domain;
-import 'package:dompetqu/features/transactions/domain/entities/transaction_page.dart'
+import 'package:dompetqu/features/transactions/domain/models/transaction_page.dart'
     as domain;
 
 class HomeRepositoryImpl implements HomeRepository {

@@ -1,0 +1,632 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:mix/mix.dart';
+
+import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
+import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:dompetqu/features/payments/domain/models/payment.dart';
+import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dart';
+import 'package:dompetqu/features/payments/view/widgets/payment_widgets.dart';
+import 'package:dompetqu/core/theme/widgets/data_states.dart';
+import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
+import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
+
+/// Filter tipe transaksi pada buku besar.
+enum _LedgerFilter { all, income, expense, transfer, failed }
+
+String _filterLabel(_LedgerFilter f) => switch (f) {
+  _LedgerFilter.all => 'All',
+  _LedgerFilter.income => 'Income',
+  _LedgerFilter.expense => 'Expense',
+  _LedgerFilter.transfer => 'Transfer',
+  _LedgerFilter.failed => 'Failed',
+};
+
+/// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
+/// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
+///
+/// Sumber data: `transactionsStoreProvider`. Mode pagination di matikan
+/// (`ensureAllLoaded`) karena ringkasan bulanan butuh transaksi di luar halaman
+/// yang tampil.
+class BookkeepingTab extends ConsumerStatefulWidget {
+  const BookkeepingTab({super.key});
+
+  @override
+  ConsumerState<BookkeepingTab> createState() => _BookkeepingTabState();
+}
+
+class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
+  /// Bulan pertama yang sedang dilihat (selalu tanggal 1).
+  late DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
+  _LedgerFilter _filter = _LedgerFilter.all;
+
+  @override
+  void initState() {
+    super.initState();
+    // Ringkasan bulanan butuh daftar penuh, bukan hanya halaman pertama.
+    Future.microtask(
+      () => ref.read(transactionsStoreProvider.notifier).ensureAllLoaded(),
+    );
+  }
+
+  void _shiftMonth(int delta) {
+    setState(() => _month = DateTime(_month.year, _month.month + delta));
+  }
+
+  bool get _isCurrentMonth =>
+      _month.year == DateTime.now().year &&
+      _month.month == DateTime.now().month;
+
+  /// Desktop (termasuk web di desktop) memakai double-tap untuk membuka menu
+  /// baris; mobile tetap long-press. `Theme.platform` dipakai — bukan
+  /// `defaultTargetPlatform` langsung — supaya override tema (mis. di test)
+  /// tetap dihormati.
+  bool get _isDesktop => switch (Theme.of(context).platform) {
+    TargetPlatform.linux ||
+    TargetPlatform.macOS ||
+    TargetPlatform.windows => true,
+    TargetPlatform.android ||
+    TargetPlatform.iOS ||
+    TargetPlatform.fuchsia => false,
+  };
+
+  /// Transaksi pada bulan terpilih, terbaru dulu.
+  List<Transaction> _monthItems(List<Transaction> items) {
+    final filtered = items.where((tx) {
+      if (tx.createdAt.year != _month.year ||
+          tx.createdAt.month != _month.month) {
+        return false;
+      }
+      return switch (_filter) {
+        _LedgerFilter.all => true,
+        // Tab Failed memakai Payment dari backend (`paymentsByStatus`),
+        // bukan filter `paymentStatus` transaksi.
+        _LedgerFilter.failed => false,
+        _ => tx.type == _filter.name,
+      };
+    }).toList();
+    filtered.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return filtered;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final currency = selectedCurrency(ref);
+
+    // Tab Failed punya sumber data sendiri: query `paymentsByStatus(status:
+    // failed)` langsung ke backend, bukan filter transaksi di klien.
+    if (_filter == _LedgerFilter.failed) {
+      final failed = ref.watch(failedPaymentsProvider(_month));
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildMonthNav(),
+          const SizedBox(height: 12),
+          _buildFailedSummary(failed.value ?? const <Payment>[]),
+          const SizedBox(height: 12),
+          _buildFilters(),
+          const SizedBox(height: 10),
+          Expanded(child: _buildFailedLedger(failed)),
+        ],
+      );
+    }
+
+    final transactions = ref.watch(transactionsStoreProvider);
+    final items = _monthItems(transactions.items);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildMonthNav(),
+        const SizedBox(height: 12),
+        _buildSummary(items, currency),
+        const SizedBox(height: 12),
+        _buildFilters(),
+        const SizedBox(height: 10),
+        Expanded(child: _buildLedger(items, transactions.loading)),
+      ],
+    );
+  }
+
+  /// Navigasi bulan: mundur/maju + tombol lompat ke bulan berjalan.
+  Widget _buildMonthNav() {
+    return Row(
+      children: [
+        IconButton(
+          tooltip: 'Previous month',
+          onPressed: () => _shiftMonth(-1),
+          icon: const Icon(Icons.chevron_left_rounded, color: Colors.white70),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.white.withValues(alpha: 0.06),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Text(
+              DateFormat('MMMM yyyy').format(_month),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+        IconButton(
+          tooltip: 'Next month',
+          onPressed: _isCurrentMonth ? null : () => _shiftMonth(1),
+          icon: const Icon(Icons.chevron_right_rounded, color: Colors.white70),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.white.withValues(alpha: 0.06),
+          ),
+        ),
+        if (!_isCurrentMonth)
+          TextButton(
+            onPressed: () => setState(() => _month = DateTime(DateTime.now().year, DateTime.now().month)),
+            child: const Text('This month', style: TextStyle(fontSize: 12)),
+          ),
+      ],
+    );
+  }
+
+  /// Ringkasan payment gagal pada bulan aktif (dari query `paymentsByStatus`).
+  Widget _buildFailedSummary(List<Payment> payments) {
+    final retryable = payments.where((p) => p.canRetry).length;
+    return Row(
+      children: [
+        Expanded(
+          child: OrderStatTile(
+            label: 'Failed Payments',
+            value: payments.length.toString(),
+            color: const Color(0xFFF87171),
+            icon: Icons.error_outline_rounded,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: OrderStatTile(
+            label: 'Retry Available',
+            value: retryable.toString(),
+            color: const Color(0xFFFBBF24),
+            icon: Icons.refresh_rounded,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Ringkasan pemasukan, pengeluaran, dan selisihnya untuk bulan aktif.
+  Widget _buildSummary(List<Transaction> items, String currency) {
+    var income = 0.0;
+    var expense = 0.0;
+    for (final tx in items) {
+      final amount = txAmount(tx);
+      if (tx.type == 'income') income += amount;
+      if (tx.type == 'expense') expense += amount;
+    }
+    final profit = income - expense;
+
+    return Row(
+      children: [
+        Expanded(
+          child: OrderStatTile(
+            label: 'Income',
+            value: formatMoney(income, currency),
+            color: const Color(0xFF34D399),
+            icon: Icons.arrow_upward_rounded,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: OrderStatTile(
+            label: 'Expense',
+            value: formatMoney(expense, currency),
+            color: const Color(0xFFF87171),
+            icon: Icons.arrow_downward_rounded,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: OrderStatTile(
+            label: 'Profit',
+            value: formatMoney(profit, currency),
+            color: profit >= 0
+                ? const Color(0xFF34D399)
+                : const Color(0xFFF87171),
+            icon: Icons.trending_up_rounded,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFilters() {
+    return SizedBox(
+      height: 30,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _LedgerFilter.values.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 6),
+        itemBuilder: (_, i) {
+          final f = _LedgerFilter.values[i];
+          return OrderFilterChip(
+            label: _filterLabel(f),
+            selected: _filter == f,
+            onTap: () => setState(() => _filter = f),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLedger(List<Transaction> items, bool loading) {
+    if (loading) return const SkeletonList(count: 4);
+    if (items.isEmpty) {
+      return EmptyState(
+        icon: Icons.menu_book_outlined,
+        label: _filter == _LedgerFilter.all
+            ? 'No transactions in ${DateFormat('MMMM yyyy').format(_month)}'
+            : 'No ${_filter.name} transactions in '
+                '${DateFormat('MMMM yyyy').format(_month)}',
+      );
+    }
+
+    // Saldo berjalan dihitung dari transaksi terlama ke terbaru, lalu dipetakan
+    // ke id transaksi supaya tiap baris tahu saldo pada titik itu.
+    final chronological = items.reversed.toList();
+    var running = 0.0;
+    final balances = <String, double>{};
+    for (final tx in chronological) {
+      final amount = txAmount(tx);
+      running += switch (tx.type) {
+        'income' => amount,
+        'expense' => -amount,
+        _ => 0.0,
+      };
+      balances[tx.id] = running;
+    }
+
+    final groups = <String, List<Transaction>>{};
+    for (final tx in items) {
+      (groups[DateFormat('yyyy-MM-dd').format(tx.createdAt)] ??= []).add(tx);
+    }
+
+    // Di-flatten jadi satu list supaya `ListView.builder` bisa lazy.
+    final entries = <_LedgerEntry>[];
+    groups.forEach((_, list) {
+      entries
+        ..add(
+          _LedgerHeaderEntry(date: list.first.createdAt, count: list.length),
+        )
+        ..addAll(list.map(_LedgerRowEntry.new));
+    });
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(bottom: 24),
+      itemCount: entries.length,
+      itemBuilder: (context, i) => switch (entries[i]) {
+        _LedgerHeaderEntry(:final date, :final count) => OrderGroupHeader(
+          title: _dayLabel(date),
+          subtitle: '$count transactions',
+        ),
+        _LedgerRowEntry(:final tx) => RepaintBoundary(
+          // `Builder` memberi context yang menunjuk ke render box baris,
+          // dipakai sebagai jangkar popup menu long-press.
+          child: Builder(
+            builder: (rowContext) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _LedgerRow(
+                tx: tx,
+                balance: balances[tx.id] ?? 0,
+                currency: selectedCurrency(ref),
+                onTap: () => context.push('/struct-details', extra: tx),
+                onLongPress: () => _showLedgerActions(rowContext, tx),
+                onDoubleTap: _isDesktop
+                    ? () => _showLedgerActions(rowContext, tx)
+                    : null,
+              ),
+            ),
+          ),
+        ),
+      },
+    );
+  }
+
+  /// Daftar payment gagal (query `paymentsByStatus`), tanpa saldo berjalan
+  /// karena Payment bukan transaksi keuangan.
+  Widget _buildFailedLedger(AsyncValue<List<Payment>> payments) {
+    return payments.when(
+      skipLoadingOnRefresh: false,
+      loading: () => const SkeletonList(count: 3),
+      error: (error, _) => ErrorState(
+        message: 'Gagal memuat payment gagal: $error',
+        onRetry: () => ref.invalidate(failedPaymentsProvider(_month)),
+      ),
+      data: (items) {
+        if (items.isEmpty) {
+          return EmptyState(
+            icon: Icons.check_circle_outline_rounded,
+            label: 'No failed payments in '
+                '${DateFormat('MMMM yyyy').format(_month)}',
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.only(bottom: 24),
+          itemCount: items.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 8),
+          itemBuilder: (_, i) => RepaintBoundary(
+            child: FailedPaymentRow(payment: items[i]),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Menu aksi baris ledger: ubah status pembayaran transaksi.
+  ///
+  /// Dibuka lewat long-press (mobile) atau double-tap (desktop).
+  /// `unpaid` → "Mark as paid", `paid` → "Mark as unpaid", `failed` → toggle ke `paid`/`unpaid`.
+  /// Selalu bisa diretry: row tidak disabled setelah gagal.
+  Future<void> _showLedgerActions(
+    BuildContext rowContext,
+    Transaction tx,
+  ) async {
+    final isFailed = tx.paymentStatus == 'failed';
+    final isPaid = tx.paymentStatus == 'paid';
+    final selected = await showMenu<bool>(
+      context: context,
+      position: _menuPosition(rowContext),
+      color: const Color(0xFF141414),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      items: [
+        PopupMenuItem<bool>(
+          value: true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                isFailed
+                    ? Icons.refresh_rounded
+                    : (isPaid
+                        ? Icons.undo_rounded
+                        : Icons.check_circle_outline_rounded),
+                size: 18,
+                color: isFailed
+                    ? const Color(0xFFFBBF24)
+                    : (isPaid
+                        ? const Color(0xFFFBBF24)
+                        : const Color(0xFF34D399)),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                isFailed
+                    ? 'Retry payment status'
+                    : (isPaid ? 'Mark as unpaid' : 'Mark as paid'),
+                style: const TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+    if (selected != true || !mounted) return;
+
+    final nextStatus = isFailed ? 'unpaid' : (isPaid ? 'unpaid' : 'paid');
+    // Controller melakukan update optimistis; pill status berubah lebih dulu
+    // lalu dikembalikan bila mutation ke backend gagal.
+    final ok = await ref
+        .read(transactionsStoreProvider.notifier)
+        .updatePaymentStatus(tx, paymentStatus: nextStatus);
+    if (!mounted) return;
+    final message = ok
+        ? (isFailed
+            ? nextStatus == 'paid'
+                ? 'Marked as paid'
+                : 'Marked as unpaid'
+                : (isPaid ? 'Marked as unpaid' : 'Marked as paid'))
+        : 'Failed to update payment status';
+    _toast(message);
+  }
+
+  /// Posisi popup menu relatif terhadap overlay, dihitung dari render box
+  /// baris yang di-long-press.
+  RelativeRect _menuPosition(BuildContext rowContext) {
+    final box = rowContext.findRenderObject() as RenderBox?;
+    final overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (box == null || overlay == null) {
+      return const RelativeRect.fromLTRB(24, 240, 24, 0);
+    }
+    final topLeft = box.localToGlobal(Offset.zero, ancestor: overlay);
+    return RelativeRect.fromRect(
+      Rect.fromLTWH(topLeft.dx, topLeft.dy, box.size.width, box.size.height),
+      Offset.zero & overlay.size,
+    );
+  }
+
+  void _toast(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(fontSize: 12.5)),
+        backgroundColor: Colors.black87,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  /// Label tanggal: "Today"/"Yesterday"/tanggal lengkap.
+  String _dayLabel(DateTime date) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final day = DateTime(date.year, date.month, date.day);
+    if (day == today) return 'Today';
+    if (day == today.subtract(const Duration(days: 1))) return 'Yesterday';
+    return DateFormat('d MMM yyyy').format(date);
+  }
+}
+
+/// Modal transaksi sebagai angka; null bila kosong atau format tak dikenal.
+num? _capitalOf(Transaction tx) {
+  final raw = tx.capital;
+  if (raw == null) return null;
+  try {
+    return Balance.parse(raw).value;
+  } on FormatException {
+    return null;
+  }
+}
+
+/// Baris ledger: nama transaksi, tipe + modal, nominal, dan saldo berjalan.
+class _LedgerRow extends StatelessWidget {
+  const _LedgerRow({
+    required this.tx,
+    required this.balance,
+    required this.currency,
+    this.onTap,
+    this.onLongPress,
+    this.onDoubleTap,
+  });
+
+  final Transaction tx;
+  final double balance;
+  final String currency;
+  final VoidCallback? onTap;
+
+  /// Aksi long-press baris (mobile): membuka popup menu ubah status pembayaran.
+  final VoidCallback? onLongPress;
+
+  /// Aksi double-tap baris (desktop) — aksi yang sama dengan [onLongPress].
+  final VoidCallback? onDoubleTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tone = txTone(tx.type);
+    final amount = formatMoney(txAmount(tx), currency);
+    final capital = _capitalOf(tx);
+
+    final card = DompetCard(
+      variant: DompetCardVariant.csGlassSurface,
+      radius: 16,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: Row(
+        children: [
+          Box(
+            style: BoxStyler()
+                .constraints(
+                  BoxConstraintsMix.value(
+                    (const BoxConstraints()).tighten(width: 36, height: 36),
+                  ),
+                )
+                .decoration(
+                  DecorationMix.value(
+                    BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: tone.color.withValues(alpha: 0.16),
+                      border: Border.all(
+                        color: tone.color.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ),
+                ),
+            child: Icon(tone.icon, size: 18, color: tone.color),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  tx.displayName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Row(
+                  children: [
+                    // Status pembayaran transaksi — padanan `paymentStatus`
+                    // (`TransactionPaymentStatus`) dari backend.
+                    PaymentStatusPill(status: tx.paymentStatus),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        [
+                          tone.label,
+                          if (capital != null)
+                            'capital ${formatMoney(capital, currency)}',
+                          DateFormat('HH:mm').format(tx.createdAt),
+                        ].join(' · '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white38,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${tone.sign}$amount',
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: tone.color,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                'balance ${formatMoney(balance, currency)}',
+                style: const TextStyle(fontSize: 10.5, color: Colors.white38),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+
+    // Satu `GestureDetector` untuk seluruh gesture baris: tap (buka detail),
+    // long-press (mobile) dan double-tap (desktop) untuk menu aksi. Digabung
+    // di satu arena supaya Flutter bisa menunda tap saat menunggu tap kedua;
+    // bila `onDoubleTap` null (mobile) tap tetap instan.
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      onDoubleTap: onDoubleTap,
+      child: card,
+    );
+  }
+}
+
+/// Satu entri datar pada buku besar: header hari atau baris transaksi.
+sealed class _LedgerEntry {
+  const _LedgerEntry();
+}
+
+class _LedgerHeaderEntry extends _LedgerEntry {
+  const _LedgerHeaderEntry({required this.date, required this.count});
+
+  final DateTime date;
+  final int count;
+}
+
+class _LedgerRowEntry extends _LedgerEntry {
+  const _LedgerRowEntry(this.tx);
+
+  final Transaction tx;
+}

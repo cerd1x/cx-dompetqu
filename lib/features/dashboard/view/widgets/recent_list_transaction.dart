@@ -10,8 +10,8 @@ import 'package:dompetqu/core/theme/widgets/cs_select_picker.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/features/transactions/domain/entities/transaction.dart';
-import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
 
 /// Filter tipe transaksi.

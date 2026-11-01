@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dompetqu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/skill_store_entry.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';

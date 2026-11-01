@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/gen_ai/domain/entities/mcp_server.dart';
+import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/mcp_repository.dart';
-import 'package:dompetqu/features/gen_ai/repositories/mcp_repository.dart';
+import 'package:dompetqu/features/gen_ai/view/stores/mcp_repository.dart';
 
 part 'generated/mcp_store.g.dart';
 

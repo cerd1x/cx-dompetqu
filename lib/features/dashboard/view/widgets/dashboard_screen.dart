@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'quick_actions.dart';
 import 'recent_list_transaction.dart';
 import 'stats_grid.dart';
-import 'package:dompetqu/features/statistics/stores/statistics_store.dart';
-import 'package:dompetqu/features/transactions/stores/transactions_store.dart';
+import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
+import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/core/theme/widgets/app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
 

@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
-import 'package:dompetqu/features/auth/domain/failures/auth_failure.dart';
+import 'package:dompetqu/features/auth/domain/models/auth_failure.dart';
 import 'auth_providers.dart';
 
 part 'generated/session_store.g.dart';

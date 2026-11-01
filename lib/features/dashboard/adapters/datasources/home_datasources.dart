@@ -2,10 +2,10 @@ import 'package:dompetqu/features/assets/adapters/models/asset.dart';
 import 'package:dompetqu/features/assets/adapters/models/asset_mutation.dart';
 import 'package:dompetqu/features/contacts/adapters/models/contact.dart';
 import 'package:dompetqu/features/contacts/adapters/models/contact_page.dart';
-import 'package:dompetqu/features/inventory/data/models/product.dart';
-import 'package:dompetqu/features/statistics/data/models/statistics.dart';
-import 'package:dompetqu/features/transactions/data/models/transaction.dart';
-import 'package:dompetqu/features/transactions/data/models/transaction_page.dart';
+import 'package:dompetqu/features/inventory/adapters/models/product.dart';
+import 'package:dompetqu/features/statistics/adapters/models/statistics.dart';
+import 'package:dompetqu/features/transactions/adapters/models/transaction.dart';
+import 'package:dompetqu/features/transactions/adapters/models/transaction_page.dart';
 
 abstract interface class AssetsDataSource {
   Future<List<Asset>> assets();

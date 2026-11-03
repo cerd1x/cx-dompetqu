@@ -17,15 +17,23 @@ import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
 
 /// Filter tipe transaksi pada buku besar.
-enum _LedgerFilter { all, income, expense, transfer, failed }
+enum _LedgerFilter {
+  all("All"),
+  income("Income"),
+  expense("Expense"),
+  transfer("Transfer"),
+  failed("Failed");
 
-String _filterLabel(_LedgerFilter f) => switch (f) {
-  _LedgerFilter.all => 'All',
-  _LedgerFilter.income => 'Income',
-  _LedgerFilter.expense => 'Expense',
-  _LedgerFilter.transfer => 'Transfer',
-  _LedgerFilter.failed => 'Failed',
-};
+  final String filterLabel;
+  const _LedgerFilter(this.filterLabel);
+  static String matchFrom(_LedgerFilter f) => switch (f) {
+    _LedgerFilter.all => 'All',
+    _LedgerFilter.income => 'Income',
+    _LedgerFilter.expense => 'Expense',
+    _LedgerFilter.transfer => 'Transfer',
+    _LedgerFilter.failed => 'Failed',
+  };
+}
 
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
 /// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
@@ -165,7 +173,10 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         ),
         if (!_isCurrentMonth)
           TextButton(
-            onPressed: () => setState(() => _month = DateTime(DateTime.now().year, DateTime.now().month)),
+            onPressed: () => setState(
+              () =>
+                  _month = DateTime(DateTime.now().year, DateTime.now().month),
+            ),
             child: const Text('This month', style: TextStyle(fontSize: 12)),
           ),
       ],
@@ -253,7 +264,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         itemBuilder: (_, i) {
           final f = _LedgerFilter.values[i];
           return OrderFilterChip(
-            label: _filterLabel(f),
+            label: _LedgerFilter.matchFrom(f),
             selected: _filter == f,
             onTap: () => setState(() => _filter = f),
           );
@@ -270,7 +281,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         label: _filter == _LedgerFilter.all
             ? 'No transactions in ${DateFormat('MMMM yyyy').format(_month)}'
             : 'No ${_filter.name} transactions in '
-                '${DateFormat('MMMM yyyy').format(_month)}',
+                  '${DateFormat('MMMM yyyy').format(_month)}',
       );
     }
 
@@ -349,7 +360,8 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         if (items.isEmpty) {
           return EmptyState(
             icon: Icons.check_circle_outline_rounded,
-            label: 'No failed payments in '
+            label:
+                'No failed payments in '
                 '${DateFormat('MMMM yyyy').format(_month)}',
           );
         }
@@ -394,14 +406,14 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
                 isFailed
                     ? Icons.refresh_rounded
                     : (isPaid
-                        ? Icons.undo_rounded
-                        : Icons.check_circle_outline_rounded),
+                          ? Icons.undo_rounded
+                          : Icons.check_circle_outline_rounded),
                 size: 18,
                 color: isFailed
                     ? const Color(0xFFFBBF24)
                     : (isPaid
-                        ? const Color(0xFFFBBF24)
-                        : const Color(0xFF34D399)),
+                          ? const Color(0xFFFBBF24)
+                          : const Color(0xFF34D399)),
               ),
               const SizedBox(width: 10),
               Text(
@@ -426,10 +438,10 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     if (!mounted) return;
     final message = ok
         ? (isFailed
-            ? nextStatus == 'paid'
-                ? 'Marked as paid'
-                : 'Marked as unpaid'
-                : (isPaid ? 'Marked as unpaid' : 'Marked as paid'))
+              ? nextStatus == 'paid'
+                    ? 'Marked as paid'
+                    : 'Marked as unpaid'
+              : (isPaid ? 'Marked as unpaid' : 'Marked as paid'))
         : 'Failed to update payment status';
     _toast(message);
   }

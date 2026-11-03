@@ -32,6 +32,12 @@ class PaymentsRemoteSource {
         description
         retryCount
         maxRetries
+        meta {
+          paymentType
+          assetId
+          lastError
+          nextRetryDelayMs
+        }
         createdAt
         updatedAt
       }
@@ -73,6 +79,12 @@ class PaymentsRemoteSource {
         description
         retryCount
         maxRetries
+        metadata {
+          paymentType
+          assetId
+          lastError
+          nextRetryDelayMs
+        }
         createdAt
         updatedAt
       }
@@ -114,11 +126,24 @@ Payment _toPayment(Map<String, dynamic> json) => Payment(
   description: json['description'] as String?,
   retryCount: (json['retryCount'] as num?)?.toInt() ?? 0,
   maxRetries: (json['maxRetries'] as num?)?.toInt() ?? 3,
+  metadata: _toMetadata(json['metadata']),
   createdAt: DateTime.parse(json['createdAt'] as String),
   updatedAt: json['updatedAt'] == null
       ? null
       : DateTime.parse(json['updatedAt'] as String),
 );
+
+/// `PaymentMetadata` GraphQL → model domain; `null` bila backend tidak
+/// mengirim metadata (payment lama atau gateway tanpa detail).
+PaymentMetadata? _toMetadata(Object? json) {
+  if (json is! Map<String, dynamic>) return null;
+  return PaymentMetadata(
+    paymentType: json['paymentType'] as String?,
+    assetId: (json['assetId'] as num?)?.toDouble(),
+    lastError: json['lastError'] as String?,
+    nextRetryDelayMs: (json['nextRetryDelayMs'] as num?)?.toDouble(),
+  );
+}
 
 @Riverpod(keepAlive: true)
 PaymentsRemoteSource paymentsRemoteSource(Ref ref) =>

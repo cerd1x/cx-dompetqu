@@ -23,9 +23,10 @@ import 'package:dompetqu/features/transactions/domain/models/payment_method_type
 /// - **Report** → kirim laporan ke `POST {baseUrl}/api/beta/report` karena
 ///   backend belum punya endpoint laporan khusus payment.
 ///
-/// Backend tidak menyimpan pesan error gateway, jadi bagian "Kemungkinan
-/// penyebab" diturunkan dari `status`, `gatewayRef`, dan sisa `retryCount` —
-/// bukan teks asli dari gateway.
+/// Penyebab kegagalan memakai `metadata.lastError` (pesan asli gateway) bila
+/// tersedia. Bila tidak ada, penyebab diturunkan dari `status`, `gatewayRef`,
+/// dan sisa `retryCount`. `metadata.nextRetryDelayMs` ditampilkan sebagai jeda
+/// retry berikutnya (backoff `retry-policy.vo.ts`).
 class DetailPaymentFailedView extends ConsumerStatefulWidget {
   const DetailPaymentFailedView({super.key, required this.payment});
 
@@ -55,11 +56,6 @@ class _DetailPaymentFailedViewState
       context: context,
       builder: (dialogContext) => CsDialog(
         title: 'Retry payment?',
-        child: Text(
-          'Percobaan ${_payment.retryCount + 1} dari '
-          '${_payment.maxRetries} akan dikirim ulang ke gateway.',
-          style: const TextStyle(height: 1.4),
-        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -70,6 +66,11 @@ class _DetailPaymentFailedViewState
             child: const Text('Retry'),
           ),
         ],
+        child: Text(
+          'Percobaan ${_payment.retryCount + 1} dari '
+          '${_payment.maxRetries} akan dikirim ulang ke gateway.',
+          style: const TextStyle(height: 1.4),
+        ),
       ),
     );
     if (confirmed != true || !mounted) return;
@@ -153,6 +154,9 @@ class _DetailPaymentFailedViewState
       'status=${p.status}',
       'gatewayRef=${p.gatewayRef ?? '-'}',
       'retry=${p.retryCount}/${p.maxRetries}',
+      'paymentType=${p.metadata?.paymentType ?? '-'}',
+      'lastError=${p.metadata?.lastError ?? '-'}',
+      'nextRetryDelayMs=${p.metadata?.nextRetryDelayMs ?? '-'}',
       'createdAt=${p.createdAt.toIso8601String()}',
       'updatedAt=${p.updatedAt?.toIso8601String() ?? '-'}',
     ].join('\n');
@@ -212,7 +216,7 @@ class _DetailPaymentFailedViewState
           const SizedBox(height: 20),
 
           // penyebab section
-          _SectionTitle('Kemungkinan penyebab'),
+          _SectionTitle('Penyebab kegagalan'),
           DompetCard(
             variant: DompetCardVariant.csGlassSurface,
             radius: 16,
@@ -275,17 +279,18 @@ class _DetailPaymentFailedViewState
             _InfoRow(label: 'Invoice', value: p.invoiceId!),
           _InfoRow(
             label: 'Metode',
-            value:
-                PaymentMethodType.fromRaw(p.method)?.label ?? p.method,
+            value: PaymentMethodType.fromRaw(p.method)?.label ?? p.method,
           ),
           _InfoRow(
             label: 'Gateway ref',
             value: p.gatewayRef?.isNotEmpty == true ? p.gatewayRef! : '—',
           ),
-          _InfoRow(
-            label: 'Retry',
-            value: '${p.retryCount} / ${p.maxRetries}',
-          ),
+          _InfoRow(label: 'Retry', value: '${p.retryCount} / ${p.maxRetries}'),
+          if (p.metadata?.nextRetryDelayMs != null)
+            _InfoRow(
+              label: 'Jeda retry',
+              value: _formatDelay(p.metadata!.nextRetryDelayMs!),
+            ),
           _InfoRow(
             label: 'Dibuat',
             value: DateFormat('d MMM yyyy, HH:mm').format(p.createdAt),
@@ -349,10 +354,46 @@ class _DetailPaymentFailedViewState
     );
   }
 
-  /// Analisis turunan: tidak ada `errorMessage` di backend, jadi penyebab
-  /// ditebak dari kondisi payment yang tersedia.
+  /// Penyebab kegagalan untuk bagian "Kemungkinan penyebab".
+  ///
+  /// `metadata.lastError` (pesan asli gateway) diprioritaskan; bila kosong
+  /// dipakai tebakan dari kondisi payment. `nextRetryDelayMs` ditambahkan
+  /// sebagai hint jeda retry berikutnya di semua kasus.
   ({String title, String detail, List<String> hints}) get _analysis {
     final p = _payment;
+    final lastError = p.metadata?.lastError;
+    final delay = p.metadata?.nextRetryDelayMs;
+    final delayHint = delay == null
+        ? null
+        : 'Retry berikutnya dijadwalkan setelah ${_formatDelay(delay)}.';
+
+    if (lastError != null && lastError.isNotEmpty) {
+      return (
+        title: 'Pesan dari gateway',
+        detail: lastError,
+        hints: [
+          if (delayHint != null) delayHint,
+          if (p.canRetry)
+            'Sisa percobaan: ${p.maxRetries - p.retryCount} kali.'
+          else
+            'Batas retry tercapai — buat payment baru atau kirim Report.',
+        ],
+      );
+    }
+
+    final derived = _derivedAnalysis(p);
+    return (
+      title: derived.title,
+      detail: derived.detail,
+      hints: [...derived.hints, if (delayHint != null) delayHint],
+    );
+  }
+
+  /// Tebakan penyebab saat `metadata.lastError` tidak tersedia (payment lama
+  /// atau gateway yang tidak mengisi pesan error).
+  ({String title, String detail, List<String> hints}) _derivedAnalysis(
+    Payment p,
+  ) {
     if (!p.canRetry) {
       return (
         title: 'Batas retry tercapai',
@@ -390,6 +431,17 @@ class _DetailPaymentFailedViewState
         'Sisa percobaan: ${p.maxRetries - p.retryCount} kali.',
       ],
     );
+  }
+
+  /// Format jeda backoff dari backend menjadi teks ringkas.
+  static String _formatDelay(double milliseconds) {
+    if (milliseconds < 1000) return '${milliseconds.round()} ms';
+    final seconds = milliseconds / 1000;
+    if (seconds < 60) {
+      final isWhole = seconds == seconds.roundToDouble();
+      return '${seconds.toStringAsFixed(isWhole ? 0 : 1)} detik';
+    }
+    return '${(seconds / 60).toStringAsFixed(1)} menit';
   }
 }
 

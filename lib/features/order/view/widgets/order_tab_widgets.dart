@@ -3,7 +3,6 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
-import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 
 /// Warna/label/ikon transaksi per tipe — dipakai bersama tab Bookkeeping & Debt.
@@ -38,13 +37,10 @@ TxTone txTone(String type) => switch (type) {
 };
 
 /// Nominal transaksi sebagai angka — parsing aman untuk string "ISO VALUE".
-num txAmount(Transaction tx) {
-  try {
-    return Balance.parse(tx.amount).value;
-  } on FormatException {
-    return 0;
-  }
-}
+///
+/// Delegasi ke [Transaction.amountValue]; dipertahankan sebagai fungsi top-level
+/// karena dipakai widget Order sebelum logikanya pindah ke domain.
+num txAmount(Transaction tx) => tx.amountValue;
 
 /// Kotak ringkasan angka (Income/Expense/Profit/Outstanding) — padanan kartu
 /// statistik di dashboard, dipakai tab Bookkeeping & Debt.
@@ -130,14 +126,20 @@ class OrderFilterChip extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.icon,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
+  /// Ikon opsional di kiri label — dipakai filter buku besar agar tipe
+  /// transaksi langsung dikenali tanpa membaca teks.
+  final IconData? icon;
+
   @override
   Widget build(BuildContext context) {
+    final color = selected ? DompetBrand.gold : Colors.white38;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -154,13 +156,23 @@ class OrderFilterChip extends StatelessWidget {
                 : Colors.white12,
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 11.5,
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? DompetBrand.gold : Colors.white38,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ikon section — opsional, ukuran kecil agar chip tetap ringkas.
+            if (icon != null) ...[
+              Icon(icon, size: 13, color: color),
+              const SizedBox(width: 5),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11.5,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                color: color,
+              ),
+            ),
+          ],
         ),
       ),
     );

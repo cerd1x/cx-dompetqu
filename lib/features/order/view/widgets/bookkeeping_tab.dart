@@ -7,147 +7,79 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/core/utils/platform_target.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/features/payments/domain/models/payment.dart';
 import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dart';
 import 'package:dompetqu/features/payments/view/widgets/payment_widgets.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
+import 'package:dompetqu/features/order/view/stores/bookkeeping_store.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
-
-/// Filter tipe transaksi pada buku besar.
-enum _LedgerFilter {
-  all("All"),
-  income("Income"),
-  expense("Expense"),
-  transfer("Transfer"),
-  failed("Failed");
-
-  final String filterLabel;
-  const _LedgerFilter(this.filterLabel);
-  static String matchFrom(_LedgerFilter f) => switch (f) {
-    _LedgerFilter.all => 'All',
-    _LedgerFilter.income => 'Income',
-    _LedgerFilter.expense => 'Expense',
-    _LedgerFilter.transfer => 'Transfer',
-    _LedgerFilter.failed => 'Failed',
-  };
-}
 
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
 /// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
 ///
-/// Sumber data: `transactionsStoreProvider`. Mode pagination di matikan
-/// (`ensureAllLoaded`) karena ringkasan bulanan butuh transaksi di luar halaman
-/// yang tampil.
-class BookkeepingTab extends ConsumerStatefulWidget {
+/// Bulan/filter aktif dan data turunannya (ringkasan, saldo berjalan, grup
+/// tanggal) ada di [bookkeepingStoreProvider]; widget hanya merender. Sumber
+/// datanya `transactionsStoreProvider` dengan mode pagination dimatikan
+/// (`ensureAllLoaded` dipanggil store) karena ringkasan bulanan butuh transaksi
+/// di luar halaman yang tampil.
+class BookkeepingTab extends ConsumerWidget {
   const BookkeepingTab({super.key});
 
   @override
-  ConsumerState<BookkeepingTab> createState() => _BookkeepingTabState();
-}
-
-class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
-  /// Bulan pertama yang sedang dilihat (selalu tanggal 1).
-  late DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
-  _LedgerFilter _filter = _LedgerFilter.all;
-
-  @override
-  void initState() {
-    super.initState();
-    // Ringkasan bulanan butuh daftar penuh, bukan hanya halaman pertama.
-    Future.microtask(
-      () => ref.read(transactionsStoreProvider.notifier).ensureAllLoaded(),
-    );
-  }
-
-  void _shiftMonth(int delta) {
-    setState(() => _month = DateTime(_month.year, _month.month + delta));
-  }
-
-  bool get _isCurrentMonth =>
-      _month.year == DateTime.now().year &&
-      _month.month == DateTime.now().month;
-
-  /// Desktop (termasuk web di desktop) memakai double-tap untuk membuka menu
-  /// baris; mobile tetap long-press. `Theme.platform` dipakai — bukan
-  /// `defaultTargetPlatform` langsung — supaya override tema (mis. di test)
-  /// tetap dihormati.
-  bool get _isDesktop => switch (Theme.of(context).platform) {
-    TargetPlatform.linux ||
-    TargetPlatform.macOS ||
-    TargetPlatform.windows => true,
-    TargetPlatform.android ||
-    TargetPlatform.iOS ||
-    TargetPlatform.fuchsia => false,
-  };
-
-  /// Transaksi pada bulan terpilih, terbaru dulu.
-  List<Transaction> _monthItems(List<Transaction> items) {
-    final filtered = items.where((tx) {
-      if (tx.createdAt.year != _month.year ||
-          tx.createdAt.month != _month.month) {
-        return false;
-      }
-      return switch (_filter) {
-        _LedgerFilter.all => true,
-        // Tab Failed memakai Payment dari backend (`paymentsByStatus`),
-        // bukan filter `paymentStatus` transaksi.
-        _LedgerFilter.failed => false,
-        _ => tx.type == _filter.name,
-      };
-    }).toList();
-    filtered.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    return filtered;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(bookkeepingStoreProvider);
+    final store = ref.read(bookkeepingStoreProvider.notifier);
     final currency = selectedCurrency(ref);
 
     // Tab Failed punya sumber data sendiri: query `paymentsByStatus(status:
     // failed)` langsung ke backend, bukan filter transaksi di klien.
-    if (_filter == _LedgerFilter.failed) {
-      final failed = ref.watch(failedPaymentsProvider(_month));
+    if (state.filter == BookkeepingFilter.failed) {
+      final failed = ref.watch(failedPaymentsProvider(state.month));
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildMonthNav(),
+          _buildMonthNav(context, store, state),
           const SizedBox(height: 12),
           _buildFailedSummary(failed.value ?? const <Payment>[]),
           const SizedBox(height: 12),
-          _buildFilters(),
+          _buildFilters(store, state),
           const SizedBox(height: 10),
-          Expanded(child: _buildFailedLedger(failed)),
+          Expanded(
+            child: _buildFailedLedger(context, ref, failed, state.month),
+          ),
         ],
       );
     }
 
-    final transactions = ref.watch(transactionsStoreProvider);
-    final items = _monthItems(transactions.items);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildMonthNav(),
+        _buildMonthNav(context, store, state),
         const SizedBox(height: 12),
-        _buildSummary(items, currency),
+        _buildSummary(state, currency),
         const SizedBox(height: 12),
-        _buildFilters(),
+        _buildFilters(store, state),
         const SizedBox(height: 10),
-        Expanded(child: _buildLedger(items, transactions.loading)),
+        Expanded(child: _buildLedger(context, ref, state)),
       ],
     );
   }
 
   /// Navigasi bulan: mundur/maju + tombol lompat ke bulan berjalan.
-  Widget _buildMonthNav() {
+  Widget _buildMonthNav(
+    BuildContext context,
+    BookkeepingStore store,
+    BookkeepingState state,
+  ) {
     return Row(
       children: [
         IconButton(
           tooltip: 'Previous month',
-          onPressed: () => _shiftMonth(-1),
+          onPressed: () => store.shiftMonth(-1),
           icon: const Icon(Icons.chevron_left_rounded, color: Colors.white70),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.06),
@@ -156,7 +88,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         Expanded(
           child: Center(
             child: Text(
-              DateFormat('MMMM yyyy').format(_month),
+              DateFormat('MMMM yyyy').format(state.month),
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -165,18 +97,15 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         ),
         IconButton(
           tooltip: 'Next month',
-          onPressed: _isCurrentMonth ? null : () => _shiftMonth(1),
+          onPressed: state.isCurrentMonth ? null : () => store.shiftMonth(1),
           icon: const Icon(Icons.chevron_right_rounded, color: Colors.white70),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.06),
           ),
         ),
-        if (!_isCurrentMonth)
+        if (!state.isCurrentMonth)
           TextButton(
-            onPressed: () => setState(
-              () =>
-                  _month = DateTime(DateTime.now().year, DateTime.now().month),
-            ),
+            onPressed: store.jumpToCurrentMonth,
             child: const Text('This month', style: TextStyle(fontSize: 12)),
           ),
       ],
@@ -210,22 +139,13 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   }
 
   /// Ringkasan pemasukan, pengeluaran, dan selisihnya untuk bulan aktif.
-  Widget _buildSummary(List<Transaction> items, String currency) {
-    var income = 0.0;
-    var expense = 0.0;
-    for (final tx in items) {
-      final amount = txAmount(tx);
-      if (tx.type == 'income') income += amount;
-      if (tx.type == 'expense') expense += amount;
-    }
-    final profit = income - expense;
-
+  Widget _buildSummary(BookkeepingState state, String currency) {
     return Row(
       children: [
         Expanded(
           child: OrderStatTile(
             label: 'Income',
-            value: formatMoney(income, currency),
+            value: formatMoney(state.income, currency),
             color: const Color(0xFF34D399),
             icon: Icons.arrow_upward_rounded,
           ),
@@ -234,7 +154,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         Expanded(
           child: OrderStatTile(
             label: 'Expense',
-            value: formatMoney(expense, currency),
+            value: formatMoney(state.expense, currency),
             color: const Color(0xFFF87171),
             icon: Icons.arrow_downward_rounded,
           ),
@@ -243,8 +163,8 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         Expanded(
           child: OrderStatTile(
             label: 'Profit',
-            value: formatMoney(profit, currency),
-            color: profit >= 0
+            value: formatMoney(state.profit, currency),
+            color: state.profit >= 0
                 ? const Color(0xFF34D399)
                 : const Color(0xFFF87171),
             icon: Icons.trending_up_rounded,
@@ -254,89 +174,73 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     );
   }
 
-  Widget _buildFilters() {
+  Widget _buildFilters(BookkeepingStore store, BookkeepingState state) {
     return SizedBox(
       height: 30,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: _LedgerFilter.values.length,
+        itemCount: BookkeepingFilter.values.length,
         separatorBuilder: (_, _) => const SizedBox(width: 6),
         itemBuilder: (_, i) {
-          final f = _LedgerFilter.values[i];
+          final f = BookkeepingFilter.values[i];
           return OrderFilterChip(
-            label: _LedgerFilter.matchFrom(f),
-            selected: _filter == f,
-            onTap: () => setState(() => _filter = f),
+            label: f.label,
+            icon: _filterIcon(f),
+            selected: state.filter == f,
+            onTap: () => store.selectFilter(f),
           );
         },
       ),
     );
   }
 
-  Widget _buildLedger(List<Transaction> items, bool loading) {
-    if (loading) return const SkeletonList(count: 4);
-    if (items.isEmpty) {
+  Widget _buildLedger(
+    BuildContext context,
+    WidgetRef ref,
+    BookkeepingState state,
+  ) {
+    if (state.loading) return const SkeletonList(count: 4);
+    if (state.items.isEmpty) {
       return EmptyState(
         icon: Icons.menu_book_outlined,
-        label: _filter == _LedgerFilter.all
-            ? 'No transactions in ${DateFormat('MMMM yyyy').format(_month)}'
-            : 'No ${_filter.name} transactions in '
-                  '${DateFormat('MMMM yyyy').format(_month)}',
+        label: state.filter == BookkeepingFilter.all
+            ? 'No transactions in ${DateFormat('MMMM yyyy').format(state.month)}'
+            : 'No ${state.filter.name} transactions in '
+                  '${DateFormat('MMMM yyyy').format(state.month)}',
       );
     }
 
-    // Saldo berjalan dihitung dari transaksi terlama ke terbaru, lalu dipetakan
-    // ke id transaksi supaya tiap baris tahu saldo pada titik itu.
-    final chronological = items.reversed.toList();
-    var running = 0.0;
-    final balances = <String, double>{};
-    for (final tx in chronological) {
-      final amount = txAmount(tx);
-      running += switch (tx.type) {
-        'income' => amount,
-        'expense' => -amount,
-        _ => 0.0,
-      };
-      balances[tx.id] = running;
-    }
-
-    final groups = <String, List<Transaction>>{};
-    for (final tx in items) {
-      (groups[DateFormat('yyyy-MM-dd').format(tx.createdAt)] ??= []).add(tx);
-    }
-
-    // Di-flatten jadi satu list supaya `ListView.builder` bisa lazy.
-    final entries = <_LedgerEntry>[];
-    groups.forEach((_, list) {
-      entries
-        ..add(
-          _LedgerHeaderEntry(date: list.first.createdAt, count: list.length),
-        )
-        ..addAll(list.map(_LedgerRowEntry.new));
-    });
-
+    // Saldo berjalan & grup tanggal sudah dihitung store; di sini hanya render
+    // satu list datar supaya `ListView.builder` tetap lazy.
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 24),
-      itemCount: entries.length,
-      itemBuilder: (context, i) => switch (entries[i]) {
-        _LedgerHeaderEntry(:final date, :final count) => OrderGroupHeader(
+      itemCount: state.entries.length,
+      itemBuilder: (context, i) => switch (state.entries[i]) {
+        LedgerDayHeader(:final date, :final count) => OrderGroupHeader(
           title: _dayLabel(date),
           subtitle: '$count transactions',
         ),
-        _LedgerRowEntry(:final tx) => RepaintBoundary(
+        LedgerTransactionRow(:final transaction) => RepaintBoundary(
           // `Builder` memberi context yang menunjuk ke render box baris,
           // dipakai sebagai jangkar popup menu long-press.
           child: Builder(
             builder: (rowContext) => Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: _LedgerRow(
-                tx: tx,
-                balance: balances[tx.id] ?? 0,
+                tx: transaction,
+                balance: state.balances[transaction.id] ?? 0,
                 currency: selectedCurrency(ref),
-                onTap: () => context.push('/struct-details', extra: tx),
-                onLongPress: () => _showLedgerActions(rowContext, tx),
-                onDoubleTap: _isDesktop
-                    ? () => _showLedgerActions(rowContext, tx)
+                onTap: () =>
+                    context.push('/struct-details', extra: transaction),
+                onLongPress: () =>
+                    _showLedgerActions(context, ref, rowContext, transaction),
+                onDoubleTap: PlatformTarget.of(context).isDesktop
+                    ? () => _showLedgerActions(
+                        context,
+                        ref,
+                        rowContext,
+                        transaction,
+                      )
                     : null,
               ),
             ),
@@ -348,13 +252,18 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
 
   /// Daftar payment gagal (query `paymentsByStatus`), tanpa saldo berjalan
   /// karena Payment bukan transaksi keuangan.
-  Widget _buildFailedLedger(AsyncValue<List<Payment>> payments) {
+  Widget _buildFailedLedger(
+    BuildContext context,
+    WidgetRef ref,
+    AsyncValue<List<Payment>> payments,
+    DateTime month,
+  ) {
     return payments.when(
       skipLoadingOnRefresh: false,
       loading: () => const SkeletonList(count: 3),
       error: (error, _) => ErrorState(
         message: 'Gagal memuat payment gagal: $error',
-        onRetry: () => ref.invalidate(failedPaymentsProvider(_month)),
+        onRetry: () => ref.invalidate(failedPaymentsProvider(month)),
       ),
       data: (items) {
         if (items.isEmpty) {
@@ -362,7 +271,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
             icon: Icons.check_circle_outline_rounded,
             label:
                 'No failed payments in '
-                '${DateFormat('MMMM yyyy').format(_month)}',
+                '${DateFormat('MMMM yyyy').format(month)}',
           );
         }
         return ListView.separated(
@@ -386,6 +295,8 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
   /// `unpaid` → "Mark as paid", `paid` → "Mark as unpaid", `failed` → toggle ke `paid`/`unpaid`.
   /// Selalu bisa diretry: row tidak disabled setelah gagal.
   Future<void> _showLedgerActions(
+    BuildContext context,
+    WidgetRef ref,
     BuildContext rowContext,
     Transaction tx,
   ) async {
@@ -393,7 +304,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     final isPaid = tx.paymentStatus == 'paid';
     final selected = await showMenu<bool>(
       context: context,
-      position: _menuPosition(rowContext),
+      position: _menuPosition(context, rowContext),
       color: const Color(0xFF141414),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       items: [
@@ -427,7 +338,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
         ),
       ],
     );
-    if (selected != true || !mounted) return;
+    if (selected != true || !context.mounted) return;
 
     final nextStatus = isFailed ? 'unpaid' : (isPaid ? 'unpaid' : 'paid');
     // Controller melakukan update optimistis; pill status berubah lebih dulu
@@ -435,7 +346,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     final ok = await ref
         .read(transactionsStoreProvider.notifier)
         .updatePaymentStatus(tx, paymentStatus: nextStatus);
-    if (!mounted) return;
+    if (!context.mounted) return;
     final message = ok
         ? (isFailed
               ? nextStatus == 'paid'
@@ -443,12 +354,12 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
                     : 'Marked as unpaid'
               : (isPaid ? 'Marked as unpaid' : 'Marked as paid'))
         : 'Failed to update payment status';
-    _toast(message);
+    _toast(context, message);
   }
 
   /// Posisi popup menu relatif terhadap overlay, dihitung dari render box
   /// baris yang di-long-press.
-  RelativeRect _menuPosition(BuildContext rowContext) {
+  RelativeRect _menuPosition(BuildContext context, BuildContext rowContext) {
     final box = rowContext.findRenderObject() as RenderBox?;
     final overlay =
         Overlay.of(context).context.findRenderObject() as RenderBox?;
@@ -462,7 +373,7 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     );
   }
 
-  void _toast(String message) {
+  void _toast(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message, style: const TextStyle(fontSize: 12.5)),
@@ -482,6 +393,19 @@ class _BookkeepingTabState extends ConsumerState<BookkeepingTab> {
     return DateFormat('d MMM yyyy').format(date);
   }
 }
+
+/// Ikon chip filter buku besar.
+///
+/// Diselaraskan dengan [txTone] supaya tipe transaksi punya ikon yang sama di
+/// chip filter dan di baris ledger — `all`/`failed` memakai ikon daftar/error
+/// karena keduanya bukan tipe transaksi.
+IconData _filterIcon(BookkeepingFilter filter) => switch (filter) {
+  BookkeepingFilter.all => Icons.list_alt_rounded,
+  BookkeepingFilter.income => Icons.arrow_upward_rounded,
+  BookkeepingFilter.expense => Icons.arrow_downward_rounded,
+  BookkeepingFilter.transfer => Icons.swap_horiz_rounded,
+  BookkeepingFilter.failed => Icons.error_outline_rounded,
+};
 
 /// Modal transaksi sebagai angka; null bila kosong atau format tak dikenal.
 num? _capitalOf(Transaction tx) {
@@ -528,6 +452,8 @@ class _LedgerRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
+          // ikon section — penanda tipe transaksi; warna & ikon dari `txTone`
+          // supaya konsisten dengan tab Debt.
           Box(
             style: BoxStyler()
                 .constraints(
@@ -549,6 +475,9 @@ class _LedgerRow extends StatelessWidget {
             child: Icon(tone.icon, size: 18, color: tone.color),
           ),
           const SizedBox(width: 12),
+          // keterangan section — nama transaksi + meta (status bayar, tipe,
+          // modal, jam). Dibatasi satu baris masing-masing agar tinggi baris
+          // stabil walau deskripsi panjang.
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -571,6 +500,8 @@ class _LedgerRow extends StatelessWidget {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
+                        // Digabung satu baris dengan pemisah agar tidak
+                        // menambah tinggi; modal hanya muncul bila ada.
                         [
                           tone.label,
                           if (capital != null)
@@ -591,6 +522,8 @@ class _LedgerRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
+          // nominal section — angka transaksi di atas, saldo berjalan pada
+          // titik transaksi ini di bawahnya.
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
@@ -626,22 +559,4 @@ class _LedgerRow extends StatelessWidget {
       child: card,
     );
   }
-}
-
-/// Satu entri datar pada buku besar: header hari atau baris transaksi.
-sealed class _LedgerEntry {
-  const _LedgerEntry();
-}
-
-class _LedgerHeaderEntry extends _LedgerEntry {
-  const _LedgerHeaderEntry({required this.date, required this.count});
-
-  final DateTime date;
-  final int count;
-}
-
-class _LedgerRowEntry extends _LedgerEntry {
-  const _LedgerRowEntry(this.tx);
-
-  final Transaction tx;
 }

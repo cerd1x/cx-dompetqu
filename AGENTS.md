@@ -108,6 +108,11 @@ Features `analytics`, `beta_report`, dan `charts` adalah UI-only, hanya memiliki
 - **Serialization**: json_serializable untuk JSON/GraphQL models
 - **Networking**: GraphQL (manual string queries) + HTTP untuk REST endpoints
 - **Session Management**: Cookie-based dengan `CookieAwareClient`
+- **Isolate / Komputasi berat**: `lib/core/utils/isolate_utils.dart` menyediakan
+  fungsi top-level yang dipanggil via `dart:isolate compute` untuk parsing JSON
+  massal (contoh: `TransactionPage.fromJsonAsync` memindahkan parsing `edges` ke
+  isolate terpisah; `fromJson` tetap sinkron untuk pemakaian non-async). Jangan
+  melewatkan `GraphQLClient`/`HttpClient` ke isolate.
 - **Theme**: Custom design system dengan paket `mix` untuk styling
 
 ## Struktur Folder
@@ -163,7 +168,9 @@ lib/
 │   │
 │   ├── utils/                         # Utility functions
 │   │   ├── balance.dart              # Format & hitung balance
-│   │   └── formatters.dart           # Format tanggal, angka, dll.
+│   │   ├── formatters.dart           # Format tanggal, angka, dll.
+│   │   ├── isolate_utils.dart        # Fungsi top-level untuk compute/isolate
+│   │   └── platform_target.dart      # Deteksi desktop/mobile dari Theme.platform
 │   │
 │   └── diagnostics/                   # Development tools
 │       └── fps_indicator.dart        # FPS monitoring (dev only)
@@ -295,8 +302,10 @@ lib/
     │   │   └── repositories/          # OrderRepositoryImpl, DebtSettlementsRepositoryImpl
     │   └── view/
     │       ├── screens/               # OrderScreen
-    │       ├── stores/                # Repository providers, debtSettlementsProvider
-    │       └── widgets/               # bookkeeping_tab, debt_tab, order_tab, form widgets
+    │       ├── stores/                # Repository providers, debtSettlementsProvider,
+    │       │                          # bookkeepingStoreProvider (bulan/filter + ledger)
+    │       └── widgets/               # bookkeeping_tab, debt_tab, order_tab,
+    │                                  # sale_tab, expense_tab, loan_tab, form widgets
     │
     ├── payments/                      # Fitur payment (read-only)
     │   ├── domain/

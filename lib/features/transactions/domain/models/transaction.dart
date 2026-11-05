@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:dompetqu/core/utils/balance.dart';
+
 part 'generated/transaction.freezed.dart';
 
 /// Satu transaksi pada domain aplikasi — padanan data model
@@ -26,6 +28,20 @@ abstract class Transaction with _$Transaction {
   const Transaction._();
 
   String get displayName => description ?? category ?? type;
+
+  /// Nominal transaksi sebagai angka — parsing aman untuk string "ISO VALUE";
+  /// format tak dikenal dianggap 0 agar ringkasan/ledger tidak error.
+  ///
+  /// Sebelumnya helper ini hidup di widget Order (`txAmount`), dipindah ke
+  /// domain supaya store (bukan cuma UI) bisa menghitung ringkasan tanpa
+  /// mengimpor layer `view/`.
+  num get amountValue {
+    try {
+      return Balance.parse(amount).value;
+    } on FormatException {
+      return 0;
+    }
+  }
 }
 
 /// Metode pembayaran pada transaksi — `type` adalah wire value backend dan

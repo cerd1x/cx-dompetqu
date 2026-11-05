@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:dompetqu/core/utils/isolate_utils.dart';
 import 'transaction.dart';
 
 /// Navigasi halaman — padanan `PageInfo` di schema GraphQL.
@@ -79,20 +81,62 @@ class TransactionPage {
 
   bool get isEmpty => edges.isEmpty;
 
+  /// Versi sinkron: `edges` di-parse langsung di isolate pemanggil.
+  ///
+  /// Pakai [fromJsonAsync] pada jalur async (alur normal `transactionsPage`)
+  /// agar payload halaman besar tidak memblokir UI isolate.
   factory TransactionPage.fromJson(Map<String, dynamic> json) {
+    return TransactionPage(
+      edges: _parseEdges(_readEdges(json)),
+      pageInfo: _readPageInfo(json),
+    );
+  }
+
+  /// Versi async: memfilter `edges` di isolate terpisah lewat [compute].
+  ///
+  /// Dipisah dari [fromJson] karena `compute` mengembalikan `Future`, sedangkan
+  /// factory sinkron tidak bisa `await`.
+  static Future<TransactionPage> fromJsonAsync(
+    Map<String, dynamic> json,
+  ) async {
+    final edges = await _parseEdgesInIsolate(_readEdges(json));
+    return TransactionPage(edges: edges, pageInfo: _readPageInfo(json));
+  }
+
+  static List<dynamic> _readEdges(Map<String, dynamic> json) {
     final rawEdges = json['edges'];
     if (rawEdges is! List) {
       throw const FormatException('TransactionPage: `edges` harus berupa list');
     }
+    return rawEdges;
+  }
+
+  static TransactionPageInfo _readPageInfo(Map<String, dynamic> json) {
     final rawPageInfo = json['pageInfo'];
     if (rawPageInfo is! Map<String, dynamic>) {
       throw const FormatException('TransactionPage: `pageInfo` wajib diisi');
     }
-    return TransactionPage(
-      edges: rawEdges
-          .map((e) => TransactionEdge.fromJson(e as Map<String, dynamic>))
-          .toList(growable: false),
-      pageInfo: TransactionPageInfo.fromJson(rawPageInfo),
-    );
+    return TransactionPageInfo.fromJson(rawPageInfo);
+  }
+
+  static List<TransactionEdge> _parseEdges(List<dynamic> rawEdges) {
+    return rawEdges
+        .map((e) => TransactionEdge.fromJson(e as Map<String, dynamic>))
+        .toList(growable: false);
+  }
+
+  /// Parsing daftar `edges` di isolate terpisah agar UI isolate tidak diblokir
+  /// saat payload halaman transaksi besar (biasanya beratus-ratus item).
+  ///
+  /// [rawEdges] adalah `List<dynamic>` mentah dari JSON — fungsi ini dipindah
+  /// ke isolate lain via [compute] (top-level dart:isolate), lalu hasilnya
+  /// dikonversi kembali menjadi `List<TransactionEdge>` di UI isolate (konversi
+  /// per-item ringan dan aman dilakukan di sini karena objek hasil decode sudah
+  /// terpisah).
+  static Future<List<TransactionEdge>> _parseEdgesInIsolate(
+    List<dynamic> rawEdges,
+  ) async {
+    final parsed = await compute(parseTransactionPageJson, rawEdges);
+    return _parseEdges(parsed as List<dynamic>);
   }
 }

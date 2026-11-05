@@ -106,7 +106,9 @@ class TransactionsRemoteSource implements TransactionsDataSource {
         gqlErrorMessage(result, fallback: 'Gagal memuat halaman transaksi'),
       );
     }
-    return TransactionPage.fromJson(connection as Map<String, dynamic>);
+    return await TransactionPage.fromJsonAsync(
+      connection as Map<String, dynamic>,
+    );
   }
 
   /// Ubah status pembayaran transaksi (`unpaid` ↔ `paid`).

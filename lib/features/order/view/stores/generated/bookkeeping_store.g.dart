@@ -59,7 +59,7 @@ final class BookkeepingStoreProvider
   }
 }
 
-String _$bookkeepingStoreHash() => r'fce6ea5291530f48465cc38796bea717034789d0';
+String _$bookkeepingStoreHash() => r'9763f5dd7f14974cc7e65ce03924be25a6c361bb';
 
 /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
 ///

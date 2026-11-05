@@ -71,6 +71,7 @@ class BookkeepingState {
     this.expense = 0,
     this.balances = const {},
     this.entries = const [],
+    this.counts = const {},
     this.loading = false,
   });
 
@@ -95,6 +96,7 @@ class BookkeepingState {
 
   /// Entri buku besar yang sudah di-flatten (header hari + baris).
   final List<LedgerEntry> entries;
+  final Map<BookkeepingFilter, int> counts;
 
   /// `true` selama daftar transaksi sumber masih dimuat.
   final bool loading;
@@ -165,6 +167,7 @@ class BookkeepingStore extends _$BookkeepingStore {
 
   BookkeepingState _derive(List<Transaction> all, {required bool loading}) {
     final items = _monthItems(all);
+    final counts = _computeCounts(all);
     var income = 0.0;
     var expense = 0.0;
     for (final tx in items) {
@@ -205,7 +208,29 @@ class BookkeepingStore extends _$BookkeepingStore {
       balances: balances,
       entries: entries,
       loading: loading,
+      counts: counts,
     );
+  }
+
+  /// Hitung jumlah transaksi per filter untuk bulan [_month].
+  Map<BookkeepingFilter, int> _computeCounts(List<Transaction> all) {
+    final map = <BookkeepingFilter, int>{};
+    for (final f in BookkeepingFilter.values) {
+      if (f == BookkeepingFilter.failed) {
+        map[f] = 0;
+        continue;
+      }
+      final type = f.transactionType;
+      int c = 0;
+      for (final tx in all) {
+        if (tx.createdAt.year != _month.year ||
+            tx.createdAt.month != _month.month)
+          continue;
+        if (type == null || tx.type == type) c++;
+      }
+      map[f] = c;
+    }
+    return map;
   }
 
   /// Transaksi pada bulan terpilih, terbaru dulu, sesuai filter aktif.

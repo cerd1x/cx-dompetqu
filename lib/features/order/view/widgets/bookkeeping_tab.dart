@@ -183,8 +183,9 @@ class BookkeepingTab extends ConsumerWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 6),
         itemBuilder: (_, i) {
           final f = BookkeepingFilter.values[i];
+          final count = state.counts[f] ?? 0;
           return OrderFilterChip(
-            label: f.label,
+            label: '${f.label} ($count)',
             icon: _filterIcon(f),
             selected: state.filter == f,
             onTap: () => store.selectFilter(f),

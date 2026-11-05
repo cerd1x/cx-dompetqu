@@ -11,15 +11,15 @@ import 'package:dompetqu/features/transactions/view/stores/transactions_store.da
 import 'package:dompetqu/features/order/view/stores/order_repository_provider.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 
-/// Form Expense — padanan `FormExpense.svelte`.
-class ExpenseForm extends ConsumerStatefulWidget {
-  const ExpenseForm({super.key});
+/// Tab Expense — padanan `FormExpense.svelte`.
+class ExpenseTab extends ConsumerStatefulWidget {
+  const ExpenseTab({super.key});
 
   @override
-  ConsumerState<ExpenseForm> createState() => _ExpenseFormState();
+  ConsumerState<ExpenseTab> createState() => _ExpenseTabState();
 }
 
-class _ExpenseFormState extends ConsumerState<ExpenseForm> {
+class _ExpenseTabState extends ConsumerState<ExpenseTab> {
   num _amount = 0;
   DateTime _date = DateTime.now();
   String? _payWithAssetId;

@@ -372,7 +372,7 @@ class _DetailPaymentFailedViewState
         title: 'Pesan dari gateway',
         detail: lastError,
         hints: [
-          if (delayHint != null) delayHint,
+          ?delayHint,
           if (p.canRetry)
             'Sisa percobaan: ${p.maxRetries - p.retryCount} kali.'
           else
@@ -385,7 +385,7 @@ class _DetailPaymentFailedViewState
     return (
       title: derived.title,
       detail: derived.detail,
-      hints: [...derived.hints, if (delayHint != null) delayHint],
+      hints: [...derived.hints, ?delayHint],
     );
   }
 

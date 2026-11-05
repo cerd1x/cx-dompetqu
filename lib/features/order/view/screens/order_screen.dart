@@ -10,9 +10,9 @@ import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/bookkeeping_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/debt_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/expense_form.dart';
-import 'package:dompetqu/features/order/view/widgets/loan_form.dart';
-import 'package:dompetqu/features/order/view/widgets/order_sale_form.dart';
+import 'package:dompetqu/features/order/view/widgets/expense_tab.dart';
+import 'package:dompetqu/features/order/view/widgets/loan_tab.dart';
+import 'package:dompetqu/features/order/view/widgets/sale_tab.dart';
 
 /// Layar buat transaksi/order — padanan
 /// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),
@@ -65,9 +65,9 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
               // laporan: manages its own scroll + filter state
               const _ReportBody(child: BookkeepingTab()),
               const _ReportBody(child: DebtTab()),
-              _ScrollingForm(child: SaleForm(product: widget.product)),
-              const _ScrollingForm(child: ExpenseForm()),
-              const _ScrollingForm(child: LoanForm()),
+              _ScrollingForm(child: SaleTab(product: widget.product)),
+              const _ScrollingForm(child: ExpenseTab()),
+              const _ScrollingForm(child: LoanTab()),
             ],
           ),
         ),

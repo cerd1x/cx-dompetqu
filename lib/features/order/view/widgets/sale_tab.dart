@@ -4,31 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/features/order/view/stores/order_repository_provider.dart';
+import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 
-/// Form Loan — padanan `FormLoan.svelte`.
-class LoanForm extends ConsumerStatefulWidget {
-  const LoanForm({super.key});
+/// Tab Sale — padanan `FormSale.svelte`.
+class SaleTab extends ConsumerStatefulWidget {
+  const SaleTab({super.key, this.product});
+
+  final Product? product;
 
   @override
-  ConsumerState<LoanForm> createState() => _LoanFormState();
+  ConsumerState<SaleTab> createState() => _SaleTabState();
 }
 
-class _LoanFormState extends ConsumerState<LoanForm> {
-  num _amount = 0;
-  num _capital = 0;
+class _SaleTabState extends ConsumerState<SaleTab> {
+  late num _amount = widget.product?.price ?? 0;
+  late num _capital = widget.product?.capital ?? 0;
+  late final TextEditingController _notesCtrl = TextEditingController(
+    text: widget.product?.name ?? '',
+  );
   String _status = 'belum';
-  String _paymentMethod = 'cash';
   DateTime _date = DateTime.now();
   String? _payWithAssetId;
   String? _customerId;
-  late final TextEditingController _notesCtrl = TextEditingController();
   bool _busy = false;
   String? _error;
 
@@ -38,16 +43,17 @@ class _LoanFormState extends ConsumerState<LoanForm> {
     super.dispose();
   }
 
-  String get _paymentMethodMapped =>
-      _paymentMethod == 'loan' ? 'credit' : _paymentMethod;
-
   Future<void> _submit() async {
     if (_amount <= 0 || _capital <= 0) {
       setState(() => _error = 'Amount dan Capital harus lebih dari 0');
       return;
     }
-    if (_customerId == null) {
+    if (_customerId == null || _customerId!.trim().isEmpty) {
       setState(() => _error = 'Pilih customer terlebih dahulu');
+      return;
+    }
+    if (_payWithAssetId == null || _payWithAssetId!.trim().isEmpty) {
+      setState(() => _error = 'Pilih Pay From Aset terlebih dahulu');
       return;
     }
     setState(() {
@@ -57,11 +63,11 @@ class _LoanFormState extends ConsumerState<LoanForm> {
     try {
       final ok = await ref
           .read(orderRepositoryProvider)
-          .createLoan(
+          .createProductSale(
+            productId: widget.product?.id ?? '',
+            itemCount: 1,
             totalAmount: _amount,
             currency: selectedCurrency(ref),
-            itemCount: 1,
-            paymentMethod: _paymentMethodMapped,
             customerId: _customerId,
             description: _notesCtrl.text.trim().isEmpty
                 ? null
@@ -74,12 +80,17 @@ class _LoanFormState extends ConsumerState<LoanForm> {
       if (!mounted) return;
       if (ok) {
         ref.invalidate(transactionsStoreProvider);
-        ref.invalidate(contactsStoreProvider);
+        ref.invalidate(inventoryStoreProvider);
         context.pop();
       } else {
         setState(() => _error = 'Gagal membuat transaksi');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.instance.debug(
+        'Gagal submit product sale: $e',
+        tag: 'SaleTab',
+        extras: {'stackTrace': '$stackTrace'},
+      );
       if (mounted) setState(() => _error = e is Exception ? '$e' : '$e');
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -97,7 +108,7 @@ class _LoanFormState extends ConsumerState<LoanForm> {
           children: [
             Expanded(
               child: DompetTextField.balance(
-                name: 'loan-amount',
+                name: 'sale-amount',
                 label: 'Amount',
                 value: _amount,
                 initialCurrency: selectedCurrency(ref),
@@ -107,7 +118,7 @@ class _LoanFormState extends ConsumerState<LoanForm> {
             const SizedBox(width: 10),
             Expanded(
               child: DompetTextField.balance(
-                name: 'loan-capital',
+                name: 'sale-capital',
                 label: 'Capital',
                 value: _capital,
                 initialCurrency: selectedCurrency(ref),
@@ -142,18 +153,11 @@ class _LoanFormState extends ConsumerState<LoanForm> {
           ],
         ),
         const SizedBox(height: 12),
-        Segmented(
-          label: 'Payment Method',
-          options: const ['cash', 'transfer', 'loan'],
-          labels: const ['Cash', 'Transfer', 'Loan'],
-          selected: _paymentMethod,
-          onChanged: (v) => setState(() => _paymentMethod = v),
-        ),
-        const SizedBox(height: 12),
         AssetPickerField(
-          title: 'Pay With / To Aset',
+          title: 'Pay From Aset',
           selectedId: _payWithAssetId,
           onChanged: (v) => setState(() => _payWithAssetId = v),
+          minBalance: _amount,
         ),
         const SizedBox(height: 12),
         CustomerPickerField(

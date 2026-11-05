@@ -3,32 +3,40 @@ import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
 import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
 import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
-import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
-import 'package:dompetqu/features/dashboard/view/widgets/dashboard_screen.dart';
-import 'package:dompetqu/features/inventory/view/screens/inventory_screen.dart';
-import 'package:dompetqu/features/order/view/screens/order_screen.dart';
-import 'package:dompetqu/features/portfolio/view/screens/portfolio_screen.dart';
 
-/// Shell utama — padanan `+layout.svelte` + tab NavigationBar di `/dompet`.
+/// Shell utama dengan ShellRoute — persistent bottom nav lewat GoRouter.
 class HomeShell extends ConsumerStatefulWidget {
-  const HomeShell({super.key});
+  final Widget child;
+
+  const HomeShell({required this.child, super.key});
 
   @override
   ConsumerState<HomeShell> createState() => _HomeShellState();
 }
 
 class _HomeShellState extends ConsumerState<HomeShell> {
-  int _index = 0;
+  /// Tab route → index mapping
+  static const Map<String, int> _routeToIndex = {
+    '/': 0,
+    '/inventory': 1,
+    '/contacts': 2,
+    '/orders': 3,
+    '/portfolio': 4,
+  };
 
-  /// Tab yang sudah pernah dibuka. Tab lain dibiarkan belum dibangun supaya
-  /// frame pertama tidak perlu me-layout lima layar sekaligus (`IndexedStack`
-  /// tetap menyimpan state tab yang sudah pernah dibuka).
-  final Set<int> _visited = {0};
+  static const _tabs = <NavItem>[
+    NavItem(icon: Icons.space_dashboard_outlined, name: 'Dashboard'),
+    NavItem(icon: Icons.inventory_2_outlined, name: 'Inventory'),
+    NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
+    NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
+    NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
+  ];
 
   @override
   void initState() {
@@ -41,27 +49,13 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     });
   }
 
-  static const _tabs = <NavItem>[
-    NavItem(icon: Icons.space_dashboard_outlined, name: 'Dashboard'),
-    NavItem(icon: Icons.inventory_2_outlined, name: 'Inventory'),
-    NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
-    NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
-    NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
-  ];
-
-  static final _pages = <Widget>[
-    const DashboardScreen(),
-    const InventoryScreen(),
-    const ContactsScreen(),
-    const OrderScreen(embedded: true),
-    const PortfolioScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(sessionStoreProvider);
     final showAiBubble =
         ref.watch(aiSettingsStoreProvider).value?.showAiBubble ?? true;
+    final location = GoRouterState.of(context).matchedLocation;
+    final currentIndex = _routeToIndex[location] ?? 0;
 
     // Reset cache saat sign-out, warm-up ulang saat akun baru sign-in.
     ref.listen(sessionStoreProvider, (prev, next) {
@@ -73,13 +67,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       }
     });
 
-    // Blokir sampai sesi benar-benar terautentikasi. Saat `unauthenticated`,
-    // `IndexedStack` tetap membangun tab yang sudah dikunjungi → store
-    // keepAlive di dalamnya auto-load tanpa cookie `__sst__` dan backend
-    // melempar "Missing or expired token" (error basi yang menempel di state
-    // sampai login berikutnya). Router tetap mengarahkan ke `/auth`.
+    // Blokir sampai sesi benar-benar terautentikasi.
     if (session.status != AuthStatus.authenticated) {
-      // loading section
       return const Scaffold(
         body: Center(
           child: SizedBox(
@@ -102,18 +91,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
               Column(
                 children: [
                   // pages section
-                  Expanded(
-                    child: IndexedStack(
-                      index: _index,
-                      children: [
-                        for (var i = 0; i < _pages.length; i++)
-                          if (_visited.contains(i))
-                            _pages[i]
-                          else
-                            const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
+                  Expanded(child: widget.child),
                   // nav bar section
                   Padding(
                     padding: const EdgeInsets.only(
@@ -124,18 +102,24 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                     ),
                     child: Center(
                       child: CSNavBar(
-                        stateActive: _index,
+                        stateActive: currentIndex,
                         navs: _tabs,
-                        onPressed: (i) => setState(() {
-                          _index = i;
-                          _visited.add(i);
-                        }),
+                        onPressed: (i) {
+                          final routes = [
+                            '/',
+                            '/inventory',
+                            '/contacts',
+                            '/orders',
+                            '/portfolio',
+                          ];
+                          context.go(routes[i]);
+                        },
                       ),
                     ),
                   ),
                 ],
               ),
-              // AI bubble section — bisa diseret ke mana saja di layar
+              // AI bubble section
               if (showAiBubble) const AiBubble(),
             ],
           ),

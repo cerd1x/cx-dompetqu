@@ -4,6 +4,10 @@ import 'package:dompetqu/features/assets/view/screens/asset_detail_screen.dart';
 import 'package:dompetqu/features/analytics/view/screens/analytics_screen.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/features/dashboard/view/widgets/home_shell.dart';
+import 'package:dompetqu/features/dashboard/view/widgets/dashboard_screen.dart';
+import 'package:dompetqu/features/inventory/view/screens/inventory_screen.dart';
+import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
+import 'package:dompetqu/features/portfolio/view/screens/portfolio_screen.dart';
 import 'package:dompetqu/features/gen_ai/view/screens/ai_setting_screen.dart';
 import 'package:dompetqu/features/gen_ai/view/screens/gen_ai_screen.dart';
 import 'package:dompetqu/features/order/view/screens/detail_payment_failed_view.dart';
@@ -153,7 +157,33 @@ GoRouter appRouter(Ref ref) {
         builder: (_, _) => const KillswitchControllScreen(),
       ),
       GoRoute(path: '/app-lock', builder: (_, _) => const AppLockScreen()),
-      GoRoute(path: '/', builder: (_, _) => const HomeShell()),
+      ShellRoute(
+        builder: (context, state, child) => HomeShell(child: child),
+        routes: [
+          GoRoute(path: '/', builder: (_, _) => const DashboardScreen()),
+          GoRoute(
+            path: '/inventory',
+            builder: (_, _) => const InventoryScreen(),
+          ),
+          GoRoute(path: '/contacts', builder: (_, _) => const ContactsScreen()),
+          GoRoute(
+            path: '/orders',
+            builder: (_, state) {
+              final args = state.extra;
+              return OrderScreen(
+                initialTab: args is OrderRouteArgs
+                    ? args.tab
+                    : OrderTab.bookkeeping,
+                product: args is OrderRouteArgs ? args.product : null,
+              );
+            },
+          ),
+          GoRoute(
+            path: '/portfolio',
+            builder: (_, _) => const PortfolioScreen(),
+          ),
+        ],
+      ),
       GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
       GoRoute(
         path: '/settings/appearance',
@@ -165,20 +195,7 @@ GoRouter appRouter(Ref ref) {
       ),
       GoRoute(path: '/gen-ai', builder: (_, _) => const GenAiScreen()),
       GoRoute(path: '/ai-settings', builder: (_, _) => const AiSettingScreen()),
-      GoRoute(
-        path: '/order',
-        builder: (_, state) {
-          // Argumen typed: tab tujuan + parameter spesifiknya (mis. produk
-          // untuk form Sale). Absen/tipe lain → default Bookkeeping.
-          final args = state.extra;
-          return OrderScreen(
-            initialTab: args is OrderRouteArgs
-                ? args.tab
-                : OrderTab.bookkeeping,
-            product: args is OrderRouteArgs ? args.product : null,
-          );
-        },
-      ),
+
       GoRoute(
         path: '/asset-detail/:id',
         builder: (_, state) {

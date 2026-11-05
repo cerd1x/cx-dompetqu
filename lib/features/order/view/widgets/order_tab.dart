@@ -55,10 +55,10 @@ enum OrderTab {
 ///
 /// ```dart
 /// // dari detail produk, buka form Sale yang sudah terisi produknya
-/// context.push('/order', extra: OrderRouteArgs.sale(product: product));
+/// context.go('/orders', extra: OrderRouteArgs.sale(product: product));
 ///
 /// // dari dashboard, buka form Expense kosong
-/// context.push('/order', extra: const OrderRouteArgs.expense());
+/// context.go('/orders', extra: const OrderRouteArgs.expense());
 /// ```
 class OrderRouteArgs {
   const OrderRouteArgs({required this.tab, this.product});

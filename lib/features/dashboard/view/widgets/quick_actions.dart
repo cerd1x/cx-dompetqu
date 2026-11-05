@@ -24,7 +24,7 @@ class QuickActions extends StatelessWidget {
               icon: Icons.add_rounded,
               label: 'Add Transaction',
               onTap: () =>
-                  context.push('/order', extra: const OrderRouteArgs.sale()),
+                  context.go('/orders', extra: const OrderRouteArgs.sale()),
             ),
             // receive section
             RoundActionButton(

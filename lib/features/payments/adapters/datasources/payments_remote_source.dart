@@ -79,7 +79,7 @@ class PaymentsRemoteSource {
         description
         retryCount
         maxRetries
-        metadata {
+        meta {
           paymentType
           assetId
           lastError

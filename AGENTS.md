@@ -74,26 +74,26 @@ Struktur folder standar yang digunakan untuk fitur-fitur yang telah bermigrasi k
 
 Status migrasi struktur per fitur:
 
-| Fitur        | Struktur                                          | Keterangan                                       |
-| ------------ | ------------------------------------------------- | ------------------------------------------------ |
-| admin_pannel | domain/adapters/view                              | Sudah migrasi                                    |
-| app_lock     | domain/adapters/view                              | Sudah migrasi                                    |
-| assets       | domain/adapters/view                              | Sudah migrasi                                    |
-| analytics    | domain/adapters/view (kerangka kosong)            | UI-only, belum lengkap                           |
-| auth         | domain/adapters/view                              | Sudah migrasi                                    |
-| beta_report  | view (screens)                                    | UI-only, belum lengkap                           |
-| charts       | view (screens)                                    | UI-only, belum lengkap                           |
-| contacts     | domain/adapters/view                              | Sudah migrasi (`domain/entities/` kosong)        |
-| dashboard    | domain/adapters/view                              | Sudah migrasi                                    |
-| gen_ai       | domain/adapters/view                              | Sudah migrasi, 2 provider store masih manual (R2) |
-| inventory    | domain/adapters/view                              | Sudah migrasi                                    |
-| order        | domain/adapters/view                              | Sudah migrasi, 4 provider masih manual (R2)      |
-| payments     | domain/adapters/view                              | Sudah migrasi, `paymentsByStatus` + `retryPayment` |
-| portfolio    | view (screens)                                    | UI-only, hanya 1 screen                          |
-| settings     | domain/adapters/view                              | Sudah migrasi                                    |
-| statistics   | domain/adapters/view                              | Sudah migrasi                                    |
-| struct       | view (screens)                                    | UI-only, hanya 1 screen                          |
-| transactions | domain/adapters/view                              | Sudah migrasi                                    |
+| Fitur        | Struktur                               | Keterangan                                         |
+| ------------ | -------------------------------------- | -------------------------------------------------- |
+| admin_pannel | domain/adapters/view                   | Sudah migrasi                                      |
+| app_lock     | domain/adapters/view                   | Sudah migrasi                                      |
+| assets       | domain/adapters/view                   | Sudah migrasi                                      |
+| analytics    | domain/adapters/view (kerangka kosong) | UI-only, belum lengkap                             |
+| auth         | domain/adapters/view                   | Sudah migrasi                                      |
+| beta_report  | view (screens)                         | UI-only, belum lengkap                             |
+| charts       | view (screens)                         | UI-only, belum lengkap                             |
+| contacts     | domain/adapters/view                   | Sudah migrasi (`domain/entities/` kosong)          |
+| dashboard    | domain/adapters/view                   | Sudah migrasi                                      |
+| gen_ai       | domain/adapters/view                   | Sudah migrasi, 2 provider store masih manual (R2)  |
+| inventory    | domain/adapters/view                   | Sudah migrasi                                      |
+| order        | domain/adapters/view                   | Sudah migrasi, 4 provider masih manual (R2)        |
+| payments     | domain/adapters/view                   | Sudah migrasi, `paymentsByStatus` + `retryPayment` |
+| portfolio    | view (screens)                         | UI-only, hanya 1 screen                            |
+| settings     | domain/adapters/view                   | Sudah migrasi                                      |
+| statistics   | domain/adapters/view                   | Sudah migrasi                                      |
+| struct       | view (screens)                         | UI-only, hanya 1 screen                            |
+| transactions | domain/adapters/view                   | Sudah migrasi                                      |
 
 Features `analytics`, `beta_report`, dan `charts` adalah UI-only, hanya memiliki layer presentation tanpa repository/domain boilerplate.
 
@@ -239,8 +239,9 @@ lib/
     │   │   ├── mappers/               # JSON → model dashboard
     │   │   └── repositories/          # HomeRepositoryImpl (komposisi fitur)
     │   └── view/
+    │       ├── screens/               # DashboardScreen, HomeShell
     │       ├── stores/                # Riverpod stores
-    │       └── widgets/               # Dashboard screen & widget (dashboard_screen.dart)
+    │       └── widgets/               # QuickActions, StatsGrid, TransactionListView, dll.
     │
     ├── gen_ai/                        # Fitur AI generatif (Genkit Dart SDK 1.0)
     │   ├── domain/

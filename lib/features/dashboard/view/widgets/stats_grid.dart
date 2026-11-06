@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
 
 /// Grid statistik dashboard — padanan `_dashboard` stats cards di web.
-class StatsGrid extends StatelessWidget {
-  const StatsGrid({super.key, required this.stats});
-
-  final StatisticsState stats;
+class StatsGrid extends ConsumerWidget {
+  const StatsGrid({super.key});
 
   static const _cells = [
     (label: 'Income', key: 'income', color: Color(0xFF34D399)),
@@ -19,7 +18,7 @@ class StatsGrid extends StatelessWidget {
     (label: 'Aset', key: 'asset', color: Color(0xFFA78BFA)),
   ];
 
-  String _value(String key) {
+  String _value(StatisticsState stats, String key) {
     if (stats.loading) return '...';
     if (stats.error != null) return '--';
     final s = stats.statistics;
@@ -34,7 +33,8 @@ class StatsGrid extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stats = ref.watch(statisticsStoreProvider);
     return DompetCard(
       variant: DompetCardVariant.csGlassCard,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -48,7 +48,7 @@ class StatsGrid extends StatelessWidget {
                   Expanded(
                     child: StatCell(
                       label: _cells[row * 3 + col].label,
-                      value: _value(_cells[row * 3 + col].key),
+                      value: _value(stats, _cells[row * 3 + col].key),
                       color: _cells[row * 3 + col].color,
                     ),
                   ),

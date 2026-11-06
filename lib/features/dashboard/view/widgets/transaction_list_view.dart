@@ -29,15 +29,15 @@ String _typeLabel(_TypeFilter f) => switch (f) {
 enum _DateFilter { all, today, week, month, custom }
 
 /// Daftar transaksi terbaru + tab filter type & date.
-class RecentListTransaction extends ConsumerStatefulWidget {
-  const RecentListTransaction({super.key});
+class TransactionListView extends ConsumerStatefulWidget {
+  const TransactionListView({super.key});
 
   @override
-  ConsumerState<RecentListTransaction> createState() =>
-      _RecentListTransactionState();
+  ConsumerState<TransactionListView> createState() =>
+      _TransactionListViewState();
 }
 
-class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
+class _TransactionListViewState extends ConsumerState<TransactionListView> {
   _TypeFilter _type = _TypeFilter.all;
   _DateFilter _date = _DateFilter.all;
   DateTimeRange? _customRange;
@@ -97,10 +97,9 @@ class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
     });
   }
 
-  List<Transaction> get _filtered {
-    final transactions = ref.watch(transactionsStoreProvider);
+  List<Transaction> _filterItems(List<Transaction> allItems) {
     final (start, end) = _rangeBounds;
-    return transactions.items.where((tx) {
+    return allItems.where((tx) {
       final matchType = switch (_type) {
         _TypeFilter.all => true,
         _ => tx.type == _type.name,
@@ -114,6 +113,7 @@ class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
 
   @override
   Widget build(BuildContext context) {
+    final transactions = ref.watch(transactionsStoreProvider);
     return Box(
       style: BoxStyler()
           .padding(EdgeInsetsGeometryMix.value(const EdgeInsets.only(top: 12)))
@@ -134,7 +134,7 @@ class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8),
-              child: _buildBody(),
+              child: _buildBody(transactions),
             ),
           ),
           _buildFilterList(context),
@@ -245,16 +245,16 @@ class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(TransactionsState transactions) {
     // loading section
-    if (widget.transactions.loading) {
+    if (transactions.loading) {
       return const SkeletonList(count: 3);
     }
     // error section
-    if (widget.transactions.error != null) {
-      return ErrorState(message: widget.transactions.error!, onRetry: null);
+    if (transactions.error != null) {
+      return ErrorState(message: transactions.error!, onRetry: null);
     }
-    final items = _filtered.reversed.toList();
+    final items = _filterItems(transactions.items).reversed.toList();
     // empty section
     if (items.isEmpty) {
       return const EmptyState(label: 'Transaction Masih Kosong...');

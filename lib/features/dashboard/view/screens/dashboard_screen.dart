@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'quick_actions.dart';
-import 'recent_list_transaction.dart';
-import 'stats_grid.dart';
+import '../widgets/quick_actions.dart';
+import '../widgets/transaction_list_view.dart';
+import '../widgets/stats_grid.dart';
 import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
 import 'package:dompetqu/core/theme/widgets/app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
@@ -15,8 +15,6 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stats = ref.watch(statisticsStoreProvider);
-
     return TabScaffold(
       // header section
       header: AppHeader(
@@ -42,11 +40,11 @@ class DashboardScreen extends ConsumerWidget {
           // stats grid section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: StatsGrid(stats: stats),
+            child: StatsGrid(),
           ),
           const SizedBox(height: 16),
           // recent list section
-          Expanded(child: RecentListTransaction()),
+          Expanded(child: const TransactionListView()),
           const SizedBox(height: 12),
           // quick actions section
           Padding(

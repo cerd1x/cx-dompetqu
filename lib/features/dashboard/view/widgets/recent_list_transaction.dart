@@ -1,5 +1,6 @@
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
@@ -28,16 +29,15 @@ String _typeLabel(_TypeFilter f) => switch (f) {
 enum _DateFilter { all, today, week, month, custom }
 
 /// Daftar transaksi terbaru + tab filter type & date.
-class RecentListTransaction extends StatefulWidget {
-  const RecentListTransaction({super.key, required this.transactions});
-
-  final TransactionsState transactions;
+class RecentListTransaction extends ConsumerStatefulWidget {
+  const RecentListTransaction({super.key});
 
   @override
-  State<RecentListTransaction> createState() => _RecentListTransactionState();
+  ConsumerState<RecentListTransaction> createState() =>
+      _RecentListTransactionState();
 }
 
-class _RecentListTransactionState extends State<RecentListTransaction> {
+class _RecentListTransactionState extends ConsumerState<RecentListTransaction> {
   _TypeFilter _type = _TypeFilter.all;
   _DateFilter _date = _DateFilter.all;
   DateTimeRange? _customRange;
@@ -98,8 +98,9 @@ class _RecentListTransactionState extends State<RecentListTransaction> {
   }
 
   List<Transaction> get _filtered {
+    final transactions = ref.watch(transactionsStoreProvider);
     final (start, end) = _rangeBounds;
-    return widget.transactions.items.where((tx) {
+    return transactions.items.where((tx) {
       final matchType = switch (_type) {
         _TypeFilter.all => true,
         _ => tx.type == _type.name,

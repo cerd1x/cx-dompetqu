@@ -6,7 +6,6 @@ import 'quick_actions.dart';
 import 'recent_list_transaction.dart';
 import 'stats_grid.dart';
 import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
-import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/core/theme/widgets/app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
 
@@ -17,7 +16,6 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(statisticsStoreProvider);
-    final transactions = ref.watch(transactionsStoreProvider);
 
     return TabScaffold(
       // header section
@@ -48,7 +46,7 @@ class DashboardScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           // recent list section
-          Expanded(child: RecentListTransaction(transactions: transactions)),
+          Expanded(child: RecentListTransaction()),
           const SizedBox(height: 12),
           // quick actions section
           Padding(

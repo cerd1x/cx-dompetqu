@@ -533,7 +533,7 @@ class _MenuList extends StatelessWidget {
       icon: Icons.receipt_long_rounded,
       title: 'Transaksi',
       subtitle: 'Monitor dan verifikasi transaksi',
-      route: '/order',
+      route: '/orders',
     ),
     (
       icon: Icons.inventory_2_rounded,

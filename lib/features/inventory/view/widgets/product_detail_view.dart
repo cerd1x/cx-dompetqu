@@ -85,7 +85,7 @@ class ProductDetailView extends StatelessWidget {
                     final router = GoRouter.of(context);
                     Navigator.of(context).pop();
                     router.push(
-                      '/order',
+                      '/orders',
                       extra: OrderRouteArgs.sale(product: product),
                     );
                   },

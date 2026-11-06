@@ -424,13 +424,37 @@ class TransactionRow extends StatelessWidget {
         return (
           color: const Color(0xFF34D399),
           sign: '+',
-          icon: Icons.arrow_upward_rounded,
+          icon: Icons.trending_up_rounded,
         );
-      case 'expense':
+      case 'credit':
+        return (
+          color: const Color(0xFF34D399),
+          sign: '+',
+          icon: Icons.credit_card_rounded,
+        );
+      case 'debit':
         return (
           color: const Color(0xFFF87171),
           sign: '-',
-          icon: Icons.arrow_downward_rounded,
+          icon: Icons.credit_card_rounded,
+        );
+      case 'EB':
+        return (
+          color: const Color(0xFFFBBF24),
+          sign: '',
+          icon: Icons.backup_rounded,
+        );
+      case 'ADM':
+        return (
+          color: const Color(0xFFFBBF24),
+          sign: '',
+          icon: Icons.backup_rounded,
+        );
+      case 'transfer':
+        return (
+          color: const Color(0xFFFBBF24),
+          sign: '',
+          icon: Icons.swap_horiz_rounded,
         );
       default:
         return (

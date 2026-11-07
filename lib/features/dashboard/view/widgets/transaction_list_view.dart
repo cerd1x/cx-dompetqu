@@ -7,6 +7,7 @@ import 'package:mix/mix.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/transaction_icons.dart';
 import 'package:dompetqu/core/theme/widgets/cs_dialog_daterange_picker.dart';
 import 'package:dompetqu/core/theme/widgets/cs_select_picker.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
@@ -424,50 +425,8 @@ class TransactionRow extends StatelessWidget {
   final VoidCallback? onTap;
 
   _TransactionTone get _tone {
-    switch (tx.type) {
-      case 'income':
-        return (
-          color: const Color(0xFF34D399),
-          sign: '+',
-          icon: HugeIcons.strokeRoundedMoneyReceiveCircle,
-        );
-      case 'credit':
-        return (
-          color: const Color(0xFF34D399),
-          sign: '+',
-          icon: HugeIcons.strokeRoundedCreditCard,
-        );
-      case 'debit':
-        return (
-          color: const Color(0xFFF87171),
-          sign: '-',
-          icon: HugeIcons.strokeRoundedCreditCard,
-        );
-      case 'EB':
-        return (
-          color: const Color(0xFFFBBF24),
-          sign: '',
-          icon: HugeIcons.strokeRoundedCloudBackup,
-        );
-      case 'ADM':
-        return (
-          color: const Color(0xFFFBBF24),
-          sign: '',
-          icon: HugeIcons.strokeRoundedCloudBackup,
-        );
-      case 'transfer':
-        return (
-          color: const Color(0xFFFBBF24),
-          sign: '',
-          icon: HugeIcons.strokeRoundedCoinsSwap,
-        );
-      default:
-        return (
-          color: const Color(0xFFFBBF24),
-          sign: '',
-          icon: HugeIcons.strokeRoundedCoinsSwap,
-        );
-    }
+    final t = TransactionType.fromString(tx.type);
+    return (color: t.color, sign: t.sign, icon: t.icon);
   }
 
   @override

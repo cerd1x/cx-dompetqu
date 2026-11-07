@@ -157,4 +157,4 @@ flutter:
   # https://flutter.dev/to/asset-from-package
 
   assets:
-    - assets/card-post.svg
+    - assets/card-pos.svg

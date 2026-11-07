@@ -224,8 +224,9 @@ class BookkeepingStore extends _$BookkeepingStore {
       int c = 0;
       for (final tx in all) {
         if (tx.createdAt.year != _month.year ||
-            tx.createdAt.month != _month.month)
+            tx.createdAt.month != _month.month) {
           continue;
+        }
         if (type == null || tx.type == type) c++;
       }
       map[f] = c;

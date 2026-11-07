@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cs_dialog_daterange_picker.dart';
@@ -410,7 +411,11 @@ class _TabChip extends StatelessWidget {
 }
 
 /// Tone income/expense/transfer: warna, prefix, dan ikon.
-typedef _TransactionTone = ({Color color, String sign, IconData icon});
+typedef _TransactionTone = ({
+  Color color,
+  String sign,
+  List<List<dynamic>> icon,
+});
 
 class TransactionRow extends StatelessWidget {
   const TransactionRow({super.key, required this.tx, this.onTap});
@@ -424,43 +429,43 @@ class TransactionRow extends StatelessWidget {
         return (
           color: const Color(0xFF34D399),
           sign: '+',
-          icon: Icons.trending_up_rounded,
+          icon: HugeIcons.strokeRoundedMoneyReceiveCircle,
         );
       case 'credit':
         return (
           color: const Color(0xFF34D399),
           sign: '+',
-          icon: Icons.credit_card_rounded,
+          icon: HugeIcons.strokeRoundedCreditCard,
         );
       case 'debit':
         return (
           color: const Color(0xFFF87171),
           sign: '-',
-          icon: Icons.credit_card_rounded,
+          icon: HugeIcons.strokeRoundedCreditCard,
         );
       case 'EB':
         return (
           color: const Color(0xFFFBBF24),
           sign: '',
-          icon: Icons.backup_rounded,
+          icon: HugeIcons.strokeRoundedCloudBackup,
         );
       case 'ADM':
         return (
           color: const Color(0xFFFBBF24),
           sign: '',
-          icon: Icons.backup_rounded,
+          icon: HugeIcons.strokeRoundedCloudBackup,
         );
       case 'transfer':
         return (
           color: const Color(0xFFFBBF24),
           sign: '',
-          icon: Icons.swap_horiz_rounded,
+          icon: HugeIcons.strokeRoundedCoinsSwap,
         );
       default:
         return (
           color: const Color(0xFFFBBF24),
           sign: '',
-          icon: Icons.swap_horiz_rounded,
+          icon: HugeIcons.strokeRoundedCoinsSwap,
         );
     }
   }
@@ -582,7 +587,7 @@ class _LeadingIcon extends StatelessWidget {
               ),
             ),
           ),
-      child: Icon(tone.icon, size: 19, color: tone.color),
+      child: HugeIcon(icon: tone.icon, size: 19, color: tone.color),
     );
   }
 }

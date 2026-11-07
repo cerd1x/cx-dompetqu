@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
@@ -16,7 +17,7 @@ class DompetBadge extends StatelessWidget {
 
   final String label;
   final DompetBadgeTone tone;
-  final IconData? icon;
+  final dynamic icon;
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +35,27 @@ class DompetBadge extends StatelessWidget {
         .labelFontWeight(FontWeight.w600)
         .labelFontSize(12);
 
+    // ponytail: dynamic icon handles IconData and HugeIcons List<List<dynamic>>
+    final Widget? iconChild = switch (icon) {
+      final IconData data => Icon(data, size: 14, color: fg),
+      final List<List<dynamic>> data => HugeIcon(
+        icon: data,
+        size: 14,
+        color: fg,
+      ),
+      final Widget w => w,
+      _ => null,
+    };
+
     return RemixBadge(
       label: label,
       style: style,
-      child: icon == null
+      child: iconChild == null
           ? null
           : Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 14, color: fg),
+                iconChild,
                 const SizedBox(width: 5),
                 Text(
                   label,

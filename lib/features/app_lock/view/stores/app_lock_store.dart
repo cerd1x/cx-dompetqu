@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,22 +14,32 @@ const Duration _kLockoutDuration = Duration(minutes: 1);
 /// Store untuk state & logika app lock.
 @Riverpod(keepAlive: true)
 class AppLockStore extends _$AppLockStore {
+  final AppLogger _log = AppLogger.instance;
   Timer? _lockoutTimer;
 
   @override
   Future<AppLockState> build() async {
     ref.onDispose(() => _lockoutTimer?.cancel());
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.ensureUsable();
-    final enabled = await repository.isEnabled();
-    final credential = await repository.getCredential();
-    final biometricEnabled = await repository.isBiometricEnabled();
-    return AppLockState(
-      isEnabled: enabled,
-      credential: credential,
-      biometricEnabled: biometricEnabled,
-      locked: enabled,
-    );
+    try {
+      await repository.ensureUsable();
+      final enabled = await repository.isEnabled();
+      final credential = await repository.getCredential();
+      final biometricEnabled = await repository.isBiometricEnabled();
+      _log.success(
+        'App lock dimuat (enabled: $enabled, biometric: $biometricEnabled)',
+        tag: 'AppLockStore',
+      );
+      return AppLockState(
+        isEnabled: enabled,
+        credential: credential,
+        biometricEnabled: biometricEnabled,
+        locked: enabled,
+      );
+    } catch (e) {
+      _log.error('Gagal memuat app lock', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -38,9 +49,15 @@ class AppLockStore extends _$AppLockStore {
   /// Menyimpan PIN sebagai kredensial utama (opsional ditambah biometrik).
   Future<void> setupPin(String pin, {bool biometricEnabled = false}) async {
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.savePin(pin);
-    await repository.setBiometricEnabled(biometricEnabled);
-    await repository.setEnabled(true);
+    try {
+      await repository.savePin(pin);
+      await repository.setBiometricEnabled(biometricEnabled);
+      await repository.setEnabled(true);
+    } catch (e) {
+      _log.error('Gagal setup PIN', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
+    _log.success('PIN berhasil disimpan', tag: 'AppLockStore');
     state = AsyncValue.data(
       AppLockState(
         isEnabled: true,
@@ -57,9 +74,15 @@ class AppLockStore extends _$AppLockStore {
     bool biometricEnabled = false,
   }) async {
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.savePattern(pattern);
-    await repository.setBiometricEnabled(biometricEnabled);
-    await repository.setEnabled(true);
+    try {
+      await repository.savePattern(pattern);
+      await repository.setBiometricEnabled(biometricEnabled);
+      await repository.setEnabled(true);
+    } catch (e) {
+      _log.error('Gagal setup pola', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
+    _log.success('Pola berhasil disimpan', tag: 'AppLockStore');
     state = AsyncValue.data(
       AppLockState(
         isEnabled: true,
@@ -75,7 +98,12 @@ class AppLockStore extends _$AppLockStore {
     final current = state.value;
     if (current == null || !current.isEnabled) return;
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.setBiometricEnabled(true);
+    try {
+      await repository.setBiometricEnabled(true);
+    } catch (e) {
+      _log.error('Gagal aktifkan biometrik', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
     state = AsyncValue.data(current.copyWith(biometricEnabled: true));
   }
 
@@ -84,13 +112,24 @@ class AppLockStore extends _$AppLockStore {
     final current = state.value;
     if (current == null) return;
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.setBiometricEnabled(false);
+    try {
+      await repository.setBiometricEnabled(false);
+    } catch (e) {
+      _log.error('Gagal matikan biometrik', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
     state = AsyncValue.data(current.copyWith(biometricEnabled: false));
   }
 
   Future<void> disableLock() async {
     final repository = ref.read(appLockRepositoryProvider);
-    await repository.clearAll();
+    try {
+      await repository.clearAll();
+    } catch (e) {
+      _log.error('Gagal nonaktifkan lock', tag: 'AppLockStore', error: e);
+      rethrow;
+    }
+    _log.warn('App lock dinonaktifkan', tag: 'AppLockStore');
     state = AsyncValue.data(const AppLockState());
   }
 
@@ -109,6 +148,7 @@ class AppLockStore extends _$AppLockStore {
       return true;
     }
 
+    _log.warn('PIN salah', tag: 'AppLockStore');
     _incrementFailedAttempts();
     return false;
   }
@@ -124,6 +164,7 @@ class AppLockStore extends _$AppLockStore {
       return true;
     }
 
+    _log.warn('Pola salah', tag: 'AppLockStore');
     _incrementFailedAttempts();
     return false;
   }
@@ -140,7 +181,11 @@ class AppLockStore extends _$AppLockStore {
     final ok = await ref
         .read(appLockRepositoryProvider)
         .authenticateBiometric();
-    if (!ok) return false;
+    if (!ok) {
+      _log.warn('Biometrik gagal', tag: 'AppLockStore');
+      return false;
+    }
+    _log.success('Biometrik berhasil', tag: 'AppLockStore');
     _resetAttempts();
     _setLocked(false);
     return true;

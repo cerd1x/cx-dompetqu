@@ -1,6 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/features/order/view/stores/debt_settlements_repository_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Status pelunasan satu utang — dipakai untuk menandai lunas/tunggakan.
 enum DebtStatus { outstanding, settled }
@@ -10,6 +10,8 @@ enum DebtStatus { outstanding, settled }
 /// `status`), jadi pelunasan dicatat di `SharedPreferences`, sementara pembayaran
 ///nya sendiri tetap ditulis ke ledger sebagai transaksi income.
 class DebtSettlements extends Notifier<Set<String>> {
+  final AppLogger _log = AppLogger.instance;
+
   @override
   Set<String> build() {
     // Defer ke microtask: `SharedPreferences.getInstance()` async, sedangkan
@@ -21,10 +23,24 @@ class DebtSettlements extends Notifier<Set<String>> {
   bool _loaded = false;
 
   Future<void> _load() async {
-    final stored = await ref.read(debtSettlementsRepositoryProvider).load();
-    if (!ref.mounted) return;
-    _loaded = true;
-    state = stored;
+    try {
+      final stored = await ref.read(debtSettlementsRepositoryProvider).load();
+      if (!ref.mounted) return;
+      _loaded = true;
+      state = stored;
+      _log.success(
+        'Debt settlements dimuat (${stored.length})',
+        tag: 'DebtSettlements',
+      );
+    } catch (e) {
+      if (!ref.mounted) return;
+      _log.error(
+        'Gagal load debt settlements',
+        tag: 'DebtSettlements',
+        error: e,
+      );
+      _loaded = true;
+    }
   }
 
   /// Status [transactionId]: lunas bila id-nya ada di [state].
@@ -38,18 +54,37 @@ class DebtSettlements extends Notifier<Set<String>> {
   Future<void> markSettled(String transactionId) async {
     if (state.contains(transactionId)) return;
     state = {...state, transactionId};
-    await _persist();
+    await _persist('settle');
+    _log.success(
+      'Utang ditandai lunas',
+      tag: 'DebtSettlements',
+      extras: {'txId': transactionId},
+    );
   }
 
   /// Batalkan status lunas (mis. salah tandai).
   Future<void> revert(String transactionId) async {
     if (!state.contains(transactionId)) return;
     state = {...state}..remove(transactionId);
-    await _persist();
+    await _persist('revert');
+    _log.info(
+      'Status lunas utang dibatalkan',
+      tag: 'DebtSettlements',
+      extras: {'txId': transactionId},
+    );
   }
 
-  Future<void> _persist() async {
-    await ref.read(debtSettlementsRepositoryProvider).save(state);
+  Future<void> _persist(String action) async {
+    try {
+      await ref.read(debtSettlementsRepositoryProvider).save(state);
+    } catch (e) {
+      _log.error(
+        'Gagal simpan debt settlements ($action)',
+        tag: 'DebtSettlements',
+        error: e,
+      );
+      rethrow;
+    }
   }
 
   /// Sudah selesai membaca `SharedPreferences` (menunggu write pertama selesai).

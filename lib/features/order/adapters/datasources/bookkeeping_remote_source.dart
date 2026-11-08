@@ -25,9 +25,9 @@ class BookkeepingRemoteSource {
         filter
         summaries {
           currency
-          income { currency amount }
-          expense { currency amount }
-          profit { currency amount }
+          income
+          expense
+          profit
           transactionCount
         }
         groups {
@@ -47,7 +47,7 @@ class BookkeepingRemoteSource {
               paymentStatus
               createdAt
             }
-            runningBalance { currency amount }
+            runningBalance
           }
         }
       }
@@ -96,7 +96,7 @@ class BookkeepingRemoteSource {
         month
         payments {
           id
-          amount { currency amount }
+          amount
           method
           status
           gatewayRef
@@ -204,7 +204,6 @@ class BookkeepingRemoteSource {
 
   BookkeepingEntry _parseEntry(Map<String, dynamic> json) {
     final txJson = json['transaction'] as Map<String, dynamic>?;
-    final balanceJson = json['runningBalance'] as Map<String, dynamic>?;
 
     return BookkeepingEntry(
       transaction: txJson != null
@@ -236,23 +235,31 @@ class BookkeepingRemoteSource {
                   DateTime.now(),
             )
           : Transaction(id: '', createdAt: DateTime.now()),
-      runningBalance: _moneyString(balanceJson),
+      runningBalance: _moneyString(json['runningBalance']),
     );
   }
 
-  /// Parse Money object {currency, amount} → "CURRENCY AMOUNT" string.
+  /// Parse scalar Money backend ("CURRENCY AMOUNT") → string domain.
+  ///
+  /// Backend `Money!` dikirim sebagai string "IDR 1500000" (scalar).
+  /// Map {currency, amount} hanya didukung untuk backward-compat bila
+  /// server belum migrasi.
   String _moneyString(Object? money) {
+    if (money is String) return money;
     if (money is! Map<String, dynamic>) return 'IDR 0';
     final currency = money['currency'] as String? ?? 'IDR';
     final amount = money['amount'];
     if (amount == null) return '$currency 0';
-    // Amount can be String or Float from GraphQL
     return '$currency $amount';
   }
 
-  /// Parse Money object → just the amount as String (for summaries).
+  /// Parse scalar Money backend ("CURRENCY AMOUNT") → string domain.
+  ///
+  /// Backend `Money!` dikirim sebagai string "IDR 1500000" (scalar).
+  /// Map {currency, amount} hanya didukung untuk backward-compat.
   String _moneyValue(Object? money) {
-    if (money is! Map<String, dynamic>) return '0';
+    if (money is String) return money;
+    if (money is! Map<String, dynamic>) return 'IDR 0';
     final currency = money['currency'] as String? ?? 'IDR';
     final amount = money['amount'] ?? 0;
     return '$currency $amount';
@@ -276,10 +283,9 @@ class BookkeepingRemoteSource {
   }
 
   BookkeepingFailedPayment _parseFailedPayment(Map<String, dynamic> json) {
-    final money = json['amount'] as Map<String, dynamic>?;
     return BookkeepingFailedPayment(
       id: json['id']?.toString() ?? '',
-      amount: _moneyString(money),
+      amount: _moneyString(json['amount']),
       method: json['method'] as String? ?? 'cash',
       status: json['status'] as String? ?? 'failed',
       gatewayRef: json['gatewayRef'] as String?,

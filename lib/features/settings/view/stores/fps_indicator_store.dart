@@ -1,3 +1,4 @@
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'settings_repository_provider.dart';
@@ -16,18 +17,41 @@ import 'settings_repository_provider.dart';
 /// menambahkan codegen store baru berarti menjalankan `build_runner`, yang
 /// di repo ini hanya dilakukan oleh user.
 final fpsIndicatorStoreProvider =
-    AsyncNotifierProvider<FpsIndicatorNotifier, bool>(
-      FpsIndicatorNotifier.new,
-    );
+    AsyncNotifierProvider<FpsIndicatorNotifier, bool>(FpsIndicatorNotifier.new);
 
 class FpsIndicatorNotifier extends AsyncNotifier<bool> {
+  final AppLogger _log = AppLogger.instance;
+
   @override
-  Future<bool> build() => ref.watch(settingsRepositoryProvider).loadShowFps();
+  Future<bool> build() async {
+    try {
+      final value = await ref.watch(settingsRepositoryProvider).loadShowFps();
+      _log.success('FPS indicator dimuat: $value', tag: 'FpsIndicatorStore');
+      return value;
+    } catch (e) {
+      _log.error(
+        'Gagal memuat FPS indicator',
+        tag: 'FpsIndicatorStore',
+        error: e,
+      );
+      rethrow;
+    }
+  }
 
   /// Toggle tampil/sembunyi indikator FPS dan persist ke prefs.
   Future<void> setVisible(bool value) async {
     // Optimistic update supaya UI langsung merespons; penyimpanan menyusul.
     state = AsyncValue.data(value);
-    await ref.read(settingsRepositoryProvider).saveShowFps(value);
+    try {
+      await ref.read(settingsRepositoryProvider).saveShowFps(value);
+      _log.success('FPS indicator disimpan: $value', tag: 'FpsIndicatorStore');
+    } catch (e) {
+      _log.error(
+        'Gagal simpan FPS indicator',
+        tag: 'FpsIndicatorStore',
+        error: e,
+      );
+      rethrow;
+    }
   }
 }

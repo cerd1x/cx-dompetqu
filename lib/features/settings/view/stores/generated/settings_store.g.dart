@@ -39,7 +39,7 @@ final class SettingsStoreProvider
   SettingsStore create() => SettingsStore();
 }
 
-String _$settingsStoreHash() => r'44bdb178413246caa135009bb958e40ed1a9e846';
+String _$settingsStoreHash() => r'd4d6dfe34e8e1dcc1c216a1b6e3e93fe505680c6';
 
 /// Pengaturan lokal (dark mode dan mata uang) yang dipersist ke
 /// `SharedPreferences`. Default dark mode `true` — app saat ini dark-first.

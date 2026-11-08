@@ -36,7 +36,7 @@ final class AppLockStoreProvider
   AppLockStore create() => AppLockStore();
 }
 
-String _$appLockStoreHash() => r'5648c2c6735f76214dadc3a506b57ecf0470f88e';
+String _$appLockStoreHash() => r'd2d8107a1fa32ca4dcc9a5fc21445987e3286a89';
 
 /// Store untuk state & logika app lock.
 

@@ -34,7 +34,7 @@
   <path d="M166 204 h180 a30 30 0 0 1 30 30 v4 h-240 v-4 a30 30 0 0 1 30 -30 z" fill="url(#orangeDeep)"/>
 
   <!-- Label di sudut kiri atas -->
-  <text x="32" y="40" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="bold" fill="#FF8C1A">cerd1x</text>
+  <text x="156" y="356" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="bold" fill="#000000">DompetQiu</text>
 
   <!-- Kancing -->
   <circle cx="318" cy="302" r="24" fill="#0A0A0A"/>

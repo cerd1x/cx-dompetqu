@@ -5,7 +5,6 @@ import 'package:dompetqu/features/order/adapters/repositories/debt_settlements_r
 import 'package:dompetqu/features/order/domain/repositories/debt_settlements_repository.dart';
 
 final debtSettlementsRepositoryProvider = Provider<DebtSettlementsRepository>(
-  (ref) => DebtSettlementsRepositoryImpl(
-    SharedPreferencesDebtSettlementsDataSource(),
-  ),
+  (ref) =>
+      DebtSettlementsRepositoryImpl(ObjectBoxDebtSettlementsDataSource()),
 );

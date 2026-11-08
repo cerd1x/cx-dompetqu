@@ -3,22 +3,15 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:get_it/get_it.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'package:dompetqu/core/database/entities/app_lock_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 import 'package:dompetqu/features/app_lock/adapters/datasources/app_lock_datasources.dart';
 import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'generated/app_lock_storage.g.dart';
-
-const String _kLockEnabledKey = 'app_lock_enabled';
-const String _kLockCredentialKey = 'app_lock_credential';
-const String _kLockBiometricKey = 'app_lock_biometric';
-const String _kLockPinHashKey = 'app_lock_pin_hash';
-const String _kLockPatternHashKey = 'app_lock_pattern_hash';
-const String _kLockSaltKey = 'app_lock_salt';
-
-/// Key lama dari model single-method (dibaca sekali saat migrasi).
-const String _kLegacyLockMethodKey = 'app_lock_method';
 
 /// Persistensi lokal untuk pengaturan app lock.
 /// PIN dan pola disimpan sebagai salted SHA-256 hash.
@@ -26,85 +19,61 @@ const String _kLegacyLockMethodKey = 'app_lock_method';
 AppLockStorage appLockStorage(Ref ref) => AppLockStorage();
 
 class AppLockStorage implements AppLockLocalDataSource {
-  Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
 
   // ---------------------------------------------------------------------------
   // Read
   // ---------------------------------------------------------------------------
 
-  /// Migrasi + perbaikan data sekaligus.
-  ///
-  /// Jika app lock berstatus aktif tetapi kredensial (PIN/pola) tidak tersimpan
-  /// (mis. sisa state dari mode biometric-only lama), data di-reset penuh agar
-  /// aplikasi tidak terkunci selamanya tanpa jalur buka.
   @override
   Future<void> ensureUsable() async {
-    final prefs = await _prefs;
-    final enabled = prefs.getBool(_kLockEnabledKey) ?? false;
-    if (!enabled) return;
+    final entity = _db.appLockBox.get(1);
+    if (entity == null || !entity.enabled) return;
 
-    final credential = await _credentialOrMigrate(prefs);
-    if (_hasCredentialHash(prefs, credential)) return;
+    final hasHash =
+        (entity.credential == 'pin' && entity.pinHash != null) ||
+        (entity.credential == 'pattern' && entity.patternHash != null);
 
-    await _resetAll(prefs);
+    if (hasHash) return;
+
+    await clearAll();
   }
 
   @override
   Future<bool> isEnabled() async {
-    final prefs = await _prefs;
-    return prefs.getBool(_kLockEnabledKey) ?? false;
+    final entity = _db.appLockBox.get(1);
+    return entity?.enabled ?? false;
   }
 
-  /// Kredensial utama (PIN/pola) dengan migrasi dari format lama.
   @override
   Future<LockCredential> getCredential() async {
-    final prefs = await _prefs;
-    return _credentialOrMigrate(prefs);
-  }
-
-  /// Membaca credential, menerapkan migrasi dari key lama bila diperlukan.
-  Future<LockCredential> _credentialOrMigrate(SharedPreferences prefs) async {
-    final raw = prefs.getString(_kLockCredentialKey);
-    if (raw != null) {
-      return _credentialFromName(raw);
-    }
-
-    final legacy = prefs.getString(_kLegacyLockMethodKey);
-    if (legacy == null) return LockCredential.pin;
-
-    // Migrasi satu kali dari model single-method.
-    final credential = _credentialFromName(legacy);
-    final biometricOnly = legacy == 'biometric';
-    await prefs.setString(_kLockCredentialKey, credential.name);
-    if (biometricOnly) {
-      await prefs.setBool(_kLockBiometricKey, true);
-    }
-    await prefs.remove(_kLegacyLockMethodKey);
-    return credential;
+    final entity = _db.appLockBox.get(1);
+    final raw = entity?.credential ?? 'pin';
+    return _credentialFromName(raw);
   }
 
   @override
   Future<bool> isBiometricEnabled() async {
-    final prefs = await _prefs;
-    return prefs.getBool(_kLockBiometricKey) ?? false;
+    final entity = _db.appLockBox.get(1);
+    return entity?.biometric ?? false;
   }
 
   @override
   Future<bool> verifyPin(String pin) async {
-    final prefs = await _prefs;
-    final storedHash = prefs.getString(_kLockPinHashKey);
-    final salt = prefs.getString(_kLockSaltKey);
-    if (storedHash == null || salt == null) return false;
-    return _hashPin(pin, salt) == storedHash;
+    final entity = _db.appLockBox.get(1);
+    if (entity == null || entity.pinHash == null || entity.salt == null) {
+      return false;
+    }
+    return _hashPin(pin, entity.salt!) == entity.pinHash;
   }
 
   @override
   Future<bool> verifyPattern(List<int> pattern) async {
-    final prefs = await _prefs;
-    final storedHash = prefs.getString(_kLockPatternHashKey);
-    final salt = prefs.getString(_kLockSaltKey);
-    if (storedHash == null || salt == null) return false;
-    return _hashPattern(pattern, salt) == storedHash;
+    final entity = _db.appLockBox.get(1);
+    if (entity == null || entity.patternHash == null || entity.salt == null) {
+      return false;
+    }
+    return _hashPattern(pattern, entity.salt!) == entity.patternHash;
   }
 
   // ---------------------------------------------------------------------------
@@ -113,49 +82,41 @@ class AppLockStorage implements AppLockLocalDataSource {
 
   @override
   Future<void> setEnabled(bool value) async {
-    final prefs = await _prefs;
-    await prefs.setBool(_kLockEnabledKey, value);
+    final entity = _db.appLockBox.get(1) ?? AppLockEntity(id: 1);
+    entity.enabled = value;
+    _db.appLockBox.put(entity);
   }
 
   @override
   Future<void> setBiometricEnabled(bool value) async {
-    final prefs = await _prefs;
-    await prefs.setBool(_kLockBiometricKey, value);
+    final entity = _db.appLockBox.get(1) ?? AppLockEntity(id: 1);
+    entity.biometric = value;
+    _db.appLockBox.put(entity);
   }
 
   @override
   Future<void> savePin(String pin) async {
-    final prefs = await _prefs;
+    final entity = _db.appLockBox.get(1) ?? AppLockEntity(id: 1);
     final salt = _generateSalt();
-    await prefs.setString(_kLockSaltKey, salt);
-    await prefs.setString(_kLockPinHashKey, _hashPin(pin, salt));
-    await prefs.setString(_kLockCredentialKey, LockCredential.pin.name);
+    entity.salt = salt;
+    entity.pinHash = _hashPin(pin, salt);
+    entity.credential = 'pin';
+    _db.appLockBox.put(entity);
   }
 
   @override
   Future<void> savePattern(List<int> pattern) async {
-    final prefs = await _prefs;
+    final entity = _db.appLockBox.get(1) ?? AppLockEntity(id: 1);
     final salt = _generateSalt();
-    await prefs.setString(_kLockSaltKey, salt);
-    await prefs.setString(_kLockPatternHashKey, _hashPattern(pattern, salt));
-    await prefs.setString(_kLockCredentialKey, LockCredential.pattern.name);
+    entity.salt = salt;
+    entity.patternHash = _hashPattern(pattern, salt);
+    entity.credential = 'pattern';
+    _db.appLockBox.put(entity);
   }
 
   @override
   Future<void> clearAll() async {
-    final prefs = await _prefs;
-    await _resetAll(prefs);
-  }
-
-  /// Menghapus semua key app lock (dipisah agar bisa dipakai untuk repair).
-  Future<void> _resetAll(SharedPreferences prefs) async {
-    await prefs.remove(_kLockEnabledKey);
-    await prefs.remove(_kLockCredentialKey);
-    await prefs.remove(_kLockBiometricKey);
-    await prefs.remove(_kLockPinHashKey);
-    await prefs.remove(_kLockPatternHashKey);
-    await prefs.remove(_kLockSaltKey);
-    await prefs.remove(_kLegacyLockMethodKey);
+    _db.appLockBox.remove(1);
   }
 
   // ---------------------------------------------------------------------------
@@ -167,16 +128,6 @@ class AppLockStorage implements AppLockLocalDataSource {
       (c) => c.name == raw,
       orElse: () => LockCredential.pin,
     );
-  }
-
-  /// Apakah salt + hash untuk kredensial tertentu tersimpan?
-  bool _hasCredentialHash(SharedPreferences prefs, LockCredential credential) {
-    final salt = prefs.getString(_kLockSaltKey);
-    if (salt == null) return false;
-    final hashKey = credential == LockCredential.pin
-        ? _kLockPinHashKey
-        : _kLockPatternHashKey;
-    return prefs.getString(hashKey) != null;
   }
 
   String _generateSalt() {

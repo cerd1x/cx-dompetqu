@@ -9,8 +9,8 @@ part of '../ui_style_controller.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Kontrol penampilan UI yang berubah saat runtime dan dipersist ke
-/// `SharedPreferences`. Mengubah [UiStyle] langsung memicu rebuild tema
-/// global (lihat `AppTheme.fromStyle` di `app_theme.dart`).
+/// ObjectBox. Mengubah [UiStyle] langsung memicu rebuild tema global (lihat
+/// `AppTheme.fromStyle` di `app_theme.dart`).
 ///
 /// Karena slider opacity/blur bisa menembak berkali-kali, persistensi dibuat
 /// debounce 50 ms — state in-memory selalu update seketika, hanya penulisan
@@ -20,8 +20,8 @@ part of '../ui_style_controller.dart';
 final uiStyleControllerProvider = UiStyleControllerProvider._();
 
 /// Kontrol penampilan UI yang berubah saat runtime dan dipersist ke
-/// `SharedPreferences`. Mengubah [UiStyle] langsung memicu rebuild tema
-/// global (lihat `AppTheme.fromStyle` di `app_theme.dart`).
+/// ObjectBox. Mengubah [UiStyle] langsung memicu rebuild tema global (lihat
+/// `AppTheme.fromStyle` di `app_theme.dart`).
 ///
 /// Karena slider opacity/blur bisa menembak berkali-kali, persistensi dibuat
 /// debounce 50 ms — state in-memory selalu update seketika, hanya penulisan
@@ -29,8 +29,8 @@ final uiStyleControllerProvider = UiStyleControllerProvider._();
 final class UiStyleControllerProvider
     extends $AsyncNotifierProvider<UiStyleController, UiStyle> {
   /// Kontrol penampilan UI yang berubah saat runtime dan dipersist ke
-  /// `SharedPreferences`. Mengubah [UiStyle] langsung memicu rebuild tema
-  /// global (lihat `AppTheme.fromStyle` di `app_theme.dart`).
+  /// ObjectBox. Mengubah [UiStyle] langsung memicu rebuild tema global (lihat
+  /// `AppTheme.fromStyle` di `app_theme.dart`).
   ///
   /// Karena slider opacity/blur bisa menembak berkali-kali, persistensi dibuat
   /// debounce 50 ms — state in-memory selalu update seketika, hanya penulisan
@@ -54,11 +54,11 @@ final class UiStyleControllerProvider
   UiStyleController create() => UiStyleController();
 }
 
-String _$uiStyleControllerHash() => r'e97b374855d6373d0b64f89563f7e5fdb8f7c1a2';
+String _$uiStyleControllerHash() => r'4970339336c1504b5b9575fee1703feaed1b1ab1';
 
 /// Kontrol penampilan UI yang berubah saat runtime dan dipersist ke
-/// `SharedPreferences`. Mengubah [UiStyle] langsung memicu rebuild tema
-/// global (lihat `AppTheme.fromStyle` di `app_theme.dart`).
+/// ObjectBox. Mengubah [UiStyle] langsung memicu rebuild tema global (lihat
+/// `AppTheme.fromStyle` di `app_theme.dart`).
 ///
 /// Karena slider opacity/blur bisa menembak berkali-kali, persistensi dibuat
 /// debounce 50 ms — state in-memory selalu update seketika, hanya penulisan

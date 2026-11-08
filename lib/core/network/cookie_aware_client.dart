@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:dompetqu/core/config/api_config.dart';
+import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 
 part 'generated/cookie_aware_client.g.dart';
@@ -32,6 +34,7 @@ class CookieAwareClient extends http.BaseClient {
   final Uri _graphqlEndpoint;
   final Map<String, String> _cookies = {};
   final AppLogger _log = AppLogger.instance;
+  static const String cookiePrefsKey = 'session_cookies';
 
   /// Refresh yang sedang berjalan — mendedupe pemanggilan `send()` yang
   /// terjadi bersamaan saat expiry terdeteksi.
@@ -54,8 +57,7 @@ class CookieAwareClient extends http.BaseClient {
   /// Memuat cookie tersimpan dari disk. Panggil sekali saat startup.
   Future<void> restore() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(prefsKey);
+      final raw = _readCookies();
       if (raw == null) {
         _log.debug('Tidak ada cookie tersimpan', tag: 'CookieClient');
         return;
@@ -69,7 +71,7 @@ class CookieAwareClient extends http.BaseClient {
         );
       } on FormatException {
         _log.warn('Cookie tersimpan rusak, dihapus.', tag: 'CookieClient');
-        await prefs.remove(prefsKey);
+        await _removeCookies();
       }
     } catch (e) {
       _log.warn('Restore gagal: $e', tag: 'CookieClient');
@@ -94,8 +96,7 @@ class CookieAwareClient extends http.BaseClient {
   Future<void> clear() async {
     _cookies.clear();
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(prefsKey);
+      await _removeCookies();
     } catch (e) {
       _log.warn('clear gagal: $e', tag: 'CookieClient');
     }
@@ -180,10 +181,34 @@ class CookieAwareClient extends http.BaseClient {
     _refreshFailedFor = ok ? null : _cookies[sessionCookieName];
   }
 
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
+
+  AppSettingEntity? _findCookieEntity() {
+    for (final e in _db.appSettingBox.getAll()) {
+      if (e.key == cookiePrefsKey) return e;
+    }
+    return null;
+  }
+
+  String? _readCookies() {
+    final entity = _findCookieEntity();
+    if (entity == null || entity.value.isEmpty) return null;
+    return entity.value;
+  }
+
+  Future<void> _removeCookies() async {
+    try {
+      final entity = _findCookieEntity();
+      if (entity != null) _db.appSettingBox.remove(entity.id);
+    } catch (_) {}
+  }
+
   Future<void> _persist() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(prefsKey, jsonEncode(_cookies));
+      final existing =
+          _findCookieEntity() ?? AppSettingEntity(key: cookiePrefsKey);
+      existing.value = jsonEncode(_cookies);
+      _db.appSettingBox.put(existing);
     } catch (e) {
       _log.warn('Persist cookie gagal: $e', tag: 'CookieClient');
     }

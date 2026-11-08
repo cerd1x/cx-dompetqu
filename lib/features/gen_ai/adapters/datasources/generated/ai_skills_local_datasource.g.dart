@@ -55,4 +55,4 @@ final class AiSkillsLocalDatasourceProvider
 }
 
 String _$aiSkillsLocalDatasourceHash() =>
-    r'a75e90c7521ec7a00a8cbee4cb7d9e2ed1f70f4a';
+    r'85358980cebc61b95076054937a797c624e6bcb9';

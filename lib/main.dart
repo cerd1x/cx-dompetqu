@@ -31,6 +31,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'core/diagnostics/fps_indicator.dart';
 import 'core/logger/app_logger.dart';
 import 'core/logger/log_config.dart';
+import 'core/database/objectbox_database.dart';
 import 'core/network/cookie_aware_client.dart';
 import 'package:dompetqu/core/theme/app_theme.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
@@ -39,7 +40,7 @@ import 'features/auth/view/stores/session_store.dart';
 import 'features/auth/view/screens/auth_screen.dart';
 import 'package:dompetqu/features/admin_pannel/view/screens/admin_pannel_screen.dart';
 import 'package:dompetqu/features/admin_pannel/view/screens/killswitch_controll_screen.dart';
-import 'package:dompetqu/features/beta_report/view/screens/beta_report_screen.dart';
+import 'package:dompetqu/features/reports/view/screens/reports_screen.dart';
 import 'features/contacts/view/screens/contact_detail_screen.dart';
 import 'features/contacts/view/screens/contact_merge.dart';
 import 'features/app_lock/view/stores/app_lock_store.dart';
@@ -60,6 +61,9 @@ Future<void> main() async {
     directory: Directory("/home/cerd1x/Documents/cx-dompetqu"),
     features: fileLogFeatures,
   );
+
+  // Initialize ObjectBox database and register to GetIt.
+  await ObjectBoxDatabase.create();
 
   final cookieClient = CookieAwareClient();
   await cookieClient.restore();
@@ -147,10 +151,7 @@ GoRouter appRouter(Ref ref) {
     },
     routes: [
       GoRoute(path: '/auth', builder: (_, _) => const AuthScreen()),
-      GoRoute(
-        path: '/beta-report',
-        builder: (_, _) => const BetaReportScreen(),
-      ),
+      GoRoute(path: '/reports', builder: (_, _) => const ReportsScreen()),
       GoRoute(path: '/admin', builder: (_, _) => const AdminPannelScreen()),
       GoRoute(
         path: '/admin/killswitch',

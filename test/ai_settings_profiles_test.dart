@@ -1,9 +1,10 @@
+import 'package:get_it/get_it.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_crypto_service.dart';
 import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_local_datasource.dart';
 import 'package:dompetqu/features/gen_ai/adapters/repositories/ai_settings_repository_impl.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class _MemoryKeyStore implements AiSettingsSecretKeyStore {
   final Map<String, String> _values = {};
@@ -17,18 +18,28 @@ class _MemoryKeyStore implements AiSettingsSecretKeyStore {
   }
 }
 
-/// Membuat repository di atas SharedPreferences kosong — meniru kondisi nyata
+/// Membuat repository di atas ObjectBox in-memory kosong — meniru kondisi nyata
 /// saat pengguna menyimpan profil pertama kali.
 AiSettingsRepositoryImpl _repository() => AiSettingsRepositoryImpl(
-  SharedPreferencesAiSettingsDataSource(),
+  ObjectBoxAiSettingsDataSource(),
   AiSettingsCryptoService(keyStore: _MemoryKeyStore()),
 );
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  setUpAll(() async {
+    await ObjectBoxDatabase.createInMemory();
+  });
+
   group('AiSettingsRepository profil', () {
-    setUp(() => SharedPreferences.setMockInitialValues({}));
+    setUp(() async {
+      // Reset ObjectBox in-memory store between tests.
+      final db = GetIt.instance.get<ObjectBoxDatabase>();
+      db.aiProfileBox.removeAll();
+      db.aiProviderSettingBox.removeAll();
+      db.aiSettingsMetaBox.removeAll();
+    });
 
     test(
       'createProfile menyimpan profil pertama pada penyimpanan kosong',
@@ -54,11 +65,11 @@ void main() {
     test(
       'pengaturan lama dengan API key dimigrasikan ke profil Default',
       () async {
-        SharedPreferences.setMockInitialValues({
-          'ai_model_provider': 'openAi',
-          'ai_open_ai_api_key': 'legacy-key',
-          'ai_open_ai_model': 'gpt-5',
-        });
+        // Legacy migration test — set raw provider setting in ObjectBox.
+        final ds = ObjectBoxAiSettingsDataSource();
+        await ds.saveProvider(AiModelProvider.openAi);
+        await ds.saveApiKey(AiModelProvider.openAi, 'legacy-key');
+        await ds.saveModel(AiModelProvider.openAi, 'gpt-5');
         final repository = _repository();
 
         final collection = await repository.loadProfiles();
@@ -73,10 +84,10 @@ void main() {
     test(
       'tidak membuat ulang profil Default setelah semua profil dihapus',
       () async {
-        SharedPreferences.setMockInitialValues({
-          'ai_model_provider': 'openAi',
-          'ai_open_ai_api_key': 'legacy-key',
-        });
+        // Seed legacy data.
+        final ds = ObjectBoxAiSettingsDataSource();
+        await ds.saveProvider(AiModelProvider.openAi);
+        await ds.saveApiKey(AiModelProvider.openAi, 'legacy-key');
         final repository = _repository();
         final initial = await repository.loadProfiles();
 
@@ -95,7 +106,7 @@ void main() {
         final repository = _repository();
         expect((await repository.loadProfiles()).profiles, isEmpty);
 
-        final dataSource = SharedPreferencesAiSettingsDataSource();
+        final dataSource = ObjectBoxAiSettingsDataSource();
         await dataSource.saveProvider(AiModelProvider.openAi);
         await dataSource.saveApiKey(AiModelProvider.openAi, 'later-key');
 

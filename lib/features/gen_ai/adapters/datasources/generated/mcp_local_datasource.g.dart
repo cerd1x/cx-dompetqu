@@ -55,4 +55,4 @@ final class McpLocalDatasourceProvider
 }
 
 String _$mcpLocalDatasourceHash() =>
-    r'46893522b21b7b1e3a022ce221baf975e8338444';
+    r'08b3afda1e50979c3e693de8ae9da13cd1cab638';

@@ -99,10 +99,10 @@ Hanya di platform non-web. `enableFileLogging()` menyalakan **dua** file di
 `<dokumen app>/logs/`, keduanya dengan rotasi otomatis ke `*.old` saat melewati
 `maxFileBytes` (256 KB):
 
-| File          | Isi                                                |
-| ------------- | -------------------------------------------------- |
-| `dompetqu.log`| Semua level yang lolos `minLevel`                  |
-| `errors.log`  | Khusus `LogLevel.error` (termasuk crash global)    |
+| File           | Isi                                             |
+| -------------- | ----------------------------------------------- |
+| `dompetqu.log` | Semua level yang lolos `minLevel`               |
+| `errors.log`   | Khusus `LogLevel.error` (termasuk crash global) |
 
 ```dart
 await AppLogger.instance.enableFileLogging();
@@ -113,12 +113,12 @@ await AppLogger.instance.enableFileLogging();
 Semua file ditulis ke subfolder `logs/` di dalam direktori dokumen aplikasi
 (`getApplicationDocumentsDirectory()`):
 
-| Platform | Path default                                                              |
-| -------- | ------------------------------------------------------------------------- |
-| Android  | `/data/user/0/id.dompetqu.dompetqu/app_flutter/logs/`                     |
-| iOS      | `<app sandbox>/Documents/logs/`                                           |
-| Linux    | `$XDG_DOCUMENTS_DIR/logs/` (biasanya `~/Documents/logs/`)                 |
-| Web      | tidak didukung (logging file dilewati diam-diam)                          |
+| Platform | Path default                                              |
+| -------- | --------------------------------------------------------- |
+| Android  | `/data/user/0/id.dompetqu.dompetqu/app_flutter/logs/`     |
+| iOS      | `<app sandbox>/Documents/logs/`                           |
+| Linux    | `$XDG_DOCUMENTS_DIR/logs/` (biasanya `~/Documents/logs/`) |
+| Web      | tidak didukung (logging file dilewati diam-diam)          |
 
 > Di Linux, `getApplicationDocumentsDirectory()` memakai XDG user dir
 > (`$XDG_DOCUMENTS_DIR`, didefinisikan di `~/.config/user-dirs.dirs`, default
@@ -210,8 +210,8 @@ final fileErr = AppLogger.instance.lastFileError; // error tulis file terakhir
 > menyimpan error terakhir, dan kegagalan juga dicetak via `debugPrint`
 > dengan prefix `[AppLogger]`.
 
-Contoh nyata ada di `lib/features/beta_report/beta_report_screen.dart` yang
-menampilkan `latest(200)`, menyimpan `exportJson()`, dan mengirim laporan beta.
+Contoh nyata ada di `lib/features/reports/view/screens/reports_screen.dart` yang
+menampilkan `latest(200)`, menyimpan `exportJson()`, dan mengirim laporan.
 
 ## Membersihkan buffer
 
@@ -224,13 +224,13 @@ Menghapus buffer memori; bila file logging aktif, **kedua** file
 
 ## Konstanta penting
 
-| Konstanta             | Nilai          | Arti                                   |
-| --------------------- | -------------- | -------------------------------------- |
-| `maxBuffer`           | `300`          | Kapasitas baris di memori              |
-| `maxFileBytes`        | `256 * 1024`   | Batas ukuran file sebelum rotate       |
-| `logFileName`         | `dompetqu.log` | Nama file log (semua level)            |
-| `errorLogFileName`    | `errors.log`   | Nama file log khusus error             |
-| `logDirEnvKey`        | `DOMPETQU_LOG_DIR` | Env override direktori dasar log   |
+| Konstanta          | Nilai              | Arti                             |
+| ------------------ | ------------------ | -------------------------------- |
+| `maxBuffer`        | `300`              | Kapasitas baris di memori        |
+| `maxFileBytes`     | `256 * 1024`       | Batas ukuran file sebelum rotate |
+| `logFileName`      | `dompetqu.log`     | Nama file log (semua level)      |
+| `errorLogFileName` | `errors.log`       | Nama file log khusus error       |
+| `logDirEnvKey`     | `DOMPETQU_LOG_DIR` | Env override direktori dasar log |
 
 ## Rekomendasi pemakaian
 

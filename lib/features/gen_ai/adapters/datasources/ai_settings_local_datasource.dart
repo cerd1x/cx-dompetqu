@@ -1,7 +1,11 @@
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_it/get_it.dart';
 
+import 'package:dompetqu/core/database/entities/ai_profile_entity.dart';
+import 'package:dompetqu/core/database/entities/ai_provider_setting_entity.dart';
+import 'package:dompetqu/core/database/entities/ai_settings_meta_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
 
@@ -48,166 +52,178 @@ class AiProviderSettingsData {
   final bool useCustomModel;
 }
 
-class SharedPreferencesAiSettingsDataSource
-    implements AiSettingsLocalDataSource {
-  static const _profilesKey = 'ai_settings_profiles';
-  static const _activeProfileIdKey = 'ai_settings_active_profile_id';
-  static const _profilesInitializedKey = 'ai_settings_profiles_initialized';
+class ObjectBoxAiSettingsDataSource implements AiSettingsLocalDataSource {
+  const ObjectBoxAiSettingsDataSource();
+
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
+
+  AiSettingsMetaEntity _getMeta() {
+    return _db.aiSettingsMetaBox.get(1) ?? AiSettingsMetaEntity(id: 1);
+  }
+
+  void _saveMeta(AiSettingsMetaEntity meta) {
+    _db.aiSettingsMetaBox.put(meta);
+  }
+
+  @override
+  Future<AiModelProvider> loadProvider() async {
+    final meta = _getMeta();
+    final name = meta.provider;
+    for (final provider in AiModelProvider.values) {
+      if (provider.name == name) return provider;
+    }
+    return AiModelProvider.googleAi;
+  }
+
+  AiProviderSettingEntity? _findProviderSetting(AiModelProvider provider) {
+    for (final e in _db.aiProviderSettingBox.getAll()) {
+      if (e.provider == provider.name) return e;
+    }
+    return null;
+  }
+
+  AiProfileEntity? _findProfile(String profileId) {
+    for (final e in _db.aiProfileBox.getAll()) {
+      if (e.profileId == profileId) return e;
+    }
+    return null;
+  }
 
   @override
   Future<AiProviderSettingsData> loadProviderSettings(
     AiModelProvider provider,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    final entity = _findProviderSetting(provider);
+
+    if (entity == null) {
+      return AiProviderSettingsData(
+        apiKey: '',
+        model: provider.defaultModel,
+        baseUrl: provider.defaultBaseUrl,
+        showAiBubble: _getMeta().showAiBubble,
+        includeCustomHeaders: false,
+        customHeaders: const {},
+        useCustomModel: provider == AiModelProvider.ollama,
+      );
+    }
+
+    Map<String, String> headers = const {};
+    try {
+      final decoded = jsonDecode(entity.customHeadersJson);
+      if (decoded is Map) {
+        headers = decoded.map((k, v) => MapEntry(k.toString(), v.toString()));
+      }
+    } catch (_) {}
+
     return AiProviderSettingsData(
-      apiKey:
-          prefs.getString(_apiKeyKey(provider)) ??
-          (provider == AiModelProvider.googleAi
-              ? prefs.getString('ai_api_key')
-              : null) ??
-          '',
-      model:
-          prefs.getString(_modelKey(provider)) ??
-          (provider == AiModelProvider.googleAi
-              ? prefs.getString('ai_model')
-              : null) ??
-          provider.defaultModel,
-      baseUrl:
-          prefs.getString(_baseUrlKey(provider)) ?? provider.defaultBaseUrl,
-      showAiBubble: prefs.getBool('ai_bubble_enabled') ?? true,
-      includeCustomHeaders:
-          prefs.getBool(_includeCustomHeadersKey(provider)) ?? false,
-      customHeaders: _decodeHeaders(
-        prefs.getString(_customHeadersKey(provider)),
-      ),
-      useCustomModel:
-          prefs.getBool(_useCustomModelKey(provider)) ??
-          provider == AiModelProvider.ollama,
+      apiKey: entity.apiKey,
+      model: entity.model.isNotEmpty ? entity.model : provider.defaultModel,
+      baseUrl: entity.baseUrl.isNotEmpty
+          ? entity.baseUrl
+          : provider.defaultBaseUrl,
+      showAiBubble: _getMeta().showAiBubble,
+      includeCustomHeaders: entity.includeCustomHeaders,
+      customHeaders: headers,
+      useCustomModel: entity.useCustomModel,
     );
   }
 
   @override
   Future<List<AiSettingsProfileModel>> loadProfiles() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encoded = prefs.getString(_profilesKey);
-    // Wajib list yang bisa dimutasi: pemanggil (save/delete profil) menambah
-    // atau menghapus item dari hasil ini.
-    if (encoded == null) return <AiSettingsProfileModel>[];
-
-    final decoded = jsonDecode(encoded);
-    if (decoded is! List) {
-      throw const FormatException('Daftar profil AI tersimpan tidak valid.');
-    }
-    final profiles = [
-      for (final value in decoded)
-        AiSettingsProfileModel.fromJson(_normalizeMap(value)),
-    ];
-    final profileIds = <String>{};
-    for (final profile in profiles) {
-      if (!profileIds.add(profile.id)) {
-        throw const FormatException('ID profil AI tersimpan duplikat.');
-      }
+    final entities = _db.aiProfileBox.getAll();
+    final profiles = <AiSettingsProfileModel>[];
+    for (final entity in entities) {
+      try {
+        final decoded = jsonDecode(entity.dataJson);
+        if (decoded is Map<String, dynamic>) {
+          profiles.add(AiSettingsProfileModel.fromJson(decoded));
+        }
+      } catch (_) {}
     }
     return profiles;
   }
 
   @override
   Future<void> saveProfile(AiSettingsProfileModel profile) async {
-    final profiles = await loadProfiles();
-    final index = profiles.indexWhere((item) => item.id == profile.id);
-    if (index == -1) {
-      profiles.add(profile);
-    } else {
-      profiles[index] = profile;
-    }
-    final saved = await (await SharedPreferences.getInstance()).setString(
-      _profilesKey,
-      jsonEncode(profiles.map((item) => item.toJson()).toList()),
-    );
-    if (!saved) {
-      throw StateError(
-        'Gagal menyimpan daftar profil AI ke penyimpanan lokal.',
-      );
-    }
+    final existing =
+        _findProfile(profile.id) ?? AiProfileEntity(profileId: profile.id);
+
+    existing.name = profile.name;
+    existing.dataJson = jsonEncode(profile.toJson());
+    _db.aiProfileBox.put(existing);
   }
 
   @override
   Future<void> deleteProfile(String profileId) async {
-    final profiles = await loadProfiles();
-    profiles.removeWhere((profile) => profile.id == profileId);
-    await (await SharedPreferences.getInstance()).setString(
-      _profilesKey,
-      jsonEncode(profiles.map((item) => item.toJson()).toList()),
-    );
+    final entities = _db.aiProfileBox.getAll();
+    for (final entity in entities) {
+      if (entity.profileId == profileId) {
+        _db.aiProfileBox.remove(entity.id);
+      }
+    }
   }
 
   @override
-  Future<bool> hasInitializedProfiles() async =>
-      (await SharedPreferences.getInstance()).getBool(
-        _profilesInitializedKey,
-      ) ??
-      false;
+  Future<bool> hasInitializedProfiles() async {
+    return _getMeta().profilesInitialized;
+  }
 
   @override
   Future<void> markProfilesInitialized() async {
-    final saved = await (await SharedPreferences.getInstance()).setBool(
-      _profilesInitializedKey,
-      true,
-    );
-    if (!saved) {
-      throw StateError('Gagal menandai inisialisasi profil AI.');
-    }
+    final meta = _getMeta();
+    meta.profilesInitialized = true;
+    _saveMeta(meta);
   }
 
   @override
-  Future<String?> loadActiveProfileId() async =>
-      (await SharedPreferences.getInstance()).getString(_activeProfileIdKey);
+  Future<String?> loadActiveProfileId() async {
+    return _getMeta().activeProfileId;
+  }
 
   @override
   Future<void> saveActiveProfileId(String? profileId) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (profileId == null) {
-      await prefs.remove(_activeProfileIdKey);
-      return;
-    }
-    final saved = await prefs.setString(_activeProfileIdKey, profileId);
-    if (!saved) {
-      throw StateError('Gagal menyimpan profil AI aktif ke penyimpanan lokal.');
-    }
+    final meta = _getMeta();
+    meta.activeProfileId = profileId;
+    _saveMeta(meta);
   }
 
   @override
   Future<void> saveProvider(AiModelProvider provider) async {
-    await (await SharedPreferences.getInstance()).setString(
-      'ai_model_provider',
-      provider.name,
-    );
+    final meta = _getMeta();
+    meta.provider = provider.name;
+    _saveMeta(meta);
+  }
+
+  AiProviderSettingEntity _getOrCreateProviderSetting(
+    AiModelProvider provider,
+  ) {
+    return _findProviderSetting(provider) ??
+        AiProviderSettingEntity(
+          provider: provider.name,
+          model: provider.defaultModel,
+          baseUrl: provider.defaultBaseUrl,
+        );
   }
 
   @override
   Future<void> saveApiKey(AiModelProvider provider, String value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_apiKeyKey(provider), value);
-    if (provider == AiModelProvider.googleAi) {
-      await prefs.setString('ai_api_key', value);
-    }
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.apiKey = value;
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
   Future<void> saveModel(AiModelProvider provider, String value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_modelKey(provider), value);
-    if (provider == AiModelProvider.googleAi) {
-      await prefs.setString('ai_model', value);
-    }
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.model = value;
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
   Future<void> saveBaseUrl(AiModelProvider provider, String value) async {
-    await (await SharedPreferences.getInstance()).setString(
-      _baseUrlKey(provider),
-      value,
-    );
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.baseUrl = value;
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
@@ -215,10 +231,9 @@ class SharedPreferencesAiSettingsDataSource
     AiModelProvider provider,
     Map<String, String> headers,
   ) async {
-    await (await SharedPreferences.getInstance()).setString(
-      _customHeadersKey(provider),
-      jsonEncode(headers),
-    );
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.customHeadersJson = jsonEncode(headers);
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
@@ -226,10 +241,9 @@ class SharedPreferencesAiSettingsDataSource
     AiModelProvider provider,
     bool include,
   ) async {
-    await (await SharedPreferences.getInstance()).setBool(
-      _includeCustomHeadersKey(provider),
-      include,
-    );
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.includeCustomHeaders = include;
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
@@ -237,71 +251,15 @@ class SharedPreferencesAiSettingsDataSource
     AiModelProvider provider,
     bool useCustom,
   ) async {
-    await (await SharedPreferences.getInstance()).setBool(
-      _useCustomModelKey(provider),
-      useCustom,
-    );
+    final setting = _getOrCreateProviderSetting(provider);
+    setting.useCustomModel = useCustom;
+    _db.aiProviderSettingBox.put(setting);
   }
 
   @override
   Future<void> saveAiBubbleVisibility(bool visible) async {
-    await (await SharedPreferences.getInstance()).setBool(
-      'ai_bubble_enabled',
-      visible,
-    );
-  }
-
-  static String _apiKeyKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_api_key';
-  static String _modelKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_model';
-  static String _baseUrlKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_base_url';
-  static String _customHeadersKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_custom_headers';
-  static String _includeCustomHeadersKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_include_custom_headers';
-  static String _useCustomModelKey(AiModelProvider provider) =>
-      'ai_${provider.storageKey}_use_custom_model';
-
-  static Map<String, String> _decodeHeaders(String? encoded) {
-    if (encoded == null) return const {};
-    final decoded = jsonDecode(encoded);
-    if (decoded is! Map<String, dynamic>) {
-      throw const FormatException('Custom headers AI harus berupa objek JSON.');
-    }
-    final headers = <String, String>{};
-    for (final entry in decoded.entries) {
-      if (entry.key.trim().isEmpty || entry.value is! String) {
-        throw const FormatException('Format custom headers AI tidak valid.');
-      }
-      headers[entry.key] = entry.value as String;
-    }
-    return headers;
-  }
-
-  Map<String, dynamic> _normalizeMap(Object? value) {
-    if (value is! Map) {
-      throw const FormatException('Data profil AI tersimpan tidak valid.');
-    }
-    final normalized = <String, dynamic>{};
-    for (final entry in value.entries) {
-      if (entry.key is! String) {
-        throw const FormatException('Data profil AI tersimpan tidak valid.');
-      }
-      normalized[entry.key as String] = entry.value;
-    }
-    return normalized;
-  }
-
-  @override
-  Future<AiModelProvider> loadProvider() async {
-    final prefs = await SharedPreferences.getInstance();
-    final name = prefs.getString('ai_model_provider');
-    if (name == null) return AiModelProvider.googleAi;
-    for (final provider in AiModelProvider.values) {
-      if (provider.name == name) return provider;
-    }
-    throw FormatException('Provider AI tersimpan tidak dikenal: $name');
+    final meta = _getMeta();
+    meta.showAiBubble = visible;
+    _saveMeta(meta);
   }
 }

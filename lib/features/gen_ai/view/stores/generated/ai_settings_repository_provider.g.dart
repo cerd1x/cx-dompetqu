@@ -55,7 +55,7 @@ final class AiSettingsRepositoryProvider
 }
 
 String _$aiSettingsRepositoryHash() =>
-    r'9b5f2042a2ec6d3c7fdfd58ba973274dc4043e04';
+    r'63b9a80d4c9162c7209f0387a52663600db38b34';
 
 @ProviderFor(openRouterModelRepository)
 final openRouterModelRepositoryProvider = OpenRouterModelRepositoryProvider._();

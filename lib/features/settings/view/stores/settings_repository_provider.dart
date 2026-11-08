@@ -5,5 +5,5 @@ import 'package:dompetqu/features/settings/adapters/repositories/settings_reposi
 import 'package:dompetqu/features/settings/domain/repositories/settings_repository.dart';
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
-  return SettingsRepositoryImpl(const SharedPreferencesSettingsDataSource());
+  return SettingsRepositoryImpl(const ObjectBoxSettingsDataSource());
 });

@@ -1,8 +1,8 @@
-import 'dart:convert';
-
+import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:dompetqu/core/database/entities/ai_skill_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 import 'package:dompetqu/features/gen_ai/adapters/models/ai_skill.dart';
 
 part 'generated/ai_skills_local_datasource.g.dart';
@@ -14,38 +14,38 @@ abstract interface class AiSkillsLocalDatasource {
 
 @Riverpod(keepAlive: true)
 AiSkillsLocalDatasource aiSkillsLocalDatasource(Ref ref) {
-  return SharedPreferencesAiSkillsLocalDatasource();
+  return ObjectBoxAiSkillsLocalDatasource();
 }
 
-class SharedPreferencesAiSkillsLocalDatasource
-    implements AiSkillsLocalDatasource {
-  static const _storageKey = 'ai_skills';
+class ObjectBoxAiSkillsLocalDatasource implements AiSkillsLocalDatasource {
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
 
   @override
   Future<List<AiSkill>> loadAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    final stored = prefs.getString(_storageKey);
-    if (stored == null) return const [];
-    final decoded = jsonDecode(stored);
-    if (decoded is! List) {
-      throw const FormatException('Data skill tersimpan tidak valid.');
-    }
-    return decoded
+    final entities = _db.aiSkillBox.getAll();
+    return entities
         .map(
-          (entry) => AiSkill.fromJson(Map<String, dynamic>.from(entry as Map)),
+          (e) => AiSkill(
+            id: e.skillId,
+            name: e.name,
+            instructions: e.instructions,
+          ),
         )
         .toList(growable: false);
   }
 
   @override
   Future<void> saveAll(List<AiSkill> skills) async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = await prefs.setString(
-      _storageKey,
-      jsonEncode(skills.map((skill) => skill.toJson()).toList()),
-    );
-    if (!saved) {
-      throw StateError('Skill tidak berhasil disimpan.');
-    }
+    _db.aiSkillBox.removeAll();
+    final entities = skills
+        .map(
+          (s) => AiSkillEntity(
+            skillId: s.id,
+            name: s.name,
+            instructions: s.instructions,
+          ),
+        )
+        .toList();
+    _db.aiSkillBox.putMany(entities);
   }
 }

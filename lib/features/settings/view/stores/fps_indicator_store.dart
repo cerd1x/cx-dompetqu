@@ -1,57 +1,50 @@
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'settings_repository_provider.dart';
+import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
+
+part 'generated/fps_indicator_store.g.dart';
 
 /// Status tampil/sembunyi indikator FPS.
 ///
-/// Dipersist ke `SharedPreferences` lewat [SettingsRepository] (key
-/// `show_fps`), bukan lewat `AppSettings` freezed — supaya toggle ini bisa
-/// ditambahkan tanpa codegen (`build_runner`) dan tidak memaksa regenerasi
-/// `.freezed.dart`.
-///
-/// Default **ON** (`true`): key belum pernah ditulis (null) dianggap tampil,
-/// sesuai keputusan agar indikator FPS tampil terus-menerus.
-///
-/// Ini provider Riverpod **manual** (bukan `@riverpod` codegen) karena
-/// menambahkan codegen store baru berarti menjalankan `build_runner`, yang
-/// di repo ini hanya dilakukan oleh user.
-final fpsIndicatorStoreProvider =
-    AsyncNotifierProvider<FpsIndicatorNotifier, bool>(FpsIndicatorNotifier.new);
-
-class FpsIndicatorNotifier extends AsyncNotifier<bool> {
-  final AppLogger _log = AppLogger.instance;
+/// Dipersist ke ObjectBox lewat [SettingsRepository] (key
+/// `show_fps`), bukan lagi ke SharedPreferences.
+@Riverpod(keepAlive: true)
+class FpsIndicatorStore extends _$FpsIndicatorStore {
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
 
   @override
   Future<bool> build() async {
-    try {
-      final value = await ref.watch(settingsRepositoryProvider).loadShowFps();
-      _log.success('FPS indicator dimuat: $value', tag: 'FpsIndicatorStore');
-      return value;
-    } catch (e) {
-      _log.error(
-        'Gagal memuat FPS indicator',
-        tag: 'FpsIndicatorStore',
-        error: e,
-      );
-      rethrow;
+    final key = 'show_fps';
+    for (final e in _db.appSettingBox.getAll()) {
+      if (e.key == key) {
+        return e.value == 'true';
+      }
     }
+    return true;
   }
 
-  /// Toggle tampil/sembunyi indikator FPS dan persist ke prefs.
-  Future<void> setVisible(bool value) async {
-    // Optimistic update supaya UI langsung merespons; penyimpanan menyusul.
-    state = AsyncValue.data(value);
-    try {
-      await ref.read(settingsRepositoryProvider).saveShowFps(value);
-      _log.success('FPS indicator disimpan: $value', tag: 'FpsIndicatorStore');
-    } catch (e) {
-      _log.error(
-        'Gagal simpan FPS indicator',
-        tag: 'FpsIndicatorStore',
-        error: e,
-      );
-      rethrow;
+  /// Alias agar pemanggil lama (`setVisible`) tetap berfungsi.
+  Future<void> setVisible(bool value) => toggle(value);
+
+  Future<void> toggle(bool value) async {
+    final key = 'show_fps';
+    AppSettingEntity? existing;
+    for (final e in _db.appSettingBox.getAll()) {
+      if (e.key == key) {
+        existing = e;
+        break;
+      }
     }
+    if (existing == null) {
+      _db.appSettingBox.put(
+        AppSettingEntity(key: key, value: value.toString()),
+      );
+    } else {
+      existing.value = value.toString();
+      _db.appSettingBox.put(existing);
+    }
+    state = AsyncData(value);
   }
 }

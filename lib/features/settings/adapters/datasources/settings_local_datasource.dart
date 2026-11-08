@@ -1,4 +1,7 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 
 const String kThemePrefsKey = 'theme';
 const String kCurrencyPrefsKey = 'currency';
@@ -9,15 +12,27 @@ abstract interface class SettingsLocalDataSource {
   Future<void> writeString(String key, String value);
 }
 
-class SharedPreferencesSettingsDataSource implements SettingsLocalDataSource {
-  const SharedPreferencesSettingsDataSource();
+class ObjectBoxSettingsDataSource implements SettingsLocalDataSource {
+  const ObjectBoxSettingsDataSource();
+
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
+
+  AppSettingEntity? _findByKey(String key) {
+    for (final e in _db.appSettingBox.getAll()) {
+      if (e.key == key) return e;
+    }
+    return null;
+  }
 
   @override
-  Future<String?> readString(String key) async =>
-      (await SharedPreferences.getInstance()).getString(key);
+  Future<String?> readString(String key) async {
+    return _findByKey(key)?.value;
+  }
 
   @override
   Future<void> writeString(String key, String value) async {
-    await (await SharedPreferences.getInstance()).setString(key, value);
+    final entity = _findByKey(key) ?? AppSettingEntity(key: key);
+    entity.value = value;
+    _db.appSettingBox.put(entity);
   }
 }

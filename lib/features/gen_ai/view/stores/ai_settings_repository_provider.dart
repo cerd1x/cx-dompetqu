@@ -14,7 +14,7 @@ part 'generated/ai_settings_repository_provider.g.dart';
 @Riverpod(keepAlive: true)
 AiSettingsRepository aiSettingsRepository(Ref ref) {
   return AiSettingsRepositoryImpl(
-    SharedPreferencesAiSettingsDataSource(),
+    ObjectBoxAiSettingsDataSource(),
     AiSettingsCryptoService(
       keyStore: const FlutterSecureStorageAiSettingsKeyStore(),
     ),

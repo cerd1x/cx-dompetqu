@@ -22,7 +22,7 @@ transfer, hutang, dan piutang) secara terstruktur. Fitur utama meliputi:
 - **Admin Panel & Kill Switch** — kontrol kill switch REST (`x-admin-token`) untuk
   admin, dapat mematikan/mengaktifkan operasi root GraphQL saat darurat.
 - **Gen AI** — fitur AI generatif untuk asisten keuangan (Genkit Dart SDK 1.0).
-- **Beta Report** — fitur pelaporan versi beta (UI-only).
+- **Reports** — fitur pelaporan (UI-only, menampilkan log AppLogger).
 
 Topologi backend (tanpa deploy, hanya HTTP/GraphQL):
 
@@ -81,7 +81,7 @@ Status migrasi struktur per fitur:
 | assets       | domain/adapters/view                   | Sudah migrasi                                      |
 | analytics    | domain/adapters/view (kerangka kosong) | UI-only, belum lengkap                             |
 | auth         | domain/adapters/view                   | Sudah migrasi                                      |
-| beta_report  | view (screens)                         | UI-only, belum lengkap                             |
+| reports      | domain/adapters/view                   | domain/adapters mockup, menampilkan log AppLogger  |
 | charts       | view (screens)                         | UI-only, belum lengkap                             |
 | contacts     | domain/adapters/view                   | Sudah migrasi (`domain/entities/` kosong)          |
 | dashboard    | domain/adapters/view                   | Sudah migrasi                                      |
@@ -89,13 +89,13 @@ Status migrasi struktur per fitur:
 | inventory    | domain/adapters/view                   | Sudah migrasi                                      |
 | order        | domain/adapters/view                   | Sudah migrasi, 4 provider masih manual (R2)        |
 | payments     | domain/adapters/view                   | Sudah migrasi, `paymentsByStatus` + `retryPayment` |
-| portfolio    | view (screens)                         | UI-only, hanya 1 screen                            |
+| portfolio    | domain/adapters/view                   | Exchange rate source adapter + UI                  |
 | settings     | domain/adapters/view                   | Sudah migrasi                                      |
 | statistics   | domain/adapters/view                   | Sudah migrasi                                      |
 | struct       | view (screens)                         | UI-only, hanya 1 screen                            |
 | transactions | domain/adapters/view                   | Sudah migrasi                                      |
 
-Features `analytics`, `beta_report`, dan `charts` adalah UI-only, hanya memiliki layer presentation tanpa repository/domain boilerplate.
+Features `analytics` dan `charts` adalah UI-only, hanya memiliki layer presentation tanpa repository/domain boilerplate.
 
 **Konvensi model domain:** acuan resmi adalah `domain/models/`. Folder `domain/entities/` adalah nama lama dan sudah tidak dipakai isinya; sisa direktori kosong `contacts/domain/entities/` boleh dihapus kapan saja.
 
@@ -287,9 +287,16 @@ lib/
     │       ├── screens/               # TransactionDetailScreen
     │       └── stores/                # transactions_store
     │
-    ├── portfolio/                     # Fitur portfolio (UI-only)
+    ├── portfolio/                     # Fitur portfolio (exchange rate adapter + UI)
+    │   ├── domain/
+    │   │   ├── models/                # ExchangeRate, ExchangeRateError
+    │   │   └── repositories/          # ExchangeRateRepository interface
+    │   ├── adapters/
+    │   │   ├── datasources/           # ExchangeRateSource + Frankfurter adapter
+    │   │   └── repositories/          # ExchangeRateRepositoryImpl
     │   └── view/
-    │       └── screens/               # PortfolioScreen
+    │       ├── screens/               # PortfolioScreen
+    │       └── stores/                # exchange_rate_store, provider
     │
     ├── struct/                        # Fitur struct (UI-only)
     │   └── view/
@@ -340,9 +347,10 @@ lib/
     │   └── view/
     │       └── screens/               # Chart screens
     │
-    └── beta_report/                   # Fitur beta report (UI-only)
+    └── reports/                       # Fitur laporan (UI-only, menampilkan log AppLogger)
         └── view/
-            └── screens/               # Beta report screen
+            ├── screens/               # ReportsScreen
+            └── stores/                # reports_store
 ```
 
 ### Catatan Penting
@@ -353,7 +361,7 @@ lib/
    - `admin_pannel` (typo "panel")
    - `KillswitchControllScreen` (typo "Control")
 
-3. **UI-Only Features**: `beta_report`, `charts`, `portfolio`, `struct`, dan `analytics` hanya memiliki layer `view/` tanpa repository/domain boilerplate. Tidak perlu menambahkan port/adapter sampai fitur ini memiliki logic business atau persistence sendiri.
+3. **UI-Only Features**: `reports`, `charts`, `struct`, dan `analytics` hanya memiliki layer `view/` tanpa repository/domain boilerplate. `portfolio` kini punya domain/adapters (exchange rate source adapter) meski UI-nya masih placeholder.
 
 4. **Pola Komposit (Agregat)**: `HomeRepository` di `dashboard/domain/repositories/` adalah agregat port yang menggabungkan beberapa fitur terkait (assets, contacts, inventory, statistics, transactions). Ini sah untuk mengurangi coupling antar-fitur.
 

@@ -29,8 +29,8 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
           IconButton(
-            tooltip: 'Laporan Beta',
-            onPressed: () => context.push('/beta-report'),
+            tooltip: 'Reports',
+            onPressed: () => context.push('/reports'),
             icon: const Icon(Icons.bug_report_outlined, color: Colors.white54),
           ),
         ],

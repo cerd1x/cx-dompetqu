@@ -543,9 +543,9 @@ class _MenuList extends StatelessWidget {
     ),
     (
       icon: Icons.bug_report_outlined,
-      title: 'Laporan Beta',
-      subtitle: 'Tinjau log dan masukan pengguna',
-      route: '/beta-report',
+      title: 'Reports',
+      subtitle: 'Tinjau log AppLogger dan masukan pengguna',
+      route: '/reports',
     ),
     (
       icon: Icons.power_settings_new_rounded,

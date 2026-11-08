@@ -1,26 +1,27 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_it/get_it.dart';
+import 'package:dompetqu/core/database/entities/debt_settlement_entity.dart';
+import 'package:dompetqu/core/database/objectbox_database.dart';
 
 abstract interface class DebtSettlementsLocalDataSource {
   Future<Set<String>> load();
   Future<void> save(Set<String> transactionIds);
 }
 
-class SharedPreferencesDebtSettlementsDataSource
+class ObjectBoxDebtSettlementsDataSource
     implements DebtSettlementsLocalDataSource {
-  static const _storageKey = 'settled_debt_ids';
+  ObjectBoxDatabase get _db => GetIt.instance.get<ObjectBoxDatabase>();
 
   @override
   Future<Set<String>> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    return (prefs.getStringList(_storageKey) ?? const []).toSet();
+    return _db.debtSettlementBox.getAll().map((e) => e.transactionId).toSet();
   }
 
   @override
   Future<void> save(Set<String> transactionIds) async {
-    final ids = transactionIds.toList()..sort();
-    await (await SharedPreferences.getInstance()).setStringList(
-      _storageKey,
-      ids,
-    );
+    _db.debtSettlementBox.removeAll();
+    final entities = transactionIds
+        .map((id) => DebtSettlementEntity(transactionId: id))
+        .toList();
+    _db.debtSettlementBox.putMany(entities);
   }
 }

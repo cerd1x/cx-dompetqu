@@ -206,14 +206,35 @@ class _LogTile extends StatelessWidget {
                 ),
               ),
             ),
-        child: Text(
-          record.line,
-          style: TextStyle(
-            fontSize: 11,
-            fontFamily: 'monospace',
-            color: color,
-            height: 1.3,
-          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // log content section
+            Expanded(
+              child: Text(
+                record.line,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontFamily: 'monospace',
+                  color: color,
+                  height: 1.3,
+                ),
+              ),
+            ),
+            // copy button section
+            InkWell(
+              onTap: () => Clipboard.setData(ClipboardData(text: record.line)),
+              borderRadius: BorderRadius.circular(6),
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: Icon(
+                  Icons.copy_rounded,
+                  size: 14,
+                  color: Colors.white38,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

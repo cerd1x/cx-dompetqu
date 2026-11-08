@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -52,6 +53,10 @@ class AppLogger extends ChangeNotifier {
   static const String errorLogFileName = 'errors.log';
 
   final List<LogRecord> _buffer = [];
+  final _logStreamCtrl = StreamController<LogRecord>.broadcast();
+
+  /// Stream untuk memantau log secara real-time.
+  Stream<LogRecord> get logStream => _logStreamCtrl.stream;
 
   late final _FileSink _mainFile;
   late final _FileSink _errorFile;
@@ -175,8 +180,11 @@ class AppLogger extends ChangeNotifier {
     }
     // Error juga dicatat ke `errors.log` agar mudah diperiksa terpisah.
     if (level == LogLevel.error && _fileLogFeatures.contains(record.feature)) {
-      _errorFile.writeLine(record.line);
+      if (_fileLogFeatures.contains(record.feature)) {
+        _errorFile.writeLine(record.line);
+      }
     }
+    _logStreamCtrl.add(record);
     notifyListeners();
   }
 
@@ -334,6 +342,12 @@ class AppLogger extends ChangeNotifier {
     _mainFile.clear();
     _errorFile.clear();
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _logStreamCtrl.close();
+    super.dispose();
   }
 }
 

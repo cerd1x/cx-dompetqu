@@ -22,13 +22,25 @@ class ReportsScreen extends ConsumerStatefulWidget {
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   final _messageCtrl = TextEditingController();
   String? _copyResult;
+  Set<int> _selectedIndexes = {};
 
   AppLogger get _logger => AppLogger.instance;
+  bool get _hasSelection => _selectedIndexes.isNotEmpty;
 
   @override
   void dispose() {
     _messageCtrl.dispose();
     super.dispose();
+  }
+
+  void _toggleSelection(int index) {
+    setState(() {
+      if (_selectedIndexes.contains(index)) {
+        _selectedIndexes.remove(index);
+      } else {
+        _selectedIndexes.add(index);
+      }
+    });
   }
 
   Future<void> _copy() async {
@@ -42,6 +54,22 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     setState(
       () => _copyResult = '${_logger.records.length} baris log disalin.',
     );
+  }
+
+  Future<void> _sendSelected() async {
+    if (_selectedIndexes.isEmpty) return;
+    final selectedRecords = _logger.records
+        .asMap()
+        .entries
+        .where((entry) => _selectedIndexes.contains(entry.key))
+        .map((entry) => entry.value)
+        .toList();
+    final messages = selectedRecords.map((r) => r.line).join('\n');
+    await ref
+        .read(reportsStoreProvider.notifier)
+        .submitReport(message: 'Log terpilih:\n$messages');
+    if (!mounted) return;
+    setState(() => _selectedIndexes = {});
   }
 
   Future<void> _send() async {
@@ -110,6 +138,14 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                     const Text(
                       'Laporan terkirim. Terima kasih atas masukannya!',
                       style: TextStyle(fontSize: 12, color: Color(0xFF34D399)),
+                    ),
+                  ],
+                  if (_hasSelection) ...[
+                    const SizedBox(height: 8),
+                    CxButton(
+                      label: 'Kirim ${_selectedIndexes.length} Log Terpilih',
+                      leadingIcon: Icons.send_rounded,
+                      onPressed: _sendSelected,
                     ),
                   ],
                   if (store.submitError != null) ...[
@@ -184,7 +220,11 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       itemCount: records.length,
                       itemBuilder: (context, index) {
                         final r = records[index];
-                        return _LogTile(record: r);
+                        return _LogTile(
+                          record: r,
+                          isSelected: _selectedIndexes.contains(index),
+                          onSelect: () => _toggleSelection(index),
+                        );
                       },
                     ),
             ),
@@ -196,9 +236,15 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
 }
 
 class _LogTile extends StatelessWidget {
-  const _LogTile({required this.record});
+  const _LogTile({
+    required this.record,
+    required this.isSelected,
+    required this.onSelect,
+  });
 
   final LogRecord record;
+  final bool isSelected;
+  final VoidCallback onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -212,58 +258,71 @@ class _LogTile extends StatelessWidget {
     };
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Box(
-        style: BoxStyler()
-            .padding(
-              EdgeInsetsGeometryMix.value(
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              ),
-            )
-            .constraints(
-              BoxConstraintsMix.value(
-                (const BoxConstraints()).tighten(
-                  width: double.infinity,
-                  height: null,
+      child: InkWell(
+        onTap: onSelect,
+        borderRadius: BorderRadius.circular(10),
+        child: Box(
+          style: BoxStyler()
+              .padding(
+                EdgeInsetsGeometryMix.value(
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                ),
+              )
+              .constraints(
+                BoxConstraintsMix.value(
+                  (const BoxConstraints()).tighten(
+                    width: double.infinity,
+                    height: null,
+                  ),
+                ),
+              )
+              .decoration(
+                DecorationMix.value(
+                  BoxDecoration(
+                    color: isSelected
+                        ? const Color(0x3360A5FA)
+                        : const Color(0x0FFFFFFF),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFF60A5FA)
+                          : Colors.transparent,
+                      width: 1,
+                    ),
+                  ),
                 ),
               ),
-            )
-            .decoration(
-              DecorationMix.value(
-                BoxDecoration(
-                  color: const Color(0x0FFFFFFF),
-                  borderRadius: BorderRadius.circular(10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // log content section
+              Expanded(
+                child: Text(
+                  record.line,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'monospace',
+                    color: color,
+                    height: 1.3,
+                  ),
                 ),
               ),
-            ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // log content section
-            Expanded(
-              child: Text(
-                record.line,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontFamily: 'monospace',
-                  color: color,
-                  height: 1.3,
+              // copy button section
+              InkWell(
+                onTap: () =>
+                    Clipboard.setData(ClipboardData(text: record.line)),
+                borderRadius: BorderRadius.circular(6),
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.copy_rounded,
+                    size: 14,
+                    color: Colors.white38,
+                  ),
                 ),
               ),
-            ),
-            // copy button section
-            InkWell(
-              onTap: () => Clipboard.setData(ClipboardData(text: record.line)),
-              borderRadius: BorderRadius.circular(6),
-              child: const Padding(
-                padding: EdgeInsets.all(4),
-                child: Icon(
-                  Icons.copy_rounded,
-                  size: 14,
-                  color: Colors.white38,
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

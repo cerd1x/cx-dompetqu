@@ -213,6 +213,68 @@ final fileErr = AppLogger.instance.lastFileError; // error tulis file terakhir
 Contoh nyata ada di `lib/features/reports/view/screens/reports_screen.dart` yang
 menampilkan `latest(200)`, menyimpan `exportJson()`, dan mengirim laporan.
 
+## Memantau log real-time (Stream)
+
+Untuk memantau log yang muncul secara _real-time_ (misalnya membuat tampilan
+log yang scroll otomatis atau trigger action saat error terjadi), gunakan
+`logStream`. Stream ini adalah _broadcast stream_, artinya bisa didengarkan
+oleh beberapa listener sekaligus.
+
+### Contoh penggunaan di Widget
+
+```dart
+class _MyWidgetState extends State<MyWidget> {
+  StreamSubscription<LogRecord>? _logSub;
+
+  @override
+  void initState() {
+    super.initState();
+    // Dengarkan semua log baru
+    _logSub = AppLogger.instance.logStream.listen((record) {
+      print('Log baru masuk: ${record.line}');
+    });
+  }
+
+  @override
+  void dispose() {
+    _logSub?.cancel(); // Selalu batalkan subscription saat dispose
+    super.dispose();
+  }
+}
+```
+
+### Contoh penggunaan di Riverpod Store
+
+Jika Anda ingin menyimpan state atau menambah item ke list saat log baru masuk,
+Anda bisa mendengarkan stream di dalam `build` method store dan menutupnya
+saat provider di-dispose.
+
+```dart
+@Riverpod(keepAlive: true)
+class MyLogStore extends _$MyLogStore {
+  StreamSubscription<LogRecord>? _sub;
+
+  @override
+  List<LogRecord> build() {
+    _sub = AppLogger.instance.logStream.listen((record) {
+      state = [...state, record];
+    });
+
+    ref.onDispose(() {
+      _sub?.cancel();
+    });
+
+    return [];
+  }
+}
+```
+
+> **Catatan:** `AppLogger` juga merupakan `ChangeNotifier`. Bila Anda hanya
+> butuh UI yang me-rebuild saat ada log baru (pull-based), cukup gunakan
+> `ref.watch(reportsStoreProvider)` atau `AnimatedBuilder` dengan
+> `AppLogger.instance` sebagai _listenable_. Stream lebih cocok untuk
+> menjalankan side-effect (mis. kirim notifikasi) atau filtering yang kompleks.
+
 ## Membersihkan buffer
 
 ```dart

@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'asset_transaction_list.dart';
@@ -54,7 +54,7 @@ class AssetDetailScreen extends ConsumerWidget {
     void confirmDelete() {
       showDialog<void>(
         context: context,
-        builder: (dialogCtx) => CsDialog(
+        builder: (dialogCtx) => CxDialog(
           title: 'Confirm Delete',
           actions: [
             TextButton(

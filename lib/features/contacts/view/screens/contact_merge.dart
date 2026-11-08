@@ -15,7 +15,7 @@ import 'package:dompetqu/core/theme/widgets/search_field.dart';
 /// Screen merge contact — route `/contact-merge/:id`.
 ///
 /// Pengganti dialog: dua fase dalam SATU halaman penuh (tanpa menumpuk
-/// dialog, karena tiap CsDialog punya 2 BackdropFilter dan menumpuknya
+/// dialog, karena tiap CxDialog punya 2 BackdropFilter dan menumpuknya
 /// bikin GPU jank).
 ///
 /// Fase 1: pilih kontak lain yang akan digabung ke [ContactMergeScreen.contactId].

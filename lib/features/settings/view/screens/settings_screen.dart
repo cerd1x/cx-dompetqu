@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
@@ -171,7 +171,7 @@ class SettingsScreen extends ConsumerWidget {
   void _confirmLogout(BuildContext context, WidgetRef ref) {
     showDialog<void>(
       context: context,
-      builder: (dialogCtx) => CsDialog(
+      builder: (dialogCtx) => CxDialog(
         title: 'Logout ?',
         actions: [
           TextButton(

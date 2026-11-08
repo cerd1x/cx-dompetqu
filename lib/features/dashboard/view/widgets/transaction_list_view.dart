@@ -81,7 +81,7 @@ class _TransactionListViewState extends ConsumerState<TransactionListView> {
                 '${DateFormat('d MMM yyyy').format(_customRange!.end)}',
   };
 
-  /// Buka date-range picker bergaya CS glass (container CsDialog).
+  /// Buka date-range picker bergaya CS glass (container CxDialog).
   Future<void> _pickCustomRange() async {
     final now = DateTime.now();
     final picked = await showCxDateRangePicker(

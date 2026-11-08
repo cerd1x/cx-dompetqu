@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
@@ -374,7 +374,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
   }) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (_) => CsDialog(
+      builder: (_) => CxDialog(
         title: title,
         actions: [
           TextButton(

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
@@ -45,14 +46,14 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
   void _openDetail(Product product) {
     showDialog<void>(
       context: context,
-      builder: (_) => CsDialog(child: ProductDetailView(product: product)),
+      builder: (_) => CxDialog(child: ProductDetailView(product: product)),
     );
   }
 
   void _confirmDelete(Product product) {
     showDialog<void>(
       context: context,
-      builder: (dialogCtx) => CsDialog(
+      builder: (dialogCtx) => CxDialog(
         title: 'Hapus Product?',
         actions: [
           TextButton(
@@ -62,9 +63,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(dialogCtx).pop();
-              ref
-                  .read(inventoryStoreProvider.notifier)
-                  .remove(product.id!);
+              ref.read(inventoryStoreProvider.notifier).remove(product.id!);
             },
             style: TextButton.styleFrom(foregroundColor: DompetBrand.pink),
             child: const Text('OK'),
@@ -335,7 +334,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CsDialog(
+    return CxDialog(
       title: _isEdit ? 'Edit Product' : 'Add Product',
       actions: [
         CxButton(
@@ -364,7 +363,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              CxTextField.balance(
+              CxTextFieldBalance(
                 name: 'product-price',
                 label: 'Price',
                 value: _price,
@@ -372,7 +371,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
                 onChanged: (v) => setState(() => _price = v ?? 0),
               ),
               const SizedBox(height: 12),
-              CxTextField.balance(
+              CxTextFieldBalance(
                 name: 'product-capital',
                 label: 'Capital',
                 value: _capital,

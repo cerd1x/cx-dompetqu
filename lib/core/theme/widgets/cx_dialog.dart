@@ -3,8 +3,8 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
-import 'cs_mix.dart';
-import 'dompet_brand.dart';
+import '../cs_mix.dart';
+import '../dompet_brand.dart';
 
 /// Dialog dengan CsFrost (frosted glass effect) di panel.
 ///
@@ -14,12 +14,12 @@ import 'dompet_brand.dart';
 /// raster cache — sumber utama jank saat dialog dibuka. Blur scrim hanya
 /// aktif jika [overlayBlur] > 0 (opt-in).
 ///
-/// Gunakan [CsDialog] untuk semua dialog di app dengan styling konsisten.
+/// Gunakan [CxDialog] untuk semua dialog di app dengan styling konsisten.
 /// Contoh:
 /// ```dart
 /// showDialog(
 ///   context: context,
-///   builder: (_) => CsDialog(
+///   builder: (_) => CxDialog(
 ///     title: 'Confirm',
 ///     child: Text('Really delete?'),
 ///     actions: [
@@ -29,8 +29,8 @@ import 'dompet_brand.dart';
 ///   ),
 /// );
 /// ```
-class CsDialog extends StatelessWidget {
-  const CsDialog({
+class CxDialog extends StatelessWidget {
+  const CxDialog({
     super.key,
     this.title,
     required this.child,

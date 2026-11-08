@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Menampilkan date-range picker bergaya CS glass dan mengembalikan
@@ -9,7 +9,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 ///
 /// Kalender digambar manual (bukan `showDateRangePicker` bawaan) supaya
 /// tampilannya sepenuhnya konsisten dengan tema frosted-glass app;
-/// container memakai [CsDialog].
+/// container memakai [CxDialog].
 ///
 /// Contoh:
 /// ```dart
@@ -175,7 +175,7 @@ class _CxDateRangePickerState extends State<CxDateRangePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return CsDialog(
+    return CxDialog(
       title: widget.title,
       actions: [
         TextButton(

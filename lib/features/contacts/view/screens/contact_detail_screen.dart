@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
@@ -81,7 +81,7 @@ class ContactDetailScreen extends ConsumerWidget {
     void confirmDelete() {
       showDialog<void>(
         context: context,
-        builder: (dialogCtx) => CsDialog(
+        builder: (dialogCtx) => CxDialog(
           title: 'Hapus ${contact.name}?',
           actions: [
             TextButton(

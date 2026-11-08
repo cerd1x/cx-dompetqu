@@ -2,10 +2,10 @@ import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/balance_input_field.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 
 class SwapBalanceDialog extends StatefulWidget {
@@ -118,7 +118,7 @@ class _SwapBalanceDialogState extends State<SwapBalanceDialog> {
     final hasBalance = balance > 0;
     final currencyCode = _getCurrencyCode(_fromId);
 
-    return CsDialog(
+    return CxDialog(
       title: 'Swap Balance',
       actions: [
         TextButton(
@@ -235,7 +235,7 @@ class _SwapBalanceDialogState extends State<SwapBalanceDialog> {
             inactiveColor: DompetBrand.csBorderDark,
           ),
           const SizedBox(height: 16),
-          CxTextField.balance(
+          CxTextFieldBalance(
             name: 'swap-amount',
             value: _swapAmount,
             label: 'Amount to swap',

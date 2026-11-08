@@ -3,7 +3,7 @@ import 'package:dompetqu/core/theme/widgets/item_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
@@ -55,7 +55,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
   void _confirmDelete(Asset asset) {
     showDialog<void>(
       context: context,
-      builder: (dialogCtx) => CsDialog(
+      builder: (dialogCtx) => CxDialog(
         title: 'Confirm Delete',
         actions: [
           TextButton(

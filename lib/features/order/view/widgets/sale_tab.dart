@@ -1,3 +1,5 @@
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart'
+    show CxTextField;
 import 'package:dompetqu/features/assets/view/widgets/asset_picker_field.dart';
 import 'package:dompetqu/features/contacts/view/widgets/customer_picker_field.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/features/order/view/stores/order_repository_provider.dart';
@@ -107,7 +109,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
         Row(
           children: [
             Expanded(
-              child: CxTextField.balance(
+              child: CxTextFieldBalance(
                 name: 'sale-amount',
                 label: 'Amount',
                 value: _amount,
@@ -117,7 +119,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: CxTextField.balance(
+              child: CxTextFieldBalance(
                 name: 'sale-capital',
                 label: 'Capital',
                 value: _capital,

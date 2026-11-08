@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/pattern_input.dart';
@@ -416,9 +416,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                     if (editing) {
                       setState(() => _biometricOption = value);
                     } else {
-                      final notifier = ref.read(
-                        appLockStoreProvider.notifier,
-                      );
+                      final notifier = ref.read(appLockStoreProvider.notifier);
                       if (value) {
                         notifier.enableBiometric();
                       } else {
@@ -439,8 +437,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
   /// biometrik yang sedang aktif.
   bool _effectiveBiometricOption() {
     if (_selectedCredential == null) {
-      return ref.read(appLockStoreProvider).value?.biometricEnabled ??
-          false;
+      return ref.read(appLockStoreProvider).value?.biometricEnabled ?? false;
     }
     return _biometricOption;
   }
@@ -508,7 +505,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
   Future<void> _confirmDisable() async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (dialogCtx) => CsDialog(
+      builder: (dialogCtx) => CxDialog(
         title: 'Nonaktifkan App Lock?',
         actions: [
           TextButton(

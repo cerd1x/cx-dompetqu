@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
@@ -94,7 +94,7 @@ class _DuplicateContactsInvestigationDialogState
     final visible = _visible;
     final hasDuplicates = visible.isNotEmpty;
     final allMerging = _mergingGroups.length == widget.groups.length;
-    return CsDialog(
+    return CxDialog(
       title: 'Investigasi Duplikat (${widget.groups.length} grup)',
       actions: [
         TextButton(

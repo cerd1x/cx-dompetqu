@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/balance.dart';
@@ -46,7 +46,7 @@ class _AddBalanceDialogState extends ConsumerState<AddBalanceDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CsDialog(
+    return CxDialog(
       title: 'Add Balance — ${widget.asset.name}',
       actions: [
         CxButton(

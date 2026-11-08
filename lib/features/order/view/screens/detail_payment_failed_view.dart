@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/logger/beta_report_remote.dart';
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
@@ -54,7 +54,7 @@ class _DetailPaymentFailedViewState
     if (!_payment.canRetry) return;
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => CsDialog(
+      builder: (dialogContext) => CxDialog(
         title: 'Retry payment?',
         actions: [
           TextButton(

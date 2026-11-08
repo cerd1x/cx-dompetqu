@@ -3,7 +3,7 @@ import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/cs_dialog.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
@@ -108,7 +108,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return CsDialog(
+    return CxDialog(
       title: _isEdit ? 'Update Contact' : 'Add Contact',
       actions: [
         CxButton(

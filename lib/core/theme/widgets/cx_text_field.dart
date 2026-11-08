@@ -3,7 +3,6 @@ import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'balance_input_field.dart';
 
 enum CxTextFieldVariant { glass, csGlassInput, csInput }
 
@@ -33,54 +32,7 @@ class CxTextField extends StatefulWidget {
     this.onChanged,
     this.onSubmitted,
     this.variant = CxTextFieldVariant.csInput,
-  }) : _child = null;
-
-  /// Input nominal + picker mata uang — port Flutter `InputBalance.svelte`.
-  ///
-  /// Memformat nominal realtime sesuai locale (separator ribuan & desimal)
-  /// sambil menjaga posisi kursor, dengan dropdown mata uang bergaya
-  /// `csglass` dan container input `csglass-input` (sama persis dengan web).
-  CxTextField.balance({
-    super.key,
-    String? name,
-    num value = 0,
-    String? label,
-    double? width,
-    BalanceCountPosition countPosition = BalanceCountPosition.above,
-    BalanceLabelPosition labelPosition = BalanceLabelPosition.above,
-    bool showCurrency = true,
-    List<BalanceCurrency> currencies = kBalanceCurrencies,
-    String initialCurrency = 'IDR',
-    ValueChanged<num?>? onChanged,
-    ValueChanged<String>? onCurrencyChanged,
-  }) : _child = BalanceInputField(
-         name: name,
-         value: value,
-         label: label,
-         width: width,
-         countPosition: countPosition,
-         labelPosition: labelPosition,
-         showCurrency: showCurrency,
-         currencies: currencies,
-         initialCurrency: initialCurrency,
-         onChanged: onChanged,
-         onCurrencyChanged: onCurrencyChanged,
-       ),
-       controller = null,
-       hintText = null,
-       label = null,
-       labelStyle = null,
-       leading = null,
-       trailing = null,
-       obscureText = false,
-       autocorrect = true,
-       enabled = true,
-       error = false,
-       keyboardType = null,
-       textInputAction = null,
-       onChanged = null,
-       onSubmitted = null,
-       variant = CxTextFieldVariant.csInput;
+  });
 
   final TextEditingController? controller;
   final String? hintText;
@@ -99,9 +51,6 @@ class CxTextField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final CxTextFieldVariant variant;
-
-  /// Child khusus (mis. balance) yang merender dirinya sendiri di [build].
-  final Widget? _child;
 
   @override
   State<CxTextField> createState() => _CxTextFieldState();
@@ -246,9 +195,6 @@ class _CxTextFieldState extends State<CxTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final child = widget._child;
-    if (child != null) return child;
-
     final field = RemixTextField(
       controller: widget.controller,
       focusNode: _focusNode,

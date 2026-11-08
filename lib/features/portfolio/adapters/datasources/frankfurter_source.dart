@@ -14,11 +14,11 @@ import 'package:dompetqu/features/portfolio/domain/models/exchange_rate_error.da
 /// - Data harian dari European Central Bank
 /// - Mendukung ~30 mata uang utama dunia
 class FrankfurterExchangeRateSource implements ExchangeRateSource {
-  const FrankfurterExchangeRateSource({http.Client? client})
+  FrankfurterExchangeRateSource({http.Client? client})
     : _client = client ?? http.Client();
 
   final http.Client _client;
-  final AppLogger _log = AppLogger.instance;
+  AppLogger get _log => AppLogger.instance;
 
   static const String _baseUrl = 'https://api.frankfurter.app';
 

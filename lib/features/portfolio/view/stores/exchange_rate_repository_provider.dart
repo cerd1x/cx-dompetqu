@@ -10,4 +10,4 @@ part 'generated/exchange_rate_repository_provider.g.dart';
 /// Ganti adapter cukup di sini (mis. sumber lain yang berbayar/berapi-key).
 @Riverpod(keepAlive: true)
 ExchangeRateRepository exchangeRateRepository(Ref ref) =>
-    const ExchangeRateRepositoryImpl(FrankfurterExchangeRateSource());
+    ExchangeRateRepositoryImpl(FrankfurterExchangeRateSource());

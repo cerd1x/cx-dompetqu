@@ -65,4 +65,4 @@ final class ExchangeRateRepositoryProvider
 }
 
 String _$exchangeRateRepositoryHash() =>
-    r'f8129c47bb0886a2527de6a84e8e0dc8915f3dbe';
+    r'1efbcdd184b81a042988d20ddc9fe3640ede1557';

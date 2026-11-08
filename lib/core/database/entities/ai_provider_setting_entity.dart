@@ -24,7 +24,7 @@ class AiProviderSettingEntity {
   String model = '';
   String baseUrl = '';
 
-  /// JSON-encoded Map<String, String>.
+  /// JSON-encoded `Map<String, String>`.
   String customHeadersJson = '{}';
   bool includeCustomHeaders = false;
   bool useCustomModel = false;

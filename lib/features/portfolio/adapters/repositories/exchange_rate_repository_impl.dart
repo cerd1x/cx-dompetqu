@@ -11,7 +11,7 @@ class ExchangeRateRepositoryImpl implements ExchangeRateRepository {
   const ExchangeRateRepositoryImpl(this._source);
 
   final ExchangeRateSource _source;
-  final AppLogger _log = AppLogger.instance;
+  AppLogger get _log => AppLogger.instance;
 
   @override
   Future<ExchangeRate> getRates(String baseCurrency) async {

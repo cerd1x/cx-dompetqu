@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/logger/log_record.dart';
-import 'package:dompetqu/features/reports/domain/repositories/reports_repository.dart';
 import 'package:dompetqu/features/reports/view/stores/reports_repository_provider.dart';
 
 part 'generated/reports_store.g.dart';

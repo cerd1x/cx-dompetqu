@@ -178,6 +178,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               ),
             ),
             const Divider(height: 1, color: Color(0x1FFFFFFF)),
+            const SizedBox(height: 8),
             // filter tabs section
             SizedBox(
               height: 30,

@@ -169,7 +169,7 @@ class AppLogger extends ChangeNotifier {
     if (_buffer.length > maxBuffer) _buffer.removeAt(0);
     // Selalu kirim ke console (logcat di Android) — bukan hanya kDebugMode —
     // supaya logger bisa di-debug dari build beta/release.
-    debugPrint(record.line);
+    debugPrint(record.consoleLine);
     if (_fileLogFeatures.contains(record.feature)) {
       _mainFile.writeLine(record.line);
     }

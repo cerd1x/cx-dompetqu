@@ -6,8 +6,8 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Widget wrapper glassmorphism dengan backdrop blur.
 /// Mirip efek `backdrop-blur-[6.1px]` di CSS.
-class CsGlass extends StatelessWidget {
-  const CsGlass({
+class CxGlass extends StatelessWidget {
+  const CxGlass({
     super.key,
     required this.child,
     this.radius = DompetBrand.radius,

@@ -5,8 +5,8 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Latar halaman: gradient ungu lembut di atas dasar gelap (mirip web).
 /// Memenuhi seluruh layar — elemen lain (mis. nav bar) ditumpuk di atasnya.
-class DompetGradientBackground extends StatelessWidget {
-  const DompetGradientBackground({
+class CxGradientBackground extends StatelessWidget {
+  const CxGradientBackground({
     super.key,
     required this.child,
     this.radial = true,

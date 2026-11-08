@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/logger/beta_report_remote.dart';
 import 'package:dompetqu/core/theme/cs_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/payments/domain/models/payment.dart';
 import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dart';
@@ -183,8 +183,8 @@ class _DetailPaymentFailedViewState
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           // summary section
-          DompetCard(
-            variant: DompetCardVariant.csGlassSurface,
+          CxCard(
+            variant: CxCardVariant.csGlassSurface,
             radius: 16,
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Column(
@@ -217,8 +217,8 @@ class _DetailPaymentFailedViewState
 
           // penyebab section
           _SectionTitle('Penyebab kegagalan'),
-          DompetCard(
-            variant: DompetCardVariant.csGlassSurface,
+          CxCard(
+            variant: CxCardVariant.csGlassSurface,
             radius: 16,
             padding: const EdgeInsets.all(14),
             child: Column(
@@ -308,9 +308,9 @@ class _DetailPaymentFailedViewState
           Row(
             children: [
               Expanded(
-                child: DompetButton(
+                child: CxButton(
                   label: 'Report',
-                  variant: DompetButtonVariant.outline,
+                  variant: CxButtonVariant.outline,
                   leadingIcon: Icons.flag_outlined,
                   loading: _reporting,
                   onPressed: _reporting ? null : _report,
@@ -319,7 +319,7 @@ class _DetailPaymentFailedViewState
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: DompetButton(
+                child: CxButton(
                   label: 'Retry',
                   leadingIcon: Icons.refresh_rounded,
                   loading: _retrying,

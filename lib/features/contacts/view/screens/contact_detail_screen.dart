@@ -1,7 +1,7 @@
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/features/contacts/view/widgets/contact_form.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +117,7 @@ class ContactDetailScreen extends ConsumerWidget {
               // header section
               Column(
                 children: [
-                  DompetAvatar(
+                  CxAvatar(
                     label: contact.name.isNotEmpty ? contact.name[0] : '?',
                     size: 72,
                   ),
@@ -133,9 +133,9 @@ class ContactDetailScreen extends ConsumerWidget {
                   ),
                   if (contact.group != null) ...[
                     const SizedBox(height: 6),
-                    DompetBadge(
+                    CxBadge(
                       label: contact.group!,
-                      tone: DompetBadgeTone.accent,
+                      tone: CxBadgeTone.accent,
                     ),
                   ],
                 ],

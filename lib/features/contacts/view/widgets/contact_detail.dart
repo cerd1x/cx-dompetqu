@@ -1,6 +1,6 @@
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -42,7 +42,7 @@ class ContactDetail extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // avatar section
-          DompetAvatar(
+          CxAvatar(
             label: contact.name.isNotEmpty ? contact.name[0] : '?',
             size: 72,
           ),
@@ -55,7 +55,7 @@ class ContactDetail extends StatelessWidget {
           ),
           if (contact.group != null) ...[
             const SizedBox(height: 6),
-            DompetBadge(label: contact.group!, tone: DompetBadgeTone.accent),
+            CxBadge(label: contact.group!, tone: CxBadgeTone.accent),
           ],
           const SizedBox(height: 16),
           // info rows section
@@ -69,9 +69,9 @@ class ContactDetail extends StatelessWidget {
             ),
           const SizedBox(height: 16),
           // close button section
-          DompetButton(
+          CxButton(
             label: 'Tutup',
-            variant: DompetButtonVariant.outline,
+            variant: CxButtonVariant.outline,
             expand: true,
             onPressed: () => Navigator.of(context).pop(),
           ),

@@ -3,7 +3,7 @@ import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-enum DompetCardVariant { solid, glass, csGlassCard, csGlassSurface }
+enum CxCardVariant { solid, glass, csGlassCard, csGlassSurface }
 
 /// Kartu glassmorphism — padanan `card-sf` / `bg-white/4` di web.
 ///
@@ -12,13 +12,13 @@ enum DompetCardVariant { solid, glass, csGlassCard, csGlassSurface }
 /// dipakai di sini: kartu berada di dalam konten yang scroll, jadi blur akan
 /// dieksekusi ulang tiap frame tanpa terlihat bedanya di atas latar gradient.
 /// Butuh blur sungguhan? Bungkus sendiri dengan `CsFrost(blur: 12)`.
-class DompetCard extends StatelessWidget {
-  const DompetCard({
+class CxCard extends StatelessWidget {
+  const CxCard({
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(16),
     this.radius = DompetBrand.radius,
-    this.variant = DompetCardVariant.glass,
+    this.variant = CxCardVariant.glass,
     this.onTap,
     this.compact = false,
   });
@@ -26,7 +26,7 @@ class DompetCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
-  final DompetCardVariant variant;
+  final CxCardVariant variant;
   final VoidCallback? onTap;
 
   /// When true, uses a tighter internal padding to render a compact card.
@@ -37,10 +37,10 @@ class DompetCard extends StatelessWidget {
         ? const EdgeInsets.symmetric(horizontal: 10, vertical: 8)
         : padding;
     final decoration = switch (variant) {
-      DompetCardVariant.solid => DompetBrand.solidDecoration(radius: radius),
-      DompetCardVariant.glass => DompetBrand.glassDecoration(radius: radius),
-      DompetCardVariant.csGlassCard => DompetBrand.csGlassCard(radius: radius),
-      DompetCardVariant.csGlassSurface => DompetBrand.csGlassSurface(
+      CxCardVariant.solid => DompetBrand.solidDecoration(radius: radius),
+      CxCardVariant.glass => DompetBrand.glassDecoration(radius: radius),
+      CxCardVariant.csGlassCard => DompetBrand.csGlassCard(radius: radius),
+      CxCardVariant.csGlassSurface => DompetBrand.csGlassSurface(
         radius: radius,
       ),
     };

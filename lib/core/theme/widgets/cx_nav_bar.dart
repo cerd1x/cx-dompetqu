@@ -12,8 +12,8 @@ const double _kItemSize = 40;
 const double _kSpacing = 4;
 const double _kBarRadius = _kBarHeight / 2;
 
-class CSNavBar extends StatefulWidget {
-  const CSNavBar({
+class CxNavBar extends StatefulWidget {
+  const CxNavBar({
     super.key,
     required this.onPressed,
     required this.navs,
@@ -27,10 +27,10 @@ class CSNavBar extends StatefulWidget {
   final String classAttr;
 
   @override
-  State<CSNavBar> createState() => _CSNavBarState();
+  State<CxNavBar> createState() => _CxNavBarState();
 }
 
-class _CSNavBarState extends State<CSNavBar> {
+class _CxNavBarState extends State<CxNavBar> {
   late int _activeIndex;
 
   @override
@@ -40,7 +40,7 @@ class _CSNavBarState extends State<CSNavBar> {
   }
 
   @override
-  void didUpdateWidget(covariant CSNavBar oldWidget) {
+  void didUpdateWidget(covariant CxNavBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.stateActive != oldWidget.stateActive) {
       _activeIndex = widget.stateActive;

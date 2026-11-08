@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
+import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
@@ -35,7 +35,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
     );
 
     return Scaffold(
-      body: DompetGradientBackground(
+      body: CxGradientBackground(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

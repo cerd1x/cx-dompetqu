@@ -4,9 +4,10 @@ import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field_password.dart';
 import 'package:dompetqu/features/auth/view/stores/auth_providers.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 
@@ -111,7 +112,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(sessionStoreProvider);
     return Scaffold(
-      body: DompetGradientBackground(
+      body: CxGradientBackground(
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -173,7 +174,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     ],
                     // name field section
                     if (_mode == _AuthMode.signUp) ...[
-                      DompetTextField(
+                      CxTextField(
                         controller: _nameCtrl,
                         label: 'Nama',
                         leading: const Icon(
@@ -188,7 +189,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       const SizedBox(height: 14),
                     ],
                     // username field section
-                    DompetTextField(
+                    CxTextField(
                       controller: _usernameCtrl,
                       label: 'Username',
                       leading: const Icon(
@@ -203,7 +204,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     _fieldError(_usernameError),
                     const SizedBox(height: 14),
                     // password field section
-                    DompetTextField.password(
+                    CxTextFieldPassword(
                       controller: _passwordCtrl,
                       label: 'Password',
                       error: _passwordError != null,
@@ -213,7 +214,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     _fieldError(_passwordError),
                     const SizedBox(height: 22),
                     // submit section
-                    DompetButton(
+                    CxButton(
                       label: _mode == _AuthMode.signIn ? 'Masuk' : 'Daftar',
                       onPressed: state.busy ? null : _submit,
                       loading: state.busy,
@@ -222,9 +223,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     // passkey section
                     if (_passkeySupported) ...[
                       const SizedBox(height: 12),
-                      DompetButton(
+                      CxButton(
                         label: 'Sign in dengan Passkey',
-                        variant: DompetButtonVariant.outline,
+                        variant: CxButtonVariant.outline,
                         leadingIcon: Icons.fingerprint,
                         onPressed: state.busy ? null : _passkeySignIn,
                         expand: true,
@@ -232,11 +233,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     ],
                     const SizedBox(height: 4),
                     // toggle mode section
-                    DompetButton(
+                    CxButton(
                       label: _mode == _AuthMode.signIn
                           ? 'Belum punya akun? Daftar'
                           : 'Sudah punya akun? Masuk',
-                      variant: DompetButtonVariant.text,
+                      variant: CxButtonVariant.text,
                       onPressed: () => setState(() {
                         _mode = _mode == _AuthMode.signIn
                             ? _AuthMode.signUp

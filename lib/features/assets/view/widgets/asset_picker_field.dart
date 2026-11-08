@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cs_modal_top_sheet.dart';
+import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
@@ -42,7 +42,7 @@ class AssetPickerField extends ConsumerWidget {
       value: selected?.name ?? 'Belum dipilih',
       leading: Icons.account_balance_wallet_outlined,
       onTap: () async {
-        final picked = await showCsModalTopBar<String>(
+        final picked = await showCxModalTopBar<String>(
           context: context,
           builder: (sheetCtx) => _AssetPickerSheet(
             selectedId: selectedId,

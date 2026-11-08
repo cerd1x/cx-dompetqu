@@ -5,9 +5,9 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-/// Generic item untuk [CSSelectPicker].
-class CSSelectItem<T> {
-  const CSSelectItem({
+/// Generic item untuk [CxSelectPicker].
+class CxSelectItem<T> {
+  const CxSelectItem({
     required this.value,
     required this.label,
     this.symbol,
@@ -25,15 +25,15 @@ class CSSelectItem<T> {
 ///
 /// Contoh:
 /// ```dart
-/// CSSelectPicker<String>(
-///   items: [CSSelectItem(value: 'idr', label: 'IDR', symbol: 'Rp')],
+/// CxSelectPicker<String>(
+///   items: [CxSelectItem(value: 'idr', label: 'IDR', symbol: 'Rp')],
 ///   value: 'idr',
 ///   onChanged: (v) => print(v),
 ///   itemBuilder: (item, selected) => Text(item.label),
 /// )
 /// ```
-class CSSelectPicker<T> extends StatefulWidget {
-  const CSSelectPicker({
+class CxSelectPicker<T> extends StatefulWidget {
+  const CxSelectPicker({
     super.key,
     required this.items,
     required this.value,
@@ -47,7 +47,7 @@ class CSSelectPicker<T> extends StatefulWidget {
   });
 
   /// Daftar opsi yang bisa dipilih.
-  final List<CSSelectItem<T>> items;
+  final List<CxSelectItem<T>> items;
 
   /// Nilai terpilih saat ini.
   final T value;
@@ -57,12 +57,12 @@ class CSSelectPicker<T> extends StatefulWidget {
 
   /// Custom builder untuk item di panel dropdown.
   /// Default: menampilkan symbol (jika ada) + label, dengan check icon jika selected.
-  final Widget Function(CSSelectItem<T> item, bool selected)? itemBuilder;
+  final Widget Function(CxSelectItem<T> item, bool selected)? itemBuilder;
 
   /// Custom builder untuk trigger button.
   /// Default: menampilkan symbol + label + dropdown arrow.
   final Widget Function(
-    CSSelectItem<T> selectedItem,
+    CxSelectItem<T> selectedItem,
     bool menuOpen,
     VoidCallback onTap,
   )?
@@ -74,17 +74,17 @@ class CSSelectPicker<T> extends StatefulWidget {
   final double borderRadius;
 
   @override
-  State<CSSelectPicker<T>> createState() => _CSSelectPickerState<T>();
+  State<CxSelectPicker<T>> createState() => _CxSelectPickerState<T>();
 }
 
-class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
+class _CxSelectPickerState<T> extends State<CxSelectPicker<T>> {
   final GlobalKey _triggerKey = GlobalKey();
   final FocusNode _focusNode = FocusNode();
   OverlayEntry? _overlayEntry;
   bool _menuOpen = false;
   Offset _menuOffset = Offset.zero;
 
-  CSSelectItem<T> get _selectedItem => widget.items.firstWhere(
+  CxSelectItem<T> get _selectedItem => widget.items.firstWhere(
     (i) => i.value == widget.value,
     orElse: () => widget.items.first,
   );
@@ -161,7 +161,7 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
     if (mounted) setState(() => _menuOpen = false);
   }
 
-  void _selectItem(CSSelectItem<T> item) {
+  void _selectItem(CxSelectItem<T> item) {
     if (item.value != widget.value) {
       widget.onChanged(item.value);
     }
@@ -214,7 +214,7 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
     );
   }
 
-  Widget _buildItem(CSSelectItem<T> item, bool selected) {
+  Widget _buildItem(CxSelectItem<T> item, bool selected) {
     if (widget.itemBuilder != null) {
       return InkWell(
         onTap: () => _selectItem(item),
@@ -315,7 +315,7 @@ class _CSSelectPickerState<T> extends State<CSSelectPicker<T>> {
   }
 
   Widget _buildDefaultTrigger(
-    CSSelectItem<T> item,
+    CxSelectItem<T> item,
     bool menuOpen,
     VoidCallback onTap,
   ) {

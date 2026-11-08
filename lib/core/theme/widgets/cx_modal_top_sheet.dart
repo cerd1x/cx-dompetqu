@@ -3,7 +3,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-Future<T?> showCsModalTopBar<T>({
+Future<T?> showCxModalTopBar<T>({
   required BuildContext context,
   bool isScrollControlled = false,
   bool barrierDismissible = true,
@@ -35,7 +35,7 @@ Future<T?> showCsModalTopBar<T>({
             ),
             child: Material(
               color: Colors.transparent,
-              child: _CsTopBarDragHandle(
+              child: _CxTopBarDragHandle(
                 content: builder(ctx),
                 topPadding: topPadding,
               ),
@@ -58,8 +58,8 @@ Future<T?> showCsModalTopBar<T>({
   );
 }
 
-class _CsTopBarDragHandle extends StatelessWidget {
-  const _CsTopBarDragHandle({required this.content, required this.topPadding});
+class _CxTopBarDragHandle extends StatelessWidget {
+  const _CxTopBarDragHandle({required this.content, required this.topPadding});
 
   final Widget content;
   final double topPadding;

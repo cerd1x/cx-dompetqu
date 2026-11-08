@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
@@ -49,14 +49,14 @@ class _AddBalanceDialogState extends ConsumerState<AddBalanceDialog> {
     return CsDialog(
       title: 'Add Balance — ${widget.asset.name}',
       actions: [
-        DompetButton(
+        CxButton(
           label: 'Tambah',
           onPressed: _busy ? null : _submit,
           loading: _busy,
           expand: false,
         ),
       ],
-      child: DompetTextField(
+      child: CxTextField(
         controller: _amountCtrl,
         label: 'Amount (${Balance.parse(widget.asset.balance).code})',
         keyboardType: TextInputType.number,

@@ -3,8 +3,8 @@ import 'package:remix/remix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Avatar brand dengan latar gradient — padanan avatar inisial di web.
-class DompetAvatar extends StatelessWidget {
-  const DompetAvatar({
+class CxAvatar extends StatelessWidget {
+  const CxAvatar({
     super.key,
     required this.label,
     this.size = 40,

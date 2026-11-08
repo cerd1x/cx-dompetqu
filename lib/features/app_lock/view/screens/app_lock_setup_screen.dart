@@ -1,6 +1,6 @@
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/pattern_input.dart';
 import 'package:dompetqu/core/theme/widgets/pin_input.dart';
 import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
@@ -184,8 +184,8 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
 
   Widget _buildStatusCard(AppLockState state) {
     final biometricText = state.biometricEnabled ? ' + Biometrik' : '';
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
@@ -242,8 +242,8 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
           final isSelected = credential == m.$1;
           return Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: DompetCard(
-              variant: DompetCardVariant.csGlassSurface,
+            child: CxCard(
+              variant: CxCardVariant.csGlassSurface,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               onTap: _isConfirming
                   ? null
@@ -382,8 +382,8 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
     required bool editing,
     required bool biometricOn,
   }) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [

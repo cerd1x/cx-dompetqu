@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/assets/view/screens/assets_screen.dart';
 import 'package:dompetqu/core/theme/widgets/search_field.dart';
@@ -283,7 +283,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           childAspectRatio: 1.9,
           children: [
             for (final m in metrics)
-              DompetCard(
+              CxCard(
                 padding: const EdgeInsets.all(14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +318,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         ),
         const SizedBox(height: 14),
         // project pipeline section
-        DompetCard(
+        CxCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -375,7 +375,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         ),
         const SizedBox(height: 12),
         // total portfolio section
-        DompetCard(
+        CxCard(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -534,8 +534,8 @@ class _SummaryCard extends StatelessWidget {
     final downColor = DompetBrand.pink;
     final color = isUp ? upColor : downColor;
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -614,7 +614,7 @@ class _AllocationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final dist = _distribution;
 
-    return DompetCard(
+    return CxCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -768,8 +768,8 @@ class _HoldingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUp = holding.change >= 0;
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [

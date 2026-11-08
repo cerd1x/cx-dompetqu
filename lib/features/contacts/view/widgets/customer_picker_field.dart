@@ -2,7 +2,7 @@ import 'package:dompetqu/features/assets/view/widgets/asset_picker_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/cs_modal_top_sheet.dart';
+import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 
@@ -38,7 +38,7 @@ class CustomerPickerField extends ConsumerWidget {
         await ref.read(contactsStoreProvider.notifier).ensureAllLoaded();
         if (!context.mounted) return;
         final all = ref.read(contactsStoreProvider).items;
-        final picked = await showCsModalTopBar<String>(
+        final picked = await showCxModalTopBar<String>(
           context: context,
           builder: (sheetCtx) =>
               _CustomerPickerSheet(contacts: all, selectedId: selectedId),

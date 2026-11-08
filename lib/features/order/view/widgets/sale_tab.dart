@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/features/order/view/stores/order_repository_provider.dart';
@@ -107,7 +107,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
         Row(
           children: [
             Expanded(
-              child: DompetTextField.balance(
+              child: CxTextField.balance(
                 name: 'sale-amount',
                 label: 'Amount',
                 value: _amount,
@@ -117,7 +117,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: DompetTextField.balance(
+              child: CxTextField.balance(
                 name: 'sale-capital',
                 label: 'Capital',
                 value: _capital,
@@ -165,7 +165,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
           onChanged: (v) => setState(() => _customerId = v),
         ),
         const SizedBox(height: 12),
-        DompetTextField(
+        CxTextField(
           controller: _notesCtrl,
           label: 'Notes',
           hintText: 'Add notes...',
@@ -179,7 +179,7 @@ class _SaleTabState extends ConsumerState<SaleTab> {
           ),
         ],
         const SizedBox(height: 18),
-        DompetButton(
+        CxButton(
           label: _busy ? 'Processing...' : 'Save Transaction',
           onPressed: _busy ? null : _submit,
           loading: _busy,

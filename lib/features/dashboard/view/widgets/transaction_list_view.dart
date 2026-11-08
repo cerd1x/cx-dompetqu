@@ -8,10 +8,10 @@ import 'package:hugeicons/hugeicons.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/transaction_icons.dart';
-import 'package:dompetqu/core/theme/widgets/cs_dialog_daterange_picker.dart';
-import 'package:dompetqu/core/theme/widgets/cs_select_picker.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_dialog_daterange_picker.dart';
+import 'package:dompetqu/core/theme/widgets/cx_select_picker.dart';
+import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
@@ -84,7 +84,7 @@ class _TransactionListViewState extends ConsumerState<TransactionListView> {
   /// Buka date-range picker bergaya CS glass (container CsDialog).
   Future<void> _pickCustomRange() async {
     final now = DateTime.now();
-    final picked = await showCsDateRangePicker(
+    final picked = await showCxDateRangePicker(
       context: context,
       firstDate: DateTime(2020),
       lastDate: now,
@@ -174,9 +174,9 @@ class _TransactionListViewState extends ConsumerState<TransactionListView> {
           ),
           const SizedBox(width: 8),
           // type filter select picker section
-          CSSelectPicker<_TypeFilter>(
+          CxSelectPicker<_TypeFilter>(
             items: _TypeFilter.values
-                .map((f) => CSSelectItem(value: f, label: _typeLabel(f)))
+                .map((f) => CxSelectItem(value: f, label: _typeLabel(f)))
                 .toList(),
             value: _type,
             onChanged: (f) => setState(() => _type = f),
@@ -435,8 +435,8 @@ class TransactionRow extends StatelessWidget {
     final balance = Balance.parse(tx.amount);
     final amountText = '${tone.sign}${balance.toLocalStr()}';
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       onTap: onTap,
@@ -497,14 +497,14 @@ class TransactionRow extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // amount badge section
-          DompetBadge(
+          CxBadge(
             label: amountText,
             icon: tone.icon,
             tone: tx.type == 'expense'
-                ? DompetBadgeTone.danger
+                ? CxBadgeTone.danger
                 : tx.type == 'income'
-                ? DompetBadgeTone.success
-                : DompetBadgeTone.accent,
+                ? CxBadgeTone.success
+                : CxBadgeTone.accent,
           ),
         ],
       ),

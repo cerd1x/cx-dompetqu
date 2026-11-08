@@ -1,8 +1,8 @@
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:flutter/material.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/item_menu.dart';
 
 /// Single contact row used in contacts list.
@@ -20,14 +20,14 @@ class ContactItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       onTap: onTap,
       child: Row(
         children: [
           // avatar section
-          DompetAvatar(
+          CxAvatar(
             label: contact.name.isNotEmpty ? contact.name[0] : '?',
             size: 36,
           ),
@@ -61,7 +61,7 @@ class ContactItem extends StatelessWidget {
           ),
           // group badge section
           if (contact.group != null)
-            DompetBadge(label: contact.group!, tone: DompetBadgeTone.accent),
+            CxBadge(label: contact.group!, tone: CxBadgeTone.accent),
           // menu button section
           ItemMenu(actions: menuActions),
         ],

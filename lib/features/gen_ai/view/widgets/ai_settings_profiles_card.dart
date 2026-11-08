@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile_collection.dart';
 
@@ -23,8 +23,8 @@ class AiSettingsProfilesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

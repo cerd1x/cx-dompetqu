@@ -1,13 +1,13 @@
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_bubble.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
-import 'package:dompetqu/core/theme/widgets/cs_nav_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
+import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
 
 /// Shell utama dengan ShellRoute — persistent bottom nav lewat GoRouter.
@@ -85,7 +85,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
     return Scaffold(
       body: SafeArea(
-        child: DompetGradientBackground(
+        child: CxGradientBackground(
           child: Stack(
             children: [
               Column(
@@ -101,7 +101,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
                       top: 8,
                     ),
                     child: Center(
-                      child: CSNavBar(
+                      child: CxNavBar(
                         stateActive: currentIndex,
                         navs: _tabs,
                         onPressed: (i) {

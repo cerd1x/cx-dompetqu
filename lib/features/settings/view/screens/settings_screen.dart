@@ -5,7 +5,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/features/app_lock/view/screens/app_lock_setup_screen.dart';
 import 'package:dompetqu/features/settings/domain/models/app_settings.dart';
@@ -115,8 +115,8 @@ class SettingsScreen extends ConsumerWidget {
                         },
                       ),
                       // passkey section
-                      DompetCard(
-                        variant: DompetCardVariant.csGlassSurface,
+                      CxCard(
+                        variant: CxCardVariant.csGlassSurface,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 10,
@@ -259,8 +259,8 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       onTap: onTap,
       child: Row(

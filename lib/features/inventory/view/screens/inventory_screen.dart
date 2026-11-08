@@ -5,8 +5,8 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
@@ -338,7 +338,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
     return CsDialog(
       title: _isEdit ? 'Edit Product' : 'Add Product',
       actions: [
-        DompetButton(
+        CxButton(
           label: _isEdit ? 'Update' : 'Add',
           onPressed: _busy ? null : _submit,
           loading: _busy,
@@ -349,13 +349,13 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          DompetTextField(
+          CxTextField(
             controller: _nameCtrl,
             label: 'Name',
             leading: const Icon(Icons.sell_outlined, color: Colors.white54),
           ),
           const SizedBox(height: 12),
-          DompetTextField(
+          CxTextField(
             controller: _descCtrl,
             label: 'Description',
             leading: const Icon(Icons.notes_outlined, color: Colors.white54),
@@ -364,7 +364,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              DompetTextField.balance(
+              CxTextField.balance(
                 name: 'product-price',
                 label: 'Price',
                 value: _price,
@@ -372,7 +372,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
                 onChanged: (v) => setState(() => _price = v ?? 0),
               ),
               const SizedBox(height: 12),
-              DompetTextField.balance(
+              CxTextField.balance(
                 name: 'product-capital',
                 label: 'Capital',
                 value: _capital,
@@ -385,7 +385,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
           Row(
             children: [
               Expanded(
-                child: DompetTextField(
+                child: CxTextField(
                   controller: _stockCtrl,
                   label: 'Stock',
                   keyboardType: TextInputType.number,

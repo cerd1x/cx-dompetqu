@@ -4,27 +4,27 @@ import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-enum DompetBadgeTone { accent, success, danger }
+enum CxBadgeTone { accent, success, danger }
 
 /// Chip/klaim kecil — padanan kelas `btn-chips` daisyUI di web.
-class DompetBadge extends StatelessWidget {
-  const DompetBadge({
+class CxBadge extends StatelessWidget {
+  const CxBadge({
     super.key,
     required this.label,
-    this.tone = DompetBadgeTone.accent,
+    this.tone = CxBadgeTone.accent,
     this.icon,
   });
 
   final String label;
-  final DompetBadgeTone tone;
+  final CxBadgeTone tone;
   final dynamic icon;
 
   @override
   Widget build(BuildContext context) {
     final (bg, fg) = switch (tone) {
-      DompetBadgeTone.accent => (DompetBrand.primary, DompetBrand.onPrimary),
-      DompetBadgeTone.success => (const Color(0xFF059669), Colors.white),
-      DompetBadgeTone.danger => (const Color(0xFFDB2777), Colors.white),
+      CxBadgeTone.accent => (DompetBrand.primary, DompetBrand.onPrimary),
+      CxBadgeTone.success => (const Color(0xFF059669), Colors.white),
+      CxBadgeTone.danger => (const Color(0xFFDB2777), Colors.white),
     };
 
     final style = BadgeStyler()

@@ -9,7 +9,7 @@ class QuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lebar efektif CSNavBar di HomeShell = layar - padding kiri/kanan 16;
+    // Lebar efektif CxNavBar di HomeShell = layar - padding kiri/kanan 16;
     // baris aksi ini dibuat 15% lebih sempit darinya lalu di-center.
     final navBarWidth = MediaQuery.widthOf(context) - 32;
     return Center(

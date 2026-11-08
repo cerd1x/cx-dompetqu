@@ -13,13 +13,13 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 ///
 /// Contoh:
 /// ```dart
-/// final range = await showCsDateRangePicker(
+/// final range = await showCxDateRangePicker(
 ///   context: context,
 ///   firstDate: DateTime(2020),
 ///   lastDate: DateTime.now(),
 /// );
 /// ```
-Future<DateTimeRange?> showCsDateRangePicker({
+Future<DateTimeRange?> showCxDateRangePicker({
   required BuildContext context,
   required DateTime firstDate,
   required DateTime lastDate,
@@ -29,7 +29,7 @@ Future<DateTimeRange?> showCsDateRangePicker({
   return showDialog<DateTimeRange>(
     context: context,
     barrierDismissible: false,
-    builder: (_) => CsDateRangePicker(
+    builder: (_) => CxDateRangePicker(
       firstDate: firstDate,
       lastDate: lastDate,
       initialDateRange: initialDateRange,
@@ -40,8 +40,8 @@ Future<DateTimeRange?> showCsDateRangePicker({
 
 /// Dialog pemilih rentang tanggal — kalender satu bulan dengan navigasi
 /// bulan, seleksi rentang dua ketukan, dan aksi Batal/Terapkan.
-class CsDateRangePicker extends StatefulWidget {
-  const CsDateRangePicker({
+class CxDateRangePicker extends StatefulWidget {
+  const CxDateRangePicker({
     super.key,
     required this.firstDate,
     required this.lastDate,
@@ -55,10 +55,10 @@ class CsDateRangePicker extends StatefulWidget {
   final String title;
 
   @override
-  State<CsDateRangePicker> createState() => _CsDateRangePickerState();
+  State<CxDateRangePicker> createState() => _CxDateRangePickerState();
 }
 
-class _CsDateRangePickerState extends State<CsDateRangePicker> {
+class _CxDateRangePickerState extends State<CxDateRangePicker> {
   late DateTime _visible;
   DateTime? _start;
   DateTime? _end;

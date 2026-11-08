@@ -1,6 +1,6 @@
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_combobox.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_combobox.dart';
 import 'package:dompetqu/core/theme/widgets/load_view_animating_progress_ripple.dart';
 import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
 import 'package:dompetqu/features/admin_pannel/adapters/graphql_operations.dart';
@@ -229,8 +229,8 @@ class _TokenFieldState extends State<_TokenField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: DompetCard(
-        variant: DompetCardVariant.csGlassCard,
+      child: CxCard(
+        variant: CxCardVariant.csGlassCard,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -295,7 +295,7 @@ class _TokenFieldState extends State<_TokenField> {
             ),
             const SizedBox(height: 10),
             // save section
-            DompetButton(
+            CxButton(
               label: 'Simpan Token',
               leadingIcon: Icons.save_rounded,
               height: 40,
@@ -328,8 +328,8 @@ class _DisableForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -344,7 +344,7 @@ class _DisableForm extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           // operation combobox section
-          DompetCombobox<String>(
+          CxCombobox<String>(
             controller: operationCtrl,
             enabled: !busy,
             items: kGraphqlOperations,
@@ -372,7 +372,7 @@ class _DisableForm extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           // submit section
-          DompetButton(
+          CxButton(
             label: 'Matikan Operation',
             leadingIcon: Icons.power_settings_new_rounded,
             loading: busy,
@@ -404,8 +404,8 @@ class _EntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = Theme.of(context).colorScheme.error;
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -467,9 +467,9 @@ class _EntryCard extends StatelessWidget {
               ),
               const Spacer(),
               // action section
-              DompetButton(
+              CxButton(
                 label: 'Aktifkan',
-                variant: DompetButtonVariant.outline,
+                variant: CxButtonVariant.outline,
                 leadingIcon: Icons.restart_alt_rounded,
                 height: 38,
                 onPressed: busy ? null : onEnable,
@@ -488,8 +488,8 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       child: Column(
         children: const [

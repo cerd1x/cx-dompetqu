@@ -3,7 +3,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 
@@ -102,7 +102,7 @@ class _DuplicateContactsInvestigationDialogState
           child: const Text('Tutup'),
         ),
         if (hasDuplicates)
-          DompetButton(
+          CxButton(
             label: _mergingGroups.isNotEmpty
                 ? 'Gabungkan Semua…'
                 : 'Gabungkan Semua',
@@ -265,7 +265,7 @@ class _DuplicateGroupTile extends StatelessWidget {
           const SizedBox(height: 6),
           Align(
             alignment: Alignment.centerRight,
-            child: DompetButton(
+            child: CxButton(
               label: 'Gabungkan',
               leadingIcon: Icons.merge_type,
               height: 36,

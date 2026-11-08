@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field_password.dart';
 
 void main() {
   String? visibleText(WidgetTester tester) {
@@ -15,7 +15,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(body: DompetTextField.password(controller: controller)),
+        home: Scaffold(body: CxTextFieldPassword(controller: controller)),
       ),
     );
 

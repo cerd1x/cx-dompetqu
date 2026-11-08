@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/core/utils/platform_target.dart';
@@ -17,6 +17,7 @@ import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/features/order/view/stores/bookkeeping_store.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
+import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
 
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
 /// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
@@ -184,7 +185,7 @@ class BookkeepingTab extends ConsumerWidget {
         itemBuilder: (_, i) {
           final f = BookkeepingFilter.values[i];
           final count = state.counts[f] ?? 0;
-          return OrderFilterChip(
+          return CxFilterChip(
             label: '${f.label} ($count)',
             icon: _filterIcon(f),
             selected: state.filter == f,
@@ -447,8 +448,8 @@ class _LedgerRow extends StatelessWidget {
     final amount = formatMoney(txAmount(tx), currency);
     final capital = _capitalOf(tx);
 
-    final card = DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    final card = CxCard(
+      variant: CxCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(

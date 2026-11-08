@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/balance_input_field.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 
 class SwapBalanceDialog extends StatefulWidget {
@@ -235,7 +235,7 @@ class _SwapBalanceDialogState extends State<SwapBalanceDialog> {
             inactiveColor: DompetBrand.csBorderDark,
           ),
           const SizedBox(height: 16),
-          DompetTextField.balance(
+          CxTextField.balance(
             name: 'swap-amount',
             value: _swapAmount,
             label: 'Amount to swap',

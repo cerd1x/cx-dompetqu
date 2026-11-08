@@ -4,16 +4,16 @@ import 'package:remix/remix.dart';
 import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-enum DompetButtonVariant { primary, outline, text }
+enum CxButtonVariant { primary, outline, text }
 
 /// Tombol brand DompetQu — padanan `btn` daisyUI + gradient web,
 /// dengan konsep frosted glass: backdrop blur, glass edge, dan soft glow.
-class DompetButton extends StatelessWidget {
-  const DompetButton({
+class CxButton extends StatelessWidget {
+  const CxButton({
     super.key,
     required this.label,
     required this.onPressed,
-    this.variant = DompetButtonVariant.primary,
+    this.variant = CxButtonVariant.primary,
     this.loading = false,
     this.enabled = true,
     this.leadingIcon,
@@ -23,7 +23,7 @@ class DompetButton extends StatelessWidget {
 
   final String label;
   final VoidCallback? onPressed;
-  final DompetButtonVariant variant;
+  final CxButtonVariant variant;
   final bool loading;
   final bool enabled;
   final IconData? leadingIcon;
@@ -71,7 +71,7 @@ class DompetButton extends StatelessWidget {
         .padding(EdgeInsetsGeometryMix.symmetric(horizontal: 12));
 
     return switch (variant) {
-      DompetButtonVariant.primary =>
+      CxButtonVariant.primary =>
         _dimmed
             ? base
                   .decoration(
@@ -83,7 +83,7 @@ class DompetButton extends StatelessWidget {
                   )
                   .labelColor(Colors.white38)
             : base.decoration(_gradient(radius: DompetBrand.radius)),
-      DompetButtonVariant.outline =>
+      CxButtonVariant.outline =>
         _dimmed
             ? base
                   .decoration(
@@ -120,7 +120,7 @@ class DompetButton extends StatelessWidget {
                       ),
                     ),
                   ),
-      DompetButtonVariant.text =>
+      CxButtonVariant.text =>
         _dimmed
             ? base.color(Colors.transparent).labelColor(Colors.white38)
             : base
@@ -146,13 +146,13 @@ class DompetButton extends StatelessWidget {
       ),
     );
 
-    if (variant == DompetButtonVariant.text) return button;
+    if (variant == CxButtonVariant.text) return button;
 
     // Soft glow di luar area blur agar tidak ikut ter-clip.
     final List<BoxShadow>? glow = _dimmed
         ? null
         : switch (variant) {
-            DompetButtonVariant.primary => [
+            CxButtonVariant.primary => [
               BoxShadow(
                 color: DompetBrand.gold.withValues(alpha: 0.4),
                 blurRadius: 28,
@@ -164,18 +164,18 @@ class DompetButton extends StatelessWidget {
                 offset: const Offset(0, 4),
               ),
             ],
-            DompetButtonVariant.outline => [
+            CxButtonVariant.outline => [
               BoxShadow(
                 color: DompetBrand.csShadow,
                 blurRadius: 20,
                 offset: const Offset(0, 6),
               ),
             ],
-            DompetButtonVariant.text => null,
+            CxButtonVariant.text => null,
           };
 
     return CsFrost(
-      radius: variant == DompetButtonVariant.primary
+      radius: variant == CxButtonVariant.primary
           ? DompetBrand.radius
           : DompetBrand.radiusSm,
       shadow: glow,

@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/assets/domain/models/asset_mutation.dart';
 import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +38,8 @@ class AssetTransactionList extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 itemBuilder: (_, i) {
                   final t = txs[i];
-                  return DompetCard(
-                    variant: DompetCardVariant.csGlassSurface,
+                  return CxCard(
+                    variant: CxCardVariant.csGlassSurface,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 10,

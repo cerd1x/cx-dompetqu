@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
@@ -24,8 +24,8 @@ class TransactionDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DompetCard(
-              variant: DompetCardVariant.csGlassSurface,
+            CxCard(
+              variant: CxCardVariant.csGlassSurface,
               radius: 16,
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Column(

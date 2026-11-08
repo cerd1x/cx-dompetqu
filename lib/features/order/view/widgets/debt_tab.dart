@@ -6,8 +6,8 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
@@ -17,6 +17,7 @@ import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/features/order/view/stores/debt_settlements.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
+import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
 
 /// Kategori yang dipakai backend saat `createOrderLoan` — penanda sebuah
 /// transaksi adalah utang pelanggan (`create-order-loan.usecase.ts`).
@@ -196,13 +197,13 @@ class _DebtTabState extends ConsumerState<DebtTab> {
     }
     return Row(
       children: [
-        OrderFilterChip(
+        CxFilterChip(
           label: 'Outstanding ($outstanding)',
           selected: _filter == _DebtFilter.outstanding,
           onTap: () => setState(() => _filter = _DebtFilter.outstanding),
         ),
         const SizedBox(width: 6),
-        OrderFilterChip(
+        CxFilterChip(
           label: 'Settled ($settled)',
           selected: _filter == _DebtFilter.settled,
           onTap: () => setState(() => _filter = _DebtFilter.settled),
@@ -380,7 +381,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
             onPressed: () => Navigator.pop(context, false),
             child: const Text('Cancel'),
           ),
-          DompetButton(
+          CxButton(
             label: actionLabel,
             onPressed: () => Navigator.pop(context, true),
           ),
@@ -462,8 +463,8 @@ class _DebtRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final amount = formatMoney(debt.amount, debt.currency);
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
@@ -540,7 +541,7 @@ class _DebtRow extends StatelessWidget {
           if (debt.settled)
             DebtPaymentBadge(amount: amount)
           else
-            DompetButton(
+            CxButton(
               label: busy ? '...' : 'Settle',
               onPressed: busy ? null : onSettle,
               loading: busy,
@@ -561,7 +562,7 @@ class _SettleAllButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetButton(
+    return CxButton(
       label: 'Settle all',
       onPressed: busy ? null : onPressed,
       loading: busy,

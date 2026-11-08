@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+
+/// Input password brand — padanan `CxTextField.password` web.
+///
+/// Menampilkan ikon gembok di kiri dan toggle visibilitas di kanan.
+class CxTextFieldPassword extends StatefulWidget {
+  const CxTextFieldPassword({
+    super.key,
+    required this.controller,
+    this.hintText,
+    this.label,
+    this.labelStyle,
+    this.enabled = true,
+    this.error = false,
+    this.keyboardType,
+    this.textInputAction,
+    this.onChanged,
+    this.onSubmitted,
+    this.variant = CxTextFieldVariant.csInput,
+  });
+
+  final TextEditingController controller;
+  final String? hintText;
+  final String? label;
+  final TextStyle? labelStyle;
+  final bool enabled;
+  final bool error;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final CxTextFieldVariant variant;
+
+  @override
+  State<CxTextFieldPassword> createState() => _CxTextFieldPasswordState();
+}
+
+class _CxTextFieldPasswordState extends State<CxTextFieldPassword> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return CxTextField(
+      controller: widget.controller,
+      hintText: widget.hintText,
+      label: widget.label,
+      labelStyle: widget.labelStyle,
+      leading: const Icon(Icons.lock_outline, color: Colors.white54),
+      trailing: IconButton(
+        tooltip: _obscureText ? 'Lihat password' : 'Sembunyikan password',
+        icon: Icon(
+          _obscureText ? Icons.visibility : Icons.visibility_off,
+          color: Colors.white54,
+        ),
+        onPressed: () {
+          setState(() {
+            _obscureText = !_obscureText;
+          });
+        },
+      ),
+      obscureText: _obscureText,
+      autocorrect: false,
+      enabled: widget.enabled,
+      error: widget.error,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
+      variant: widget.variant,
+    );
+  }
+}

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cs_select_picker.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_select_picker.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_repository_provider.dart';
@@ -16,37 +16,37 @@ import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 import 'ai_settings_profiles_card.dart';
 
 // Model yang ditawarkan untuk tiap provider; Ollama memakai nama model lokal.
-const Map<AiModelProvider, List<CSSelectItem<String>>> _kProviderModels = {
+const Map<AiModelProvider, List<CxSelectItem<String>>> _kProviderModels = {
   AiModelProvider.googleAi: [
-    CSSelectItem(value: 'gemini-2.5-flash', label: 'Flash', symbol: '2.5'),
-    CSSelectItem(value: 'gemini-2.5-pro', label: 'Pro', symbol: '2.5'),
-    CSSelectItem(value: 'gemini-2.0-flash', label: 'Flash', symbol: '2.0'),
-    CSSelectItem(value: 'gemini-1.5-flash', label: 'Flash', symbol: '1.5'),
+    CxSelectItem(value: 'gemini-2.5-flash', label: 'Flash', symbol: '2.5'),
+    CxSelectItem(value: 'gemini-2.5-pro', label: 'Pro', symbol: '2.5'),
+    CxSelectItem(value: 'gemini-2.0-flash', label: 'Flash', symbol: '2.0'),
+    CxSelectItem(value: 'gemini-1.5-flash', label: 'Flash', symbol: '1.5'),
   ],
   AiModelProvider.anthropic: [
-    CSSelectItem(value: 'claude-sonnet-4-5', label: 'Sonnet', symbol: '4.5'),
-    CSSelectItem(value: 'claude-haiku-4-5', label: 'Haiku', symbol: '4.5'),
-    CSSelectItem(value: 'claude-opus-4-1', label: 'Opus', symbol: '4.1'),
+    CxSelectItem(value: 'claude-sonnet-4-5', label: 'Sonnet', symbol: '4.5'),
+    CxSelectItem(value: 'claude-haiku-4-5', label: 'Haiku', symbol: '4.5'),
+    CxSelectItem(value: 'claude-opus-4-1', label: 'Opus', symbol: '4.1'),
   ],
   AiModelProvider.openAi: [
-    CSSelectItem(value: 'gpt-5-mini', label: 'GPT', symbol: '5 mini'),
-    CSSelectItem(value: 'gpt-5', label: 'GPT', symbol: '5'),
-    CSSelectItem(value: 'gpt-4.1-mini', label: 'GPT', symbol: '4.1 mini'),
+    CxSelectItem(value: 'gpt-5-mini', label: 'GPT', symbol: '5 mini'),
+    CxSelectItem(value: 'gpt-5', label: 'GPT', symbol: '5'),
+    CxSelectItem(value: 'gpt-4.1-mini', label: 'GPT', symbol: '4.1 mini'),
   ],
   AiModelProvider.ollama: [
-    CSSelectItem(value: 'llama3.2', label: 'Llama', symbol: '3.2'),
-    CSSelectItem(value: 'qwen2.5', label: 'Qwen', symbol: '2.5'),
-    CSSelectItem(value: 'mistral', label: 'Mistral', symbol: ''),
+    CxSelectItem(value: 'llama3.2', label: 'Llama', symbol: '3.2'),
+    CxSelectItem(value: 'qwen2.5', label: 'Qwen', symbol: '2.5'),
+    CxSelectItem(value: 'mistral', label: 'Mistral', symbol: ''),
   ],
   // OpenRouter memakai katalog model; daftar ini hanya cadangan bila picker
   // preset terakses (ID model OpenRouter memakai prefix vendor).
   AiModelProvider.openRouter: [
-    CSSelectItem(
+    CxSelectItem(
       value: OpenRouterConfig.defaultModel,
       label: 'Gemini',
       symbol: '2.5',
     ),
-    CSSelectItem(value: 'google/gemini-2.5-pro', label: 'Pro', symbol: '2.5'),
+    CxSelectItem(value: 'google/gemini-2.5-pro', label: 'Pro', symbol: '2.5'),
   ],
 };
 
@@ -447,13 +447,13 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
       widget.settings.provider == AiModelProvider.ollama ||
       widget.settings.provider == AiModelProvider.openRouter;
 
-  List<CSSelectItem<String>> get _modelOptions {
+  List<CxSelectItem<String>> get _modelOptions {
     final options = _kProviderModels[widget.settings.provider]!;
     if (options.any((option) => option.value == widget.settings.model)) {
       return options;
     }
     return [
-      CSSelectItem(
+      CxSelectItem(
         value: widget.settings.model,
         label: widget.settings.model,
         symbol: 'Custom',
@@ -475,8 +475,8 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: EdgeInsets.zero,
       child: Column(
         // Daftar pengaturan provider, bubble, kredensial, model, dan request.
@@ -485,11 +485,11 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           AiSettingRow(
             icon: Icons.hub_outlined,
             label: 'Provider model',
-            trailing: CSSelectPicker<AiModelProvider>(
+            trailing: CxSelectPicker<AiModelProvider>(
               items: [
                 // Ubah enum provider menjadi opsi picker berlabel.
                 for (final provider in AiModelProvider.values)
-                  CSSelectItem(
+                  CxSelectItem(
                     value: provider,
                     label: provider.label,
                     symbol: _kProviderSymbols[provider]!,
@@ -625,7 +625,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                           _loadingOpenRouterModels ? 'Memuat' : 'Pilih model',
                         ),
                       )
-                    : CSSelectPicker<String>(
+                    : CxSelectPicker<String>(
                         items: _modelOptions,
                         value: widget.settings.model,
                         onChanged: _saveModel,

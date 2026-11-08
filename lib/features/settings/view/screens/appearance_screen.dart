@@ -9,7 +9,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
 import 'package:dompetqu/core/theme/ui_style_controller.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 
 /// Palet preset untuk color picker — kombinasi gold/purple/pink & warna netral.
 const List<Color> kUiPalette = [
@@ -200,8 +200,8 @@ class _LivePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.solid,
+    return CxCard(
+      variant: CxCardVariant.solid,
       padding: EdgeInsets.zero,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(DompetBrand.radius),
@@ -313,8 +313,8 @@ class _ColorPickerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -492,8 +492,8 @@ class _GradientPickerCard extends StatelessWidget {
       ('↓', Alignment.topCenter, Alignment.bottomCenter),
     ];
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -599,8 +599,8 @@ class _OpacitySliderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -641,8 +641,8 @@ class _BlurSliderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -680,8 +680,8 @@ class _ResetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       child: OutlinedButton.icon(
         onPressed: onReset,
         icon: const Icon(Icons.restart_alt),

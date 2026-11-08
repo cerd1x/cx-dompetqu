@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// membacanya seperti `TextField` biasa.
 ///
 /// ```dart
-/// DompetCombobox<String>(
+/// CxCombobox<String>(
 ///   controller: _ctrl,
 ///   items: kGraphqlOperations,
 ///   labelOf: (s) => s,
@@ -16,8 +16,8 @@ import 'package:flutter/material.dart';
 ///   helperText: '${kGraphqlOperations.length} operation',
 /// )
 /// ```
-class DompetCombobox<T> extends StatelessWidget {
-  const DompetCombobox({
+class CxCombobox<T> extends StatelessWidget {
+  const CxCombobox({
     super.key,
     required this.items,
     required this.labelOf,

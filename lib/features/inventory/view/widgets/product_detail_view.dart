@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
@@ -26,7 +26,7 @@ class ProductDetailView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // avatar section
-          const DompetAvatar(label: 'P', size: 56),
+          const CxAvatar(label: 'P', size: 56),
           const SizedBox(height: 12),
           // name section
           Text(
@@ -70,15 +70,15 @@ class ProductDetailView extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: DompetButton(
+                child: CxButton(
                   label: 'Tutup',
-                  variant: DompetButtonVariant.outline,
+                  variant: CxButtonVariant.outline,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: DompetButton(
+                child: CxButton(
                   label: 'Buy',
                   leadingIcon: Icons.shopping_bag_outlined,
                   onPressed: () {

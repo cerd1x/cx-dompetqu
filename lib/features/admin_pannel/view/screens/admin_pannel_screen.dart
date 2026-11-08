@@ -1,7 +1,7 @@
 import 'package:dompetqu/core/theme/ui_style.dart';
 import 'package:dompetqu/core/theme/ui_style_controller.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -96,7 +96,7 @@ class _AdminHeader extends StatelessWidget {
         _GlassIconButton(icon: Icons.notifications_none_rounded, onTap: () {}),
         const SizedBox(width: 10),
         // avatar section
-        const DompetAvatar(label: 'A', size: 42),
+        const CxAvatar(label: 'A', size: 42),
       ],
     );
   }
@@ -363,8 +363,8 @@ class _StatRow extends StatelessWidget {
         for (var i = 0; i < items.length; i++) ...[
           if (i > 0) const SizedBox(width: 12),
           Expanded(
-            child: DompetCard(
-              variant: DompetCardVariant.csGlassCard,
+            child: CxCard(
+              variant: CxCardVariant.csGlassCard,
               radius: 18,
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -430,8 +430,8 @@ class _ActivityChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       radius: 20,
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       child: Column(
@@ -506,8 +506,8 @@ class _MenuList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       radius: 20,
       padding: EdgeInsets.zero,
       child: Column(

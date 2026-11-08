@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 
@@ -194,8 +194,8 @@ class _StructCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // hero header
-        DompetCard(
-          variant: DompetCardVariant.csGlassSurface,
+        CxCard(
+          variant: CxCardVariant.csGlassSurface,
           radius: 20,
           padding: const EdgeInsets.symmetric(vertical: 28),
           child: Column(
@@ -248,8 +248,8 @@ class _StructCard extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         // structured detail rows
-        DompetCard(
-          variant: DompetCardVariant.csGlassSurface,
+        CxCard(
+          variant: CxCardVariant.csGlassSurface,
           radius: 20,
           padding: const EdgeInsets.all(18),
           child: Column(

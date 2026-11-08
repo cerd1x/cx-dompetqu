@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 
 /// Dialog for creating/updating a contact.
 class ContactFormDialog extends ConsumerStatefulWidget {
@@ -111,7 +111,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
     return CsDialog(
       title: _isEdit ? 'Update Contact' : 'Add Contact',
       actions: [
-        DompetButton(
+        CxButton(
           label: _isEdit ? 'Update' : 'Save',
           onPressed: _busy ? null : _submit,
           loading: _busy,
@@ -124,14 +124,14 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // name field section
-            DompetTextField(
+            CxTextField(
               controller: _nameCtrl,
               label: 'Name',
               leading: const Icon(Icons.person_outline, color: Colors.white54),
             ),
             const SizedBox(height: 12),
             // email field section
-            DompetTextField(
+            CxTextField(
               controller: _emailCtrl,
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
@@ -148,7 +148,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
               Row(
                 children: [
                   Expanded(
-                    child: DompetTextField(
+                    child: CxTextField(
                       controller: _phoneCtrls[i],
                       label: i == 0 ? 'Phone (Mobile)' : 'Phone ${i + 1}',
                       keyboardType: TextInputType.phone,
@@ -179,7 +179,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
             ),
             const SizedBox(height: 8),
             // group field section
-            DompetTextField(
+            CxTextField(
               controller: _groupCtrl,
               label: 'Group',
               leading: const Icon(Icons.group_outlined, color: Colors.white54),

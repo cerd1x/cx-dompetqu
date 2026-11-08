@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/payments/domain/models/payment.dart';
 
@@ -75,8 +75,8 @@ class FailedPaymentRow extends StatelessWidget {
     final retry = 'retry ${payment.retryCount}/${payment.maxRetries}';
     final reference = payment.gatewayRef;
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       onTap: onTap,

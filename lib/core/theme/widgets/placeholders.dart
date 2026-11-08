@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'dompet_card.dart';
+import 'cx_card.dart';
 
 /// Widget dasar untuk tab yang belum diimplementasikan.
 class PlaceholderTab extends StatelessWidget {
@@ -14,7 +14,7 @@ class PlaceholderTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: DompetCard(
+      child: CxCard(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,

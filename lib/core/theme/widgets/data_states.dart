@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'dompet_card.dart';
+import 'cx_card.dart';
 
 /// Baris skeleton — padanan kelas `skeleton` daisyUI di web.
 class SkeletonRow extends StatelessWidget {
@@ -12,8 +12,8 @@ class SkeletonRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [

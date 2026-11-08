@@ -5,18 +5,18 @@ import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'balance_input_field.dart';
 
-enum DompetTextFieldVariant { glass, csGlassInput, csInput }
+enum CxTextFieldVariant { glass, csGlassInput, csInput }
 
 /// Input text brand — padanan `TextField.svelte`/melt-ui + gaya daisyUI.
 ///
-/// Constructor utama ([DompetTextField]) secara default memakai gaya `csinput`
+/// Constructor utama ([CxTextField]) secara default memakai gaya `csinput`
 /// di web: radius `rounded-2xl`, padding `px-3 py-2`, fill/border
 /// `rgba(200,163,182,...)` yang berubah mengikuti hover/focus
 /// (`rgba(168,85,247,...)` saat fokus), placeholder `gray-100/40`, dan glass
 /// frosted ([CsFrost] backdrop blur 6.1px). Variant lain: `glass` (frosted
 /// putih) dan `csGlassInput` (pola `csglass-input`).
-class DompetTextField extends StatefulWidget {
-  const DompetTextField({
+class CxTextField extends StatefulWidget {
+  const CxTextField({
     super.key,
     this.controller,
     this.hintText,
@@ -32,7 +32,7 @@ class DompetTextField extends StatefulWidget {
     this.textInputAction,
     this.onChanged,
     this.onSubmitted,
-    this.variant = DompetTextFieldVariant.csInput,
+    this.variant = CxTextFieldVariant.csInput,
   }) : _child = null;
 
   /// Input nominal + picker mata uang — port Flutter `InputBalance.svelte`.
@@ -40,7 +40,7 @@ class DompetTextField extends StatefulWidget {
   /// Memformat nominal realtime sesuai locale (separator ribuan & desimal)
   /// sambil menjaga posisi kursor, dengan dropdown mata uang bergaya
   /// `csglass` dan container input `csglass-input` (sama persis dengan web).
-  DompetTextField.balance({
+  CxTextField.balance({
     super.key,
     String? name,
     num value = 0,
@@ -80,7 +80,7 @@ class DompetTextField extends StatefulWidget {
        textInputAction = null,
        onChanged = null,
        onSubmitted = null,
-       variant = DompetTextFieldVariant.csInput;
+       variant = CxTextFieldVariant.csInput;
 
   final TextEditingController? controller;
   final String? hintText;
@@ -98,46 +98,16 @@ class DompetTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
-  final DompetTextFieldVariant variant;
+  final CxTextFieldVariant variant;
 
   /// Child khusus (mis. balance) yang merender dirinya sendiri di [build].
   final Widget? _child;
 
   @override
-  State<DompetTextField> createState() => _DompetTextFieldState();
-
-  static Widget password({
-    Key? key,
-    required TextEditingController controller,
-    String? hintText,
-    String? label,
-    TextStyle? labelStyle,
-    bool enabled = true,
-    bool error = false,
-    TextInputType? keyboardType,
-    TextInputAction? textInputAction,
-    ValueChanged<String>? onChanged,
-    ValueChanged<String>? onSubmitted,
-    DompetTextFieldVariant variant = DompetTextFieldVariant.csInput,
-  }) {
-    return _DompetPasswordTextField(
-      key: key,
-      controller: controller,
-      hintText: hintText,
-      label: label,
-      labelStyle: labelStyle,
-      enabled: enabled,
-      error: error,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      onChanged: onChanged,
-      onSubmitted: onSubmitted,
-      variant: variant,
-    );
-  }
+  State<CxTextField> createState() => _CxTextFieldState();
 }
 
-class _DompetTextFieldState extends State<DompetTextField> {
+class _CxTextFieldState extends State<CxTextField> {
   final FocusNode _focusNode = FocusNode();
   bool _hovered = false;
   bool _focused = false;
@@ -157,17 +127,17 @@ class _DompetTextFieldState extends State<DompetTextField> {
   }
 
   double get _radius => switch (widget.variant) {
-    DompetTextFieldVariant.glass => DompetBrand.radiusSm,
-    DompetTextFieldVariant.csGlassInput => DompetBrand.radiusSm,
-    DompetTextFieldVariant.csInput => DompetBrand.radius,
+    CxTextFieldVariant.glass => DompetBrand.radiusSm,
+    CxTextFieldVariant.csGlassInput => DompetBrand.radiusSm,
+    CxTextFieldVariant.csInput => DompetBrand.radius,
   };
 
   /// Padding per variant — `csinput` memakai `px-3 py-2` (12/8),
   /// `csglass-input` & `glass` memakai `p-4 py-2` (16/8).
   EdgeInsetsGeometryMix get _padding => switch (widget.variant) {
-    DompetTextFieldVariant.glass || DompetTextFieldVariant.csGlassInput =>
+    CxTextFieldVariant.glass || CxTextFieldVariant.csGlassInput =>
       EdgeInsetsGeometryMix.symmetric(horizontal: 16, vertical: 8),
-    DompetTextFieldVariant.csInput => EdgeInsetsGeometryMix.symmetric(
+    CxTextFieldVariant.csInput => EdgeInsetsGeometryMix.symmetric(
       horizontal: 12,
       vertical: 8,
     ),
@@ -177,11 +147,11 @@ class _DompetTextFieldState extends State<DompetTextField> {
   /// `rgba(200,163,182,0.14)` (`csFillHover`).
   Color get _fillColor {
     final fill = switch (widget.variant) {
-      DompetTextFieldVariant.glass => DompetBrand.glassFill,
-      DompetTextFieldVariant.csGlassInput => DompetBrand.csFill,
-      DompetTextFieldVariant.csInput => DompetBrand.csFill,
+      CxTextFieldVariant.glass => DompetBrand.glassFill,
+      CxTextFieldVariant.csGlassInput => DompetBrand.csFill,
+      CxTextFieldVariant.csInput => DompetBrand.csFill,
     };
-    if (widget.variant == DompetTextFieldVariant.csInput &&
+    if (widget.variant == CxTextFieldVariant.csInput &&
         (_hovered || _focused)) {
       return DompetBrand.csFillHover;
     }
@@ -193,19 +163,19 @@ class _DompetTextFieldState extends State<DompetTextField> {
   /// `csinput` (focus `rgba(168,85,247,...)`).
   ({Color normal, Color hover, Color focus, Color ring}) get _stateColors =>
       switch (widget.variant) {
-        DompetTextFieldVariant.glass => (
+        CxTextFieldVariant.glass => (
           normal: DompetBrand.glassBorder,
           hover: const Color(0x29FFFFFF),
           focus: const Color(0x3DFFFFFF),
           ring: const Color(0x1AFFFFFF),
         ),
-        DompetTextFieldVariant.csGlassInput => (
+        CxTextFieldVariant.csGlassInput => (
           normal: DompetBrand.csBorder,
           hover: DompetBrand.csBorderHover,
           focus: DompetBrand.csBorderHover,
           ring: DompetBrand.csBorderHover,
         ),
-        DompetTextFieldVariant.csInput => (
+        CxTextFieldVariant.csInput => (
           normal: DompetBrand.csBorder,
           hover: DompetBrand.csBorderHover,
           focus: DompetBrand.csFocusBorder,
@@ -221,11 +191,11 @@ class _DompetTextFieldState extends State<DompetTextField> {
   }
 
   Color get _hintColor => switch (widget.variant) {
-    DompetTextFieldVariant.glass => Colors.white38,
-    DompetTextFieldVariant.csGlassInput => const Color(
+    CxTextFieldVariant.glass => Colors.white38,
+    CxTextFieldVariant.csGlassInput => const Color(
       0xFF374151,
     ), // placeholder-gray-700
-    DompetTextFieldVariant.csInput => const Color(
+    CxTextFieldVariant.csInput => const Color(
       0x66F3F4F6,
     ), // dark:placeholder:text-gray-100/40
   };
@@ -240,13 +210,13 @@ class _DompetTextFieldState extends State<DompetTextField> {
   TextFieldStyler get _style {
     final decoration =
         switch (widget.variant) {
-          DompetTextFieldVariant.glass => DompetBrand.glassDecoration(
+          CxTextFieldVariant.glass => DompetBrand.glassDecoration(
             radius: DompetBrand.radiusSm,
           ),
-          DompetTextFieldVariant.csGlassInput => DompetBrand.csGlassInput(
+          CxTextFieldVariant.csGlassInput => DompetBrand.csGlassInput(
             radius: DompetBrand.radiusSm,
           ),
-          DompetTextFieldVariant.csInput => DompetBrand.csInput(
+          CxTextFieldVariant.csInput => DompetBrand.csInput(
             radius: DompetBrand.radius,
           ),
         }.merge(
@@ -267,7 +237,7 @@ class _DompetTextFieldState extends State<DompetTextField> {
   }
 
   /// Gaya label kustom — mengikuti default Remix (`13`/`Colors.white70`),
-  /// lalu menerapkan [DompetTextField.labelStyle] di atasnya.
+  /// lalu menerapkan [CxTextField.labelStyle] di atasnya.
   TextStyle get _labelTextStyle {
     final base = const TextStyle(fontSize: 13, color: Colors.white70);
     final labelStyle = widget.labelStyle;
@@ -324,75 +294,6 @@ class _DompetTextFieldState extends State<DompetTextField> {
         const SizedBox(height: 8),
         frosted,
       ],
-    );
-  }
-}
-
-class _DompetPasswordTextField extends StatefulWidget {
-  const _DompetPasswordTextField({
-    super.key,
-    required this.controller,
-    this.hintText,
-    this.label,
-    this.labelStyle,
-    this.enabled = true,
-    this.error = false,
-    this.keyboardType,
-    this.textInputAction,
-    this.onChanged,
-    this.onSubmitted,
-    this.variant = DompetTextFieldVariant.csInput,
-  });
-
-  final TextEditingController controller;
-  final String? hintText;
-  final String? label;
-  final TextStyle? labelStyle;
-  final bool enabled;
-  final bool error;
-  final TextInputType? keyboardType;
-  final TextInputAction? textInputAction;
-  final ValueChanged<String>? onChanged;
-  final ValueChanged<String>? onSubmitted;
-  final DompetTextFieldVariant variant;
-
-  @override
-  State<_DompetPasswordTextField> createState() =>
-      _DompetPasswordTextFieldState();
-}
-
-class _DompetPasswordTextFieldState extends State<_DompetPasswordTextField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return DompetTextField(
-      controller: widget.controller,
-      hintText: widget.hintText,
-      label: widget.label,
-      labelStyle: widget.labelStyle,
-      leading: const Icon(Icons.lock_outline, color: Colors.white54),
-      trailing: IconButton(
-        tooltip: _obscureText ? 'Lihat password' : 'Sembunyikan password',
-        icon: Icon(
-          _obscureText ? Icons.visibility : Icons.visibility_off,
-          color: Colors.white54,
-        ),
-        onPressed: () {
-          setState(() {
-            _obscureText = !_obscureText;
-          });
-        },
-      ),
-      obscureText: _obscureText,
-      autocorrect: false,
-      enabled: widget.enabled,
-      error: widget.error,
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      onChanged: widget.onChanged,
-      onSubmitted: widget.onSubmitted,
-      variant: widget.variant,
     );
   }
 }

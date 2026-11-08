@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_badge.dart';
+import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 
 /// Warna/label/ikon transaksi per tipe — dipakai bersama tab Bookkeeping & Debt.
@@ -119,66 +118,6 @@ class OrderStatTile extends StatelessWidget {
   }
 }
 
-/// Chip filter pill yang bisa dipilih (tipe transaksi / status utang).
-class OrderFilterChip extends StatelessWidget {
-  const OrderFilterChip({
-    super.key,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    this.icon,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  /// Ikon opsional di kiri label — dipakai filter buku besar agar tipe
-  /// transaksi langsung dikenali tanpa membaca teks.
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = selected ? DompetBrand.gold : Colors.white38;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: selected
-              ? DompetBrand.gold.withValues(alpha: 0.16)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-            color: selected
-                ? DompetBrand.gold.withValues(alpha: 0.6)
-                : Colors.white12,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // ikon section — opsional, ukuran kecil agar chip tetap ringkas.
-            if (icon != null) ...[
-              Icon(icon, size: 13, color: color),
-              const SizedBox(width: 5),
-            ],
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11.5,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: color,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// Judul grup daftar + aksi di kanan (tanggal/contact/pelanggan).
 class OrderGroupHeader extends StatelessWidget {
   const OrderGroupHeader({
@@ -244,10 +183,10 @@ class DebtPaymentBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetBadge(
+    return CxBadge(
       label: amount,
       icon: Icons.check_circle_outline_rounded,
-      tone: DompetBadgeTone.success,
+      tone: CxBadgeTone.success,
     );
   }
 }

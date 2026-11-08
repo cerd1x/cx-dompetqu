@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/widgets/balance_input_field.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
@@ -76,7 +76,7 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
     return CsDialog(
       title: _isEdit ? 'Update Asset' : 'Add Asset',
       actions: [
-        DompetButton(
+        CxButton(
           label: _isEdit ? 'Update' : 'Add',
           onPressed: _busy ? null : _submit,
           loading: _busy,
@@ -87,7 +87,7 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          DompetTextField(
+          CxTextField(
             controller: _nameCtrl,
             label: 'Name',
             leading: const Icon(
@@ -116,7 +116,7 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: DompetTextField.balance(
+                  child: CxTextField.balance(
                     name: 'asset-balance',
                     label: 'Balance',
                     value: _balanceValue ?? 0,

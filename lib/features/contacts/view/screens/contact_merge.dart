@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:dompetqu/core/theme/widgets/search_field.dart';
@@ -172,7 +172,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
           spacing: 8,
           children: [
             Expanded(
-              child: DompetButton(
+              child: CxButton(
                 label: 'Gabungkan',
                 leadingIcon: Icons.merge_type,
                 onPressed: _busy ? null : _submit,
@@ -353,7 +353,7 @@ class _MiniContact extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          DompetAvatar(
+          CxAvatar(
             label: contact.name.isNotEmpty ? contact.name[0] : '?',
             size: 42,
           ),
@@ -395,7 +395,7 @@ class _MergeCandidateTile extends StatelessWidget {
         side: const BorderSide(color: DompetBrand.csBorder, width: 1),
       ),
       tileColor: Colors.white.withValues(alpha: 0.05),
-      leading: DompetAvatar(
+      leading: CxAvatar(
         label: contact.name.isNotEmpty ? contact.name[0] : '?',
         size: 36,
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
 
@@ -35,8 +35,8 @@ class StatsGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(statisticsStoreProvider);
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: Column(
         children: [

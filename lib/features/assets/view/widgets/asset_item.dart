@@ -2,8 +2,8 @@ import 'package:dompetqu/features/assets/domain/models/asset.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/item_menu.dart';
 
 /// Single asset row used in assets list.
@@ -30,14 +30,14 @@ class AssetItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final balance = Balance.parse(asset.balance);
-    return DompetCard(
+    return CxCard(
       onTap: onTap,
-      variant: DompetCardVariant.csGlassSurface,
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
           // icon section
-          DompetAvatar(
+          CxAvatar(
             label: _iconForType(asset.type) == Icons.currency_bitcoin
                 ? '₿'
                 : 'W',

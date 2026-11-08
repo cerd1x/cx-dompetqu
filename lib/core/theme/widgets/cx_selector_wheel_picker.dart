@@ -15,14 +15,14 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 ///
 /// Contoh penggunaan:
 /// ```dart
-/// CsSelectorWheelPicker<String>(
+/// CxSelectorWheelPicker<String>(
 ///   items: ['A', 'B', 'C'],
 ///   selectedItem: selected,
 ///   onChanged: (v) => setState(() => selected = v),
 /// )
 /// ```
-class CsSelectorWheelPicker<T> extends StatefulWidget {
-  const CsSelectorWheelPicker({
+class CxSelectorWheelPicker<T> extends StatefulWidget {
+  const CxSelectorWheelPicker({
     super.key,
     required this.items,
     required this.selectedItem,
@@ -50,11 +50,11 @@ class CsSelectorWheelPicker<T> extends StatefulWidget {
   final Axis axis;
 
   @override
-  State<CsSelectorWheelPicker<T>> createState() =>
-      _CsSelectorWheelPickerState<T>();
+  State<CxSelectorWheelPicker<T>> createState() =>
+      _CxSelectorWheelPickerState<T>();
 }
 
-class _CsSelectorWheelPickerState<T> extends State<CsSelectorWheelPicker<T>> {
+class _CxSelectorWheelPickerState<T> extends State<CxSelectorWheelPicker<T>> {
   late FixedExtentScrollController _scrollController;
 
   @override
@@ -67,7 +67,7 @@ class _CsSelectorWheelPickerState<T> extends State<CsSelectorWheelPicker<T>> {
   }
 
   @override
-  void didUpdateWidget(CsSelectorWheelPicker<T> oldWidget) {
+  void didUpdateWidget(CxSelectorWheelPicker<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedItem != widget.selectedItem) {
       final newIndex = widget.items.indexOf(widget.selectedItem);

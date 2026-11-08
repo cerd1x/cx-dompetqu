@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
 
@@ -50,7 +50,7 @@ class AppHeader extends ConsumerWidget {
           // avatar section
           if (user != null) ...[
             const SizedBox(width: 12),
-            DompetAvatar(
+            CxAvatar(
               label: UserAvatar.initials(user),
               onTap: () => context.push('/settings'),
             ),
@@ -61,7 +61,7 @@ class AppHeader extends ConsumerWidget {
   }
 }
 
-/// Avatar lingkaran dengan inisial user (diganti DompetAvatar ber-gradient).
+/// Avatar lingkaran dengan inisial user (diganti CxAvatar ber-gradient).
 class UserAvatar {
   UserAvatar._();
 

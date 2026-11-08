@@ -5,7 +5,7 @@ import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_avatar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 
 /// Detail dialog for an asset.
 class AssetDetail extends StatelessWidget {
@@ -28,7 +28,7 @@ class AssetDetail extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // avatar section
-          DompetAvatar(
+          CxAvatar(
             label: asset.name.isNotEmpty ? asset.name[0] : '?',
             size: 72,
           ),

@@ -1,5 +1,5 @@
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_card.dart';
+import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/analytics/view/widgets/analytics_data.dart';
 import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
@@ -78,8 +78,8 @@ class _ErrorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassSurface,
+    return CxCard(
+      variant: CxCardVariant.csGlassSurface,
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -109,8 +109,8 @@ class _PercentagesCard extends StatelessWidget {
         ? 0
         : (s.totalProfit / s.totalIncome * 100);
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,8 +244,8 @@ class _PerformanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,8 +493,8 @@ class _CalendarCard extends StatelessWidget {
     final daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
     final leading = firstDay.weekday % 7; // Senin=0
 
-    return DompetCard(
-      variant: DompetCardVariant.csGlassCard,
+    return CxCard(
+      variant: CxCardVariant.csGlassCard,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

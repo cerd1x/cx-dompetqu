@@ -6,7 +6,8 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/logger/log_level.dart';
 import 'package:dompetqu/core/logger/log_record.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
 import 'package:dompetqu/features/reports/view/stores/reports_store.dart';
 
 /// Layar laporan: menampilkan hasil dari [AppLogger] (log yang tertangkap),
@@ -85,7 +86,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: DompetButton(
+                        child: CxButton(
                           label: 'Kirim Laporan',
                           leadingIcon: Icons.send_rounded,
                           loading: store.submitting,
@@ -94,9 +95,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: DompetButton(
+                        child: CxButton(
                           label: 'Salin Log',
-                          variant: DompetButtonVariant.outline,
+                          variant: CxButtonVariant.outline,
                           leadingIcon: Icons.copy_rounded,
                           onPressed: _copy,
                         ),
@@ -141,6 +142,34 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
               ),
             ),
             const Divider(height: 1, color: Color(0x1FFFFFFF)),
+            // filter tabs section
+            SizedBox(
+              height: 30,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  CxFilterChip(
+                    label: 'All',
+                    selected: store.filterLevel == null,
+                    onTap: () => ref
+                        .read(reportsStoreProvider.notifier)
+                        .setFilterLevel(null),
+                  ),
+                  const SizedBox(width: 6),
+                  for (final level in LogLevel.values) ...[
+                    CxFilterChip(
+                      label: level.name.toUpperCase(),
+                      selected: store.filterLevel == level,
+                      onTap: () => ref
+                          .read(reportsStoreProvider.notifier)
+                          .setFilterLevel(level),
+                    ),
+                    const SizedBox(width: 6),
+                  ],
+                ],
+              ),
+            ),
             // log list section
             Expanded(
               child: records.isEmpty

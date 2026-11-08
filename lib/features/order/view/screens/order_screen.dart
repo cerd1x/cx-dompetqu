@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/dompet_gradient_background.dart';
+import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
@@ -81,7 +81,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
     if (widget.embedded) return content;
 
     return Scaffold(
-      body: DompetGradientBackground(child: SafeArea(child: content)),
+      body: CxGradientBackground(child: SafeArea(child: content)),
     );
   }
 

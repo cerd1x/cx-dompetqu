@@ -8,58 +8,59 @@ part of '../reports_repository_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Provider untuk data source mock laporan.
+/// Provider untuk data source laporan berbasis ObjectBox.
 
-@ProviderFor(reportsMockDataSource)
-final reportsMockDataSourceProvider = ReportsMockDataSourceProvider._();
+@ProviderFor(reportsObjectboxDataSource)
+final reportsObjectboxDataSourceProvider =
+    ReportsObjectboxDataSourceProvider._();
 
-/// Provider untuk data source mock laporan.
+/// Provider untuk data source laporan berbasis ObjectBox.
 
-final class ReportsMockDataSourceProvider
+final class ReportsObjectboxDataSourceProvider
     extends
         $FunctionalProvider<
-          ReportsMockDataSource,
-          ReportsMockDataSource,
-          ReportsMockDataSource
+          ReportsObjectboxDataSource,
+          ReportsObjectboxDataSource,
+          ReportsObjectboxDataSource
         >
-    with $Provider<ReportsMockDataSource> {
-  /// Provider untuk data source mock laporan.
-  ReportsMockDataSourceProvider._()
+    with $Provider<ReportsObjectboxDataSource> {
+  /// Provider untuk data source laporan berbasis ObjectBox.
+  ReportsObjectboxDataSourceProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'reportsMockDataSourceProvider',
+        name: r'reportsObjectboxDataSourceProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$reportsMockDataSourceHash();
+  String debugGetCreateSourceHash() => _$reportsObjectboxDataSourceHash();
 
   @$internal
   @override
-  $ProviderElement<ReportsMockDataSource> $createElement(
+  $ProviderElement<ReportsObjectboxDataSource> $createElement(
     $ProviderPointer pointer,
   ) => $ProviderElement(pointer);
 
   @override
-  ReportsMockDataSource create(Ref ref) {
-    return reportsMockDataSource(ref);
+  ReportsObjectboxDataSource create(Ref ref) {
+    return reportsObjectboxDataSource(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ReportsMockDataSource value) {
+  Override overrideWithValue(ReportsObjectboxDataSource value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<ReportsMockDataSource>(value),
+      providerOverride: $SyncValueProvider<ReportsObjectboxDataSource>(value),
     );
   }
 }
 
-String _$reportsMockDataSourceHash() =>
-    r'9b69cf315ab649438714d1e1eac2d2aa33341285';
+String _$reportsObjectboxDataSourceHash() =>
+    r'94763e28dad983acbdda158902df490efa32d460';
 
 /// Provider untuk repository laporan (port).
 
@@ -111,4 +112,4 @@ final class ReportsRepositoryProvider
   }
 }
 
-String _$reportsRepositoryHash() => r'7b1ccd649d329ea297840699ef334626642d6a83';
+String _$reportsRepositoryHash() => r'b0c0682a5f692be865caec02d6fa8c96a2cc5fbd';

@@ -29,7 +29,7 @@ class ReportsState {
     if (q.isEmpty) return all;
     return all.where((r) {
       return r.line.toLowerCase().contains(q) ||
-          r.tag.toLowerCase().contains(q);
+          (r.tag?.toLowerCase().contains(q) ?? false);
     }).toList();
   }
 

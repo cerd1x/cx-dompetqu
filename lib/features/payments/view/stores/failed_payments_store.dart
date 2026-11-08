@@ -16,15 +16,26 @@ part 'generated/failed_payments_store.g.dart';
 Future<List<Payment>> failedPayments(Ref ref, DateTime month) async {
   final log = AppLogger.instance;
   final repository = ref.watch(paymentsRepositoryProvider);
-  final payments = await repository.byStatus('failed');
+  try {
+    final payments = await repository.byStatus('failed');
 
-  final start = DateTime(month.year, month.month);
-  final end = DateTime(month.year, month.month + 1);
-  final items = payments
-      .where((p) => !p.createdAt.isBefore(start) && p.createdAt.isBefore(end))
-      .toList()
-    ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    final start = DateTime(month.year, month.month);
+    final end = DateTime(month.year, month.month + 1);
+    final items =
+        payments
+            .where(
+              (p) => !p.createdAt.isBefore(start) && p.createdAt.isBefore(end),
+            )
+            .toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-  log.success('payment failed dimuat (${items.length})', tag: 'PaymentsStore');
-  return items;
+    log.success(
+      'payment failed dimuat (${items.length})',
+      tag: 'PaymentsStore',
+    );
+    return items;
+  } catch (e) {
+    log.error('Gagal load payment failed', tag: 'PaymentsStore', error: e);
+    rethrow;
+  }
 }

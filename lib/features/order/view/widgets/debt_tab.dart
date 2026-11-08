@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/cs_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
@@ -297,6 +298,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
       ref.invalidate(transactionsStoreProvider);
       _toast('Debt settled');
     } catch (e) {
+      AppLogger.instance.error('Gagal settle debt', tag: 'DebtTab', error: e);
       if (mounted) _toast(e is Exception ? '$e' : '$e');
     } finally {
       if (mounted) setState(() => _busy.remove(debt.tx.id));
@@ -339,7 +341,12 @@ class _DebtTabState extends ConsumerState<DebtTab> {
           await ref
               .read(debtSettlementsProvider.notifier)
               .markSettled(debt.tx.id);
-        } catch (_) {
+        } catch (e) {
+          AppLogger.instance.error(
+            'Gagal settle debt bulk',
+            tag: 'DebtTab',
+            error: e,
+          );
           failed.add(debt);
         }
       }

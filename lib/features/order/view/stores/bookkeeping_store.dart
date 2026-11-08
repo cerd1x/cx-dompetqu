@@ -1,8 +1,10 @@
-import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
+import 'package:dompetqu/features/order/view/stores/bookkeeping_repository_provider.dart';
+import 'package:dompetqu/features/order/domain/models/bookkeeping_ledger.dart'
+    as domain_bookkeeping;
 
 part 'generated/bookkeeping_store.g.dart';
 
@@ -109,14 +111,36 @@ class BookkeepingState {
     final now = DateTime.now();
     return month.year == now.year && month.month == now.month;
   }
+
+  BookkeepingState copyWith({
+    DateTime? month,
+    BookkeepingFilter? filter,
+    List<Transaction>? items,
+    double? income,
+    double? expense,
+    Map<String, double>? balances,
+    List<LedgerEntry>? entries,
+    Map<BookkeepingFilter, int>? counts,
+    bool? loading,
+  }) {
+    return BookkeepingState(
+      month: month ?? this.month,
+      filter: filter ?? this.filter,
+      items: items ?? this.items,
+      income: income ?? this.income,
+      expense: expense ?? this.expense,
+      balances: balances ?? this.balances,
+      entries: entries ?? this.entries,
+      counts: counts ?? this.counts,
+      loading: loading ?? this.loading,
+    );
+  }
 }
 
 /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
 ///
-/// Sumber data tetap `transactionsStoreProvider`; store ini menontonnya supaya
-/// ringkasan ikut segar setelah transaksi ditambah/diubah. Pagination dimatikan
-/// lewat `ensureAllLoaded()` karena ringkasan bulanan butuh transaksi di luar
-/// halaman yang tampil.
+/// Mengambil data dari [bookkeepingRepositoryProvider] secara asinkron
+/// daripada mengkomputi dari `transactionsStoreProvider` secara lokal.
 @Riverpod(keepAlive: true)
 class BookkeepingStore extends _$BookkeepingStore {
   DateTime _month = _startOfMonth(DateTime.now());
@@ -124,18 +148,15 @@ class BookkeepingStore extends _$BookkeepingStore {
 
   @override
   BookkeepingState build() {
-    final transactions = ref.watch(transactionsStoreProvider);
-
-    // Defer ke microtask: `ensureAllLoaded()` mengubah state provider lain,
-    // sementara `build()` masih berjalan (riverpod 3). Aman dipanggil tiap
-    // build — `ensureAllLoaded()` no-op ketika daftar sudah dimuat penuh
-    // (mis. setelah layar lain mengaktifkan lagi mode pagination).
+    // Initial state: loading tanpa data. _refresh() dipanggil dari initDidChange
+    // atau user interaksi (pindah bulan/filter).
+    // Defer ke microtask untuk load data pertama kali.
     Future.microtask(() {
-      if (!ref.mounted) return;
-      ref.read(transactionsStoreProvider.notifier).ensureAllLoaded();
+      if (ref.mounted) {
+        _loadLedger();
+      }
     });
-
-    return _derive(transactions.items, loading: transactions.loading);
+    return BookkeepingState(month: _month, filter: _filter, loading: true);
   }
 
   /// Geser bulan yang dilihat sebesar [delta] bulan (-1 mundur, +1 maju).
@@ -157,98 +178,121 @@ class BookkeepingStore extends _$BookkeepingStore {
     _refresh();
   }
 
-  /// Hitung ulang data turunan dari state transaksi terkini (tanpa menunggu
-  /// `build()` dijalankan ulang).
+  /// Muat ulang data dari server sesuai bulan & filter aktif.
   void _refresh() {
     if (!ref.mounted) return;
-    final transactions = ref.read(transactionsStoreProvider);
-    state = _derive(transactions.items, loading: transactions.loading);
+    _loadLedger();
   }
 
-  BookkeepingState _derive(List<Transaction> all, {required bool loading}) {
-    final items = _monthItems(all);
-    final counts = _computeCounts(all);
-    var income = 0.0;
-    var expense = 0.0;
-    for (final tx in items) {
-      final amount = tx.amountValue;
-      if (tx.type == 'income') income += amount;
-      if (tx.type == 'expense') expense += amount;
-    }
-
-    final balances = <String, double>{};
-    var running = 0.0;
-    for (final tx in items.reversed) {
-      running += switch (tx.type) {
-        'income' => tx.amountValue,
-        'expense' => -tx.amountValue,
-        _ => 0.0,
-      };
-      balances[tx.id] = running;
-    }
-
-    final groups = <String, List<Transaction>>{};
-    for (final tx in items) {
-      (groups[DateFormat('yyyy-MM-dd').format(tx.createdAt)] ??= []).add(tx);
-    }
-
-    final entries = <LedgerEntry>[];
-    groups.forEach((_, list) {
-      entries
-        ..add(LedgerDayHeader(date: list.first.createdAt, count: list.length))
-        ..addAll(list.map(LedgerTransactionRow.new));
-    });
-
-    return BookkeepingState(
-      month: _month,
-      filter: _filter,
-      items: items,
-      income: income,
-      expense: expense,
-      balances: balances,
-      entries: entries,
-      loading: loading,
-      counts: counts,
-    );
-  }
-
-  /// Hitung jumlah transaksi per filter untuk bulan [_month].
-  Map<BookkeepingFilter, int> _computeCounts(List<Transaction> all) {
-    final map = <BookkeepingFilter, int>{};
-    for (final f in BookkeepingFilter.values) {
-      if (f == BookkeepingFilter.failed) {
-        map[f] = 0;
-        continue;
+  Future<void> _loadLedger() async {
+    if (!ref.mounted) return;
+    final repo = ref.read(bookkeepingRepositoryProvider);
+    state = state.copyWith(loading: true);
+    try {
+      // Map store filter to domain filter (skip 'failed' as it uses separate API)
+      if (_filter == BookkeepingFilter.failed) {
+        state = state.copyWith(loading: false);
+        return;
       }
-      final type = f.transactionType;
-      int c = 0;
-      for (final tx in all) {
-        if (tx.createdAt.year != _month.year ||
-            tx.createdAt.month != _month.month) {
-          continue;
+      final domainFilter = _mapToDomainFilter(_filter);
+      final ledger = await repo.getLedger(
+        month: _formatMonth(_month),
+        filter: domainFilter,
+        timezoneOffsetMinutes: 420, // WIB default
+      );
+
+      // Extract all transactions from day groups
+      final allTx = <Transaction>[];
+      for (final group in ledger.groups) {
+        for (final entry in group.entries) {
+          allTx.add(entry.transaction);
         }
-        if (type == null || tx.type == type) c++;
       }
-      map[f] = c;
+
+      // Compute balances from running balance in entries
+      final balances = <String, double>{};
+      for (final group in ledger.groups) {
+        for (final entry in group.entries) {
+          balances[entry.transaction.id] = _parseMoneyAmount(
+            entry.runningBalance,
+          );
+        }
+      }
+
+      // Flatten entries into LedgerEntry list
+      final entries = <LedgerEntry>[];
+      for (final group in ledger.groups) {
+        entries.add(
+          LedgerDayHeader(
+            date: DateTime.parse(group.date),
+            count: group.transactionCount,
+          ),
+        );
+        for (final entry in group.entries) {
+          entries.add(LedgerTransactionRow(entry.transaction));
+        }
+      }
+
+      // Parse summaries to get income/expense totals
+      double totalIncome = 0;
+      double totalExpense = 0;
+      for (final summary in ledger.summaries) {
+        totalIncome += _parseMoneyAmount(summary.income);
+        totalExpense += _parseMoneyAmount(summary.expense);
+      }
+
+      state = state.copyWith(
+        month: _month,
+        filter: _filter,
+        items: allTx,
+        income: totalIncome,
+        expense: totalExpense,
+        balances: balances,
+        entries: entries,
+        loading: false,
+      );
+    } catch (e) {
+      if (!ref.mounted) return;
+      AppLogger.instance.error(
+        'Gagal load ledger',
+        tag: 'BookkeepingStore',
+        error: e,
+      );
+      state = state.copyWith(loading: false);
     }
-    return map;
   }
 
-  /// Transaksi pada bulan terpilih, terbaru dulu, sesuai filter aktif.
-  List<Transaction> _monthItems(List<Transaction> all) {
-    final type = _filter.transactionType;
-    final filtered = all.where((tx) {
-      if (tx.createdAt.year != _month.year ||
-          tx.createdAt.month != _month.month) {
-        return false;
+  /// Parse Money string "IDR 15000" → 15000.0
+  double _parseMoneyAmount(String money) {
+    final parts = money.split(' ');
+    if (parts.length >= 2) {
+      try {
+        return double.tryParse(parts.sublist(1).join(' ')) ?? 0.0;
+      } catch (_) {
+        return 0.0;
       }
-      // Tab Failed memakai Payment dari backend (`paymentsByStatus`), jadi
-      // tidak ada transaksi lokal yang cocok.
-      if (_filter == BookkeepingFilter.failed) return false;
-      return type == null || tx.type == type;
-    }).toList();
-    filtered.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    return filtered;
+    }
+    return 0.0;
+  }
+
+  /// Format DateTime to YYYY-MM string for API
+  String _formatMonth(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}';
+  }
+
+  /// Map store-level BookkeepingFilter to domain-level BookkeepingFilter.
+  /// Store has 'failed' which uses separate API; map others to domain enum.
+  domain_bookkeeping.BookkeepingFilter _mapToDomainFilter(
+    BookkeepingFilter filter,
+  ) {
+    return switch (filter) {
+      BookkeepingFilter.all => domain_bookkeeping.BookkeepingFilter.all,
+      BookkeepingFilter.income => domain_bookkeeping.BookkeepingFilter.income,
+      BookkeepingFilter.expense => domain_bookkeeping.BookkeepingFilter.expense,
+      BookkeepingFilter.transfer =>
+        domain_bookkeeping.BookkeepingFilter.transfer,
+      BookkeepingFilter.failed => domain_bookkeeping.BookkeepingFilter.all,
+    };
   }
 
   static DateTime _startOfMonth(DateTime date) =>

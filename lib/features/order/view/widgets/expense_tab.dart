@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:dompetqu/core/logger/app_logger.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_button.dart';
 import 'package:dompetqu/core/theme/widgets/dompet_text_field.dart';
@@ -64,6 +65,11 @@ class _ExpenseTabState extends ConsumerState<ExpenseTab> {
         setState(() => _error = 'Gagal membuat transaksi');
       }
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal submit expense',
+        tag: 'ExpenseTab',
+        error: e,
+      );
       if (mounted) setState(() => _error = e is Exception ? '$e' : '$e');
     } finally {
       if (mounted) setState(() => _busy = false);

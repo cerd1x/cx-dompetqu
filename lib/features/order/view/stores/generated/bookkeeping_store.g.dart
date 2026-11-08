@@ -10,28 +10,22 @@ part of '../bookkeeping_store.dart';
 // ignore_for_file: type=lint, type=warning
 /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
 ///
-/// Sumber data tetap `transactionsStoreProvider`; store ini menontonnya supaya
-/// ringkasan ikut segar setelah transaksi ditambah/diubah. Pagination dimatikan
-/// lewat `ensureAllLoaded()` karena ringkasan bulanan butuh transaksi di luar
-/// halaman yang tampil.
+/// Mengambil data dari [bookkeepingRepositoryProvider] secara asinkron
+/// daripada mengkomputi dari `transactionsStoreProvider` secara lokal.
 
 @ProviderFor(BookkeepingStore)
 final bookkeepingStoreProvider = BookkeepingStoreProvider._();
 
 /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
 ///
-/// Sumber data tetap `transactionsStoreProvider`; store ini menontonnya supaya
-/// ringkasan ikut segar setelah transaksi ditambah/diubah. Pagination dimatikan
-/// lewat `ensureAllLoaded()` karena ringkasan bulanan butuh transaksi di luar
-/// halaman yang tampil.
+/// Mengambil data dari [bookkeepingRepositoryProvider] secara asinkron
+/// daripada mengkomputi dari `transactionsStoreProvider` secara lokal.
 final class BookkeepingStoreProvider
     extends $NotifierProvider<BookkeepingStore, BookkeepingState> {
   /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
   ///
-  /// Sumber data tetap `transactionsStoreProvider`; store ini menontonnya supaya
-  /// ringkasan ikut segar setelah transaksi ditambah/diubah. Pagination dimatikan
-  /// lewat `ensureAllLoaded()` karena ringkasan bulanan butuh transaksi di luar
-  /// halaman yang tampil.
+  /// Mengambil data dari [bookkeepingRepositoryProvider] secara asinkron
+  /// daripada mengkomputi dari `transactionsStoreProvider` secara lokal.
   BookkeepingStoreProvider._()
     : super(
         from: null,
@@ -59,14 +53,12 @@ final class BookkeepingStoreProvider
   }
 }
 
-String _$bookkeepingStoreHash() => r'9763f5dd7f14974cc7e65ce03924be25a6c361bb';
+String _$bookkeepingStoreHash() => r'deedb8d3ec2d51a4f46a70ee5baa7f10b65ac5a7';
 
 /// Store tab Bookkeeping — bulan/filter aktif + data turunan buku besar.
 ///
-/// Sumber data tetap `transactionsStoreProvider`; store ini menontonnya supaya
-/// ringkasan ikut segar setelah transaksi ditambah/diubah. Pagination dimatikan
-/// lewat `ensureAllLoaded()` karena ringkasan bulanan butuh transaksi di luar
-/// halaman yang tampil.
+/// Mengambil data dari [bookkeepingRepositoryProvider] secara asinkron
+/// daripada mengkomputi dari `transactionsStoreProvider` secara lokal.
 
 abstract class _$BookkeepingStore extends $Notifier<BookkeepingState> {
   BookkeepingState build();

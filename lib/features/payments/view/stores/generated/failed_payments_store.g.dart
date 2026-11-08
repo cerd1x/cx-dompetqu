@@ -83,7 +83,7 @@ final class FailedPaymentsProvider
   }
 }
 
-String _$failedPaymentsHash() => r'f98492b9bb2b415954996edad71c6cd12f879499';
+String _$failedPaymentsHash() => r'd833727e37d7bf8a2708e7c278e907a4999453b0';
 
 /// Payment berstatus `failed` pada [month] — query langsung ke backend
 /// (`paymentsByStatus(status: failed)`), bukan filter transaksi lokal.

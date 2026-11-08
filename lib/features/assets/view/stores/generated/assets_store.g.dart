@@ -41,7 +41,7 @@ final class AssetsStoreProvider
   }
 }
 
-String _$assetsStoreHash() => r'eaab79797d73490e29f32bd97e64cfa466ec74ab';
+String _$assetsStoreHash() => r'393d6e43168f4e2ead05d66566bf734f5a6f72a7';
 
 abstract class _$AssetsStore extends $Notifier<AssetsState> {
   AssetsState build();

@@ -112,6 +112,11 @@ class AssetsStore extends _$AssetsStore {
       state = state.copyWith(items: [created, ...state.items]);
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal create asset',
+        tag: 'AssetsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -133,6 +138,11 @@ class AssetsStore extends _$AssetsStore {
       );
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal update asset',
+        tag: 'AssetsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -148,6 +158,11 @@ class AssetsStore extends _$AssetsStore {
       }
       return ok;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal hapus asset',
+        tag: 'AssetsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -164,6 +179,11 @@ class AssetsStore extends _$AssetsStore {
       );
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal add balance asset',
+        tag: 'AssetsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -191,6 +211,11 @@ class AssetsStore extends _$AssetsStore {
       ref.invalidate(transactionsStoreProvider);
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal swap balance asset',
+        tag: 'AssetsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }

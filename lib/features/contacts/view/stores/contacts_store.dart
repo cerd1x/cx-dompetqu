@@ -373,6 +373,11 @@ class ContactsStore extends _$ContactsStore {
       state = state.copyWith(items: [created, ...state.items]);
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal buat kontak',
+        tag: 'ContactsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -401,6 +406,11 @@ class ContactsStore extends _$ContactsStore {
       );
       return true;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal update kontak',
+        tag: 'ContactsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }
@@ -429,6 +439,11 @@ class ContactsStore extends _$ContactsStore {
           .read(homeRepositoryProvider)
           .updateContact(primaryId, name: name, email: email, phone: phone);
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal merge update kontak',
+        tag: 'ContactsStore',
+        error: e,
+      );
       return MergeOutcome(MergeStatus.failed, error: _msg(e));
     }
     var removed = false;
@@ -436,7 +451,11 @@ class ContactsStore extends _$ContactsStore {
       removed = await ref
           .read(homeRepositoryProvider)
           .deleteContact(duplicateId);
-    } catch (_) {
+    } catch (e) {
+      AppLogger.instance.warn(
+        'Gagal delete kontak duplikat saat merge',
+        tag: 'ContactsStore',
+      );
       removed = false;
     }
     if (ref.mounted) {
@@ -463,6 +482,11 @@ class ContactsStore extends _$ContactsStore {
       }
       return ok;
     } catch (e) {
+      AppLogger.instance.error(
+        'Gagal hapus kontak',
+        tag: 'ContactsStore',
+        error: e,
+      );
       if (ref.mounted) state = state.copyWith(error: _msg(e));
       return false;
     }

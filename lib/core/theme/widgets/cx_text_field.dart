@@ -226,20 +226,26 @@ class _CxTextFieldState extends State<CxTextField> {
       ),
     );
 
+    Widget content = frosted;
     final label = widget.label;
-    if (label == null) return frosted;
+    if (label != null) {
+      content = Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: widget.enabled ? () => _focusNode.requestFocus() : null,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(label, style: _labelTextStyle),
+            ),
+          ),
+          const SizedBox(height: 8),
+          frosted,
+        ],
+      );
+    }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text(label, style: _labelTextStyle),
-        ),
-        const SizedBox(height: 8),
-        frosted,
-      ],
-    );
+    return content;
   }
 }

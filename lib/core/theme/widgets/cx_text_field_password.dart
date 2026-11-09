@@ -38,7 +38,7 @@ class CxTextFieldPassword extends StatefulWidget {
 }
 
 class _CxTextFieldPasswordState extends State<CxTextFieldPassword> {
-  bool _obscureText = true;
+  bool _obscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +49,14 @@ class _CxTextFieldPasswordState extends State<CxTextFieldPassword> {
       labelStyle: widget.labelStyle,
       leading: const Icon(Icons.lock_outline, color: Colors.white54),
       trailing: IconButton(
-        tooltip: _obscureText ? 'Lihat password' : 'Sembunyikan password',
+        tooltip: _obscure ? 'Lihat password' : 'Sembunyikan password',
         icon: Icon(
-          _obscureText ? Icons.visibility : Icons.visibility_off,
+          _obscure ? Icons.visibility : Icons.visibility_off,
           color: Colors.white54,
         ),
-        onPressed: () {
-          setState(() {
-            _obscureText = !_obscureText;
-          });
-        },
+        onPressed: () => setState(() => _obscure = !_obscure),
       ),
-      obscureText: _obscureText,
+      obscureText: _obscure,
       autocorrect: false,
       enabled: widget.enabled,
       error: widget.error,

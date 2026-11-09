@@ -149,13 +149,6 @@ class _CxTextFieldState extends State<CxTextField> {
     ), // dark:placeholder:text-gray-100/40
   };
 
-  List<BoxShadow>? get _frostShadow {
-    if (!_focused) return null;
-    return [
-      BoxShadow(color: _stateColors.ring, blurRadius: 0, spreadRadius: 2),
-    ];
-  }
-
   TextFieldStyler get _style {
     final decoration =
         switch (widget.variant) {
@@ -181,7 +174,6 @@ class _CxTextFieldState extends State<CxTextField> {
         .padding(_padding)
         .color(Colors.white)
         .hintColor(_hintColor)
-        .cursorColor(DompetBrand.purple)
         .decoration(decoration);
   }
 
@@ -195,27 +187,32 @@ class _CxTextFieldState extends State<CxTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final field = RemixTextField(
-      controller: widget.controller,
-      focusNode: _focusNode,
-      hintText: widget.hintText,
-      semanticLabel: widget.label,
-      leading: widget.leading,
-      trailing: widget.trailing,
-      obscureText: widget.obscureText,
-      autocorrect: widget.autocorrect,
-      enabled: widget.enabled,
-      error: widget.error,
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      onChanged: widget.onChanged,
-      onSubmitted: widget.onSubmitted,
-      style: _style,
+    final field = SizedBox(
+      height: 50,
+      child: RemixTextField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        hintText: widget.hintText,
+        semanticLabel: widget.label,
+        leading: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: widget.leading,
+        ),
+        trailing: widget.trailing,
+        obscureText: widget.obscureText,
+        autocorrect: widget.autocorrect,
+        enabled: widget.enabled,
+        error: widget.error,
+        keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        style: _style,
+      ),
     );
 
     final frosted = CsFrost(
       radius: _radius,
-      shadow: _frostShadow,
       child: MouseRegion(
         cursor: widget.enabled
             ? SystemMouseCursors.text

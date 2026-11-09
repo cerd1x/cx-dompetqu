@@ -54,6 +54,8 @@ class _CxTextFieldPasswordState extends State<CxTextFieldPassword> {
           _obscure ? Icons.visibility : Icons.visibility_off,
           color: Colors.white54,
         ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+        constraints: const BoxConstraints(minHeight: 50),
         onPressed: () => setState(() => _obscure = !_obscure),
       ),
       obscureText: _obscure,

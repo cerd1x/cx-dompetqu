@@ -453,7 +453,7 @@ Jangan hardcode secret; jangan cetak env sensitif.
   `DompetButton`, `DompetCard`, `DompetCombobox<T>`, `DompetAvatar`,
   `DompetBadge`, `DompetTextField`, `DompetGradientBackground`,
   `LoadViewAnimatingProgressRipple`, `ScrollRefreshWrapper`, `RoundActionButton`,
-  `CsGlass`, `CsDialog`, `BalanceInputField`, pickers, `ItemMenu`.
+  `CsGlass`, `CsDialog`, `CxTextFieldBalance`, pickers, `ItemMenu`.
 
 ## Testing
 

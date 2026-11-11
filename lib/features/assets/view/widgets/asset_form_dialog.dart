@@ -9,6 +9,7 @@ import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 const _assetTypes = ['bank', 'ewallet', 'cash', 'crypto', 'loan'];
 const _currencies = ['IDR', 'USD', 'EUR', 'JPY', 'GBP', 'SGD'];
@@ -92,7 +93,7 @@ class _AssetFormDialogState extends ConsumerState<AssetFormDialog> {
             controller: _nameCtrl,
             label: 'Name',
             leading: const Icon(
-              Icons.account_balance_wallet_outlined,
+              CxIcons.accountBalanceWalletOutlined,
               color: Colors.white54,
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Single asset row used in assets list.
 class AssetItem extends StatelessWidget {
@@ -20,11 +21,11 @@ class AssetItem extends StatelessWidget {
   final VoidCallback? onTap;
 
   IconData _iconForType(String type) => switch (type) {
-    'bank' => Icons.account_balance_outlined,
-    'cash' => Icons.attach_money_rounded,
-    'loan' => Icons.account_balance_wallet_outlined,
-    'crypto' => Icons.currency_bitcoin,
-    _ => Icons.wallet_outlined,
+    'bank' => CxIcons.accountBalanceOutlined,
+    'cash' => CxIcons.attachMoneyRounded,
+    'loan' => CxIcons.accountBalanceWalletOutlined,
+    'crypto' => CxIcons.currencyBitcoin,
+    _ => CxIcons.walletOutlined,
   };
 
   @override
@@ -38,7 +39,7 @@ class AssetItem extends StatelessWidget {
         children: [
           // icon section
           CxAvatar(
-            label: _iconForType(asset.type) == Icons.currency_bitcoin
+            label: _iconForType(asset.type) == CxIcons.currencyBitcoin
                 ? '₿'
                 : 'W',
             size: 36,

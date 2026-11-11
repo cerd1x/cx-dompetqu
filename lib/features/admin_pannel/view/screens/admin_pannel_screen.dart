@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar panel admin — diakses lewat route `/admin` (ikon di header Dashboard).
 ///
@@ -70,7 +71,7 @@ class _AdminHeader extends StatelessWidget {
               context.pop();
             }
           },
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white54),
+          icon: const Icon(CxIcons.arrowBackRounded, color: Colors.white54),
         ),
         const SizedBox(width: 4),
         // title section
@@ -93,7 +94,7 @@ class _AdminHeader extends StatelessWidget {
           ),
         ),
         // notification section
-        _GlassIconButton(icon: Icons.notifications_none_rounded, onTap: () {}),
+        _GlassIconButton(icon: CxIcons.notificationsNoneRounded, onTap: () {}),
         const SizedBox(width: 10),
         // avatar section
         const CxAvatar(label: 'A', size: 42),
@@ -222,7 +223,7 @@ class _OverviewCard extends StatelessWidget {
           Row(
             children: [
               const Icon(
-                Icons.account_balance_wallet_rounded,
+                CxIcons.accountBalanceWalletRounded,
                 color: Colors.black87,
                 size: 18,
               ),
@@ -341,19 +342,19 @@ class _StatRow extends StatelessWidget {
       (
         label: 'Pengguna',
         value: '1.248',
-        icon: Icons.people_alt_rounded,
+        icon: CxIcons.peopleAltRounded,
         color: style.primary,
       ),
       (
         label: 'Transaksi',
         value: '8.902',
-        icon: Icons.receipt_long_rounded,
+        icon: CxIcons.receiptLongRounded,
         color: style.secondary,
       ),
       (
         label: 'Produk',
         value: '312',
-        icon: Icons.inventory_2_rounded,
+        icon: CxIcons.inventory2Rounded,
         color: style.tertiary,
       ),
     ];
@@ -524,37 +525,37 @@ class _MenuList extends StatelessWidget {
 
   static final _items = [
     (
-      icon: Icons.people_alt_rounded,
+      icon: CxIcons.peopleAltRounded,
       title: 'Kelola Pengguna',
       subtitle: 'Tambah, edit, nonaktifkan akun',
       route: '/analytics',
     ),
     (
-      icon: Icons.receipt_long_rounded,
+      icon: CxIcons.receiptLongRounded,
       title: 'Transaksi',
       subtitle: 'Monitor dan verifikasi transaksi',
       route: '/orders',
     ),
     (
-      icon: Icons.inventory_2_rounded,
+      icon: CxIcons.inventory2Rounded,
       title: 'Produk & Aset',
       subtitle: 'Inventaris dan kategori',
       route: '/charts',
     ),
     (
-      icon: Icons.bug_report_outlined,
+      icon: CxIcons.bugReportOutlined,
       title: 'Reports',
       subtitle: 'Tinjau log AppLogger dan masukan pengguna',
       route: '/reports',
     ),
     (
-      icon: Icons.power_settings_new_rounded,
+      icon: CxIcons.powerSettingsNewRounded,
       title: 'Kill Switch',
       subtitle: 'Matikan/hidupkan operation GraphQL',
       route: '/admin/killswitch',
     ),
     (
-      icon: Icons.settings_rounded,
+      icon: CxIcons.settingsRounded,
       title: 'Pengaturan',
       subtitle: 'Konfigurasi aplikasi',
       route: '/settings',
@@ -623,7 +624,7 @@ class _MenuItem extends StatelessWidget {
               ),
               // trailing section
               const Icon(
-                Icons.chevron_right_rounded,
+                CxIcons.chevronRightRounded,
                 color: Colors.white38,
                 size: 20,
               ),

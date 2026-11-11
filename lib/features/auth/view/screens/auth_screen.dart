@@ -10,6 +10,7 @@ import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_password.dart';
 import 'package:dompetqu/features/auth/view/stores/auth_providers.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 enum _AuthMode { signIn, signUp }
 
@@ -141,7 +142,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                               ),
                             ]),
                         child: const Icon(
-                          Icons.account_balance_wallet_rounded,
+                          CxIcons.accountBalanceWalletRounded,
                           size: 38,
                           color: Colors.white,
                         ),
@@ -178,7 +179,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         controller: _nameCtrl,
                         label: 'Nama',
                         leading: const Icon(
-                          Icons.person_outline,
+                          CxIcons.personOutline,
                           color: Colors.white54,
                         ),
                         textInputAction: TextInputAction.next,
@@ -193,7 +194,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       controller: _usernameCtrl,
                       label: 'Username',
                       leading: const Icon(
-                        Icons.badge_outlined,
+                        CxIcons.badgeOutlined,
                         color: Colors.white54,
                       ),
                       textInputAction: TextInputAction.next,
@@ -226,7 +227,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       CxButton(
                         label: 'Sign in dengan Passkey',
                         variant: CxButtonVariant.outline,
-                        leadingIcon: Icons.fingerprint,
+                        leadingIcon: CxIcons.fingerprint,
                         onPressed: state.busy ? null : _passkeySignIn,
                         expand: true,
                       ),
@@ -282,7 +283,7 @@ class _ErrorBanner extends StatelessWidget {
           ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, size: 20, color: DompetBrand.pink),
+          const Icon(CxIcons.errorOutline, size: 20, color: DompetBrand.pink),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

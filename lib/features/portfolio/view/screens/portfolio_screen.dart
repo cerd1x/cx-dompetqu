@@ -6,6 +6,7 @@ import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/assets/view/screens/assets_screen.dart';
 import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 class _Holding {
   const _Holding({
@@ -27,10 +28,10 @@ class _Holding {
   final String type;
 
   IconData get icon => switch (type) {
-    'stock' => Icons.show_chart,
-    'crypto' => Icons.currency_bitcoin,
-    'mutual' => Icons.donut_large,
-    _ => Icons.location_city_outlined,
+    'stock' => CxIcons.showChart,
+    'crypto' => CxIcons.currencyBitcoin,
+    'mutual' => CxIcons.donutLarge,
+    _ => CxIcons.locationCityOutlined,
   };
 
   Color get badgeColor => switch (type) {
@@ -436,9 +437,9 @@ class _PortfolioTabBar extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   static const _tabs = [
-    (label: 'Assets', icon: Icons.account_balance_wallet_outlined),
-    (label: 'Investment', icon: Icons.show_chart),
-    (label: 'Business', icon: Icons.business_center_outlined),
+    (label: 'Assets', icon: CxIcons.accountBalanceWalletOutlined),
+    (label: 'Investment', icon: CxIcons.showChart),
+    (label: 'Business', icon: CxIcons.businessCenterOutlined),
   ];
 
   @override
@@ -556,7 +557,7 @@ class _SummaryCard extends StatelessWidget {
           Row(
             children: [
               Icon(
-                isUp ? Icons.trending_up : Icons.trending_down,
+                isUp ? CxIcons.trendingUp : CxIcons.trendingDown,
                 size: 18,
                 color: color,
               ),

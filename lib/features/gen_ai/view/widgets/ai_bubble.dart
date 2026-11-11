@@ -6,6 +6,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Tombol melayang ELIPS untuk asisten AI yang bisa DISERET ke mana saja
 /// di sekitar layar.
@@ -324,7 +325,7 @@ class _AiBubbleState extends State<AiBubble>
                     return Transform.rotate(angle: wiggle, child: child);
                   },
                   child: Icon(
-                    Icons.smart_toy_rounded,
+                    CxIcons.smartToyRounded,
                     size: 26,
                     color: DompetBrand.goldLight,
                     shadows: [

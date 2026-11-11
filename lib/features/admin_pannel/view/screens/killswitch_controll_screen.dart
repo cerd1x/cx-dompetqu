@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar kontrol kill switch — mematikan / menghidupkan root operation GraphQL
 /// tanpa deploy (lihat `domain/killswitch` di cx-services).
@@ -128,7 +129,7 @@ class _KillswitchControllScreenState
               context.go('/admin');
             }
           },
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(CxIcons.arrowBackRounded),
         ),
         title: const Text('Kill Switch'),
         actions: [
@@ -136,7 +137,7 @@ class _KillswitchControllScreenState
           IconButton(
             tooltip: 'Muat ulang',
             onPressed: state.loading ? null : _controller.load,
-            icon: const Icon(Icons.refresh_rounded),
+            icon: const Icon(CxIcons.refreshRounded),
           ),
         ],
       ),
@@ -238,7 +239,7 @@ class _TokenFieldState extends State<_TokenField> {
             Row(
               children: [
                 Icon(
-                  widget.hasToken ? Icons.key_rounded : Icons.key_off_rounded,
+                  widget.hasToken ? CxIcons.keyRounded : CxIcons.keyOffRounded,
                   size: 20,
                   color: widget.hasToken
                       ? const Color(0xFF34D399)
@@ -260,7 +261,7 @@ class _TokenFieldState extends State<_TokenField> {
                     tooltip: 'Hapus token',
                     onPressed: widget.busy ? null : widget.onClear,
                     icon: const Icon(
-                      Icons.logout_rounded,
+                      CxIcons.logoutRounded,
                       size: 18,
                       color: Colors.white54,
                     ),
@@ -285,8 +286,8 @@ class _TokenFieldState extends State<_TokenField> {
                   onPressed: () => setState(() => _obscured = !_obscured),
                   icon: Icon(
                     _obscured
-                        ? Icons.visibility_rounded
-                        : Icons.visibility_off_rounded,
+                        ? CxIcons.visibilityRounded
+                        : CxIcons.visibilityOffRounded,
                     size: 18,
                     color: Colors.white54,
                   ),
@@ -297,7 +298,7 @@ class _TokenFieldState extends State<_TokenField> {
             // save section
             CxButton(
               label: 'Simpan Token',
-              leadingIcon: Icons.save_rounded,
+              leadingIcon: CxIcons.saveRounded,
               height: 40,
               loading: widget.busy,
               onPressed: widget.busy ? null : widget.onSave,
@@ -374,7 +375,7 @@ class _DisableForm extends StatelessWidget {
           // submit section
           CxButton(
             label: 'Matikan Operation',
-            leadingIcon: Icons.power_settings_new_rounded,
+            leadingIcon: CxIcons.powerSettingsNewRounded,
             loading: busy,
             onPressed: onSubmit,
           ),
@@ -427,7 +428,7 @@ class _EntryCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                child: Icon(Icons.block_rounded, size: 18, color: accent),
+                child: Icon(CxIcons.blockRounded, size: 18, color: accent),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -456,7 +457,7 @@ class _EntryCard extends StatelessWidget {
           Row(
             children: [
               const Icon(
-                Icons.schedule_rounded,
+                CxIcons.scheduleRounded,
                 size: 13,
                 color: Colors.white38,
               ),
@@ -470,7 +471,7 @@ class _EntryCard extends StatelessWidget {
               CxButton(
                 label: 'Aktifkan',
                 variant: CxButtonVariant.outline,
-                leadingIcon: Icons.restart_alt_rounded,
+                leadingIcon: CxIcons.restartAltRounded,
                 height: 38,
                 onPressed: busy ? null : onEnable,
               ),
@@ -493,7 +494,7 @@ class _EmptyState extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       child: Column(
         children: const [
-          Icon(Icons.verified_rounded, color: Color(0xFF34D399), size: 36),
+          Icon(CxIcons.verifiedRounded, color: Color(0xFF34D399), size: 36),
           SizedBox(height: 12),
           Text(
             'Semua operation aktif',
@@ -542,7 +543,7 @@ class _ErrorBanner extends StatelessWidget {
       child: Row(
         children: [
           const Icon(
-            Icons.error_outline_rounded,
+            CxIcons.errorOutlineRounded,
             color: Color(0xFFF87171),
             size: 18,
           ),

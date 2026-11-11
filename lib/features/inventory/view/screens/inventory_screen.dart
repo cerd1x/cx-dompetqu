@@ -18,6 +18,7 @@ import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/core/theme/widgets/search_field.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_detail_view.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_item_view.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Padanan `_inventory/InventoryPage.svelte`.
 class InventoryScreen extends ConsumerStatefulWidget {
@@ -106,7 +107,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               const SizedBox(width: 10),
               // add button section
               RoundActionButton(
-                icon: Icons.add,
+                icon: CxIcons.add,
                 label: 'Add Product',
                 onTap: () => _openForm(),
               ),
@@ -351,13 +352,13 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
           CxTextField(
             controller: _nameCtrl,
             label: 'Name',
-            leading: const Icon(Icons.sell_outlined, color: Colors.white54),
+            leading: const Icon(CxIcons.sellOutlined, color: Colors.white54),
           ),
           const SizedBox(height: 12),
           CxTextField(
             controller: _descCtrl,
             label: 'Description',
-            leading: const Icon(Icons.notes_outlined, color: Colors.white54),
+            leading: const Icon(CxIcons.notesOutlined, color: Colors.white54),
           ),
           const SizedBox(height: 12),
           Column(
@@ -392,7 +393,7 @@ class _ProductFormDialogState extends ConsumerState<_ProductFormDialog> {
                   leading: Padding(
                     padding: const .symmetric(horizontal: 8.0),
                     child: const Icon(
-                      Icons.inventory_2_outlined,
+                      CxIcons.inventory2Outlined,
                       color: Colors.white54,
                     ),
                   ),

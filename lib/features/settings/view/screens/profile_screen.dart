@@ -6,6 +6,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Halaman Profile — padanan `src/routes/dompet/settings/profile/+page.svelte`.
 class ProfileScreen extends ConsumerWidget {
@@ -43,7 +44,7 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     IconButton(
                       onPressed: () => context.pop(),
-                      icon: const Icon(Icons.arrow_back_outlined),
+                      icon: const Icon(CxIcons.arrowBackOutlined),
                       color: Colors.white,
                       tooltip: 'back',
                     ),
@@ -80,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
                                 ),
                               ),
                           child: const Icon(
-                            Icons.account_circle_outlined,
+                            CxIcons.accountCircleOutlined,
                             size: 48,
                             color: DompetBrand.purple,
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mix/mix.dart';
 
+import 'package:dompetqu/core/cx_icons.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Tombol autentikasi biometrik (fingerprint / face).
@@ -46,8 +47,8 @@ class _BiometricButtonState extends State<BiometricButton> {
     if (!_isAvailable) return const SizedBox.shrink();
 
     final icon = _availableTypes.contains(BiometricType.face)
-        ? Icons.face_outlined
-        : Icons.fingerprint;
+        ? CxIcons.faceOutlined
+        : CxIcons.fingerprint;
 
     final label = _availableTypes.contains(BiometricType.face)
         ? 'Face ID'

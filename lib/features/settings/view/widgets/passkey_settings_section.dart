@@ -8,6 +8,7 @@ import 'package:dompetqu/features/auth/domain/models/auth_passkey_credential.dar
 import 'package:dompetqu/features/auth/domain/models/auth_failure.dart';
 import 'package:dompetqu/features/auth/domain/usecases/auth_use_cases.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Bagian kelola passkey — padanan `PasskeySettings.svelte` di web.
 class PasskeySettingsSection extends ConsumerStatefulWidget {
@@ -102,7 +103,7 @@ class _PasskeySettingsSectionState
         // header row section
         Row(
           children: [
-            Icon(Icons.fingerprint, size: 20, color: DompetBrand.primary),
+            Icon(CxIcons.fingerprint, size: 20, color: DompetBrand.primary),
             const SizedBox(width: 12),
             const Expanded(
               child: Text(
@@ -143,7 +144,7 @@ class _PasskeySettingsSectionState
             child: Row(
               children: [
                 const Icon(
-                  Icons.fingerprint,
+                  CxIcons.fingerprint,
                   size: 12,
                   color: Color(0xFF4ADE80),
                 ),

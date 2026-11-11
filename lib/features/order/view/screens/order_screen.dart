@@ -13,6 +13,7 @@ import 'package:dompetqu/features/order/view/widgets/debt_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/expense_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/loan_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/sale_tab.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar buat transaksi/order — padanan
 /// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),
@@ -161,7 +162,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
           // back button section
           if (!widget.embedded) ...[
             IconButton(
-              icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+              icon: const Icon(CxIcons.arrowBackRounded, color: Colors.white),
               onPressed: () => context.pop(),
               style: IconButton.styleFrom(
                 backgroundColor: Colors.white.withValues(alpha: 0.06),

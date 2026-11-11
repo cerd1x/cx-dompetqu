@@ -16,6 +16,7 @@ import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Filter tipe transaksi.
 enum _TypeFilter { all, income, expense, transfer }
@@ -231,7 +232,7 @@ class _TransactionListViewState extends ConsumerState<TransactionListView> {
                         turns: menuOpen ? 0.5 : 0,
                         duration: const Duration(milliseconds: 200),
                         child: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
+                          CxIcons.keyboardArrowDownRounded,
                           size: 12,
                           color: Colors.white70,
                         ),

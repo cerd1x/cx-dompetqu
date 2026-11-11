@@ -7,6 +7,7 @@ import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Dialog for creating/updating a contact.
 class ContactFormDialog extends ConsumerStatefulWidget {
@@ -127,7 +128,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
             CxTextField(
               controller: _nameCtrl,
               label: 'Name',
-              leading: const Icon(Icons.person_outline, color: Colors.white54),
+              leading: const Icon(CxIcons.personOutline, color: Colors.white54),
             ),
             const SizedBox(height: 12),
             // email field section
@@ -135,7 +136,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
               controller: _emailCtrl,
               label: 'Email',
               keyboardType: TextInputType.emailAddress,
-              leading: const Icon(Icons.email_outlined, color: Colors.white54),
+              leading: const Icon(CxIcons.emailOutlined, color: Colors.white54),
             ),
             const SizedBox(height: 12),
             // phone fields section — mendukung multiple nomor
@@ -153,7 +154,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
                       label: i == 0 ? 'Phone (Mobile)' : 'Phone ${i + 1}',
                       keyboardType: TextInputType.phone,
                       leading: const Icon(
-                        Icons.phone_outlined,
+                        CxIcons.phoneOutlined,
                         color: Colors.white54,
                       ),
                     ),
@@ -161,7 +162,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
                   if (_phoneCtrls.length > 1)
                     IconButton(
                       onPressed: () => _removePhone(i),
-                      icon: const Icon(Icons.remove_circle_outline),
+                      icon: const Icon(CxIcons.removeCircleOutline),
                       color: DompetBrand.pink,
                     ),
                 ],
@@ -173,7 +174,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
               alignment: Alignment.centerLeft,
               child: TextButton.icon(
                 onPressed: _addPhone,
-                icon: const Icon(Icons.add_circle_outline, size: 18),
+                icon: const Icon(CxIcons.addCircleOutline, size: 18),
                 label: const Text('Add phone number'),
               ),
             ),
@@ -182,7 +183,7 @@ class ContactFormDialogState extends ConsumerState<ContactFormDialog> {
             CxTextField(
               controller: _groupCtrl,
               label: 'Group',
-              leading: const Icon(Icons.group_outlined, color: Colors.white54),
+              leading: const Icon(CxIcons.groupOutlined, color: Colors.white54),
             ),
           ],
         ),

@@ -6,6 +6,7 @@ import 'package:dompetqu/features/gen_ai/view/stores/ai_store.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_message.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Bottom sheet percakapan dengan asisten AI — dipanggil dari [AiBubble].
 class AiChatSheet extends StatelessWidget {
@@ -64,7 +65,7 @@ class _AiChatConversationState extends ConsumerState<AiChatConversation> {
             padding: const EdgeInsets.fromLTRB(16, 14, 8, 10),
             child: Row(
               children: [
-                const Icon(Icons.auto_awesome, color: DompetBrand.primary),
+                const Icon(CxIcons.autoAwesome, color: DompetBrand.primary),
                 const SizedBox(width: 10),
                 const Expanded(
                   child: Text(
@@ -77,7 +78,7 @@ class _AiChatConversationState extends ConsumerState<AiChatConversation> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white38),
+                  icon: const Icon(CxIcons.close, color: Colors.white38),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
@@ -122,7 +123,7 @@ class _AiChatConversationState extends ConsumerState<AiChatConversation> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.auto_awesome_outlined,
+              CxIcons.autoAwesomeOutlined,
               size: 36,
               color: Colors.white.withValues(alpha: 0.15),
             ),
@@ -217,7 +218,7 @@ class _AiChatConversationState extends ConsumerState<AiChatConversation> {
                         ),
                       )
                     : const Icon(
-                        Icons.send_rounded,
+                        CxIcons.sendRounded,
                         color: DompetBrand.onPrimary,
                       ),
               ),
@@ -345,7 +346,7 @@ class _TypingBubbleState extends State<_TypingBubble>
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.auto_awesome, size: 14, color: DompetBrand.primary),
+              Icon(CxIcons.autoAwesome, size: 14, color: DompetBrand.primary),
               SizedBox(width: 8),
               Text(
                 'mengetik…',

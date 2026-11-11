@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar pengaturan app lock — pilih kredensial (PIN/pola) & set biometrik.
 class AppLockSetupScreen extends ConsumerStatefulWidget {
@@ -189,7 +190,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Row(
         children: [
-          const Icon(Icons.shield_outlined, size: 20, color: Colors.green),
+          const Icon(CxIcons.shieldOutlined, size: 20, color: Colors.green),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -217,10 +218,10 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
 
   Widget _buildMethodSelector(LockCredential? credential) {
     final methods = [
-      (LockCredential.pin, Icons.pin_outlined, 'PIN', '6 digit numerik'),
+      (LockCredential.pin, CxIcons.pinOutlined, 'PIN', '6 digit numerik'),
       (
         LockCredential.pattern,
-        Icons.grid_3x3_outlined,
+        CxIcons.grid3x3Outlined,
         'Pola',
         'Gambarkan pola 3x3',
       ),
@@ -318,7 +319,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
                   ),
                   if (isSelected)
                     const Icon(
-                      Icons.check_circle,
+                      CxIcons.checkCircle,
                       size: 20,
                       color: DompetBrand.purple,
                     ),
@@ -387,7 +388,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
-          const Icon(Icons.fingerprint, size: 20, color: DompetBrand.purple),
+          const Icon(CxIcons.fingerprint, size: 20, color: DompetBrand.purple),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -553,7 +554,7 @@ class _Header extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_outlined),
+            icon: const Icon(CxIcons.arrowBackOutlined),
             color: Colors.white,
             tooltip: 'back',
           ),

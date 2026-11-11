@@ -15,6 +15,7 @@ import 'contacts_header.dart';
 import 'contact_item.dart';
 import 'contact_form.dart';
 import 'duplicate_contacts_investigation_dialog.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Padanan `_contacts/ContactPage.svelte`.
 class ContactsScreen extends ConsumerStatefulWidget {
@@ -107,7 +108,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
 
   List<ItemMenuAction> _menuActions(Contact contact) => [
     ItemMenuAction(
-      icon: Icons.edit_outlined,
+      icon: CxIcons.editOutlined,
       label: 'Edit',
       onTap: () {
         showDialog<void>(
@@ -117,12 +118,12 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
       },
     ),
     ItemMenuAction(
-      icon: Icons.merge_type,
+      icon: CxIcons.mergeType,
       label: 'Merge',
       onTap: () => context.push('/contact-merge/${contact.id}'),
     ),
     ItemMenuAction(
-      icon: Icons.delete_outline,
+      icon: CxIcons.deleteOutline,
       label: 'Delete',
       onTap: () {
         showDialog<void>(
@@ -184,12 +185,12 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
                 ),
                 // add button section
                 RoundActionButton(
-                  icon: Icons.person_add_alt_1,
+                  icon: CxIcons.personAddAlt1,
                   label: 'Add Contact',
                   onTap: () => _openForm(),
                 ),
                 RoundActionButton(
-                  icon: Icons.merge,
+                  icon: CxIcons.merge,
                   label: 'Merge Contact',
                   onTap: () => _openForm(),
                 ),
@@ -249,7 +250,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
                 height: 16,
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
-            : const Icon(Icons.expand_more, size: 18),
+            : const Icon(CxIcons.expandMore, size: 18),
         label: Text(state.loadingMore ? 'Memuat...' : 'Muat lebih banyak'),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.white,

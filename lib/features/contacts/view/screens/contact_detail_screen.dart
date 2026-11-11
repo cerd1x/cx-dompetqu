@@ -13,6 +13,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Full screen detail kontak — route `/contact-detail/:id`.
 ///
@@ -144,37 +145,37 @@ class ContactDetailScreen extends ConsumerWidget {
               // phone numbers section
               if (phones.isNotEmpty) ...[
                 _SectionTitle(
-                  icon: Icons.phone_outlined,
+                  icon: CxIcons.phoneOutlined,
                   label: 'Phone Numbers',
                 ),
                 const SizedBox(height: 8),
                 for (final p in phones)
-                  _InfoRow(icon: Icons.phone_iphone, text: p),
+                  _InfoRow(icon: CxIcons.phoneIphone, text: p),
               ],
               if (contact.email != null) ...[
                 const SizedBox(height: 12),
-                _SectionTitle(icon: Icons.email_outlined, label: 'Email'),
+                _SectionTitle(icon: CxIcons.emailOutlined, label: 'Email'),
                 const SizedBox(height: 8),
-                _InfoRow(icon: Icons.email_outlined, text: contact.email!),
+                _InfoRow(icon: CxIcons.emailOutlined, text: contact.email!),
               ],
               if (contact.group != null) ...[
                 const SizedBox(height: 12),
-                _SectionTitle(icon: Icons.group_outlined, label: 'Group'),
+                _SectionTitle(icon: CxIcons.groupOutlined, label: 'Group'),
                 const SizedBox(height: 8),
-                _InfoRow(icon: Icons.group_outlined, text: contact.group!),
+                _InfoRow(icon: CxIcons.groupOutlined, text: contact.group!),
               ],
               const SizedBox(height: 12),
-              _SectionTitle(icon: Icons.info_outline, label: 'Info'),
+              _SectionTitle(icon: CxIcons.infoOutline, label: 'Info'),
               const SizedBox(height: 8),
               if (contact.createdAt != null)
                 _InfoRow(
-                  icon: Icons.calendar_today_outlined,
+                  icon: CxIcons.calendarTodayOutlined,
                   text:
                       'Dibuat ${DateFormat('d MMMM yyyy').format(contact.createdAt!)}',
                 ),
               if (contact.updatedAt != null)
                 _InfoRow(
-                  icon: Icons.update_outlined,
+                  icon: CxIcons.updateOutlined,
                   text:
                       'Diubah ${DateFormat('d MMMM yyyy').format(contact.updatedAt!)}',
                 ),
@@ -190,22 +191,22 @@ class ContactDetailScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               RoundActionButton(
-                icon: Icons.edit_outlined,
+                icon: CxIcons.editOutlined,
                 label: 'Edit',
                 onTap: openEdit,
               ),
               RoundActionButton(
-                icon: Icons.merge_type,
+                icon: CxIcons.mergeType,
                 label: 'Merge',
                 onTap: openMerge,
               ),
               RoundActionButton(
-                icon: Icons.delete_outline,
+                icon: CxIcons.deleteOutline,
                 label: 'Delete',
                 onTap: confirmDelete,
               ),
               RoundActionButton(
-                icon: Icons.arrow_back,
+                icon: CxIcons.arrowBack,
                 label: 'Back',
                 onTap: () => context.pop(),
               ),

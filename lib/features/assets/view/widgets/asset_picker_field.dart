@@ -7,6 +7,7 @@ import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Picker aset dari [assetsStoreProvider] — padanan `AssetPicker.svelte`.
 class AssetPickerField extends ConsumerWidget {
@@ -40,7 +41,7 @@ class AssetPickerField extends ConsumerWidget {
     return FieldTile(
       label: title,
       value: selected?.name ?? 'Belum dipilih',
-      leading: Icons.account_balance_wallet_outlined,
+      leading: CxIcons.accountBalanceWalletOutlined,
       onTap: () async {
         final picked = await showCxModalTopBar<String>(
           context: context,
@@ -114,7 +115,7 @@ class FieldTile extends StatelessWidget {
                   ),
                 ),
                 const Icon(
-                  Icons.chevron_right_rounded,
+                  CxIcons.chevronRightRounded,
                   size: 18,
                   color: Colors.white38,
                 ),
@@ -247,8 +248,8 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                           return ListTile(
                             leading: Icon(
                               insufficient
-                                  ? Icons.error_outline
-                                  : Icons.account_balance_wallet_outlined,
+                                  ? CxIcons.errorOutline
+                                  : CxIcons.accountBalanceWalletOutlined,
                               color: insufficient
                                   ? DompetBrand.pink.withValues(alpha: 0.9)
                                   : Colors.white70,
@@ -282,7 +283,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                                 if (insufficient) ...[
                                   const SizedBox(width: 8),
                                   Icon(
-                                    Icons.error_outline,
+                                    CxIcons.errorOutline,
                                     size: 18,
                                     color: DompetBrand.pink.withValues(
                                       alpha: 0.9,
@@ -291,7 +292,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                                 ] else if (selected) ...[
                                   const SizedBox(width: 8),
                                   const Icon(
-                                    Icons.check,
+                                    CxIcons.check,
                                     color: Color(0xFF34D399),
                                   ),
                                 ],
@@ -333,7 +334,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                       borderSide: BorderSide.none,
                     ),
                     prefixIcon: const Icon(
-                      Icons.search,
+                      CxIcons.search,
                       size: 18,
                       color: Colors.white38,
                     ),
@@ -359,7 +360,7 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                             ),
                           )
                         : const Icon(
-                            Icons.refresh_rounded,
+                            CxIcons.refreshRounded,
                             size: 20,
                             color: Colors.white70,
                           ),

@@ -9,6 +9,7 @@ import 'package:dompetqu/core/logger/log_record.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
 import 'package:dompetqu/features/reports/view/stores/reports_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar laporan: menampilkan hasil dari [AppLogger] (log yang tertangkap),
 /// menyalinnya, dan menyimpan laporan ke backend/database via store.
@@ -116,7 +117,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       Expanded(
                         child: CxButton(
                           label: 'Kirim Laporan',
-                          leadingIcon: Icons.send_rounded,
+                          leadingIcon: CxIcons.sendRounded,
                           loading: store.submitting,
                           onPressed: store.submitting ? null : _send,
                         ),
@@ -126,7 +127,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                         child: CxButton(
                           label: 'Salin Log',
                           variant: CxButtonVariant.outline,
-                          leadingIcon: Icons.copy_rounded,
+                          leadingIcon: CxIcons.copyRounded,
                           onPressed: _copy,
                         ),
                       ),
@@ -144,7 +145,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                     const SizedBox(height: 8),
                     CxButton(
                       label: 'Kirim ${_selectedIndexes.length} Log Terpilih',
-                      leadingIcon: Icons.send_rounded,
+                      leadingIcon: CxIcons.sendRounded,
                       onPressed: _sendSelected,
                     ),
                   ],
@@ -316,7 +317,7 @@ class _LogTile extends StatelessWidget {
                 child: const Padding(
                   padding: EdgeInsets.all(4),
                   child: Icon(
-                    Icons.copy_rounded,
+                    CxIcons.copyRounded,
                     size: 14,
                     color: Colors.white38,
                   ),

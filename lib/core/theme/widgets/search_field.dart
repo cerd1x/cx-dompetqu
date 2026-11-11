@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/theme/cs_mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Input pencarian — padanan search bar sticky di halaman Contacts/Inventory/Assets.
 class SearchField extends StatelessWidget {
@@ -32,7 +33,7 @@ class SearchField extends StatelessWidget {
           isDense: true,
           filled: true,
           fillColor: Colors.white.withValues(alpha: 0.05),
-          prefixIcon: const Icon(Icons.search, size: 20, color: Colors.grey),
+          prefixIcon: const Icon(CxIcons.search, size: 20, color: Colors.grey),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: Colors.white10),

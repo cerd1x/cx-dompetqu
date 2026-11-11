@@ -7,6 +7,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 class SwapBalanceDialog extends StatefulWidget {
   const SwapBalanceDialog({
@@ -195,7 +196,7 @@ class _SwapBalanceDialogState extends State<SwapBalanceDialog> {
               alignment: .center,
               child: RoundActionButton(
                 onTap: _reverseAssets,
-                icon: Icons.swap_horiz,
+                icon: CxIcons.swapHoriz,
                 label: 'Reverse',
                 alpha: .6,
               ),

@@ -3,6 +3,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Warna/label/ikon transaksi per tipe — dipakai bersama tab Bookkeeping & Debt.
 typedef TxTone = ({Color color, String sign, String label, IconData icon});
@@ -13,25 +14,25 @@ TxTone txTone(String type) => switch (type) {
     color: const Color(0xFF34D399),
     sign: '+',
     label: 'Income',
-    icon: Icons.arrow_upward_rounded,
+    icon: CxIcons.arrowUpwardRounded,
   ),
   'expense' => (
     color: const Color(0xFFF87171),
     sign: '-',
     label: 'Expense',
-    icon: Icons.arrow_downward_rounded,
+    icon: CxIcons.arrowDownwardRounded,
   ),
   'transfer' => (
     color: const Color(0xFFFBBF24),
     sign: '',
     label: 'Transfer',
-    icon: Icons.swap_horiz_rounded,
+    icon: CxIcons.swapHorizRounded,
   ),
   _ => (
     color: const Color(0xFFFBBF24),
     sign: '',
     label: 'Capital',
-    icon: Icons.savings_outlined,
+    icon: CxIcons.savingsOutlined,
   ),
 };
 
@@ -185,7 +186,7 @@ class DebtPaymentBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return CxBadge(
       label: amount,
-      icon: Icons.check_circle_outline_rounded,
+      icon: CxIcons.checkCircleOutlineRounded,
       tone: CxBadgeTone.success,
     );
   }

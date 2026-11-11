@@ -7,6 +7,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Mata uang dari preferensi lokal — padanan `settingStore.selectedCurrency`.
 String selectedCurrency(WidgetRef ref) =>
@@ -155,7 +156,7 @@ class DateField extends StatelessWidget {
     return FieldTile(
       label: label,
       value: DateFormat('d MMM yyyy').format(value),
-      leading: Icons.calendar_month_outlined,
+      leading: CxIcons.calendarMonthOutlined,
       onTap: () async {
         final picked = await showDatePicker(
           context: context,

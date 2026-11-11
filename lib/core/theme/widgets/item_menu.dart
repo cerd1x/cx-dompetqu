@@ -3,6 +3,7 @@ import 'package:cue/cue.dart';
 import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
 
 import 'round_action_button.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Data satu aksi yang ditampilkan [ItemMenu].
 class ItemMenuAction {
@@ -61,7 +62,7 @@ class _ItemMenuState extends State<ItemMenu> {
               constraints: const BoxConstraints(),
               padding: const EdgeInsets.all(0),
               icon: _isOpen
-                  ? const Icon(Icons.keyboard_arrow_down)
+                  ? const Icon(CxIcons.keyboardArrowDown)
                   : Column(
                       spacing: 2,
                       mainAxisSize: MainAxisSize.min,

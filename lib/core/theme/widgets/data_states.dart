@@ -3,6 +3,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'cx_card.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Baris skeleton — padanan kelas `skeleton` daisyUI di web.
 class SkeletonRow extends StatelessWidget {
@@ -100,7 +101,7 @@ class EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // icon section
-            Icon(icon ?? Icons.inbox_outlined, size: 44, color: Colors.white24),
+            Icon(icon ?? CxIcons.inboxOutlined, size: 44, color: Colors.white24),
             const SizedBox(height: 12),
             // message section
             Text(
@@ -132,7 +133,7 @@ class ErrorState extends StatelessWidget {
           children: [
             // icon section
             const Icon(
-              Icons.cloud_off_outlined,
+              CxIcons.cloudOffOutlined,
               size: 40,
               color: DompetBrand.pink,
             ),
@@ -148,7 +149,7 @@ class ErrorState extends StatelessWidget {
               const SizedBox(height: 14),
               OutlinedButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh, size: 18),
+                icon: const Icon(CxIcons.refresh, size: 18),
                 label: const Text('Coba lagi'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,

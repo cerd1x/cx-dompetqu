@@ -14,6 +14,7 @@ import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 import 'ai_settings_profiles_card.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 // Model yang ditawarkan untuk tiap provider; Ollama memakai nama model lokal.
 const Map<AiModelProvider, List<CxSelectItem<String>>> _kProviderModels = {
@@ -142,14 +143,14 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
                       // tetap di belakang dan bisa kembali dengan tombol back).
                       onPressed: () => context.push('/ai-settings'),
                       icon: const Icon(
-                        Icons.settings_outlined,
+                        CxIcons.settingsOutlined,
                         color: Colors.white70,
                       ),
                     ),
                     IconButton(
                       tooltip: 'Tutup',
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, color: Colors.white70),
+                      icon: const Icon(CxIcons.close, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -240,7 +241,7 @@ class _AiSettingsSheetState extends ConsumerState<AiSettingsSheet> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                   ),
-                  child: Row(children: [Icon(Icons.add), StyledText("Add")]),
+                  child: Row(children: [Icon(CxIcons.add), StyledText("Add")]),
                   // Membuka form konfigurasi untuk membuat profil AI baru.
                   onPressed: () => setState(() {
                     _creatingProfile = true;
@@ -483,7 +484,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
         children: [
           // Memilih layanan AI yang digunakan untuk percakapan.
           AiSettingRow(
-            icon: Icons.hub_outlined,
+            icon: CxIcons.hubOutlined,
             label: 'Provider model',
             trailing: CxSelectPicker<AiModelProvider>(
               items: [
@@ -502,7 +503,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           Divider(height: 1, color: Colors.white.withValues(alpha: 0.08)),
           // Mengatur apakah tombol AI melayang tampil di Home.
           AiSettingRow(
-            icon: Icons.smart_toy_outlined,
+            icon: CxIcons.smartToyOutlined,
             label: 'Tampilkan AI Bubble di Home',
             trailing: Switch(
               value: widget.settings.showAiBubble,
@@ -515,7 +516,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           if (widget.settings.provider != AiModelProvider.ollama) ...[
             // Mengontrol visibilitas API key tanpa mengekspos nilainya.
             AiSettingRow(
-              icon: Icons.key,
+              icon: CxIcons.key,
               label: '$_providerSettingsLabel API key',
               trailing: IconButton(
                 tooltip: _apiKeyVisible
@@ -525,8 +526,8 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                     setState(() => _apiKeyVisible = !_apiKeyVisible),
                 icon: Icon(
                   _apiKeyVisible
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
+                      ? CxIcons.visibilityOffOutlined
+                      : CxIcons.visibilityOutlined,
                   size: 20,
                   color: Colors.white54,
                 ),
@@ -566,7 +567,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                   IconButton.filled(
                     tooltip: 'Simpan API key',
                     onPressed: _saveApiKey,
-                    icon: const Icon(Icons.save_outlined),
+                    icon: const Icon(CxIcons.saveOutlined),
                   ),
                 ],
               ),
@@ -575,7 +576,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           ],
           // Mengaktifkan input teks untuk model yang tidak ada di daftar.
           AiSettingRow(
-            icon: Icons.edit_outlined,
+            icon: CxIcons.editOutlined,
             label: 'Model kustom (input teks)',
             trailing: Switch(
               value: widget.settings.useCustomModel,
@@ -586,7 +587,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           Divider(height: 1, color: Colors.white.withValues(alpha: 0.08)),
           // Memasukkan ID model bebas atau memilih model yang tersedia.
           AiSettingRow(
-            icon: Icons.auto_awesome,
+            icon: CxIcons.autoAwesome,
             label: 'Model $_providerSettingsLabel',
             trailing: Row(
               // Mode teks mendukung ID custom; mode pilihan memakai preset.
@@ -620,7 +621,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Icon(Icons.search, size: 16),
+                            : const Icon(CxIcons.search, size: 16),
                         label: Text(
                           _loadingOpenRouterModels ? 'Memuat' : 'Pilih model',
                         ),
@@ -668,7 +669,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                   IconButton.filled(
                     tooltip: 'Simpan base URL',
                     onPressed: () => _saveBaseUrl(_baseUrlCtrl.text),
-                    icon: const Icon(Icons.save_outlined),
+                    icon: const Icon(CxIcons.saveOutlined),
                   ),
                 ],
               ),
@@ -677,7 +678,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
           // Headers opsional untuk endpoint OpenAI-compatible.
           if (_supportsCustomHeaders) ...[
             AiSettingRow(
-              icon: Icons.http_outlined,
+              icon: CxIcons.httpOutlined,
               label: 'Sertakan custom headers',
               trailing: Switch(
                 value: widget.settings.includeCustomHeaders,
@@ -726,7 +727,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                         tooltip: 'Hapus header',
                         onPressed: () => _removeHeader(index),
                         icon: const Icon(
-                          Icons.delete_outline,
+                          CxIcons.deleteOutline,
                           color: Colors.white54,
                         ),
                       ),
@@ -740,14 +741,14 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
                   children: [
                     TextButton.icon(
                       onPressed: _addHeader,
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(CxIcons.add),
                       label: const Text('Tambah header'),
                     ),
                     const Spacer(),
                     IconButton.filled(
                       tooltip: 'Simpan custom headers',
                       onPressed: _saveCustomHeaders,
-                      icon: const Icon(Icons.save_outlined),
+                      icon: const Icon(CxIcons.saveOutlined),
                     ),
                   ],
                 ),
@@ -761,7 +762,7 @@ class _AiSettingsSectionState extends ConsumerState<AiSettingsSection> {
               alignment: Alignment.centerRight,
               child: FilledButton.icon(
                 onPressed: _saveProfileSnapshot,
-                icon: const Icon(Icons.bookmark_add_outlined),
+                icon: const Icon(CxIcons.bookmarkAddOutlined),
                 label: Text(widget.saveButtonLabel),
               ),
             ),
@@ -1039,7 +1040,7 @@ class _OpenRouterModelPickerDialogState
               controller: _searchController,
               autofocus: true,
               decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: Icon(CxIcons.search),
                 hintText: 'Cari nama atau ID model',
               ),
               onChanged: (value) => setState(() => _query = value),
@@ -1068,7 +1069,7 @@ class _OpenRouterModelPickerDialogState
                             overflow: TextOverflow.ellipsis,
                           ),
                           trailing: selected
-                              ? const Icon(Icons.check, color: DompetBrand.gold)
+                              ? const Icon(CxIcons.check, color: DompetBrand.gold)
                               : null,
                           onTap: () => Navigator.of(context).pop(model.id),
                         );

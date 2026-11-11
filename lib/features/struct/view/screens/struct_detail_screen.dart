@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar detail struktur transaksi + fitur ekspor ke PNG/img.
 ///
@@ -34,17 +35,17 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
     'income' => (
       color: const Color(0xFF34D399),
       sign: '+',
-      icon: Icons.arrow_upward_rounded,
+      icon: CxIcons.arrowUpwardRounded,
     ),
     'expense' => (
       color: const Color(0xFFF87171),
       sign: '-',
-      icon: Icons.arrow_downward_rounded,
+      icon: CxIcons.arrowDownwardRounded,
     ),
     _ => (
       color: const Color(0xFFFBBF24),
       sign: '',
-      icon: Icons.swap_horiz_rounded,
+      icon: CxIcons.swapHorizRounded,
     ),
   };
 
@@ -125,7 +126,7 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.download_rounded),
+                : const Icon(CxIcons.downloadRounded),
           ),
         ],
       ),
@@ -157,7 +158,7 @@ class _StructDetailScreenState extends State<StructDetailScreen> {
                         color: Colors.black,
                       ),
                     )
-                  : const Icon(Icons.image_outlined),
+                  : const Icon(CxIcons.imageOutlined),
               label: Text(_saving ? 'Menyimpan…' : 'Simpan Struktur ke PNG'),
             ),
             const SizedBox(height: 8),

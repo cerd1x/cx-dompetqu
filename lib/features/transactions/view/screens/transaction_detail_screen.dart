@@ -5,6 +5,7 @@ import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   const TransactionDetailScreen({super.key, required this.transaction});
@@ -82,19 +83,19 @@ class TransactionDetailScreen extends StatelessWidget {
         return (
           color: const Color(0xFF34D399),
           sign: '+',
-          icon: Icons.arrow_upward_rounded,
+          icon: CxIcons.arrowUpwardRounded,
         );
       case 'expense':
         return (
           color: const Color(0xFFF87171),
           sign: '-',
-          icon: Icons.arrow_downward_rounded,
+          icon: CxIcons.arrowDownwardRounded,
         );
       default:
         return (
           color: const Color(0xFFFBBF24),
           sign: '',
-          icon: Icons.swap_horiz_rounded,
+          icon: CxIcons.swapHorizRounded,
         );
     }
   }
@@ -102,11 +103,11 @@ class TransactionDetailScreen extends StatelessWidget {
   IconData get _typeIcon {
     switch (transaction.type) {
       case 'income':
-        return Icons.arrow_upward_rounded;
+        return CxIcons.arrowUpwardRounded;
       case 'expense':
-        return Icons.arrow_downward_rounded;
+        return CxIcons.arrowDownwardRounded;
       default:
-        return Icons.swap_horiz_rounded;
+        return CxIcons.swapHorizRounded;
     }
   }
 

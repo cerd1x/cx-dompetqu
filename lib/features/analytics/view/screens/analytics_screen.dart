@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 const _kIncome = Color(0xFF34D399);
 const _kExpense = Color(0xFFF87171);
@@ -83,7 +84,7 @@ class _ErrorCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          const Icon(Icons.error_outline, color: _kExpense, size: 40),
+          const Icon(CxIcons.errorOutline, color: _kExpense, size: 40),
           const SizedBox(height: 8),
           Text(message, textAlign: TextAlign.center),
         ],
@@ -266,12 +267,12 @@ class _PerformanceCard extends StatelessWidget {
                 segments: const [
                   ButtonSegment(
                     value: false,
-                    icon: Icon(Icons.show_chart, size: 14),
+                    icon: Icon(CxIcons.showChart, size: 14),
                     label: Text('Line'),
                   ),
                   ButtonSegment(
                     value: true,
-                    icon: Icon(Icons.bar_chart, size: 14),
+                    icon: Icon(CxIcons.barChart, size: 14),
                     label: Text('Bar'),
                   ),
                 ],
@@ -507,7 +508,7 @@ class _CalendarCard extends StatelessWidget {
               ),
               const Spacer(),
               IconButton(
-                icon: const Icon(Icons.chevron_left, size: 18),
+                icon: const Icon(CxIcons.chevronLeft, size: 18),
                 onPressed: onPrev,
               ),
               Text(
@@ -518,7 +519,7 @@ class _CalendarCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.chevron_right, size: 18),
+                icon: const Icon(CxIcons.chevronRight, size: 18),
                 onPressed: onNext,
               ),
             ],
@@ -560,7 +561,7 @@ class _CalendarCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const Icon(Icons.trending_up, size: 12, color: _kIncome),
+              const Icon(CxIcons.trendingUp, size: 12, color: _kIncome),
               const SizedBox(width: 4),
               Text(
                 'Profit hari itu',

@@ -3,6 +3,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 sealed class McpAction {
   const McpAction();
@@ -74,7 +75,7 @@ class _McpSheetState extends State<McpSheet> {
                     IconButton(
                       tooltip: 'Tutup',
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, color: Colors.white70),
+                      icon: const Icon(CxIcons.close, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -160,7 +161,7 @@ class McpServerList extends StatelessWidget {
                       tooltip: 'Hapus ${server.name}',
                       onPressed: () => onRemove(server.id),
                       icon: const Icon(
-                        Icons.delete_outline,
+                        CxIcons.deleteOutline,
                         color: Colors.redAccent,
                       ),
                     ),
@@ -174,7 +175,7 @@ class McpServerList extends StatelessWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: onCreate,
-                icon: const Icon(Icons.add_link),
+                icon: const Icon(CxIcons.addLink),
                 label: const Text('Tambah MCP'),
               ),
             ),

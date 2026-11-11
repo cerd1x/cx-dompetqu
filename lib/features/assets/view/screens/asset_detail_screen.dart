@@ -12,6 +12,7 @@ import 'package:dompetqu/features/assets/view/widgets/asset_detail.dart';
 import 'package:dompetqu/features/assets/view/widgets/asset_form_dialog.dart';
 import 'package:dompetqu/features/assets/view/widgets/add_balance_dialog.dart';
 import 'package:remix/remix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Full screen details for an asset. Route: /details-assets/:id
 class AssetDetailScreen extends ConsumerWidget {
@@ -91,7 +92,7 @@ class AssetDetailScreen extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: confirmDelete,
-            icon: const Icon(Icons.delete_outline),
+            icon: const Icon(CxIcons.deleteOutline),
           ),
         ],
       ),
@@ -125,18 +126,18 @@ class AssetDetailScreen extends ConsumerWidget {
                       RoundActionButton(
                         label: 'Add',
                         onTap: openAddBalance,
-                        icon: Icons.add,
+                        icon: CxIcons.add,
                       ),
                       const SizedBox(width: 12),
                       RoundActionButton(
                         onTap: () => openSwap(context, controller, state.items),
-                        icon: Icons.swap_horiz,
+                        icon: CxIcons.swapHoriz,
                         label: 'Swap Balance',
                       ),
                       const SizedBox(width: 12),
                       RoundActionButton(
                         onTap: openEdit,
-                        icon: Icons.edit,
+                        icon: CxIcons.edit,
                         label: 'Edit Asset',
                       ),
                     ],

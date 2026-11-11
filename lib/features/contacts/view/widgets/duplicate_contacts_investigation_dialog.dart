@@ -6,6 +6,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Dialog investigasi kontak duplikat — menampilkan grup kontak yang
 /// kemungkinan duplikat (nomor sama beda nama, atau nama sama beda nomor).
@@ -106,7 +107,7 @@ class _DuplicateContactsInvestigationDialogState
             label: _mergingGroups.isNotEmpty
                 ? 'Gabungkan Semua…'
                 : 'Gabungkan Semua',
-            leadingIcon: Icons.merge_type,
+            leadingIcon: CxIcons.mergeType,
             loading: allMerging,
             onPressed: widget.onMergeGroup == null || allMerging
                 ? null
@@ -178,8 +179,8 @@ class _DuplicateGroupTile extends StatelessWidget {
       DuplicateGroupType.name => '"${group.key}"',
     };
     final icon = switch (group.type) {
-      DuplicateGroupType.phone => Icons.phone_outlined,
-      DuplicateGroupType.name => Icons.person_outline,
+      DuplicateGroupType.phone => CxIcons.phoneOutlined,
+      DuplicateGroupType.name => CxIcons.personOutline,
     };
     return Box(
       style: BoxStyler()
@@ -228,8 +229,8 @@ class _DuplicateGroupTile extends StatelessWidget {
                   children: [
                     Icon(
                       selected
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_unchecked,
+                          ? CxIcons.radioButtonChecked
+                          : CxIcons.radioButtonUnchecked,
                       size: 16,
                       color: selected ? DompetBrand.gold : Colors.white24,
                     ),
@@ -267,7 +268,7 @@ class _DuplicateGroupTile extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: CxButton(
               label: 'Gabungkan',
-              leadingIcon: Icons.merge_type,
+              leadingIcon: CxIcons.mergeType,
               height: 36,
               onPressed: busy ? null : onMerge,
               loading: busy,

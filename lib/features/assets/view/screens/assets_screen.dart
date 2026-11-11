@@ -16,6 +16,7 @@ import 'package:dompetqu/features/assets/view/widgets/asset_form.dart';
 import 'package:dompetqu/features/assets/view/widgets/assets_header.dart';
 import 'package:dompetqu/features/assets/view/widgets/asset_item.dart';
 import 'package:go_router/go_router.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Padanan `_assets/AssetsPage.svelte`.
 class AssetsScreen extends ConsumerStatefulWidget {
@@ -78,17 +79,17 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
 
   List<ItemMenuAction> _menuActions(Asset asset) => [
     ItemMenuAction(
-      icon: Icons.edit_outlined,
+      icon: CxIcons.editOutlined,
       label: 'Update',
       onTap: () => _openForm(asset: asset),
     ),
     ItemMenuAction(
-      icon: Icons.add_chart,
+      icon: CxIcons.addChart,
       label: 'Add Balance',
       onTap: () => _openAddBalance(asset),
     ),
     ItemMenuAction(
-      icon: Icons.delete_outline,
+      icon: CxIcons.deleteOutline,
       label: 'Delete',
       onTap: () => _confirmDelete(asset),
     ),
@@ -121,7 +122,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
               const SizedBox(width: 10),
               // add button section
               RoundActionButton(
-                icon: Icons.add,
+                icon: CxIcons.add,
                 label: 'Add Asset',
                 onTap: () => _openForm(),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Input password brand — padanan `CxTextField.password` web.
 ///
@@ -47,11 +48,11 @@ class _CxTextFieldPasswordState extends State<CxTextFieldPassword> {
       hintText: widget.hintText,
       label: widget.label,
       labelStyle: widget.labelStyle,
-      leading: const Icon(Icons.lock_outline, color: Colors.white54),
+      leading: const Icon(CxIcons.lockOutline, color: Colors.white54),
       trailing: IconButton(
         tooltip: _obscure ? 'Lihat password' : 'Sembunyikan password',
         icon: Icon(
-          _obscure ? Icons.visibility : Icons.visibility_off,
+          _obscure ? CxIcons.visibility : CxIcons.visibilityOff,
           color: Colors.white54,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),

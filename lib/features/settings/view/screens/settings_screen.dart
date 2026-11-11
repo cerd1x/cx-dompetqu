@@ -14,6 +14,7 @@ import 'package:dompetqu/features/settings/view/widgets/row_currency_picker_view
 import 'package:dompetqu/features/settings/view/widgets/row_notifications_view.dart';
 import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
 import 'package:dompetqu/features/settings/view/stores/fps_indicator_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';
@@ -62,7 +63,7 @@ class SettingsScreen extends ConsumerWidget {
                     children: [
                       // dark mode section
                       _SettingsRow(
-                        icon: Icons.dark_mode_outlined,
+                        icon: CxIcons.darkModeOutlined,
                         label: 'Dark Mode',
                         trailing: Switch(
                           value: settings.darkMode,
@@ -74,7 +75,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       // fps indicator section — overlay debug framerate
                       _SettingsRow(
-                        icon: Icons.speed_outlined,
+                        icon: CxIcons.speedOutlined,
                         label: 'Indikator FPS',
                         trailing: Switch(
                           value: showFps,
@@ -86,25 +87,25 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       // appearance section — theme colors/gradient/opacity/blur
                       _SettingsRow(
-                        icon: Icons.palette_outlined,
+                        icon: CxIcons.paletteOutlined,
                         label: 'Penampilan',
                         onTap: () => context.push('/settings/appearance'),
                       ),
                       // notifications section
                       _SettingsRow(
-                        icon: Icons.notifications_outlined,
+                        icon: CxIcons.notificationsOutlined,
                         label: 'Notifications',
                         onTap: () => _showNotifications(context),
                       ),
                       // profile section
                       _SettingsRow(
-                        icon: Icons.account_circle_outlined,
+                        icon: CxIcons.accountCircleOutlined,
                         label: 'Profile',
                         onTap: () => context.push('/settings/profile'),
                       ),
                       // app lock section
                       _SettingsRow(
-                        icon: Icons.lock_outline,
+                        icon: CxIcons.lockOutline,
                         label: 'App Lock',
                         onTap: () {
                           Navigator.of(context).push(
@@ -127,7 +128,7 @@ class SettingsScreen extends ConsumerWidget {
                       CurrencyPickerSection(currency: settings.currency),
                       // version section
                       _SettingsRow(
-                        icon: Icons.info_outline,
+                        icon: CxIcons.infoOutline,
                         label: 'Version',
                         trailing: Text(
                           kAppVersion,
@@ -136,7 +137,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       // update section
                       _SettingsRow(
-                        icon: Icons.system_update_outlined,
+                        icon: CxIcons.systemUpdateOutlined,
                         label: 'Update',
                         onTap: () {
                           ScaffoldMessenger.of(context)
@@ -150,7 +151,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       // logout section
                       _SettingsRow(
-                        icon: Icons.logout,
+                        icon: CxIcons.logout,
                         label: 'Logout',
                         labelColor: DompetBrand.pink,
                         iconColor: DompetBrand.pink,
@@ -222,7 +223,7 @@ class _Header extends StatelessWidget {
           // back button section
           IconButton(
             onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_outlined),
+            icon: const Icon(CxIcons.arrowBackOutlined),
             color: Colors.white,
             tooltip: 'back',
           ),
@@ -279,7 +280,7 @@ class _SettingsRow extends StatelessWidget {
           trailing ??
               (onTap != null && showChevron
                   ? const Icon(
-                      Icons.chevron_right,
+                      CxIcons.chevronRight,
                       size: 20,
                       color: Colors.white54,
                     )

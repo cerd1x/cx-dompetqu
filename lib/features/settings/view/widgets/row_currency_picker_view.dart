@@ -5,6 +5,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Seksi mata uang dengan dropdown expandable — padanan web.
 class CurrencyPickerSection extends ConsumerStatefulWidget {
@@ -40,7 +41,7 @@ class _CurrencyPickerSectionState extends ConsumerState<CurrencyPickerSection> {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.attach_money,
+                    CxIcons.attachMoney,
                     size: 20,
                     color: DompetBrand.purple,
                   ),
@@ -57,7 +58,7 @@ class _CurrencyPickerSectionState extends ConsumerState<CurrencyPickerSection> {
                     turns: _open ? 0.25 : 0,
                     duration: const Duration(milliseconds: 200),
                     child: const Icon(
-                      Icons.chevron_right,
+                      CxIcons.chevronRight,
                       size: 18,
                       color: Colors.white54,
                     ),
@@ -108,7 +109,7 @@ class _CurrencyPickerSectionState extends ConsumerState<CurrencyPickerSection> {
                                 ),
                                 if (c.code == selected.code)
                                   const Icon(
-                                    Icons.check,
+                                    CxIcons.check,
                                     size: 16,
                                     color: DompetBrand.purple,
                                   ),

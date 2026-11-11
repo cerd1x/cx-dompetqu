@@ -5,6 +5,7 @@ import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Detail dialog for a contact.
 class ContactDetail extends StatelessWidget {
@@ -30,7 +31,7 @@ class ContactDetail extends StatelessWidget {
 
   List<Widget> _phoneInfoRows() {
     return [
-      for (final p in _phones) InfoRow(icon: Icons.phone_outlined, text: p),
+      for (final p in _phones) InfoRow(icon: CxIcons.phoneOutlined, text: p),
     ];
   }
 
@@ -61,10 +62,10 @@ class ContactDetail extends StatelessWidget {
           // info rows section
           ..._phoneInfoRows(),
           if (contact.email != null)
-            InfoRow(icon: Icons.email_outlined, text: contact.email!),
+            InfoRow(icon: CxIcons.emailOutlined, text: contact.email!),
           if (contact.createdAt != null)
             InfoRow(
-              icon: Icons.calendar_today_outlined,
+              icon: CxIcons.calendarTodayOutlined,
               text: DateFormat('d MMMM yyyy').format(contact.createdAt!),
             ),
           const SizedBox(height: 16),

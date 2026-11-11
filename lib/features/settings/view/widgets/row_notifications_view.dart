@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Lembar notifikasi — padanan popover `PopupNotification.svelte`.
 class NotificationsSheet extends StatelessWidget {
@@ -7,13 +8,13 @@ class NotificationsSheet extends StatelessWidget {
 
   static const _items = [
     (
-      Icons.check_circle,
+      CxIcons.checkCircle,
       Color(0xFF22C55E),
       'Transfer Succesfuly',
       'Transfer Dana TO BNI 1234567890',
     ),
     (
-      Icons.check_circle,
+      CxIcons.checkCircle,
       Color(0xFF22C55E),
       'Transfer Succesfuly',
       'Transfer Dana TO BNI 1234567890',

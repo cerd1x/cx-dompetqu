@@ -6,6 +6,7 @@ import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Detail dialog for an asset.
 class AssetDetail extends StatelessWidget {
@@ -47,7 +48,7 @@ class AssetDetail extends StatelessWidget {
           const SizedBox(height: 12),
           // balance section
           InfoRow(
-            icon: Icons.payments_outlined,
+            icon: CxIcons.paymentsOutlined,
             text: '${balance.code} ${balance.toLocalStr()}',
           ),
           const SizedBox(height: 16),

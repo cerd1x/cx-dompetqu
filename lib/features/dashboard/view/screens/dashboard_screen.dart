@@ -8,6 +8,7 @@ import '../widgets/stats_grid.dart';
 
 import 'package:dompetqu/core/theme/widgets/app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Padanan `_dashboard/DashboardPage.svelte` + `AppBar.svelte` (restyle fluttermix).
 class DashboardScreen extends ConsumerWidget {
@@ -24,14 +25,14 @@ class DashboardScreen extends ConsumerWidget {
             tooltip: 'Admin Panel',
             onPressed: () => context.push('/admin'),
             icon: const Icon(
-              Icons.admin_panel_settings_outlined,
+              CxIcons.adminPanelSettingsOutlined,
               color: Colors.white54,
             ),
           ),
           IconButton(
             tooltip: 'Reports',
             onPressed: () => context.push('/reports'),
-            icon: const Icon(Icons.bug_report_outlined, color: Colors.white54),
+            icon: const Icon(CxIcons.bugReportOutlined, color: Colors.white54),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile_collection.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 class AiSettingsProfilesCard extends StatelessWidget {
   const AiSettingsProfilesCard({
@@ -64,7 +65,7 @@ class AiSettingsProfilesCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   leading: Icon(
-                    selected ? Icons.radio_button_checked : Icons.tune,
+                    selected ? CxIcons.radioButtonChecked : CxIcons.tune,
                     color: selected ? DompetBrand.gold : Colors.white54,
                     size: 20,
                   ),
@@ -86,7 +87,7 @@ class AiSettingsProfilesCard extends StatelessWidget {
                         tooltip: 'Edit profil ${profile.name}',
                         onPressed: () => onEdit(profile),
                         icon: const Icon(
-                          Icons.edit_outlined,
+                          CxIcons.editOutlined,
                           color: Colors.white54,
                           size: 20,
                         ),
@@ -95,7 +96,7 @@ class AiSettingsProfilesCard extends StatelessWidget {
                         tooltip: 'Hapus profil ${profile.name}',
                         onPressed: () => onDelete(profile),
                         icon: const Icon(
-                          Icons.delete_outline,
+                          CxIcons.deleteOutline,
                           color: Colors.white54,
                           size: 20,
                         ),
@@ -110,7 +111,7 @@ class AiSettingsProfilesCard extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: onCreateSettings,
-                icon: const Icon(Icons.add),
+                icon: const Icon(CxIcons.add),
                 label: const Text('Atur AI'),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mix/mix.dart';
 
+import 'package:dompetqu/core/cx_icons.dart';
 import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
@@ -307,7 +308,7 @@ class _CxSelectPickerState<T> extends State<CxSelectPicker<T>> {
               ),
             ),
             if (selected)
-              Icon(Icons.check, size: 12, color: DompetBrand.purple),
+              Icon(CxIcons.check, size: 12, color: DompetBrand.purple),
           ],
         ),
       ),
@@ -366,7 +367,7 @@ class _CxSelectPickerState<T> extends State<CxSelectPicker<T>> {
               turns: menuOpen ? 0.5 : 0,
               duration: const Duration(milliseconds: 200),
               child: const Icon(
-                Icons.keyboard_arrow_down_rounded,
+                CxIcons.keyboardArrowDownRounded,
                 size: 12,
                 color: Colors.white70,
               ),

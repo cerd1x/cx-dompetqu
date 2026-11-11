@@ -9,6 +9,7 @@ import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_profiles_card.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar penuh untuk mengelola profil dan konfigurasi AI.
 /// Padanan halaman dari [AiSettingsSheet] yang dipakai sebagai modal —
@@ -118,7 +119,7 @@ class _AiSettingScreenState extends ConsumerState<AiSettingScreen> {
                                 _creatingProfile = true;
                                 _editingProfileId = null;
                               }),
-                              icon: const Icon(Icons.add),
+                              icon: const Icon(CxIcons.add),
                               label: const Text('Tambah profil AI'),
                             ),
                           ),
@@ -303,7 +304,7 @@ class _AiSettingHeader extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_outlined),
+            icon: const Icon(CxIcons.arrowBackOutlined),
             color: Colors.white,
             tooltip: 'Kembali',
           ),

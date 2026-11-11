@@ -13,6 +13,7 @@ import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dar
 import 'package:dompetqu/features/payments/view/stores/payments_repository_provider.dart';
 import 'package:dompetqu/features/payments/view/widgets/payment_widgets.dart';
 import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar detail satu payment gagal.
 ///
@@ -190,7 +191,7 @@ class _DetailPaymentFailedViewState
             child: Column(
               children: [
                 const Icon(
-                  Icons.error_outline_rounded,
+                  CxIcons.errorOutlineRounded,
                   size: 44,
                   color: Color(0xFFF87171),
                 ),
@@ -311,7 +312,7 @@ class _DetailPaymentFailedViewState
                 child: CxButton(
                   label: 'Report',
                   variant: CxButtonVariant.outline,
-                  leadingIcon: Icons.flag_outlined,
+                  leadingIcon: CxIcons.flagOutlined,
                   loading: _reporting,
                   onPressed: _reporting ? null : _report,
                   height: 46,
@@ -321,7 +322,7 @@ class _DetailPaymentFailedViewState
               Expanded(
                 child: CxButton(
                   label: 'Retry',
-                  leadingIcon: Icons.refresh_rounded,
+                  leadingIcon: CxIcons.refreshRounded,
                   loading: _retrying,
                   enabled: !triedOut,
                   onPressed: _retrying || triedOut ? null : _retry,

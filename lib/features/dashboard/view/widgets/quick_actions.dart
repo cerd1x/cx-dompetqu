@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Padanan tombol aksi cepat di dashboard (`_dashboard/DashboardPage.svelte`).
 class QuickActions extends StatelessWidget {
@@ -21,35 +22,35 @@ class QuickActions extends StatelessWidget {
           children: [
             // top up section
             RoundActionButton(
-              icon: Icons.add_rounded,
+              icon: CxIcons.addRounded,
               label: 'Add Transaction',
               onTap: () =>
                   context.go('/orders', extra: const OrderRouteArgs.sale()),
             ),
             // receive section
             RoundActionButton(
-              icon: Icons.call_received_rounded,
+              icon: CxIcons.callReceivedRounded,
               label: 'Receive',
             ),
             // transfer section
             RoundActionButton(
-              icon: Icons.swap_horiz_rounded,
+              icon: CxIcons.swapHorizRounded,
               label: 'Transfer',
             ),
             // charts section
             RoundActionButton(
-              icon: Icons.pie_chart_sharp,
+              icon: CxIcons.pieChartSharp,
               label: 'Charts',
               onTap: () => context.push('/charts'),
             ),
             // analytics section
             RoundActionButton(
-              icon: Icons.bar_chart_rounded,
+              icon: CxIcons.barChartRounded,
               label: 'Analytics',
               onTap: () => context.push('/analytics'),
             ),
             RoundActionButton(
-              icon: Icons.auto_awesome_rounded,
+              icon: CxIcons.autoAwesomeRounded,
               label: 'AI Assistant',
               onTap: () => context.push('/gen-ai'),
             ),

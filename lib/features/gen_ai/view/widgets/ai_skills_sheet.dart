@@ -7,6 +7,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 sealed class AiSkillAction {
   const AiSkillAction();
@@ -100,7 +101,7 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
                         onPressed: () =>
                             setState(() => _mode = _SkillSheetMode.list),
                         icon: const Icon(
-                          Icons.arrow_back,
+                          CxIcons.arrowBack,
                           color: Colors.white70,
                         ),
                       ),
@@ -117,7 +118,7 @@ class _AiSkillsSheetState extends State<AiSkillsSheet> {
                     IconButton(
                       tooltip: 'Tutup',
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close, color: Colors.white70),
+                      icon: const Icon(CxIcons.close, color: Colors.white70),
                     ),
                   ],
                 ),
@@ -215,7 +216,7 @@ class AiSkillsList extends StatelessWidget {
                       tooltip: 'Hapus ${skill.name}',
                       onPressed: () => onDelete(skill.id),
                       icon: const Icon(
-                        Icons.delete_outline,
+                        CxIcons.deleteOutline,
                         color: Colors.redAccent,
                       ),
                     ),
@@ -231,19 +232,19 @@ class AiSkillsList extends StatelessWidget {
               children: [
                 FilledButton.icon(
                   onPressed: onCreate,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(CxIcons.add),
                   label: const Text('Buat skill'),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
                   onPressed: onBrowseStore,
-                  icon: const Icon(Icons.storefront_outlined),
+                  icon: const Icon(CxIcons.storefrontOutlined),
                   label: const Text('Toko skills (skills.sh)'),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
                   onPressed: onImport,
-                  icon: const Icon(Icons.link),
+                  icon: const Icon(CxIcons.link),
                   label: const Text('Impor dari URL'),
                 ),
               ],
@@ -571,12 +572,12 @@ class _AiSkillStoreBrowserState extends State<AiSkillStoreBrowser> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     isDense: true,
-                    prefixIcon: const Icon(Icons.search, color: Colors.white54),
+                    prefixIcon: const Icon(CxIcons.search, color: Colors.white54),
                     hintText: 'Cari skill (min. 2 huruf)',
                     suffixIcon: IconButton(
                       tooltip: 'Muat ulang',
                       onPressed: () => unawaited(_load()),
-                      icon: const Icon(Icons.refresh, color: Colors.white54),
+                      icon: const Icon(CxIcons.refresh, color: Colors.white54),
                     ),
                   ),
                 ),
@@ -608,7 +609,7 @@ class _AiSkillStoreBrowserState extends State<AiSkillStoreBrowser> {
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     onPressed: () => unawaited(_load()),
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(CxIcons.refresh),
                     label: const Text('Coba lagi'),
                   ),
                 ],

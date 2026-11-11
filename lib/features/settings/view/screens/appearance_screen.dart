@@ -10,6 +10,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/ui_style.dart';
 import 'package:dompetqu/core/theme/ui_style_controller.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Palet preset untuk color picker — kombinasi gold/purple/pink & warna netral.
 const List<Color> kUiPalette = [
@@ -177,7 +178,7 @@ class _Header extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_outlined),
+            icon: const Icon(CxIcons.arrowBackOutlined),
             color: Colors.white,
             tooltip: 'back',
           ),
@@ -394,7 +395,7 @@ class _Swatch extends StatelessWidget {
                 ),
               ),
           child: isCustom
-              ? const Icon(Icons.add, size: 20, color: Colors.white)
+              ? const Icon(CxIcons.add, size: 20, color: Colors.white)
               : const SizedBox.shrink(),
         ),
       ),
@@ -684,7 +685,7 @@ class _ResetCard extends StatelessWidget {
       variant: CxCardVariant.csGlassSurface,
       child: OutlinedButton.icon(
         onPressed: onReset,
-        icon: const Icon(Icons.restart_alt),
+        icon: const Icon(CxIcons.restartAlt),
         label: const Text('Reset ke bawaan'),
         style: OutlinedButton.styleFrom(
           foregroundColor: DompetBrand.pink,

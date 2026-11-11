@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
+import 'package:dompetqu/core/cx_icons.dart';
 import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
@@ -205,7 +206,7 @@ class _CxDateRangePickerState extends State<CxDateRangePicker> {
           Row(
             children: [
               const Icon(
-                Icons.calendar_month_outlined,
+                CxIcons.calendarMonthOutlined,
                 size: 14,
                 color: DompetBrand.primary,
               ),
@@ -221,7 +222,7 @@ class _CxDateRangePickerState extends State<CxDateRangePicker> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _navIcon(Icons.chevron_left_rounded, _canGoBack, () {
+              _navIcon(CxIcons.chevronLeftRounded, _canGoBack, () {
                 _shiftMonth(-1);
               }),
               Text(
@@ -232,7 +233,7 @@ class _CxDateRangePickerState extends State<CxDateRangePicker> {
                   color: Colors.white,
                 ),
               ),
-              _navIcon(Icons.chevron_right_rounded, _canGoForward, () {
+              _navIcon(CxIcons.chevronRightRounded, _canGoForward, () {
                 _shiftMonth(1);
               }),
             ],

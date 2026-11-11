@@ -9,6 +9,7 @@ import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Shell utama dengan ShellRoute — persistent bottom nav lewat GoRouter.
 class HomeShell extends ConsumerStatefulWidget {
@@ -31,11 +32,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   };
 
   static const _tabs = <NavItem>[
-    NavItem(icon: Icons.space_dashboard_outlined, name: 'Dashboard'),
-    NavItem(icon: Icons.inventory_2_outlined, name: 'Inventory'),
-    NavItem(icon: Icons.contacts_outlined, name: 'Contacts'),
-    NavItem(icon: Icons.receipt_long_outlined, name: 'Orders'),
-    NavItem(icon: Icons.pie_chart_outline, name: 'Portfolio'),
+    NavItem(icon: CxIcons.spaceDashboardOutlined, name: 'Dashboard'),
+    NavItem(icon: CxIcons.inventory2Outlined, name: 'Inventory'),
+    NavItem(icon: CxIcons.contactsOutlined, name: 'Contacts'),
+    NavItem(icon: CxIcons.receiptLongOutlined, name: 'Orders'),
+    NavItem(icon: CxIcons.pieChartOutline, name: 'Portfolio'),
   ];
 
   @override

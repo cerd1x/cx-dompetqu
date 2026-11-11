@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Picker customer dari [contactsStoreProvider].
 class CustomerPickerField extends ConsumerWidget {
@@ -31,7 +32,7 @@ class CustomerPickerField extends ConsumerWidget {
     return FieldTile(
       label: 'Customer',
       value: selected?.name ?? 'Pilih customer...',
-      leading: Icons.person_outline,
+      leading: CxIcons.personOutline,
       onTap: () async {
         // Picker harus memuat seluruh kontak, bukan hanya halaman list yang
         // sudah tampil.
@@ -107,7 +108,7 @@ class _CustomerPickerSheetState extends State<_CustomerPickerSheet> {
                     for (final contact in filtered)
                       ListTile(
                         leading: const Icon(
-                          Icons.person_outline,
+                          CxIcons.personOutline,
                           color: Colors.white70,
                         ),
                         title: Text(
@@ -122,7 +123,7 @@ class _CustomerPickerSheetState extends State<_CustomerPickerSheet> {
                           ),
                         ),
                         trailing: contact.id == widget.selectedId
-                            ? const Icon(Icons.check, color: Color(0xFF34D399))
+                            ? const Icon(CxIcons.check, color: Color(0xFF34D399))
                             : null,
                         onTap: () => Navigator.of(context).pop(contact.id),
                       ),
@@ -151,7 +152,7 @@ class _CustomerPickerSheetState extends State<_CustomerPickerSheet> {
                 borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(
-                Icons.search,
+                CxIcons.search,
                 size: 18,
                 color: Colors.white38,
               ),

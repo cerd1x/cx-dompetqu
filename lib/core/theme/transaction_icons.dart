@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
+
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Tipe transaksi — padanan field `type` di Transaction model.
 enum TransactionType {
@@ -32,14 +33,14 @@ extension TransactionTypeUI on TransactionType {
   /// Icon hugeicons untuk transaksi.
   List<List<dynamic>> get icon {
     return switch (this) {
-      TransactionType.income => HugeIcons.strokeRoundedMoneyReceiveCircle,
-      TransactionType.credit => HugeIcons.strokeRoundedCreditCard,
-      TransactionType.debit => HugeIcons.strokeRoundedCreditCard,
-      TransactionType.eb => HugeIcons.strokeRoundedCloudBackup,
-      TransactionType.adm => HugeIcons.strokeRoundedCloudBackup,
-      TransactionType.transfer => HugeIcons.strokeRoundedCoinsSwap,
-      TransactionType.expense => HugeIcons.strokeRoundedMoneySendCircle,
-      TransactionType.unknown => HugeIcons.strokeRoundedCircleQuestionMark,
+      TransactionType.income => CxIcons.strokeRoundedMoneyReceiveCircle,
+      TransactionType.credit => CxIcons.strokeRoundedCreditCard,
+      TransactionType.debit => CxIcons.strokeRoundedCreditCard,
+      TransactionType.eb => CxIcons.strokeRoundedCloudBackup,
+      TransactionType.adm => CxIcons.strokeRoundedCloudBackup,
+      TransactionType.transfer => CxIcons.strokeRoundedCoinsSwap,
+      TransactionType.expense => CxIcons.strokeRoundedMoneySendCircle,
+      TransactionType.unknown => CxIcons.strokeRoundedCircleQuestionMark,
     };
   }
 

@@ -11,6 +11,7 @@ import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
 import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
 import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Screen merge contact — route `/contact-merge/:id`.
 ///
@@ -174,14 +175,14 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
             Expanded(
               child: CxButton(
                 label: 'Gabungkan',
-                leadingIcon: Icons.merge_type,
+                leadingIcon: CxIcons.mergeType,
                 onPressed: _busy ? null : _submit,
                 loading: _busy,
                 expand: true,
               ),
             ),
             RoundActionButton(
-              icon: Icons.arrow_back,
+              icon: CxIcons.arrowBack,
               label: 'Back',
               onTap: () => context.pop(),
             ),
@@ -257,7 +258,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
               child: Row(
                 children: [
                   const Icon(
-                    Icons.error_outline,
+                    CxIcons.errorOutline,
                     size: 16,
                     color: DompetBrand.pink,
                   ),
@@ -278,7 +279,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
           const SizedBox(height: 16),
           MergeFieldChoice(
             label: 'Name',
-            icon: Icons.person_outline,
+            icon: CxIcons.personOutline,
             primaryValue: primary.name,
             duplicateValue: duplicate.name,
             selected: _name,
@@ -287,7 +288,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
           const SizedBox(height: 12),
           MergeFieldChoice(
             label: 'Phone',
-            icon: Icons.phone_outlined,
+            icon: CxIcons.phoneOutlined,
             primaryValue: primary.phone,
             duplicateValue: duplicate.phone,
             selected: _phone,
@@ -296,7 +297,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
           const SizedBox(height: 12),
           MergeFieldChoice(
             label: 'Email',
-            icon: Icons.email_outlined,
+            icon: CxIcons.emailOutlined,
             primaryValue: primary.email,
             duplicateValue: duplicate.email,
             selected: _email,
@@ -333,7 +334,7 @@ class _MergePairHeader extends StatelessWidget {
           _MiniContact(contact: primary, tag: 'Utama'),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Icon(Icons.merge_type, size: 20, color: DompetBrand.gold),
+            child: Icon(CxIcons.mergeType, size: 20, color: DompetBrand.gold),
           ),
           _MiniContact(contact: duplicate, tag: 'Duplikat'),
         ],
@@ -411,7 +412,7 @@ class _MergeCandidateTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontSize: 12, color: Colors.white38),
       ),
-      trailing: const Icon(Icons.merge_type, color: DompetBrand.gold, size: 20),
+      trailing: const Icon(CxIcons.mergeType, color: DompetBrand.gold, size: 20),
       onTap: onTap,
     );
   }
@@ -497,8 +498,8 @@ class MergeFieldChoice<T> extends StatelessWidget {
           children: [
             Icon(
               isSelected
-                  ? Icons.radio_button_checked
-                  : Icons.radio_button_unchecked,
+                  ? CxIcons.radioButtonChecked
+                  : CxIcons.radioButtonUnchecked,
               size: 16,
               color: isSelected ? DompetBrand.gold : Colors.white24,
             ),
@@ -522,7 +523,7 @@ class MergeFieldChoice<T> extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       child: Row(
         children: [
-          const Icon(Icons.check, size: 14, color: Colors.white24),
+          const Icon(CxIcons.check, size: 14, color: Colors.white24),
           const SizedBox(width: 10),
           Expanded(child: _valueText(value)),
         ],

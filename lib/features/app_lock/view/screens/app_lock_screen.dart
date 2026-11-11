@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Layar kunci yang muncul saat aplikasi terkunci.
 class AppLockScreen extends ConsumerStatefulWidget {
@@ -100,7 +101,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
         const Spacer(flex: 2),
         // App icon & title
         Icon(
-          Icons.lock_outline,
+          CxIcons.lockOutline,
           size: 48,
           color: DompetBrand.purple.withValues(alpha: 0.8),
         ),
@@ -169,7 +170,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
             foregroundColor: Colors.white,
             side: const BorderSide(color: DompetBrand.csBorder, width: 1),
           ),
-          icon: const Icon(Icons.draw_outlined),
+          icon: const Icon(CxIcons.drawOutlined),
           label: const Text('Gambarkan pola'),
         ),
       ),
@@ -187,7 +188,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.lock_clock, size: 48, color: Color(0xFFEF4444)),
+          const Icon(CxIcons.lockClock, size: 48, color: Color(0xFFEF4444)),
           const SizedBox(height: 16),
           const Text(
             'Terlalu banyak percobaan',

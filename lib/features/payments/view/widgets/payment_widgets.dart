@@ -5,6 +5,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/payments/domain/models/payment.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Pill status payment — `failed` merah, `completed` hijau, `pending`/
 /// `processing` kuning, `refunded`/`cancelled` netral.
@@ -102,7 +103,7 @@ class FailedPaymentRow extends StatelessWidget {
                   ),
                 ),
             child: const Icon(
-              Icons.error_outline_rounded,
+              CxIcons.errorOutlineRounded,
               size: 18,
               color: Color(0xFFF87171),
             ),

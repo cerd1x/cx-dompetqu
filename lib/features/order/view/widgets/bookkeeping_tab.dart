@@ -18,6 +18,7 @@ import 'package:dompetqu/features/order/view/stores/bookkeeping_store.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
 import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Tab **Bookkeeping** — buku besar (ledger) seluruh transaksi: total pemasukan/
 /// pengeluaran per bulan, saldo berjalan, dan daftar transaksi per tanggal.
@@ -81,7 +82,7 @@ class BookkeepingTab extends ConsumerWidget {
         IconButton(
           tooltip: 'Previous month',
           onPressed: () => store.shiftMonth(-1),
-          icon: const Icon(Icons.chevron_left_rounded, color: Colors.white70),
+          icon: const Icon(CxIcons.chevronLeftRounded, color: Colors.white70),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.06),
           ),
@@ -99,7 +100,7 @@ class BookkeepingTab extends ConsumerWidget {
         IconButton(
           tooltip: 'Next month',
           onPressed: state.isCurrentMonth ? null : () => store.shiftMonth(1),
-          icon: const Icon(Icons.chevron_right_rounded, color: Colors.white70),
+          icon: const Icon(CxIcons.chevronRightRounded, color: Colors.white70),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.06),
           ),
@@ -123,7 +124,7 @@ class BookkeepingTab extends ConsumerWidget {
             label: 'Failed Payments',
             value: payments.length.toString(),
             color: const Color(0xFFF87171),
-            icon: Icons.error_outline_rounded,
+            icon: CxIcons.errorOutlineRounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -132,7 +133,7 @@ class BookkeepingTab extends ConsumerWidget {
             label: 'Retry Available',
             value: retryable.toString(),
             color: const Color(0xFFFBBF24),
-            icon: Icons.refresh_rounded,
+            icon: CxIcons.refreshRounded,
           ),
         ),
       ],
@@ -148,7 +149,7 @@ class BookkeepingTab extends ConsumerWidget {
             label: 'Income',
             value: formatMoney(state.income, currency),
             color: const Color(0xFF34D399),
-            icon: Icons.arrow_upward_rounded,
+            icon: CxIcons.arrowUpwardRounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -157,7 +158,7 @@ class BookkeepingTab extends ConsumerWidget {
             label: 'Expense',
             value: formatMoney(state.expense, currency),
             color: const Color(0xFFF87171),
-            icon: Icons.arrow_downward_rounded,
+            icon: CxIcons.arrowDownwardRounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -168,7 +169,7 @@ class BookkeepingTab extends ConsumerWidget {
             color: state.profit >= 0
                 ? const Color(0xFF34D399)
                 : const Color(0xFFF87171),
-            icon: Icons.trending_up_rounded,
+            icon: CxIcons.trendingUpRounded,
           ),
         ),
       ],
@@ -204,7 +205,7 @@ class BookkeepingTab extends ConsumerWidget {
     if (state.loading) return const SkeletonList(count: 4);
     if (state.items.isEmpty) {
       return EmptyState(
-        icon: Icons.menu_book_outlined,
+        icon: CxIcons.menuBookOutlined,
         label: state.filter == BookkeepingFilter.all
             ? 'No transactions in ${DateFormat('MMMM yyyy').format(state.month)}'
             : 'No ${state.filter.name} transactions in '
@@ -270,7 +271,7 @@ class BookkeepingTab extends ConsumerWidget {
       data: (items) {
         if (items.isEmpty) {
           return EmptyState(
-            icon: Icons.check_circle_outline_rounded,
+            icon: CxIcons.checkCircleOutlineRounded,
             label:
                 'No failed payments in '
                 '${DateFormat('MMMM yyyy').format(month)}',
@@ -317,10 +318,10 @@ class BookkeepingTab extends ConsumerWidget {
             children: [
               Icon(
                 isFailed
-                    ? Icons.refresh_rounded
+                    ? CxIcons.refreshRounded
                     : (isPaid
-                          ? Icons.undo_rounded
-                          : Icons.check_circle_outline_rounded),
+                          ? CxIcons.undoRounded
+                          : CxIcons.checkCircleOutlineRounded),
                 size: 18,
                 color: isFailed
                     ? const Color(0xFFFBBF24)
@@ -402,11 +403,11 @@ class BookkeepingTab extends ConsumerWidget {
 /// chip filter dan di baris ledger — `all`/`failed` memakai ikon daftar/error
 /// karena keduanya bukan tipe transaksi.
 IconData _filterIcon(BookkeepingFilter filter) => switch (filter) {
-  BookkeepingFilter.all => Icons.list_alt_rounded,
-  BookkeepingFilter.income => Icons.arrow_upward_rounded,
-  BookkeepingFilter.expense => Icons.arrow_downward_rounded,
-  BookkeepingFilter.transfer => Icons.swap_horiz_rounded,
-  BookkeepingFilter.failed => Icons.error_outline_rounded,
+  BookkeepingFilter.all => CxIcons.listAltRounded,
+  BookkeepingFilter.income => CxIcons.arrowUpwardRounded,
+  BookkeepingFilter.expense => CxIcons.arrowDownwardRounded,
+  BookkeepingFilter.transfer => CxIcons.swapHorizRounded,
+  BookkeepingFilter.failed => CxIcons.errorOutlineRounded,
 };
 
 /// Modal transaksi sebagai angka; null bila kosong atau format tak dikenal.

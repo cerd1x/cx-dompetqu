@@ -18,6 +18,7 @@ import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/features/order/view/stores/debt_settlements.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
 import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Kategori yang dipakai backend saat `createOrderLoan` — penanda sebuah
 /// transaksi adalah utang pelanggan (`create-order-loan.usecase.ts`).
@@ -160,7 +161,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
             label: 'Outstanding',
             value: formatMoney(total, currency),
             color: DompetBrand.gold,
-            icon: Icons.receipt_long_outlined,
+            icon: CxIcons.receiptLongOutlined,
           ),
         ),
         const SizedBox(width: 10),
@@ -169,7 +170,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
             label: 'Debts',
             value: '${outstanding.length}',
             color: const Color(0xFFFBBF24),
-            icon: Icons.list_alt_rounded,
+            icon: CxIcons.listAltRounded,
           ),
         ),
         const SizedBox(width: 10),
@@ -178,7 +179,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
             label: 'Overdue',
             value: '$overdue',
             color: overdue > 0 ? DompetBrand.pink : Colors.white54,
-            icon: Icons.schedule_rounded,
+            icon: CxIcons.scheduleRounded,
           ),
         ),
       ],
@@ -221,7 +222,7 @@ class _DebtTabState extends ConsumerState<DebtTab> {
     if (loading) return const SkeletonList(count: 4);
     if (totalVisible == 0) {
       return EmptyState(
-        icon: Icons.receipt_long_outlined,
+        icon: CxIcons.receiptLongOutlined,
         label: _filter == _DebtFilter.outstanding
             ? 'No outstanding debts'
             : 'No settled debts yet',
@@ -495,8 +496,8 @@ class _DebtRow extends StatelessWidget {
                 ),
             child: Icon(
               debt.settled
-                  ? Icons.check_circle_outline_rounded
-                  : Icons.hourglass_bottom_rounded,
+                  ? CxIcons.checkCircleOutlineRounded
+                  : CxIcons.hourglassBottomRounded,
               size: 18,
               color: debt.settled ? const Color(0xFF34D399) : DompetBrand.pink,
             ),

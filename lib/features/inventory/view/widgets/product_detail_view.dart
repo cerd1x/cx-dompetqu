@@ -10,6 +10,7 @@ import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Dialog detail product — padanan popup detail di web.
 class ProductDetailView extends StatelessWidget {
@@ -80,7 +81,7 @@ class ProductDetailView extends StatelessWidget {
               Expanded(
                 child: CxButton(
                   label: 'Buy',
-                  leadingIcon: Icons.shopping_bag_outlined,
+                  leadingIcon: CxIcons.shoppingBagOutlined,
                   onPressed: () {
                     final router = GoRouter.of(context);
                     Navigator.of(context).pop();

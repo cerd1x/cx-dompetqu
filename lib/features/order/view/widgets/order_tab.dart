@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
+import 'package:dompetqu/core/cx_icons.dart';
 
 /// Tab layar order/transaksi — padanan tab di
 /// `_routes/dompet/create-transaction/+page.svelte`.
@@ -8,11 +9,11 @@ import 'package:dompetqu/features/inventory/domain/models/product.dart';
 /// [bookkeeping] dan [debt] adalah laporan, [sale]/[expense]/[loan] adalah form
 /// pembuatan transaksi. Tab laporan dibuka lebih dulu secara default.
 enum OrderTab {
-  bookkeeping(label: 'Bookkeeping', icon: Icons.menu_book_outlined),
-  debt(label: 'Debt', icon: Icons.receipt_long_outlined),
-  sale(label: 'Sale', icon: Icons.sell_outlined),
-  expense(label: 'Expense', icon: Icons.money_off_outlined),
-  loan(label: 'Loan', icon: Icons.request_quote_outlined);
+  bookkeeping(label: 'Bookkeeping', icon: CxIcons.menuBookOutlined),
+  debt(label: 'Debt', icon: CxIcons.receiptLongOutlined),
+  sale(label: 'Sale', icon: CxIcons.sellOutlined),
+  expense(label: 'Expense', icon: CxIcons.moneyOffOutlined),
+  loan(label: 'Loan', icon: CxIcons.requestQuoteOutlined);
 
   const OrderTab({required this.label, required this.icon});
 

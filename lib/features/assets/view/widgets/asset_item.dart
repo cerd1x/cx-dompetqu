@@ -1,11 +1,11 @@
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:dompetqu/features/assets/domain/models/asset_type.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/item_menu.dart';
-import 'package:dompetqu/core/cx_icons.dart';
 
 /// Single asset row used in assets list.
 class AssetItem extends StatelessWidget {
@@ -20,14 +20,6 @@ class AssetItem extends StatelessWidget {
   final List<ItemMenuAction> menuActions;
   final VoidCallback? onTap;
 
-  IconData _iconForType(String type) => switch (type) {
-    'bank' => CxIcons.accountBalanceOutlined,
-    'cash' => CxIcons.attachMoneyRounded,
-    'loan' => CxIcons.accountBalanceWalletOutlined,
-    'crypto' => CxIcons.currencyBitcoin,
-    _ => CxIcons.walletOutlined,
-  };
-
   @override
   Widget build(BuildContext context) {
     final balance = Balance.parse(asset.balance);
@@ -39,7 +31,7 @@ class AssetItem extends StatelessWidget {
         children: [
           // icon section
           CxAvatar(
-            label: _iconForType(asset.type) == CxIcons.currencyBitcoin
+            label: AssetType.fromRaw(asset.type) == AssetType.crypto
                 ? '₿'
                 : 'W',
             size: 36,

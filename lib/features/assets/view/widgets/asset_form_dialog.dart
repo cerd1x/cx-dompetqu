@@ -5,7 +5,6 @@ import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';

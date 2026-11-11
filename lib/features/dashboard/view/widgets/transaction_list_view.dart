@@ -16,7 +16,6 @@ import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
-import 'package:dompetqu/core/cx_icons.dart';
 
 /// Filter tipe transaksi.
 enum _TypeFilter { all, income, expense, transfer }

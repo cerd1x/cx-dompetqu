@@ -5,8 +5,8 @@ import 'package:remix/remix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Tombol aksi bulat — padanan tombol import/add di web.
-class RoundActionButton extends StatelessWidget {
-  const RoundActionButton({
+class CxButtonActRound extends StatelessWidget {
+  const CxButtonActRound({
     super.key,
     required this.icon,
     required this.label,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
@@ -21,35 +21,35 @@ class QuickActions extends StatelessWidget {
           spacing: 8,
           children: [
             // top up section
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.addRounded,
               label: 'Add Transaction',
               onTap: () =>
                   context.go('/orders', extra: const OrderRouteArgs.sale()),
             ),
             // receive section
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.callReceivedRounded,
               label: 'Receive',
             ),
             // transfer section
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.swapHorizRounded,
               label: 'Transfer',
             ),
             // charts section
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.pieChartSharp,
               label: 'Charts',
               onTap: () => context.push('/charts'),
             ),
             // analytics section
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.barChartRounded,
               label: 'Analytics',
               onTap: () => context.push('/analytics'),
             ),
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.autoAwesomeRounded,
               label: 'AI Assistant',
               onTap: () => context.push('/gen-ai'),

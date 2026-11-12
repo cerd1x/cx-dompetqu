@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/core/cx_icons.dart';
@@ -98,14 +98,14 @@ class ProductItemView extends StatelessWidget {
             ],
           ),
           // menu button section
-          ItemMenu(
+          CxItemMenu(
             actions: [
-              ItemMenuAction(
+              CxItemMenuAction(
                 icon: CxIcons.editOutlined,
                 label: 'Edit',
                 onTap: onUpdate,
               ),
-              ItemMenuAction(
+              CxItemMenuAction(
                 icon: CxIcons.deleteOutline,
                 label: 'Hapus',
                 onTap: onDelete,

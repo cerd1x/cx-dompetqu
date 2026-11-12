@@ -2,7 +2,7 @@ import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/pattern_input.dart';
-import 'package:dompetqu/core/theme/widgets/pin_input.dart';
+import 'package:dompetqu/core/theme/widgets/cx_pin_input.dart';
 import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
 import 'package:dompetqu/features/app_lock/view/stores/app_lock_store.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
   bool _biometricAvailable = false;
 
   // PIN
-  final _pinKey = GlobalKey<PinInputState>();
+  final _pinKey = GlobalKey<CxPinInputState>();
   // Pattern
   final _patternKey = GlobalKey<PatternInputState>();
   final LocalAuthentication _auth = LocalAuthentication();
@@ -350,7 +350,7 @@ class _AppLockSetupScreenState extends ConsumerState<AppLockSetupScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        PinInput(key: _pinKey, onCompleted: (pin) => _handlePinCompleted(pin)),
+        CxPinInput(key: _pinKey, onCompleted: (pin) => _handlePinCompleted(pin)),
       ],
     );
   }

@@ -17,11 +17,13 @@ class AssetPickerField extends ConsumerWidget {
     required this.selectedId,
     required this.onChanged,
     this.minBalance,
+    this.unShow = const [],
   });
 
   final String title;
   final String? selectedId;
   final ValueChanged<String?> onChanged;
+  final List<String> unShow;
 
   /// Saldo minimum yang wajib dimiliki aset agar bisa dipilih.
   /// Aset dengan balance < [minBalance] ditandai merah & tidak bisa dipilih.
@@ -49,6 +51,7 @@ class AssetPickerField extends ConsumerWidget {
             selectedId: selectedId,
             title: title,
             minBalance: minBalance,
+            unShow: unShow,
           ),
         );
         if (picked != null) onChanged(picked);
@@ -133,11 +136,13 @@ class _AssetPickerSheet extends ConsumerStatefulWidget {
     this.selectedId,
     this.title = 'Pilih Aset',
     this.minBalance,
+    this.unShow = const [],
   });
 
   final String? selectedId;
   final String title;
   final num? minBalance;
+  final List<String> unShow;
 
   @override
   ConsumerState<_AssetPickerSheet> createState() => _AssetPickerSheetState();
@@ -185,11 +190,14 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
   Widget build(BuildContext context) {
     final controller = ref.watch(assetsStoreProvider);
     final assets = controller.items;
-    final filtered = _query.isEmpty
-        ? assets
-        : assets
-              .where((a) => a.name.toLowerCase().contains(_query.toLowerCase()))
-              .toList();
+    final filtered = assets
+        .where((a) => !widget.unShow.contains(a.id))
+        .where(
+          (a) =>
+              _query.isEmpty ||
+              a.name.toLowerCase().contains(_query.toLowerCase()),
+        )
+        .toList();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -308,6 +316,8 @@ class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
                   ],
                 ),
         ),
+
+        // form search of assets
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           child: Row(

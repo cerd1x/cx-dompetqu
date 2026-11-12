@@ -1,6 +1,6 @@
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/core/theme/widgets/item_menu.dart';
-import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
+import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +9,7 @@ import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'contacts_header.dart';
 import 'contact_item.dart';
@@ -106,8 +106,8 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
     context.push('/contact-detail/${contact.id}', extra: contact);
   }
 
-  List<ItemMenuAction> _menuActions(Contact contact) => [
-    ItemMenuAction(
+  List<CxItemMenuAction> _menuActions(Contact contact) => [
+    CxItemMenuAction(
       icon: CxIcons.editOutlined,
       label: 'Edit',
       onTap: () {
@@ -117,12 +117,12 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
         );
       },
     ),
-    ItemMenuAction(
+    CxItemMenuAction(
       icon: CxIcons.mergeType,
       label: 'Merge',
       onTap: () => context.push('/contact-merge/${contact.id}'),
     ),
-    ItemMenuAction(
+    CxItemMenuAction(
       icon: CxIcons.deleteOutline,
       label: 'Delete',
       onTap: () {
@@ -168,14 +168,14 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
         Expanded(child: _buildBody(state)),
         // bottom bar section
         IntrinsicHeight(
-          child: TabBottomBar(
+          child: CxTabBottomBar(
             child: Row(
               spacing: 8,
               mainAxisAlignment: .end,
               children: [
                 // search section
                 Expanded(
-                  child: SearchField(
+                  child: CxSearchField(
                     controller: _searchCtrl,
                     hint: 'Search contacts...',
                     onChanged: (v) => ref
@@ -184,12 +184,12 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
                   ),
                 ),
                 // add button section
-                RoundActionButton(
+                CxButtonActRound(
                   icon: CxIcons.personAddAlt1,
                   label: 'Add Contact',
                   onTap: () => _openForm(),
                 ),
-                RoundActionButton(
+                CxButtonActRound(
                   icon: CxIcons.merge,
                   label: 'Merge Contact',
                   onTap: () => _openForm(),

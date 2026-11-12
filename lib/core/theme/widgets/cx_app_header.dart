@@ -7,8 +7,8 @@ import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
 
 /// Header yang dipakai tab-tab di dalam shell — padanan `AppBar.svelte`.
-class AppHeader extends ConsumerWidget {
-  const AppHeader({super.key, this.title, this.subtitle, this.actions});
+class CxAppHeader extends ConsumerWidget {
+  const CxAppHeader({super.key, this.title, this.subtitle, this.actions});
 
   final String? title;
   final String? subtitle;
@@ -51,7 +51,7 @@ class AppHeader extends ConsumerWidget {
           if (user != null) ...[
             const SizedBox(width: 12),
             CxAvatar(
-              label: UserAvatar.initials(user),
+              label: CxUserAvatar.initials(user),
               onTap: () => context.push('/settings'),
             ),
           ],
@@ -62,8 +62,8 @@ class AppHeader extends ConsumerWidget {
 }
 
 /// Avatar lingkaran dengan inisial user (diganti CxAvatar ber-gradient).
-class UserAvatar {
-  UserAvatar._();
+class CxUserAvatar {
+  CxUserAvatar._();
 
   static String initials(AuthUser? user) {
     if (user == null) return '?';

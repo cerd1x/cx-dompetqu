@@ -2,7 +2,7 @@ import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/cx_combobox.dart';
 import 'package:dompetqu/core/theme/widgets/load_view_animating_progress_ripple.dart';
-import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
+import 'package:dompetqu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
 import 'package:dompetqu/features/admin_pannel/adapters/graphql_operations.dart';
 import 'package:dompetqu/features/admin_pannel/adapters/killswitch_remote_source.dart';
 import 'package:dompetqu/features/admin_pannel/domain/models/disabled_operation.dart';
@@ -142,7 +142,7 @@ class _KillswitchControllScreenState
         ],
       ),
       body: SafeArea(
-        child: ScrollRefreshWrapper(
+        child: CxScrollRefreshWrapper(
           onRefresh: _controller.load,
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),

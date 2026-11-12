@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cue/cue.dart';
 import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
 
-import 'round_action_button.dart';
+import 'cx_button_act_round.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
-/// Data satu aksi yang ditampilkan [ItemMenu].
-class ItemMenuAction {
-  const ItemMenuAction({
+/// Data satu aksi yang ditampilkan [CxItemMenu].
+class CxItemMenuAction {
+  const CxItemMenuAction({
     required this.icon,
     required this.label,
     required this.onTap,
@@ -20,16 +20,16 @@ class ItemMenuAction {
 
 /// Tombol menu (titik tiga) yang membuka daftar aksi item — digeneralisasi
 /// dari `ProductItemMenu` agar bisa dipakai untuk item apa pun.
-class ItemMenu extends StatefulWidget {
-  const ItemMenu({super.key, required this.actions});
+class CxItemMenu extends StatefulWidget {
+  const CxItemMenu({super.key, required this.actions});
 
-  final List<ItemMenuAction> actions;
+  final List<CxItemMenuAction> actions;
 
   @override
-  State<ItemMenu> createState() => _ItemMenuState();
+  State<CxItemMenu> createState() => _CxItemMenuState();
 }
 
-class _ItemMenuState extends State<ItemMenu> {
+class _CxItemMenuState extends State<CxItemMenu> {
   bool _isOpen = false;
 
   Future<void> _toggle(ShowModalFunction showModal) async {
@@ -93,7 +93,7 @@ class _ItemMenuState extends State<ItemMenu> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       for (var i = 0; i < widget.actions.length; i++) ...[
-                        RoundActionButton(
+                        CxButtonActRound(
                           icon: widget.actions[i].icon,
                           label: widget.actions[i].label,
                           size: 36,

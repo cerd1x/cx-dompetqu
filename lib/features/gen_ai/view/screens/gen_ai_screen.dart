@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -125,7 +125,7 @@ class GenAiScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: SafeArea(
         top: false,
-        child: TabBottomBar(
+        child: CxTabBottomBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

@@ -11,8 +11,8 @@ import 'package:dompetqu/core/theme/cs_mix.dart';
 /// yang scroll, sementara gradient-nya sudah nyaris opak
 /// (`gradientDarkWithAlpha`). Backdrop blur di sini hanya membakar frame tanpa
 /// perubahan visual berarti. Isi [blur] > 0 kalau memang butuh efek kaca.
-class TabBottomBar extends StatelessWidget {
-  const TabBottomBar({
+class CxTabBottomBar extends StatelessWidget {
+  const CxTabBottomBar({
     super.key,
     required this.child,
     this.paddingX = 16,

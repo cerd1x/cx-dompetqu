@@ -4,8 +4,8 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
-/// Cara memicu refresh pada [ScrollRefreshWrapper].
-enum ScrollRefreshMode {
+/// Cara memicu refresh pada [CxScrollRefreshWrapper].
+enum CxScrollRefreshMode {
   /// Tarik ke bawah saat berada di paling atas (pull-to-refresh).
   pull,
 
@@ -17,13 +17,13 @@ enum ScrollRefreshMode {
 /// atas.
 ///
 /// Dua mode tersedia lewat [mode]:
-/// - [ScrollRefreshMode.pull] (default): pengguna menarik ke bawah di posisi
+/// - [CxScrollRefreshMode.pull] (default): pengguna menarik ke bawah di posisi
 ///   paling atas lalu melepas. Indikatornya kustom memakai `SpinKitHourGlass`.
-/// - [ScrollRefreshMode.reachTop]: memanggil [onRefresh] otomatis ketika posisi
+/// - [CxScrollRefreshMode.reachTop]: memanggil [onRefresh] otomatis ketika posisi
 ///   scroll benar-benar mentok ke atas setelah sebelumnya digeser turun.
 ///
 /// ```dart
-/// ScrollRefreshWrapper(
+/// CxScrollRefreshWrapper(
 ///   onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
 ///   child: ListView.builder(...),
 /// )
@@ -32,12 +32,12 @@ enum ScrollRefreshMode {
 /// Tips: agar pull-to-refresh tetap bekerja walau konten belum melebihi tinggi
 /// layar, pastikan scrollable anak memakai
 /// `physics: const AlwaysScrollableScrollPhysics()`.
-class ScrollRefreshWrapper extends StatefulWidget {
-  const ScrollRefreshWrapper({
+class CxScrollRefreshWrapper extends StatefulWidget {
+  const CxScrollRefreshWrapper({
     super.key,
     required this.child,
     required this.onRefresh,
-    this.mode = ScrollRefreshMode.pull,
+    this.mode = CxScrollRefreshMode.pull,
     this.reachTopThreshold = 0.0,
     this.onlyOnUserDrag = true,
     this.displacement = 48,
@@ -57,17 +57,17 @@ class ScrollRefreshWrapper extends StatefulWidget {
   final Future<void> Function() onRefresh;
 
   /// Mode pemicu refresh.
-  final ScrollRefreshMode mode;
+  final CxScrollRefreshMode mode;
 
-  /// Ambang "mentok atas" untuk [ScrollRefreshMode.reachTop] (biasanya `0`).
+  /// Ambang "mentok atas" untuk [CxScrollRefreshMode.reachTop] (biasanya `0`).
   final double reachTopThreshold;
 
-  /// Bila `true`, [ScrollRefreshMode.reachTop] hanya terpicu oleh gestur
+  /// Bila `true`, [CxScrollRefreshMode.reachTop] hanya terpicu oleh gestur
   /// pengguna — bukan perubahan posisi programatik.
   final bool onlyOnUserDrag;
 
   /// Jarak indikator bertahan dari tepi atas selagi refresh berjalan
-  /// (mode [ScrollRefreshMode.pull]).
+  /// (mode [CxScrollRefreshMode.pull]).
   final double displacement;
 
   /// Jarak tarikan minimum agar refresh terpicu (mode pull).
@@ -86,13 +86,13 @@ class ScrollRefreshWrapper extends StatefulWidget {
   final double size;
 
   @override
-  State<ScrollRefreshWrapper> createState() => _ScrollRefreshWrapperState();
+  State<CxScrollRefreshWrapper> createState() => _CxScrollRefreshWrapperState();
 }
 
-class _ScrollRefreshWrapperState extends State<ScrollRefreshWrapper>
+class _CxScrollRefreshWrapperState extends State<CxScrollRefreshWrapper>
     with SingleTickerProviderStateMixin {
   /// Baru `true` setelah pengguna menggeser menjauh dari atas, sehingga
-  /// [ScrollRefreshMode.reachTop] tidak terpicu saat pertama kali dibuka.
+  /// [CxScrollRefreshMode.reachTop] tidak terpicu saat pertama kali dibuka.
   bool _armed = false;
 
   bool _refreshing = false;
@@ -184,7 +184,7 @@ class _ScrollRefreshWrapperState extends State<ScrollRefreshWrapper>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mode == ScrollRefreshMode.reachTop) {
+    if (widget.mode == CxScrollRefreshMode.reachTop) {
       return NotificationListener<ScrollNotification>(
         onNotification: _onReachTopNotification,
         child: Stack(

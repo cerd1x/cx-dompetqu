@@ -1,6 +1,6 @@
 import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'asset_transaction_list.dart';
 import 'swap_balance_dialog.dart';
 import 'package:flutter/material.dart';
@@ -123,19 +123,19 @@ class AssetDetailScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      RoundActionButton(
+                      CxButtonActRound(
                         label: 'Add',
                         onTap: openAddBalance,
                         icon: CxIcons.add,
                       ),
                       const SizedBox(width: 12),
-                      RoundActionButton(
+                      CxButtonActRound(
                         onTap: () => openSwap(context, controller, state.items),
                         icon: CxIcons.swapHoriz,
                         label: 'Swap Balance',
                       ),
                       const SizedBox(width: 12),
-                      RoundActionButton(
+                      CxButtonActRound(
                         onTap: openEdit,
                         icon: CxIcons.edit,
                         label: 'Edit Asset',

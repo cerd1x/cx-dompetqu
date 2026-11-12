@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:flutter/material.dart';
 
@@ -193,7 +193,7 @@ class _SwapBalanceDialogState extends State<SwapBalanceDialog> {
             padding: const .symmetric(vertical: 12),
             child: Align(
               alignment: .center,
-              child: RoundActionButton(
+              child: CxButtonActRound(
                 onTap: _reverseAssets,
                 icon: CxIcons.swapHoriz,
                 label: 'Reverse',

@@ -5,17 +5,17 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Input numerik 6 digit untuk PIN lock screen.
-class PinInput extends StatefulWidget {
-  const PinInput({super.key, this.length = 6, this.onCompleted});
+class CxPinInput extends StatefulWidget {
+  const CxPinInput({super.key, this.length = 6, this.onCompleted});
 
   final int length;
   final ValueChanged<String>? onCompleted;
 
   @override
-  State<PinInput> createState() => PinInputState();
+  State<CxPinInput> createState() => CxPinInputState();
 }
 
-class PinInputState extends State<PinInput> {
+class CxPinInputState extends State<CxPinInput> {
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
 

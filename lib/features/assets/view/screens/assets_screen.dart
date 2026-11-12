@@ -1,16 +1,16 @@
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
+import 'package:dompetqu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
-import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:dompetqu/features/assets/view/widgets/add_balance_dialog.dart';
 import 'package:dompetqu/features/assets/view/widgets/asset_form.dart';
 import 'package:dompetqu/features/assets/view/widgets/assets_header.dart';
@@ -77,18 +77,18 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     );
   }
 
-  List<ItemMenuAction> _menuActions(Asset asset) => [
-    ItemMenuAction(
+  List<CxItemMenuAction> _menuActions(Asset asset) => [
+    CxItemMenuAction(
       icon: CxIcons.editOutlined,
       label: 'Update',
       onTap: () => _openForm(asset: asset),
     ),
-    ItemMenuAction(
+    CxItemMenuAction(
       icon: CxIcons.addChart,
       label: 'Add Balance',
       onTap: () => _openAddBalance(asset),
     ),
-    ItemMenuAction(
+    CxItemMenuAction(
       icon: CxIcons.deleteOutline,
       label: 'Delete',
       onTap: () => _confirmDelete(asset),
@@ -108,12 +108,12 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
         // body section
         Expanded(child: _buildBody(state)),
         // bottom bar section
-        TabBottomBar(
+        CxTabBottomBar(
           child: Row(
             children: [
               // search section
               Expanded(
-                child: SearchField(
+                child: CxSearchField(
                   controller: _searchCtrl,
                   hint: 'Search assets...',
                   onChanged: controller.setSearch,
@@ -121,7 +121,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
               ),
               const SizedBox(width: 10),
               // add button section
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.add,
                 label: 'Add Asset',
                 onTap: () => _openForm(),
@@ -148,7 +148,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
     final assets = state.filtered.reversed.toList();
     // empty section
     if (assets.isEmpty) {
-      return ScrollRefreshWrapper(
+      return CxScrollRefreshWrapper(
         onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -160,7 +160,7 @@ class _AssetsScreenState extends ConsumerState<AssetsScreen> {
       );
     }
     // asset list section
-    return ScrollRefreshWrapper(
+    return CxScrollRefreshWrapper(
       onRefresh: () => ref.read(assetsStoreProvider.notifier).load(),
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
 
 /// Single contact row used in contacts list.
 class ContactItem extends StatelessWidget {
@@ -16,7 +16,7 @@ class ContactItem extends StatelessWidget {
 
   final Contact contact;
   final VoidCallback onTap;
-  final List<ItemMenuAction> menuActions;
+  final List<CxItemMenuAction> menuActions;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class ContactItem extends StatelessWidget {
           if (contact.group != null)
             CxBadge(label: contact.group!, tone: CxBadgeTone.accent),
           // menu button section
-          ItemMenu(actions: menuActions),
+          CxItemMenu(actions: menuActions),
         ],
       ),
     );

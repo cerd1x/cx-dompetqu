@@ -6,7 +6,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/bookkeeping_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/debt_tab.dart';
@@ -73,7 +73,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen> {
           ),
         ),
         // tab selector section — sticky di bawah konten
-        TabBottomBar(child: _buildTabSelector()),
+        CxTabBottomBar(child: _buildTabSelector()),
       ],
     );
 

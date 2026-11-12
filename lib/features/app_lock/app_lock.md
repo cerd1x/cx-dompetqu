@@ -91,14 +91,14 @@ tombol biometrik di bawah):
 - ICON `lock_outline` + judul "DompetQu Terkunci".
 - Hint (atau `_errorText` merah saat gagal).
 - Input sesuai `credential`:
-  - **PIN** → `PinInput` inline (6 kotak).
+  - **PIN** → `CxPinInput` inline (6 kotak).
   - **Pola** → tombol fallback + dialog otomatis (lihat §4.3).
-- Jika `biometricEnabled` → `BiometricButton` sebagai **opsi buka cepat** di
+- Jika `biometricEnabled` → `CxButtonBiometric` sebagai **opsi buka cepat** di
   bawah. User boleh pilih biometrik ATAU masukkan PIN/pola.
 
 ### 4.2 PIN inline
 
-`PinInput` adalah 6 `TextField` terpisah (1 digit per kotak, `obscureText`).
+`CxPinInput` adalah 6 `TextField` terpisah (1 digit per kotak, `obscureText`).
 Saat lengkap → `onCompleted(pin)`:
 
 ```dart
@@ -128,12 +128,12 @@ dalam `AlertDialog` (`_showPatternDialog`).
 
 ## 5. Biometrik sebagai opsi + double-prompt
 
-Biometrik di layar kunci bekerja via **`BiometricButton`**
-(`widgets/biometric_button.dart`) — widget mandiri yang mengecek ketersediaan
+Biometrik di layar kunci bekerja via **`CxButtonBiometric`**
+(`widgets/cx_button_biometric.dart`) — widget mandiri yang mengecek ketersediaan
 biometrik lalu **memverifikasi via `LocalAuthentication`** sendiri. Setelah
 sukses ia memanggil `onAuthenticated`.
 
-**Gotcha:** menghubungkan `BiometricButton.onAuthenticated` ke
+**Gotcha:** menghubungkan `CxButtonBiometric.onAuthenticated` ke
 `unlockWithBiometric()` akan memancing **dua prompt OS berurutan**. Karena itu
 layar kunci memanggil `completeUnlock()`:
 
@@ -147,10 +147,10 @@ void completeUnlock() {
 ```
 
 `completeUnlock` **tidak memunculkan prompt lagi** — verifikasi sudah dilakukan
-oleh `BiometricButton`. `unlockWithBiometric()` tetap ada untuk pemanggil yang
+oleh `CxButtonBiometric`. `unlockWithBiometric()` tetap ada untuk pemanggil yang
 belum terverifikasi.
 
-Jika perangkat tak punya biometrik, `BiometricButton` render
+Jika perangkat tak punya biometrik, `CxButtonBiometric` render
 `SizedBox.shrink()` dan user tetap bisa buka lewat PIN/pola (kredensial wajib
 selalu ada).
 
@@ -242,9 +242,9 @@ User memilih **kredensial** (PIN atau Pola) dan **opsional biometrik**
 ```
 masuk /app-lock
   -> build() -> credential?
-      pin      -> PinInput inline -> unlockWithPin
+      pin      -> CxPinInput inline -> unlockWithPin
       pattern  -> dialog dibuka otomatis -> unlockWithPattern
-  + biometricEnabled -> BiometricButton tersedia (opsi buka cepat)
+  + biometricEnabled -> CxButtonBiometric tersedia (opsi buka cepat)
 
 gagal -> error / clear input / failedAttempts++
   5x   -> lockout 1 menit (dinamis countdown), input terkunci
@@ -256,7 +256,7 @@ sukses -> _resetAttempts + locked=false
 ## 10. Catatan & edge cases
 
 - **`PopScope canPop: false`** — user tidak bisa back-nav keluar layar kunci.
-- **Biometrik tak tersedia** — `BiometricButton` render `SizedBox.shrink()`;
+- **Biometrik tak tersedia** — `CxButtonBiometric` render `SizedBox.shrink()`;
   PIN/pola tetap jadi jalur buka.
 - **Kredensial wajib selalu ada** — model ini menghapus mode biometric-only agar
   layar kunci tidak pernah buntu saat biometrik `PlatformException`.

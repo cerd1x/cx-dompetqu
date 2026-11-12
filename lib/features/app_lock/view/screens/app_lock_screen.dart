@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/biometric_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_biometric.dart';
 import 'package:dompetqu/core/theme/widgets/pattern_input_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/pin_input.dart';
+import 'package:dompetqu/core/theme/widgets/cx_pin_input.dart';
 import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
 import 'package:dompetqu/features/app_lock/view/stores/app_lock_store.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class AppLockScreen extends ConsumerStatefulWidget {
 }
 
 class _AppLockScreenState extends ConsumerState<AppLockScreen> {
-  final _pinKey = GlobalKey<PinInputState>();
+  final _pinKey = GlobalKey<CxPinInputState>();
   String? _errorText;
   Timer? _countdownTimer;
   bool _patternDialogVisible = false;
@@ -136,7 +136,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
         if (lockState.biometricEnabled)
           Padding(
             padding: const EdgeInsets.only(bottom: 32),
-            child: BiometricButton(
+            child: CxButtonBiometric(
               onAuthenticated: () {
                 ref.read(appLockStoreProvider.notifier).completeUnlock();
               },
@@ -149,7 +149,7 @@ class _AppLockScreenState extends ConsumerState<AppLockScreen> {
 
   Widget _buildInput(AppLockState lockState) {
     return switch (lockState.credential) {
-      LockCredential.pin => PinInput(
+      LockCredential.pin => CxPinInput(
         key: _pinKey,
         onCompleted: (pin) async {
           final ok = await ref

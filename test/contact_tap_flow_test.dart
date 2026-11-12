@@ -4,14 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dompetqu/core/theme/app_theme.dart';
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
 import 'package:dompetqu/features/contacts/view/screens/contact_detail_screen.dart';
 import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact_page.dart';
 import 'package:dompetqu/features/dashboard/domain/repositories/home_repository.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 
 class FakeContactsRepository implements HomeRepository {
   final _contact = Contact(
@@ -90,15 +90,15 @@ void main() {
     final detail = find.byType(ContactDetailScreen);
     expect(detail, findsOneWidget);
     expect(
-      find.descendant(of: detail, matching: find.byType(TabBottomBar)),
+      find.descendant(of: detail, matching: find.byType(CxTabBottomBar)),
       findsOneWidget,
     );
-    // `RoundActionButton` default memakai `Semantics` (bukan `Tooltip`) karena
-    // tooltip `OverlayPortal` bermasalah di dalam `TabBottomBar` yang ber-blur.
+    // `CxButtonActRound` default memakai `Semantics` (bukan `Tooltip`) karena
+    // tooltip `OverlayPortal` bermasalah di dalam `CxTabBottomBar` yang ber-blur.
     Finder actionButton(String label) => find.descendant(
       of: detail,
       matching: find.byWidgetPredicate(
-        (widget) => widget is RoundActionButton && widget.label == label,
+        (widget) => widget is CxButtonActRound && widget.label == label,
       ),
     );
     expect(actionButton('Edit'), findsOneWidget);
@@ -106,7 +106,7 @@ void main() {
     expect(actionButton('Delete'), findsOneWidget);
     expect(actionButton('Back'), findsOneWidget);
     expect(
-      find.descendant(of: detail, matching: find.byType(RoundActionButton)),
+      find.descendant(of: detail, matching: find.byType(CxButtonActRound)),
       findsNWidgets(4),
     );
 

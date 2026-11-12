@@ -4,8 +4,8 @@ import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
 /// Input pencarian — padanan search bar sticky di halaman Contacts/Inventory/Assets.
-class SearchField extends StatelessWidget {
-  const SearchField({
+class CxSearchField extends StatelessWidget {
+  const CxSearchField({
     super.key,
     required this.controller,
     required this.hint,

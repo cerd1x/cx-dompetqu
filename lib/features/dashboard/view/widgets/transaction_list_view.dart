@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -146,7 +146,7 @@ class _TransactionListViewState extends ConsumerState<TransactionListView> {
   }
 
   Widget _buildFilterList(BuildContext context) {
-    return TabBottomBar(
+    return CxTabBottomBar(
       child: Row(
         crossAxisAlignment: .center,
         children: [

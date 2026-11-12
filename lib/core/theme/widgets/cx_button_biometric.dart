@@ -7,16 +7,16 @@ import 'package:dompetqu/core/cx_icons.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 
 /// Tombol autentikasi biometrik (fingerprint / face).
-class BiometricButton extends StatefulWidget {
-  const BiometricButton({super.key, this.onAuthenticated});
+class CxButtonBiometric extends StatefulWidget {
+  const CxButtonBiometric({super.key, this.onAuthenticated});
 
   final VoidCallback? onAuthenticated;
 
   @override
-  State<BiometricButton> createState() => _BiometricButtonState();
+  State<CxButtonBiometric> createState() => _CxButtonBiometricState();
 }
 
-class _BiometricButtonState extends State<BiometricButton> {
+class _CxButtonBiometricState extends State<CxButtonBiometric> {
   final LocalAuthentication _auth = LocalAuthentication();
   bool _isAvailable = false;
   List<BiometricType> _availableTypes = [];

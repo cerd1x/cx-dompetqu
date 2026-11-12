@@ -172,7 +172,7 @@ class AppLockStore extends _$AppLockStore {
   /// Autentikasi biometrik penuh (memunculkan prompt OS) lalu membuka kunci.
   ///
   /// Hanya panggil jika biometrik BELUM diverifikasi di UI. Jika pemanggil
-  /// hanya memverifikasi via `LocalAuthentication` (mis. `BiometricButton`),
+  /// hanya memverifikasi via `LocalAuthentication` (mis. `CxButtonBiometric`),
   /// gunakan [completeUnlock] agar prompt tidak muncul dua kali.
   Future<bool> unlockWithBiometric() async {
     final current = state.value;
@@ -193,7 +193,7 @@ class AppLockStore extends _$AppLockStore {
 
   /// Menyelesaikan unlock tanpa memunculkan prompt autentikasi lagi.
   ///
-  /// Dipanggil setelah biometrik berhasil diverifikasi oleh `BiometricButton`.
+  /// Dipanggil setelah biometrik berhasil diverifikasi oleh `CxButtonBiometric`.
   void completeUnlock() {
     final current = state.value;
     if (current == null || current.isLockedOut) return;

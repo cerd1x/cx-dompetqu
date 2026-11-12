@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/item_menu.dart';
+import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
 
 /// Single asset row used in assets list.
 class AssetItem extends StatelessWidget {
@@ -17,7 +17,7 @@ class AssetItem extends StatelessWidget {
   });
 
   final Asset asset;
-  final List<ItemMenuAction> menuActions;
+  final List<CxItemMenuAction> menuActions;
   final VoidCallback? onTap;
 
   @override
@@ -77,7 +77,7 @@ class AssetItem extends StatelessWidget {
             ],
           ),
           // menu button section
-          ItemMenu(actions: menuActions),
+          CxItemMenu(actions: menuActions),
         ],
       ),
     );

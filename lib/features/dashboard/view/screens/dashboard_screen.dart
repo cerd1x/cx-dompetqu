@@ -6,7 +6,7 @@ import '../widgets/quick_actions.dart';
 import '../widgets/transaction_list_view.dart';
 import '../widgets/stats_grid.dart';
 
-import 'package:dompetqu/core/theme/widgets/app_header.dart';
+import 'package:dompetqu/core/theme/widgets/cx_app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
@@ -18,7 +18,7 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return TabScaffold(
       // header section
-      header: AppHeader(
+      header: CxAppHeader(
         title: 'DompetQu',
         actions: [
           IconButton(

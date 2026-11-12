@@ -5,7 +5,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/assets/view/screens/assets_screen.dart';
-import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
 class _Holding {
@@ -226,7 +226,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         Row(
           children: [
             Expanded(
-              child: SearchField(
+              child: CxSearchField(
                 controller: _searchCtrl,
                 hint: 'Search holdings...',
                 onChanged: (v) => setState(() => _search = v),

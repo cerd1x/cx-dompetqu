@@ -2,7 +2,7 @@ import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:dompetqu/features/contacts/view/widgets/contact_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +12,7 @@ import 'package:mix/mix.dart';
 
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
 /// Full screen detail kontak — route `/contact-detail/:id`.
@@ -185,27 +185,27 @@ class ContactDetailScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: SafeArea(
         top: false,
-        child: TabBottomBar(
+        child: CxTabBottomBar(
           child: Row(
             spacing: 8,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.editOutlined,
                 label: 'Edit',
                 onTap: openEdit,
               ),
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.mergeType,
                 label: 'Merge',
                 onTap: openMerge,
               ),
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.deleteOutline,
                 label: 'Delete',
                 onTap: confirmDelete,
               ),
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.arrowBack,
                 label: 'Back',
                 onTap: () => context.pop(),

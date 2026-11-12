@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
@@ -8,14 +8,14 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
-import 'package:dompetqu/core/theme/widgets/scroll_refresh_wrapper.dart';
+import 'package:dompetqu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
 import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:dompetqu/core/theme/widgets/data_states.dart';
-import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_detail_view.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_item_view.dart';
 import 'package:dompetqu/core/cx_icons.dart';
@@ -91,14 +91,14 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
         // body section
         Expanded(child: _buildBody(state)),
         // bottom bar section
-        TabBottomBar(
+        CxTabBottomBar(
           child: Row(
             mainAxisAlignment: .center,
             crossAxisAlignment: .center,
             children: [
               // search section
               Expanded(
-                child: SearchField(
+                child: CxSearchField(
                   controller: _searchCtrl,
                   hint: 'Search products...',
                   onChanged: controller.setSearch,
@@ -106,7 +106,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
               ),
               const SizedBox(width: 10),
               // add button section
-              RoundActionButton(
+              CxButtonActRound(
                 icon: CxIcons.add,
                 label: 'Add Product',
                 onTap: () => _openForm(),
@@ -133,7 +133,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
     final products = state.filtered;
     // empty section
     if (products.isEmpty) {
-      return ScrollRefreshWrapper(
+      return CxScrollRefreshWrapper(
         onRefresh: () => ref.read(inventoryStoreProvider.notifier).load(),
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -145,7 +145,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen> {
       );
     }
     // product list section
-    return ScrollRefreshWrapper(
+    return CxScrollRefreshWrapper(
       onRefresh: () => ref.read(inventoryStoreProvider.notifier).load(),
       child: ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),

@@ -8,9 +8,9 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/round_action_button.dart';
-import 'package:dompetqu/core/theme/widgets/bottom_bar.dart';
-import 'package:dompetqu/core/theme/widgets/search_field.dart';
+import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:dompetqu/core/cx_icons.dart';
 
 /// Screen merge contact — route `/contact-merge/:id`.
@@ -168,7 +168,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
   Widget _buildActions() {
     return SafeArea(
       top: false,
-      child: TabBottomBar(
+      child: CxTabBottomBar(
         child: Row(
           spacing: 8,
           children: [
@@ -181,7 +181,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
                 expand: true,
               ),
             ),
-            RoundActionButton(
+            CxButtonActRound(
               icon: CxIcons.arrowBack,
               label: 'Back',
               onTap: () => context.pop(),
@@ -197,7 +197,7 @@ class _ContactMergeScreenState extends ConsumerState<ContactMergeScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-          child: SearchField(
+          child: CxSearchField(
             controller: _searchCtrl,
             hint: 'Cari kontak untuk digabung...',
             onChanged: (_) => setState(() {}),

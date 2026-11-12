@@ -6,7 +6,7 @@ import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/assets/view/screens/assets_screen.dart';
 import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 class _Holding {
   const _Holding({

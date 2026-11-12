@@ -13,7 +13,7 @@ import 'package:dompetqu/features/order/view/widgets/debt_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/expense_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/loan_tab.dart';
 import 'package:dompetqu/features/order/view/widgets/sale_tab.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Layar buat transaksi/order — padanan
 /// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),

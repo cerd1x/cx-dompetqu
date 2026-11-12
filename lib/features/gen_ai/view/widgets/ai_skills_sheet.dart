@@ -7,7 +7,7 @@ import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
 import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 sealed class AiSkillAction {
   const AiSkillAction();

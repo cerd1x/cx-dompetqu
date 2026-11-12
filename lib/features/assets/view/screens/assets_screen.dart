@@ -16,7 +16,7 @@ import 'package:dompetqu/features/assets/view/widgets/asset_form.dart';
 import 'package:dompetqu/features/assets/view/widgets/assets_header.dart';
 import 'package:dompetqu/features/assets/view/widgets/asset_item.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_assets/AssetsPage.svelte`.
 class AssetsScreen extends ConsumerStatefulWidget {

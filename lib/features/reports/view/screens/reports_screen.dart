@@ -9,7 +9,7 @@ import 'package:dompetqu/core/logger/log_record.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
 import 'package:dompetqu/features/reports/view/stores/reports_store.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Layar laporan: menampilkan hasil dari [AppLogger] (log yang tertangkap),
 /// menyalinnya, dan menyimpan laporan ke backend/database via store.

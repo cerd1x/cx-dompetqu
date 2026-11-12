@@ -10,7 +10,7 @@ import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/theme/widgets/cx_text_field_password.dart';
 import 'package:dompetqu/features/auth/view/stores/auth_providers.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 enum _AuthMode { signIn, signUp }
 

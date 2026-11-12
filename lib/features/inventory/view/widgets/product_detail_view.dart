@@ -10,7 +10,7 @@ import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Dialog detail product — padanan popup detail di web.
 class ProductDetailView extends StatelessWidget {

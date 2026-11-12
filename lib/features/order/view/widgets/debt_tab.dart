@@ -18,7 +18,7 @@ import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/features/order/view/stores/debt_settlements.dart';
 import 'package:dompetqu/features/order/view/widgets/order_tab_widgets.dart';
 import 'package:dompetqu/core/theme/widgets/cx_filter_chip.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Kategori yang dipakai backend saat `createOrderLoan` — penanda sebuah
 /// transaksi adalah utang pelanggan (`create-order-loan.usecase.ts`).

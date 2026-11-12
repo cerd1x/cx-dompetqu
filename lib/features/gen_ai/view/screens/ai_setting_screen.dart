@@ -9,7 +9,7 @@ import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_profiles_card.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Layar penuh untuk mengelola profil dan konfigurasi AI.
 /// Padanan halaman dari [AiSettingsSheet] yang dipakai sebagai modal —

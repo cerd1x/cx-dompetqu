@@ -6,7 +6,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Halaman Profile — padanan `src/routes/dompet/settings/profile/+page.svelte`.
 class ProfileScreen extends ConsumerWidget {

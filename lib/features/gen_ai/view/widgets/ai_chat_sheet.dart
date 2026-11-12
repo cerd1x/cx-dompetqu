@@ -6,7 +6,7 @@ import 'package:dompetqu/features/gen_ai/view/stores/ai_store.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_message.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Bottom sheet percakapan dengan asisten AI — dipanggil dari [AiBubble].
 class AiChatSheet extends StatelessWidget {

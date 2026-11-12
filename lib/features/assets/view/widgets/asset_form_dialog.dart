@@ -8,7 +8,7 @@ import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 const _assetTypes = ['bank', 'ewallet', 'cash', 'crypto', 'loan'];
 const _currencies = ['IDR', 'USD', 'EUR', 'JPY', 'GBP', 'SGD'];

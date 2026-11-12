@@ -13,7 +13,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Full screen detail kontak — route `/contact-detail/:id`.
 ///

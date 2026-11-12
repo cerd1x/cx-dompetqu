@@ -14,7 +14,7 @@ import 'package:dompetqu/features/settings/view/widgets/row_currency_picker_view
 import 'package:dompetqu/features/settings/view/widgets/row_notifications_view.dart';
 import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
 import 'package:dompetqu/features/settings/view/stores/fps_indicator_store.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';

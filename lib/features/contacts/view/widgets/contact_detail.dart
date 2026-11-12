@@ -5,7 +5,7 @@ import 'package:dompetqu/features/contacts/domain/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Detail dialog for a contact.
 class ContactDetail extends StatelessWidget {

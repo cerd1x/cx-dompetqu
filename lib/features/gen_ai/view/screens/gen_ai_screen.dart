@@ -12,7 +12,7 @@ import 'package:dompetqu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_skills_sheet.dart';
 import 'package:dompetqu/features/gen_ai/view/widgets/mcp_sheet.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 class GenAiScreen extends ConsumerWidget {
   const GenAiScreen({super.key});

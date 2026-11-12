@@ -7,7 +7,7 @@ import 'package:dompetqu/core/theme/widgets/cx_card.dart';
 import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Baris item product di daftar inventory — padanan `_inventory/InventoryPage.svelte`.
 class ProductItemView extends StatelessWidget {

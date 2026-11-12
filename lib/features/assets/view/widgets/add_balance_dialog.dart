@@ -7,7 +7,7 @@ import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Dialog tambah saldo asset — padanan `_assets/FormAddBalance.svelte`.
 class AddBalanceDialog extends ConsumerStatefulWidget {

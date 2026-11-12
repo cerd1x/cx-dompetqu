@@ -18,7 +18,7 @@ import 'package:dompetqu/core/theme/widgets/data_states.dart';
 import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_detail_view.dart';
 import 'package:dompetqu/features/inventory/view/widgets/product_item_view.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_inventory/InventoryPage.svelte`.
 class InventoryScreen extends ConsumerStatefulWidget {

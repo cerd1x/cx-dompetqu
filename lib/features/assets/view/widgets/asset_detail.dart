@@ -6,7 +6,7 @@ import 'package:remix/remix.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Detail dialog for an asset.
 class AssetDetail extends StatelessWidget {

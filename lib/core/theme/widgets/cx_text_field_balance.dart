@@ -6,7 +6,7 @@ import 'package:mix/mix.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/core/theme/cs_mix.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Mata uang untuk picker — padanan `currencies` di `setting_store.svelte`.
 class BalanceCurrency {

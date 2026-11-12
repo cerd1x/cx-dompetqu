@@ -15,7 +15,7 @@ import 'contacts_header.dart';
 import 'contact_item.dart';
 import 'contact_form.dart';
 import 'duplicate_contacts_investigation_dialog.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_contacts/ContactPage.svelte`.
 class ContactsScreen extends ConsumerStatefulWidget {

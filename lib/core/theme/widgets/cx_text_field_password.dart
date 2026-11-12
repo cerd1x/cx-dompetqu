@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Input password brand — padanan `CxTextField.password` web.
 ///

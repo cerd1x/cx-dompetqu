@@ -8,7 +8,7 @@ import '../widgets/stats_grid.dart';
 
 import 'package:dompetqu/core/theme/widgets/cx_app_header.dart';
 import 'package:dompetqu/core/theme/widgets/placeholders.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_dashboard/DashboardPage.svelte` + `AppBar.svelte` (restyle fluttermix).
 class DashboardScreen extends ConsumerWidget {

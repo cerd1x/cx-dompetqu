@@ -9,7 +9,7 @@ import 'package:dompetqu/features/auth/view/stores/session_store.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
 import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Shell utama dengan ShellRoute — persistent bottom nav lewat GoRouter.
 class HomeShell extends ConsumerStatefulWidget {

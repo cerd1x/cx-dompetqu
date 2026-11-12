@@ -12,7 +12,7 @@ import 'package:dompetqu/features/assets/view/widgets/asset_detail.dart';
 import 'package:dompetqu/features/assets/view/widgets/asset_form_dialog.dart';
 import 'package:dompetqu/features/assets/view/widgets/add_balance_dialog.dart';
 import 'package:remix/remix.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Full screen details for an asset. Route: /details-assets/:id
 class AssetDetailScreen extends ConsumerWidget {

@@ -14,7 +14,7 @@ import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
 import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
 import 'ai_settings_profiles_card.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 // Model yang ditawarkan untuk tiap provider; Ollama memakai nama model lokal.
 const Map<AiModelProvider, List<CxSelectItem<String>>> _kProviderModels = {

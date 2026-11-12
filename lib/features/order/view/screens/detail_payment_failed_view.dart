@@ -13,7 +13,7 @@ import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dar
 import 'package:dompetqu/features/payments/view/stores/payments_repository_provider.dart';
 import 'package:dompetqu/features/payments/view/widgets/payment_widgets.dart';
 import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
-import 'package:dompetqu/core/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Layar detail satu payment gagal.
 ///

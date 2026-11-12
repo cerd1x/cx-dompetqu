@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:mix/mix.dart';
 
+import 'package:dompetqu/core/theme/widgets/cx_field_tile.dart';
 import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 import 'package:dompetqu/core/theme/dompet_brand.dart';
 import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
@@ -45,6 +45,7 @@ class CxPickerFieldWithModalTopbar<T> extends StatelessWidget {
     this.emptyText = 'Data kosong',
     this.searchHint,
     this.sheetTitle,
+    this.header,
     this.loadItems,
     this.onRefresh,
     this.disabledOf,
@@ -94,6 +95,10 @@ class CxPickerFieldWithModalTopbar<T> extends StatelessWidget {
   /// Judul di dalam sheet bila berbeda dari [label].
   final String? sheetTitle;
 
+  /// Baris keterangan tambahan di bawah judul sheet (mis. "Butuh saldo
+  /// minimal: Rp 100.000" pada picker aset). Bila null, hanya judul tampil.
+  final String? header;
+
   /// Dimuat sekali saat tile ditap, sebelum sheet dibuka; hasilnya menjadi isi
   /// sheet. Dipakai fitur yang list-nya dipaginasi/baru sebagian termuat —
   /// padanan `ensureAllLoaded()` di `CustomerPickerField`. Bila null, sheet
@@ -115,7 +120,7 @@ class CxPickerFieldWithModalTopbar<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final selected = selectedItem;
 
-    return _CxPickerFieldTile(
+    return CxFieldTile(
       label: label,
       value: selected == null ? placeholder : labelOf(selected),
       leading: icon,
@@ -127,6 +132,7 @@ class CxPickerFieldWithModalTopbar<T> extends StatelessWidget {
           context: context,
           builder: (_) => _CxPickerSheet<T>(
             title: sheetTitle ?? label,
+            header: header,
             items: source,
             selectedItem: selectedItem,
             isSelectedOf: isSelectedOf,
@@ -147,77 +153,6 @@ class CxPickerFieldWithModalTopbar<T> extends StatelessWidget {
   }
 }
 
-/// Tile input bergaya `csinput` yang bisa ditap — salinan visual `FieldTile`
-/// di `asset_picker_field.dart` supaya `core/` tidak bergantung ke `features/`.
-class _CxPickerFieldTile extends StatelessWidget {
-  const _CxPickerFieldTile({
-    required this.label,
-    required this.value,
-    required this.leading,
-    required this.onTap,
-  });
-
-  final String label;
-  final String value;
-  final IconData leading;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8, bottom: 4),
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 12, color: Colors.white70),
-          ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: Box(
-            style: BoxStyler()
-                .padding(
-                  EdgeInsetsGeometryMix.value(
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  ),
-                )
-                .decoration(
-                  DecorationMix.value(
-                    BoxDecoration(
-                      color: DompetBrand.csFill,
-                      borderRadius: BorderRadius.circular(DompetBrand.radius),
-                      border: Border.all(color: DompetBrand.csBorder, width: 1),
-                    ),
-                  ),
-                ),
-            child: Row(
-              children: [
-                Icon(leading, size: 18, color: Colors.white54),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    value,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ),
-                const Icon(
-                  CxIcons.chevronRightRounded,
-                  size: 18,
-                  color: Colors.white38,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 /// Isi sheet: judul, daftar item, pencarian, dan tombol refresh opsional.
 class _CxPickerSheet<T> extends StatefulWidget {
   const _CxPickerSheet({
@@ -227,6 +162,7 @@ class _CxPickerSheet<T> extends StatefulWidget {
     required this.defaultIcon,
     required this.emptyText,
     required this.searchHint,
+    this.header,
     this.selectedItem,
     this.isSelectedOf,
     this.subtitleOf,
@@ -237,6 +173,7 @@ class _CxPickerSheet<T> extends StatefulWidget {
   });
 
   final String title;
+  final String? header;
   final List<T> items;
   final T? selectedItem;
   final bool Function(T item)? isSelectedOf;
@@ -315,12 +252,28 @@ class _CxPickerSheetState<T> extends State<_CxPickerSheet<T>> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Text(
-                        widget.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          if (widget.header != null &&
+                              widget.header!.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.header!,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white54,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
                     for (final item in filtered)

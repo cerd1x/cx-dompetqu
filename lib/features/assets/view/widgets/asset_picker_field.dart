@@ -1,15 +1,23 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
-import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
 import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:dompetqu/core/theme/widgets/cx_picker_field_with_modal_topbar.dart';
+import 'package:dompetqu/core/utils/balance.dart';
+import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
 
 /// Picker aset dari [assetsStoreProvider] — padanan `AssetPicker.svelte`.
+///
+/// Komposisi tipis di atas [CxPickerFieldWithModalTopbar]: tile, sheet, list,
+/// dan pencarian tinggal di core. Di sini hanya sumber data, pemetaan id, dan
+/// aturan saldo minimum yang spesifik fitur aset.
+///
+/// Catatan perilaku:
+/// - Tombol refresh sengaja tidak dipakai (tidak mengoper `onRefresh`); data
+///   aset mengikuti `assetsStoreProvider` yang sudah dimuat layar pemanggil.
+/// - Aset dengan saldo < [minBalance] tetap tampil tapi ditandai merah dan tidak
+///   bisa dipilih, dengan keterangan batas saldo di bawah judul sheet.
 class AssetPickerField extends ConsumerWidget {
   const AssetPickerField({
     super.key,
@@ -23,6 +31,8 @@ class AssetPickerField extends ConsumerWidget {
   final String title;
   final String? selectedId;
   final ValueChanged<String?> onChanged;
+
+  /// Id aset yang tidak ditampilkan (mis. aset sumber pada form transfer).
   final List<String> unShow;
 
   /// Saldo minimum yang wajib dimiliki aset agar bisa dipilih.
@@ -40,347 +50,61 @@ class AssetPickerField extends ConsumerWidget {
       }
     }
 
-    return FieldTile(
+    // Widget core tidak tahu aturan tiap fitur, jadi penyaringan `unShow`
+    // dilakukan di sini — termasuk saat sheet dibuka ulang.
+    final visible = assets.where((a) => !unShow.contains(a.id)).toList();
+
+    return CxPickerFieldWithModalTopbar<Asset>(
       label: title,
-      value: selected?.name ?? 'Belum dipilih',
-      leading: CxIcons.accountBalanceWalletOutlined,
-      onTap: () async {
-        final picked = await showCxModalTopBar<String>(
-          context: context,
-          builder: (sheetCtx) => _AssetPickerSheet(
-            selectedId: selectedId,
-            title: title,
-            minBalance: minBalance,
-            unShow: unShow,
-          ),
-        );
-        if (picked != null) onChanged(picked);
-      },
+      items: visible,
+      labelOf: (a) => a.name,
+      selectedItem: selected,
+      isSelectedOf: (a) => a.id == selectedId,
+      icon: CxIcons.accountBalanceWalletOutlined,
+      emptyText: 'Aset kosong',
+      searchHint: 'Cari aset...',
+      header: _minBalanceHint(),
+      subtitleOf: (a) =>
+          '${a.type.toUpperCase()} · ${_formatBalance(a.balance)}',
+      disabledOf: _insufficient,
+      disabledHintOf: (a) => 'Saldo tidak cukup · ${_formatBalance(a.balance)}',
+      // Form memakai id (bukan objek Asset), jadi nilai dari sheet dipetakan
+      // ke id di boundary ini.
+      onChanged: (asset) => onChanged(asset.id),
     );
   }
-}
 
-/// Tile input bergaya `csinput` yang bisa ditap.
-class FieldTile extends StatelessWidget {
-  const FieldTile({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.onTap,
-    required this.leading,
-  });
-
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-  final IconData leading;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8, bottom: 4),
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 12, color: Colors.white70),
-          ),
-        ),
-        GestureDetector(
-          onTap: onTap,
-          child: Box(
-            style: BoxStyler()
-                .padding(
-                  EdgeInsetsGeometryMix.value(
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  ),
-                )
-                .decoration(
-                  DecorationMix.value(
-                    BoxDecoration(
-                      color: DompetBrand.csFill,
-                      borderRadius: BorderRadius.circular(DompetBrand.radius),
-                      border: Border.all(color: DompetBrand.csBorder, width: 1),
-                    ),
-                  ),
-                ),
-            child: Row(
-              children: [
-                Icon(leading, size: 18, color: Colors.white54),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    value,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ),
-                const Icon(
-                  CxIcons.chevronRightRounded,
-                  size: 18,
-                  color: Colors.white38,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _AssetPickerSheet extends ConsumerStatefulWidget {
-  const _AssetPickerSheet({
-    this.selectedId,
-    this.title = 'Pilih Aset',
-    this.minBalance,
-    this.unShow = const [],
-  });
-
-  final String? selectedId;
-  final String title;
-  final num? minBalance;
-  final List<String> unShow;
-
-  @override
-  ConsumerState<_AssetPickerSheet> createState() => _AssetPickerSheetState();
-}
-
-class _AssetPickerSheetState extends ConsumerState<_AssetPickerSheet> {
-  final _ctrl = TextEditingController();
-  String _query = '';
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _refresh() async {
-    await ref.read(assetsStoreProvider.notifier).load();
-  }
-
-  String _formatBalance(String raw) {
-    try {
-      return Balance.parse(raw).toLocalStr();
-    } on FormatException {
-      return raw;
-    }
-  }
-
-  num? _balanceValue(String raw) {
-    try {
-      return Balance.parse(raw).value;
-    } on FormatException {
-      return null;
-    }
+  /// Baris "Butuh saldo minimal: …" di bawah judul sheet; null bila tidak ada
+  /// batas saldo sehingga sheet hanya menampilkan judul.
+  String? _minBalanceHint() {
+    final min = minBalance;
+    if (min == null || min <= 0) return null;
+    return 'Butuh saldo minimal: ${Balance.parse('IDR $min').toLocalStr()}';
   }
 
   bool _insufficient(Asset asset) {
-    final min = widget.minBalance;
+    final min = minBalance;
     if (min == null || min <= 0) return false;
     final value = _balanceValue(asset.balance);
     if (value == null) return false;
     return value < min;
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    final controller = ref.watch(assetsStoreProvider);
-    final assets = controller.items;
-    final filtered = assets
-        .where((a) => !widget.unShow.contains(a.id))
-        .where(
-          (a) =>
-              _query.isEmpty ||
-              a.name.toLowerCase().contains(_query.toLowerCase()),
-        )
-        .toList();
+/// Format string "ISO_CODE VALUE" ke mata uang lokal; kembalikan apa adanya
+/// bila formatnya tidak dikenal (mis. data backend rusak).
+String _formatBalance(String raw) {
+  try {
+    return Balance.parse(raw).toLocalStr();
+  } on FormatException {
+    return raw;
+  }
+}
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          child: filtered.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Text(
-                    'Aset kosong',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white38),
-                  ),
-                )
-              : ListView(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          if (widget.minBalance != null &&
-                              widget.minBalance! > 0) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              'Butuh saldo minimal: '
-                              '${Balance.parse('IDR ${widget.minBalance}').toLocalStr()}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    for (final asset in filtered)
-                      Builder(
-                        builder: (_) {
-                          final insufficient = _insufficient(asset);
-                          final selected = asset.id == widget.selectedId;
-                          final accent = insufficient
-                              ? DompetBrand.pink.withValues(alpha: 0.9)
-                              : selected
-                              ? const Color(0xFF34D399)
-                              : Colors.white70;
-                          return ListTile(
-                            leading: Icon(
-                              insufficient
-                                  ? CxIcons.errorOutline
-                                  : CxIcons.accountBalanceWalletOutlined,
-                              color: insufficient
-                                  ? DompetBrand.pink.withValues(alpha: 0.9)
-                                  : Colors.white70,
-                            ),
-                            title: Text(
-                              asset.name,
-                              style: TextStyle(color: accent),
-                            ),
-                            subtitle: Text(
-                              insufficient
-                                  ? 'Saldo tidak cukup · ${_formatBalance(asset.balance)}'
-                                  : '${asset.type.toUpperCase()} · ${_formatBalance(asset.balance)}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: insufficient
-                                    ? DompetBrand.pink.withValues(alpha: 0.7)
-                                    : Colors.white38,
-                              ),
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  _formatBalance(asset.balance),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: accent,
-                                  ),
-                                ),
-                                if (insufficient) ...[
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    CxIcons.errorOutline,
-                                    size: 18,
-                                    color: DompetBrand.pink.withValues(
-                                      alpha: 0.9,
-                                    ),
-                                  ),
-                                ] else if (selected) ...[
-                                  const SizedBox(width: 8),
-                                  const Icon(
-                                    CxIcons.check,
-                                    color: Color(0xFF34D399),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            onTap: insufficient
-                                ? null
-                                : () => Navigator.of(context).pop(asset.id),
-                          );
-                        },
-                      ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-        ),
-
-        // form search of assets
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _ctrl,
-                  onChanged: (v) => setState(() => _query = v),
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    hintText: 'Cari aset...',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.3),
-                    ),
-                    isDense: true,
-                    filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.06),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: const Icon(
-                      CxIcons.search,
-                      size: 18,
-                      color: Colors.white38,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              SizedBox(
-                width: 46,
-                height: 46,
-                child: Material(
-                  color: Colors.white.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(14),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: controller.loading ? null : _refresh,
-                    child: controller.loading
-                        ? const Padding(
-                            padding: EdgeInsets.all(13),
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white70,
-                            ),
-                          )
-                        : const Icon(
-                            CxIcons.refreshRounded,
-                            size: 20,
-                            color: Colors.white70,
-                          ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+num? _balanceValue(String raw) {
+  try {
+    return Balance.parse(raw).value;
+  } on FormatException {
+    return null;
   }
 }

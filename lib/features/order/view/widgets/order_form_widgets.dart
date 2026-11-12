@@ -1,13 +1,13 @@
-import 'package:dompetqu/features/assets/view/widgets/asset_picker_field.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
 import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:dompetqu/core/theme/widgets/cx_field_tile.dart';
+import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 import 'package:dompetqu/core/utils/formatters.dart';
 import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
 
 /// Mata uang dari preferensi lokal — padanan `settingStore.selectedCurrency`.
 String selectedCurrency(WidgetRef ref) =>
@@ -153,7 +153,7 @@ class DateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FieldTile(
+    return CxFieldTile(
       label: label,
       value: DateFormat('d MMM yyyy').format(value),
       leading: CxIcons.calendarMonthOutlined,

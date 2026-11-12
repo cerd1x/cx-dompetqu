@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Nilai tampilan yang dapat dikendalikan saat runtime — sumber kebenaran
 /// warna (primary/secondary/tertiary), gradient, opacity glass, dan blur.

@@ -1,7 +1,7 @@
 import 'package:dompetqu/features/gen_ai/view/widgets/ai_bubble.dart';
 import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
 import 'package:dompetqu/core/theme/widgets/cx_nav_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

@@ -1,6 +1,6 @@
 import 'package:dompetqu/features/assets/domain/models/asset.dart';
 import 'package:dompetqu/features/assets/domain/models/asset_type.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:dompetqu/core/utils/balance.dart';
 import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';

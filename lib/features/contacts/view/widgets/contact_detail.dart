@@ -2,7 +2,7 @@ import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
 import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
 import 'package:dompetqu/core/theme/widgets/cx_button.dart';
 import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 import 'package:dompetqu/core/theme/widgets/cx_icons.dart';

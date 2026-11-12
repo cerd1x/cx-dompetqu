@@ -1,7 +1,7 @@
 // CxIcons - Centralized icon management for the app
 // Replaces direct `Icons.*` and `HugeIcons.*` references.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 /// Centralized icon class for all icons used in the app.

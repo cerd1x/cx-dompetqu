@@ -23,7 +23,7 @@ import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
 import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
 import 'package:dompetqu/features/transactions/view/screens/transaction_detail_screen.dart';
 import 'package:dompetqu/features/struct/view/screens/struct_detail_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:remix/remix.dart';
 
 /// Brand identity DompetQu — updated to gold-black primary with purple & pink accents

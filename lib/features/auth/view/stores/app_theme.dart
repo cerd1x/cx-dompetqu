@@ -1,5 +1,5 @@
 import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Palet mengikuti tema daisyUI di web (primary/brand). Scaffold awal.
 class AppTheme {

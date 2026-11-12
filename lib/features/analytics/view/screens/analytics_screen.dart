@@ -6,7 +6,7 @@ import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
 import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
 import 'package:mix/mix.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:dompetqu/core/theme/widgets/cx_icons.dart';

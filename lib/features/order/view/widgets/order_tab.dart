@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:dompetqu/features/inventory/domain/models/product.dart';
 import 'package:dompetqu/core/theme/widgets/cx_icons.dart';

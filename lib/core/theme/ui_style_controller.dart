@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart' show Alignment, Color;
+import 'package:material_ui/material_ui.dart' show Alignment, Color;
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

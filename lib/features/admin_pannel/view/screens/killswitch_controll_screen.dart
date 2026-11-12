@@ -7,7 +7,7 @@ import 'package:dompetqu/features/admin_pannel/adapters/graphql_operations.dart'
 import 'package:dompetqu/features/admin_pannel/adapters/killswitch_remote_source.dart';
 import 'package:dompetqu/features/admin_pannel/domain/models/disabled_operation.dart';
 import 'package:dompetqu/features/admin_pannel/view/stores/killswitch_store.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';

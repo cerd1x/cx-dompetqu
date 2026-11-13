@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Tab layar order/transaksi — padanan tab di
 /// `_routes/dompet/create-transaction/+page.svelte`.

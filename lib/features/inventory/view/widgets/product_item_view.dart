@@ -1,13 +1,13 @@
 // ignore_for_file: file_names
 import 'package:material_ui/material_ui.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_item_menu.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Baris item product di daftar inventory — padanan `_inventory/InventoryPage.svelte`.
 class ProductItemView extends StatelessWidget {

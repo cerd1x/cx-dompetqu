@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/models/app_lock_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'app_lock_repository_provider.dart';

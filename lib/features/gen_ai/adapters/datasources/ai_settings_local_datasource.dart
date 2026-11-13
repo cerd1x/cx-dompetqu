@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 
-import 'package:dompetqu/core/database/entities/ai_profile_entity.dart';
-import 'package:dompetqu/core/database/entities/ai_provider_setting_entity.dart';
-import 'package:dompetqu/core/database/entities/ai_settings_meta_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
+import 'package:cx_dompetqiu/core/database/entities/ai_profile_entity.dart';
+import 'package:cx_dompetqiu/core/database/entities/ai_provider_setting_entity.dart';
+import 'package:cx_dompetqiu/core/database/entities/ai_settings_meta_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
 
 abstract interface class AiSettingsLocalDataSource {
   Future<AiModelProvider> loadProvider();

@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Indikator loading memakai `SpinKitRipple` dari flutter_spinkit.
 ///

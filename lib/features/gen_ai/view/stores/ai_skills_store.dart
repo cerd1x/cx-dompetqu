@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/ai_skills_repository.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_skills_repository.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_skill.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/skill_store_entry.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/ai_skills_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_skills_repository.dart';
 
 part 'generated/ai_skills_store.g.dart';
 

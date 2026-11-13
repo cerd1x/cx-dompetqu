@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
-import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
-import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
-import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
+import 'package:cx_dompetqiu/features/assets/view/stores/assets_store.dart';
+import 'package:cx_dompetqiu/features/contacts/view/stores/contacts_store.dart';
+import 'package:cx_dompetqiu/features/inventory/view/stores/inventory_store.dart';
+import 'package:cx_dompetqiu/features/statistics/view/stores/statistics_store.dart';
+import 'package:cx_dompetqiu/features/transactions/view/stores/transactions_store.dart';
 
 /// Warm-up semua data di background tanpa memblokir frame pertama.
 ///

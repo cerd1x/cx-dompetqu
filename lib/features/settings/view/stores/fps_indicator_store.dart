@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/core/database/entities/app_setting_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
 
 part 'generated/fps_indicator_store.g.dart';
 

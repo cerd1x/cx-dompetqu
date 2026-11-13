@@ -1,7 +1,7 @@
-import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/features/settings/domain/models/app_settings.dart';
+import 'package:cx_dompetqiu/features/settings/domain/models/app_settings.dart';
 import 'settings_repository_provider.dart';
 part 'generated/settings_store.g.dart';
 

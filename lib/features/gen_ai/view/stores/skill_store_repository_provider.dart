@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:dompetqu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
-import 'package:dompetqu/features/gen_ai/adapters/repositories/skill_store_repository_impl.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/repositories/skill_store_repository_impl.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/skill_store_repository.dart';
 
 /// Base URL proxy toko skills (opsional, diisi saat build).
 ///

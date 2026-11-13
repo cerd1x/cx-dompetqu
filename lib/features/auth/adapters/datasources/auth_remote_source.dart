@@ -1,12 +1,12 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/graphql/graphql_providers.dart';
-import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/core/graphql/graphql_providers.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
 import 'auth_remote_datasource.dart';
-import 'package:dompetqu/features/auth/domain/models/auth_failure.dart';
-import 'package:dompetqu/features/auth/adapters/models/passkey.dart';
-import 'package:dompetqu/features/auth/adapters/models/user.dart';
+import 'package:cx_dompetqiu/features/auth/domain/models/auth_failure.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/models/passkey.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/models/user.dart';
 
 part 'generated/auth_remote_source.g.dart';
 

@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/order/domain/models/bookkeeping_failed_payments.dart';
-import 'package:dompetqu/features/order/domain/models/bookkeeping_ledger.dart';
+import 'package:cx_dompetqiu/features/order/domain/models/bookkeeping_failed_payments.dart';
+import 'package:cx_dompetqiu/features/order/domain/models/bookkeeping_ledger.dart';
 
 /// Repository interface untuk bookkeeping API.
 abstract interface class BookkeepingRepository {

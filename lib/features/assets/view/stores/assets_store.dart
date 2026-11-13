@@ -1,10 +1,10 @@
-import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/stores/home_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/auth/view/stores/session_store.dart';
+import 'package:cx_dompetqiu/features/transactions/view/stores/transactions_store.dart';
 
 part 'generated/assets_store.g.dart';
 

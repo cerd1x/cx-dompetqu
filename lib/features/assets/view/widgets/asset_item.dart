@@ -1,11 +1,11 @@
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/assets/domain/models/asset_type.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset_type.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
+import 'package:cx_dompetqiu/core/utils/balance.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_item_menu.dart';
 
 /// Single asset row used in assets list.
 class AssetItem extends StatelessWidget {

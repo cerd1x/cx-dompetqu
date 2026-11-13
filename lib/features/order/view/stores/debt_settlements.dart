@@ -1,5 +1,5 @@
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/order/view/stores/debt_settlements_repository_provider.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/order/view/stores/debt_settlements_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Status pelunasan satu utang — dipakai untuk menandai lunas/tunggakan.

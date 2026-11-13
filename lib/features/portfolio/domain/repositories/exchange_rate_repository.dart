@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/portfolio/domain/models/exchange_rate.dart';
+import 'package:cx_dompetqiu/features/portfolio/domain/models/exchange_rate.dart';
 
 /// Kontrak repository untuk nilai tukar mata uang.
 abstract interface class ExchangeRateRepository {

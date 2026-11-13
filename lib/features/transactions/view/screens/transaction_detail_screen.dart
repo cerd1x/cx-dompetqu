@@ -1,11 +1,11 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/utils/balance.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/payment_method_type.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   const TransactionDetailScreen({super.key, required this.transaction});

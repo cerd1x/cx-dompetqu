@@ -3,12 +3,12 @@ import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/types.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
 import 'auth_remote_datasource.dart';
 import 'passkey_datasource.dart';
 import 'auth_remote_source.dart';
-import 'package:dompetqu/features/auth/adapters/models/passkey.dart';
-import 'package:dompetqu/features/auth/adapters/models/user.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/models/passkey.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/models/user.dart';
 
 part 'generated/passkey_service.g.dart';
 

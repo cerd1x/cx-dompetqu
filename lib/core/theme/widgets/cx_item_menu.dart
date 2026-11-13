@@ -3,7 +3,7 @@ import 'package:cue/cue.dart';
 import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
 
 import 'cx_button_act_round.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Data satu aksi yang ditampilkan [CxItemMenu].
 class CxItemMenuAction {

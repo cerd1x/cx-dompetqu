@@ -2,14 +2,14 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_profiles_card.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_gradient_background.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings_profile.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_settings_profiles_card.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Layar penuh untuk mengelola profil dan konfigurasi AI.
 /// Padanan halaman dari [AiSettingsSheet] yang dipakai sebagai modal —

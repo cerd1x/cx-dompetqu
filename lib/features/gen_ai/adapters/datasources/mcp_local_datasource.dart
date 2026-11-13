@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/database/entities/mcp_server_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
-import 'package:dompetqu/features/gen_ai/adapters/models/mcp_server.dart';
+import 'package:cx_dompetqiu/core/database/entities/mcp_server_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/mcp_server.dart';
 
 part 'generated/mcp_local_datasource.g.dart';
 

@@ -1,6 +1,6 @@
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/admin_pannel/domain/models/disabled_operation.dart';
-import 'package:dompetqu/features/admin_pannel/domain/repositories/killswitch_repository.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/domain/models/disabled_operation.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/domain/repositories/killswitch_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

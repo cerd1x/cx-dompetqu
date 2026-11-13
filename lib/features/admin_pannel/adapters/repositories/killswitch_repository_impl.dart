@@ -1,7 +1,7 @@
-import 'package:dompetqu/features/admin_pannel/domain/models/disabled_operation.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/domain/models/disabled_operation.dart';
 
-import 'package:dompetqu/features/admin_pannel/domain/repositories/killswitch_repository.dart';
-import 'package:dompetqu/features/admin_pannel/adapters/killswitch_remote_source.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/domain/repositories/killswitch_repository.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/adapters/killswitch_remote_source.dart';
 
 class KillswitchRepositoryImpl implements KillswitchRepository {
   const KillswitchRepositoryImpl(this._remote);

@@ -4,9 +4,9 @@ import 'dart:math' as math;
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Tombol melayang ELIPS untuk asisten AI yang bisa DISERET ke mana saja
 /// di sekitar layar.

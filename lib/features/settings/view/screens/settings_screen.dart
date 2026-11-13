@@ -3,18 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/features/app_lock/view/screens/app_lock_setup_screen.dart';
-import 'package:dompetqu/features/settings/domain/models/app_settings.dart';
-import 'package:dompetqu/features/settings/view/widgets/passkey_settings_section.dart';
-import 'package:dompetqu/features/settings/view/widgets/row_currency_picker_view.dart';
-import 'package:dompetqu/features/settings/view/widgets/row_notifications_view.dart';
-import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
-import 'package:dompetqu/features/settings/view/stores/fps_indicator_store.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/features/auth/view/stores/session_store.dart';
+import 'package:cx_dompetqiu/features/app_lock/view/screens/app_lock_setup_screen.dart';
+import 'package:cx_dompetqiu/features/settings/domain/models/app_settings.dart';
+import 'package:cx_dompetqiu/features/settings/view/widgets/passkey_settings_section.dart';
+import 'package:cx_dompetqiu/features/settings/view/widgets/row_currency_picker_view.dart';
+import 'package:cx_dompetqiu/features/settings/view/widgets/row_notifications_view.dart';
+import 'package:cx_dompetqiu/features/settings/view/stores/settings_store.dart';
+import 'package:cx_dompetqiu/features/settings/view/stores/fps_indicator_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Versi aplikasi — samakan dengan `version` di pubspec.yaml.
 const String kAppVersion = '1.0.0+1';

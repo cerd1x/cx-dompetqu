@@ -1,22 +1,22 @@
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
-import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_item_menu.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
-import 'package:dompetqu/core/theme/widgets/data_states.dart';
-import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
-import 'package:dompetqu/features/assets/view/widgets/add_balance_dialog.dart';
-import 'package:dompetqu/features/assets/view/widgets/asset_form.dart';
-import 'package:dompetqu/features/assets/view/widgets/assets_header.dart';
-import 'package:dompetqu/features/assets/view/widgets/asset_item.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/assets/view/stores/assets_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/data_states.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_search_field.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/add_balance_dialog.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/asset_form.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/assets_header.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/asset_item.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_assets/AssetsPage.svelte`.
 class AssetsScreen extends ConsumerStatefulWidget {

@@ -1,11 +1,11 @@
-import 'package:dompetqu/core/graphql/gql_result.dart';
-import 'package:dompetqu/core/graphql/graphql_providers.dart';
-import 'package:dompetqu/features/dashboard/adapters/datasources/home_datasources.dart';
+import 'package:cx_dompetqiu/core/graphql/gql_result.dart';
+import 'package:cx_dompetqiu/core/graphql/graphql_providers.dart';
+import 'package:cx_dompetqiu/features/dashboard/adapters/datasources/home_datasources.dart';
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/features/assets/adapters/models/asset.dart';
-import 'package:dompetqu/features/assets/adapters/models/asset_mutation.dart';
+import 'package:cx_dompetqiu/features/assets/adapters/models/asset.dart';
+import 'package:cx_dompetqiu/features/assets/adapters/models/asset_mutation.dart';
 
 part 'generated/assets_remote_source.g.dart';
 

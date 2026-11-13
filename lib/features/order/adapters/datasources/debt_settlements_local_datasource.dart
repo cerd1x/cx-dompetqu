@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:dompetqu/core/database/entities/debt_settlement_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/core/database/entities/debt_settlement_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
 
 abstract interface class DebtSettlementsLocalDataSource {
   Future<Set<String>> load();

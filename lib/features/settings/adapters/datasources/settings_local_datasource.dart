@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 
-import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/core/database/entities/app_setting_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
 
 const String kThemePrefsKey = 'theme';
 const String kCurrencyPrefsKey = 'currency';

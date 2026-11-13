@@ -1,11 +1,11 @@
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_badge.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Detail dialog for a contact.
 class ContactDetail extends StatelessWidget {

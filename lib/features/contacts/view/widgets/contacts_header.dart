@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:cx_dompetqiu/features/contacts/view/stores/contacts_store.dart';
 
 /// Header kecil untuk halaman Contacts.
 class ContactsHeader extends ConsumerWidget {

@@ -1,11 +1,11 @@
-import 'package:dompetqu/features/auth/domain/models/auth_passkey_credential.dart';
-import 'package:dompetqu/features/auth/domain/models/auth_user.dart';
-import 'package:dompetqu/features/auth/domain/models/auth_failure.dart';
-import 'package:dompetqu/features/auth/domain/repositories/auth_repository.dart';
-import 'package:dompetqu/features/auth/adapters/datasources/auth_remote_datasource.dart';
-import 'package:dompetqu/features/auth/adapters/datasources/auth_session_local_datasource.dart';
-import 'package:dompetqu/features/auth/adapters/datasources/passkey_datasource.dart';
-import 'package:dompetqu/features/auth/adapters/mappers/user_mapper.dart';
+import 'package:cx_dompetqiu/features/auth/domain/models/auth_passkey_credential.dart';
+import 'package:cx_dompetqiu/features/auth/domain/models/auth_user.dart';
+import 'package:cx_dompetqiu/features/auth/domain/models/auth_failure.dart';
+import 'package:cx_dompetqiu/features/auth/domain/repositories/auth_repository.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/datasources/auth_remote_datasource.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/datasources/auth_session_local_datasource.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/datasources/passkey_datasource.dart';
+import 'package:cx_dompetqiu/features/auth/adapters/mappers/user_mapper.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(

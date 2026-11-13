@@ -1,24 +1,24 @@
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
-import 'package:dompetqu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/features/inventory/view/stores/inventory_store.dart';
-import 'package:dompetqu/features/order/view/widgets/order_form_widgets.dart';
-import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
-import 'package:dompetqu/core/theme/widgets/data_states.dart';
-import 'package:dompetqu/core/theme/widgets/cx_search_field.dart';
-import 'package:dompetqu/features/inventory/view/widgets/product_detail_view.dart';
-import 'package:dompetqu/features/inventory/view/widgets/product_item_view.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field_balance.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_scroll_refresh_wrapper.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart';
+import 'package:cx_dompetqiu/features/inventory/view/stores/inventory_store.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/order_form_widgets.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/data_states.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_search_field.dart';
+import 'package:cx_dompetqiu/features/inventory/view/widgets/product_detail_view.dart';
+import 'package:cx_dompetqiu/features/inventory/view/widgets/product_item_view.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_inventory/InventoryPage.svelte`.
 class InventoryScreen extends ConsumerStatefulWidget {

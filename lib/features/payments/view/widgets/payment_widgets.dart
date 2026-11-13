@@ -2,10 +2,10 @@ import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Pill status payment — `failed` merah, `completed` hijau, `pending`/
 /// `processing` kuning, `refunded`/`cancelled` netral.

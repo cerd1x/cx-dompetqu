@@ -1,9 +1,9 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/config/api_config.dart';
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/core/network/cookie_aware_client.dart';
+import 'package:cx_dompetqiu/core/config/api_config.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/core/network/cookie_aware_client.dart';
 
 part 'generated/graphql_providers.g.dart';
 

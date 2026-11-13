@@ -1,10 +1,10 @@
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart' as domain;
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile_collection.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/ai_settings_repository.dart';
-import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_crypto_service.dart';
-import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_settings_local_datasource.dart';
-import 'package:dompetqu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings.dart' as domain;
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings_profile.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings_profile_collection.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/ai_settings_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/ai_settings_crypto_service.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/ai_settings_local_datasource.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/ai_settings_profile_model.dart';
 
 class AiSettingsRepositoryImpl implements AiSettingsRepository {
   const AiSettingsRepositoryImpl(this._local, this._crypto);

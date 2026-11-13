@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/order/domain/repositories/order_repository.dart';
-import 'package:dompetqu/features/order/adapters/datasources/order_datasource.dart';
+import 'package:cx_dompetqiu/features/order/domain/repositories/order_repository.dart';
+import 'package:cx_dompetqiu/features/order/adapters/datasources/order_datasource.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
   const OrderRepositoryImpl(this._remoteSource);

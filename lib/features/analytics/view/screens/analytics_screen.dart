@@ -1,15 +1,15 @@
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/analytics/view/widgets/analytics_data.dart';
-import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
-import 'package:dompetqu/features/transactions/view/stores/transactions_store.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/analytics/view/widgets/analytics_data.dart';
+import 'package:cx_dompetqiu/features/statistics/view/stores/statistics_store.dart';
+import 'package:cx_dompetqiu/features/transactions/view/stores/transactions_store.dart';
 import 'package:mix/mix.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 const _kIncome = Color(0xFF34D399);
 const _kExpense = Color(0xFFF87171);

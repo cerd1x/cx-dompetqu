@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/reports/adapters/datasources/reports_objectbox_datasource.dart';
-import 'package:dompetqu/features/reports/domain/repositories/reports_repository.dart';
+import 'package:cx_dompetqiu/features/reports/adapters/datasources/reports_objectbox_datasource.dart';
+import 'package:cx_dompetqiu/features/reports/domain/repositories/reports_repository.dart';
 
 /// Implementasi [ReportsRepository] yang memakai [ReportsObjectboxDataSource]
 /// untuk menyimpan snapshot laporan ke ObjectBox.

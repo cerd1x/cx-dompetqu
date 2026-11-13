@@ -1,12 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/features/contacts/view/stores/contacts_store.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Dialog investigasi kontak duplikat — menampilkan grup kontak yang
 /// kemungkinan duplikat (nomor sama beda nama, atau nama sama beda nomor).

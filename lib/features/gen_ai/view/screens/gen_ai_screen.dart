@@ -1,18 +1,18 @@
-import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_tab_bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_skills_store.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/mcp_store.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/skill_store_repository_provider.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_skills_sheet.dart';
-import 'package:dompetqu/features/gen_ai/view/widgets/mcp_sheet.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_skills_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/mcp_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/skill_store_repository_provider.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_chat_sheet.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_settings_sheet.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_skills_sheet.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/mcp_sheet.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 class GenAiScreen extends ConsumerWidget {
   const GenAiScreen({super.key});

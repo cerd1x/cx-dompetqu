@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:dompetqu/core/network/cookie_aware_client.dart';
+import 'package:cx_dompetqiu/core/network/cookie_aware_client.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/config/api_config.dart';
+import 'package:cx_dompetqiu/core/config/api_config.dart';
 
 part 'generated/killswitch_remote_source.freezed.dart';
 part 'generated/killswitch_remote_source.g.dart';

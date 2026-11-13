@@ -1,12 +1,12 @@
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
-import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/utils/balance.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Detail dialog for an asset.
 class AssetDetail extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_field_tile.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_modal_top_sheet.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_field_tile.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_modal_top_sheet.dart';
 
 /// Field bergaya `csinput` yang membuka sheet modal top-bar berisi daftar item
 /// yang bisa dicari.

@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button_biometric.dart';
-import 'package:dompetqu/core/theme/widgets/pattern_input_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/cx_pin_input.dart';
-import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
-import 'package:dompetqu/features/app_lock/view/stores/app_lock_store.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_biometric.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/pattern_input_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_pin_input.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/models/app_lock_state.dart';
+import 'package:cx_dompetqiu/features/app_lock/view/stores/app_lock_store.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Layar kunci yang muncul saat aplikasi terkunci.
 class AppLockScreen extends ConsumerStatefulWidget {

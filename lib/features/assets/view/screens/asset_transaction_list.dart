@@ -1,6 +1,6 @@
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/features/assets/domain/models/asset_mutation.dart';
-import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset_mutation.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/stores/home_repository_provider.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

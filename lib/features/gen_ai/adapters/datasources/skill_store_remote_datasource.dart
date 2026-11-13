@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/skill_store_entry.dart';
 
 /// Kontrak pengambilan data toko skills skills.sh.
 ///

@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/models/app_lock_state.dart';
 
 abstract interface class AppLockLocalDataSource {
   Future<void> ensureUsable();

@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:remix/remix.dart';
 
-import 'package:dompetqu/core/theme/cs_mix.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/cs_mix.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Widget wrapper glassmorphism dengan backdrop blur.
 /// Mirip efek `backdrop-blur-[6.1px]` di CSS.

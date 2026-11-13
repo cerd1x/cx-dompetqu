@@ -1,15 +1,15 @@
-import 'package:dompetqu/features/gen_ai/view/widgets/ai_bubble.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
-import 'package:dompetqu/core/theme/widgets/cx_nav_bar.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/widgets/ai_bubble.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_nav_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
-import 'package:dompetqu/features/dashboard/view/stores/bootstrap.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/features/auth/view/stores/session_store.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_gradient_background.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/stores/bootstrap.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Shell utama dengan ShellRoute — persistent bottom nav lewat GoRouter.
 class HomeShell extends ConsumerStatefulWidget {

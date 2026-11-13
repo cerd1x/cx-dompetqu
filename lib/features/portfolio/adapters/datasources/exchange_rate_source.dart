@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/portfolio/domain/models/exchange_rate.dart';
-import 'package:dompetqu/features/portfolio/domain/models/exchange_rate_error.dart';
+import 'package:cx_dompetqiu/features/portfolio/domain/models/exchange_rate.dart';
+import 'package:cx_dompetqiu/features/portfolio/domain/models/exchange_rate_error.dart';
 
 /// Kontrak adapter sumber nilai tukar mata uang global.
 ///

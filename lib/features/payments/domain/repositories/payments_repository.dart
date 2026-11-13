@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
 
 /// Port baca payment — domain tidak tahu GraphQL/HTTP.
 ///

@@ -6,10 +6,10 @@ import 'package:crypto/crypto.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/database/entities/app_lock_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
-import 'package:dompetqu/features/app_lock/adapters/datasources/app_lock_datasources.dart';
-import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
+import 'package:cx_dompetqiu/core/database/entities/app_lock_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/features/app_lock/adapters/datasources/app_lock_datasources.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/models/app_lock_state.dart';
 
 part 'generated/app_lock_storage.g.dart';
 

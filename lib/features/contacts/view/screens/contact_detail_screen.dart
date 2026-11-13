@@ -1,19 +1,19 @@
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
-import 'package:dompetqu/features/contacts/view/widgets/contact_form.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_badge.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/features/contacts/view/widgets/contact_form.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/features/contacts/view/stores/contacts_store.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Full screen detail kontak — route `/contact-detail/:id`.
 ///

@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/statistics/view/stores/statistics_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/statistics/view/stores/statistics_store.dart';
 
 /// Grid statistik dashboard — padanan `_dashboard` stats cards di web.
 class StatsGrid extends ConsumerWidget {

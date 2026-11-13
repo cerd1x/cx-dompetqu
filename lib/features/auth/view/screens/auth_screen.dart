@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field_password.dart';
-import 'package:dompetqu/features/auth/view/stores/auth_providers.dart';
-import 'package:dompetqu/features/auth/view/stores/session_store.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_gradient_background.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field_password.dart';
+import 'package:cx_dompetqiu/features/auth/view/stores/auth_providers.dart';
+import 'package:cx_dompetqiu/features/auth/view/stores/session_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 enum _AuthMode { signIn, signUp }
 

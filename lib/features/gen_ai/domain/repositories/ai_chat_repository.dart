@@ -1,6 +1,6 @@
-import 'package:dompetqu/features/gen_ai/domain/models/ai_message.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_message.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/mcp_server.dart';
 
 abstract interface class AiChatRepository {
   Future<String> generateReply({

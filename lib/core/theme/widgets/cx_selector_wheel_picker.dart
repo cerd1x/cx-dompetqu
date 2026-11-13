@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Picker selector berbentuk roda (wheel) bergaya CS glass.
 ///

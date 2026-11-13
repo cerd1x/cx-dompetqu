@@ -1,28 +1,28 @@
 import 'dart:io';
 
-import 'package:dompetqu/features/assets/view/screens/asset_detail_screen.dart';
-import 'package:dompetqu/features/analytics/view/screens/analytics_screen.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/features/dashboard/view/screens/home_shell.dart';
-import 'package:dompetqu/features/dashboard/view/screens/dashboard_screen.dart';
-import 'package:dompetqu/features/inventory/view/screens/inventory_screen.dart';
-import 'package:dompetqu/features/contacts/view/widgets/contacts_screen.dart';
-import 'package:dompetqu/features/portfolio/view/screens/portfolio_screen.dart';
-import 'package:dompetqu/features/gen_ai/view/screens/ai_setting_screen.dart';
-import 'package:dompetqu/features/gen_ai/view/screens/gen_ai_screen.dart';
-import 'package:dompetqu/features/order/view/screens/detail_payment_failed_view.dart';
-import 'package:dompetqu/features/order/view/screens/order_screen.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/features/order/view/widgets/order_tab.dart'
+import 'package:cx_dompetqiu/features/assets/view/screens/asset_detail_screen.dart';
+import 'package:cx_dompetqiu/features/analytics/view/screens/analytics_screen.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/screens/home_shell.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/screens/dashboard_screen.dart';
+import 'package:cx_dompetqiu/features/inventory/view/screens/inventory_screen.dart';
+import 'package:cx_dompetqiu/features/contacts/view/widgets/contacts_screen.dart';
+import 'package:cx_dompetqiu/features/portfolio/view/screens/portfolio_screen.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/screens/ai_setting_screen.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/screens/gen_ai_screen.dart';
+import 'package:cx_dompetqiu/features/order/view/screens/detail_payment_failed_view.dart';
+import 'package:cx_dompetqiu/features/order/view/screens/order_screen.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/order_tab.dart'
     show OrderRouteArgs, OrderTab;
-import 'package:dompetqu/features/settings/view/screens/appearance_screen.dart';
-import 'package:dompetqu/features/settings/view/screens/profile_screen.dart';
-import 'package:dompetqu/features/settings/view/screens/settings_screen.dart';
-import 'package:dompetqu/features/settings/view/stores/fps_indicator_store.dart';
-import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/features/transactions/view/screens/transaction_detail_screen.dart';
-import 'package:dompetqu/features/struct/view/screens/struct_detail_screen.dart';
+import 'package:cx_dompetqiu/features/settings/view/screens/appearance_screen.dart';
+import 'package:cx_dompetqiu/features/settings/view/screens/profile_screen.dart';
+import 'package:cx_dompetqiu/features/settings/view/screens/settings_screen.dart';
+import 'package:cx_dompetqiu/features/settings/view/stores/fps_indicator_store.dart';
+import 'package:cx_dompetqiu/features/settings/view/stores/settings_store.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/transactions/view/screens/transaction_detail_screen.dart';
+import 'package:cx_dompetqiu/features/struct/view/screens/struct_detail_screen.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,14 +33,18 @@ import 'core/logger/app_logger.dart';
 import 'core/logger/log_config.dart';
 import 'core/database/objectbox_database.dart';
 import 'core/network/cookie_aware_client.dart';
-import 'package:dompetqu/core/theme/app_theme.dart';
-import 'package:dompetqu/core/theme/ui_style.dart';
-import 'package:dompetqu/core/theme/ui_style_controller.dart';
+
+import 'package:cx_dompetqiu/core/theme/app_theme.dart';
+import 'package:cx_dompetqiu/core/theme/ui_style.dart';
+import 'package:cx_dompetqiu/core/theme/ui_style_controller.dart';
+
 import 'features/auth/view/stores/session_store.dart';
 import 'features/auth/view/screens/auth_screen.dart';
-import 'package:dompetqu/features/admin_pannel/view/screens/admin_pannel_screen.dart';
-import 'package:dompetqu/features/admin_pannel/view/screens/killswitch_controll_screen.dart';
-import 'package:dompetqu/features/reports/view/screens/reports_screen.dart';
+
+import 'package:cx_dompetqiu/features/admin_pannel/view/screens/admin_pannel_screen.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/view/screens/killswitch_controll_screen.dart';
+import 'package:cx_dompetqiu/features/reports/view/screens/reports_screen.dart';
+
 import 'features/contacts/view/screens/contact_detail_screen.dart';
 import 'features/contacts/view/screens/contact_merge.dart';
 import 'features/app_lock/view/stores/app_lock_store.dart';

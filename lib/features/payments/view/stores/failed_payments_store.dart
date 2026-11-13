@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/features/payments/view/stores/payments_repository_provider.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/payments/view/stores/payments_repository_provider.dart';
 
 part 'generated/failed_payments_store.g.dart';
 

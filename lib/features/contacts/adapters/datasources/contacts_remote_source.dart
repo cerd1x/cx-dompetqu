@@ -1,11 +1,11 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/graphql/graphql_providers.dart';
-import 'package:dompetqu/features/dashboard/adapters/datasources/home_datasources.dart';
-import 'package:dompetqu/features/contacts/adapters/models/contact.dart';
-import 'package:dompetqu/features/contacts/adapters/models/contact_page.dart';
-import 'package:dompetqu/core/graphql/gql_result.dart';
+import 'package:cx_dompetqiu/core/graphql/graphql_providers.dart';
+import 'package:cx_dompetqiu/features/dashboard/adapters/datasources/home_datasources.dart';
+import 'package:cx_dompetqiu/features/contacts/adapters/models/contact.dart';
+import 'package:cx_dompetqiu/features/contacts/adapters/models/contact_page.dart';
+import 'package:cx_dompetqiu/core/graphql/gql_result.dart';
 
 part 'generated/contacts_remote_source.g.dart';
 

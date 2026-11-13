@@ -3,18 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_select_picker.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_store.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
-import 'package:dompetqu/features/gen_ai/view/stores/ai_settings_repository_provider.dart';
-import 'package:dompetqu/core/config/openrouter_config.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_settings_profile.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/openrouter_model.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_select_picker.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_profiles_store.dart';
+import 'package:cx_dompetqiu/features/gen_ai/view/stores/ai_settings_repository_provider.dart';
+import 'package:cx_dompetqiu/core/config/openrouter_config.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_settings_profile.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/openrouter_model.dart';
 import 'ai_settings_profiles_card.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 // Model yang ditawarkan untuk tiap provider; Ollama memakai nama model lokal.
 const Map<AiModelProvider, List<CxSelectItem<String>>> _kProviderModels = {

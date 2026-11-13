@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
 
 part 'generated/bookkeeping_ledger.freezed.dart';
 

@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_field_tile.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/settings/view/stores/settings_store.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_field_tile.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/settings/view/stores/settings_store.dart';
 
 /// Mata uang dari preferensi lokal — padanan `settingStore.selectedCurrency`.
 String selectedCurrency(WidgetRef ref) =>

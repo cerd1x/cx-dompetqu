@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/portfolio/domain/models/exchange_rate.dart';
-import 'package:dompetqu/features/portfolio/view/stores/exchange_rate_repository_provider.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/portfolio/domain/models/exchange_rate.dart';
+import 'package:cx_dompetqiu/features/portfolio/view/stores/exchange_rate_repository_provider.dart';
 
 part 'generated/exchange_rate_store.g.dart';
 

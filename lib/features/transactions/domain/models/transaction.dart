@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:dompetqu/core/utils/balance.dart';
+import 'package:cx_dompetqiu/core/utils/balance.dart';
 
 part 'generated/transaction.freezed.dart';
 

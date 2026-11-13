@@ -1,11 +1,11 @@
-import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_skill_import_datasource.dart';
-import 'package:dompetqu/features/gen_ai/adapters/datasources/ai_skills_local_datasource.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart';
-import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/ai_skills_repository.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
-import 'package:dompetqu/features/gen_ai/adapters/mappers/gen_ai_model_mapper.dart';
-import 'package:dompetqu/features/gen_ai/adapters/models/ai_skill.dart' as data;
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/ai_skill_import_datasource.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/ai_skills_local_datasource.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_skill.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/skill_store_entry.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/ai_skills_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/skill_store_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/mappers/gen_ai_model_mapper.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/ai_skill.dart' as data;
 
 class LocalAiSkillsRepository implements AiSkillsRepository {
   const LocalAiSkillsRepository(this._local, this._importer, this._store);

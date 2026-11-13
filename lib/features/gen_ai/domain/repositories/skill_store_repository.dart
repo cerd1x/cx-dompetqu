@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/skill_store_entry.dart';
 
 /// Kontrak toko skills (skills.sh).
 ///

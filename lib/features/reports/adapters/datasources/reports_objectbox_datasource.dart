@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 
-import 'package:dompetqu/core/database/entities/report_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/core/database/entities/report_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
 
 /// Data source laporan berbasis ObjectBox — menyimpan snapshot log ke DB lokal.
 ///

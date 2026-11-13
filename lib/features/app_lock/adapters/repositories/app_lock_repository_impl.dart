@@ -1,7 +1,7 @@
-import 'package:dompetqu/features/app_lock/domain/models/app_lock_state.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/models/app_lock_state.dart';
 
-import 'package:dompetqu/features/app_lock/domain/repositories/app_lock_repository.dart';
-import 'package:dompetqu/features/app_lock/adapters/datasources/app_lock_datasources.dart';
+import 'package:cx_dompetqiu/features/app_lock/domain/repositories/app_lock_repository.dart';
+import 'package:cx_dompetqiu/features/app_lock/adapters/datasources/app_lock_datasources.dart';
 
 class AppLockRepositoryImpl implements AppLockRepository {
   const AppLockRepositoryImpl(this._local, this._biometric);

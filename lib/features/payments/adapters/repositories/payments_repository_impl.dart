@@ -1,6 +1,6 @@
-import 'package:dompetqu/features/payments/adapters/datasources/payments_remote_source.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/features/payments/domain/repositories/payments_repository.dart';
+import 'package:cx_dompetqiu/features/payments/adapters/datasources/payments_remote_source.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/payments/domain/repositories/payments_repository.dart';
 
 /// Implementasi port payment di atas [PaymentsRemoteSource] (GraphQL).
 class PaymentsRepositoryImpl implements PaymentsRepository {

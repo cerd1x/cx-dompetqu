@@ -1,4 +1,4 @@
-import 'package:dompetqu/core/network/cookie_aware_client.dart';
+import 'package:cx_dompetqiu/core/network/cookie_aware_client.dart';
 
 abstract interface class AuthSessionLocalDataSource {
   Future<void> restore();

@@ -1,11 +1,11 @@
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/assets/domain/models/asset_mutation.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact_page.dart';
-import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/features/statistics/domain/models/statistics.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction_page.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset_mutation.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact_page.dart';
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart';
+import 'package:cx_dompetqiu/features/statistics/domain/models/statistics.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction_page.dart';
 
 abstract interface class HomeRepository {
   Future<List<Asset>> assets();

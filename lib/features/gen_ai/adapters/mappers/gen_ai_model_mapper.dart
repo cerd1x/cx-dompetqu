@@ -1,7 +1,7 @@
-import 'package:dompetqu/features/gen_ai/domain/models/ai_skill.dart' as domain;
-import 'package:dompetqu/features/gen_ai/domain/models/mcp_server.dart' as domain;
-import 'package:dompetqu/features/gen_ai/adapters/models/ai_skill.dart' as data;
-import 'package:dompetqu/features/gen_ai/adapters/models/mcp_server.dart' as data;
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/ai_skill.dart' as domain;
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/mcp_server.dart' as domain;
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/ai_skill.dart' as data;
+import 'package:cx_dompetqiu/features/gen_ai/adapters/models/mcp_server.dart' as data;
 
 extension AiSkillModelMapper on data.AiSkill {
   domain.AiSkill toEntity() =>

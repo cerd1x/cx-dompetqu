@@ -1,9 +1,9 @@
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:dompetqu/core/theme/widgets/cx_avatar.dart';
-import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/cx_item_menu.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_avatar.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_badge.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_item_menu.dart';
 
 /// Single contact row used in contacts list.
 class ContactItem extends StatelessWidget {

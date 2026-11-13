@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_badge.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_badge.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Warna/label/ikon transaksi per tipe — dipakai bersama tab Bookkeeping & Debt.
 typedef TxTone = ({Color color, String sign, String label, IconData icon});

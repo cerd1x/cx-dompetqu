@@ -1,5 +1,5 @@
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
 
 /// Kontrak perhitungan statistik keuangan — padanan `statistics_use_cases` web.
 abstract interface class StatisticsRepository {

@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Lembar notifikasi — padanan popover `PopupNotification.svelte`.
 class NotificationsSheet extends StatelessWidget {

@@ -3,17 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_gradient_background.dart';
-import 'package:dompetqu/features/inventory/domain/models/product.dart';
-import 'package:dompetqu/core/theme/widgets/cx_tab_bottom_bar.dart';
-import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/bookkeeping_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/debt_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/expense_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/loan_tab.dart';
-import 'package:dompetqu/features/order/view/widgets/sale_tab.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_gradient_background.dart';
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_tab_bottom_bar.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/order_tab.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/bookkeeping_tab.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/debt_tab.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/expense_tab.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/loan_tab.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/sale_tab.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Layar buat transaksi/order — padanan
 /// `_routes/dompet/create-transaction/+page.svelte` (Sale/Expense/Loan),

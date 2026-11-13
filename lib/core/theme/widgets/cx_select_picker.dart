@@ -2,9 +2,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
-import 'package:dompetqu/core/theme/cs_mix.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/cs_mix.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Generic item untuk [CxSelectPicker].
 class CxSelectItem<T> {

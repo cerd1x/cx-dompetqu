@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/dashboard/view/stores/home_repository_provider.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/features/payments/view/stores/payments_repository_provider.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/dashboard/view/stores/home_repository_provider.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/payments/view/stores/payments_repository_provider.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
 
 part 'generated/finance_overview_store.freezed.dart';
 part 'generated/finance_overview_store.g.dart';

@@ -1,4 +1,4 @@
-import 'package:dompetqu/features/admin_pannel/domain/models/disabled_operation.dart';
+import 'package:cx_dompetqiu/features/admin_pannel/domain/models/disabled_operation.dart';
 
 abstract interface class KillswitchRepository {
   bool get hasToken;

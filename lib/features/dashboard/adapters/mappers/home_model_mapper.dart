@@ -1,30 +1,30 @@
-import 'package:dompetqu/features/assets/adapters/models/asset.dart' as data;
-import 'package:dompetqu/features/assets/adapters/models/asset_mutation.dart'
+import 'package:cx_dompetqiu/features/assets/adapters/models/asset.dart' as data;
+import 'package:cx_dompetqiu/features/assets/adapters/models/asset_mutation.dart'
     as data;
-import 'package:dompetqu/features/assets/domain/models/asset.dart' as domain;
-import 'package:dompetqu/features/assets/domain/models/asset_mutation.dart'
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart' as domain;
+import 'package:cx_dompetqiu/features/assets/domain/models/asset_mutation.dart'
     as domain;
-import 'package:dompetqu/features/contacts/adapters/models/contact.dart' as data;
-import 'package:dompetqu/features/contacts/adapters/models/contact_page.dart'
+import 'package:cx_dompetqiu/features/contacts/adapters/models/contact.dart' as data;
+import 'package:cx_dompetqiu/features/contacts/adapters/models/contact_page.dart'
     as data;
-import 'package:dompetqu/features/contacts/domain/models/contact.dart'
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart'
     as domain;
-import 'package:dompetqu/features/contacts/domain/models/contact_page.dart'
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact_page.dart'
     as domain;
-import 'package:dompetqu/features/inventory/adapters/models/product.dart' as data;
-import 'package:dompetqu/features/inventory/domain/models/product.dart'
+import 'package:cx_dompetqiu/features/inventory/adapters/models/product.dart' as data;
+import 'package:cx_dompetqiu/features/inventory/domain/models/product.dart'
     as domain;
-import 'package:dompetqu/features/statistics/adapters/models/statistics.dart'
+import 'package:cx_dompetqiu/features/statistics/adapters/models/statistics.dart'
     as data;
-import 'package:dompetqu/features/statistics/domain/models/statistics.dart'
+import 'package:cx_dompetqiu/features/statistics/domain/models/statistics.dart'
     as domain;
-import 'package:dompetqu/features/transactions/adapters/models/transaction.dart'
+import 'package:cx_dompetqiu/features/transactions/adapters/models/transaction.dart'
     as data;
-import 'package:dompetqu/features/transactions/adapters/models/transaction_page.dart'
+import 'package:cx_dompetqiu/features/transactions/adapters/models/transaction_page.dart'
     as data;
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart'
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart'
     as domain;
-import 'package:dompetqu/features/transactions/domain/models/transaction_page.dart'
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction_page.dart'
     as domain;
 
 extension AssetModelMapper on data.Asset {

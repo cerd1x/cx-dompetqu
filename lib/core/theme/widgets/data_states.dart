@@ -1,9 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 import 'cx_card.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Baris skeleton — padanan kelas `skeleton` daisyUI di web.
 class SkeletonRow extends StatelessWidget {

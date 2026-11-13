@@ -2,18 +2,18 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/core/logger/beta_report_remote.dart';
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/cx_card.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/features/payments/domain/models/payment.dart';
-import 'package:dompetqu/features/payments/view/stores/failed_payments_store.dart';
-import 'package:dompetqu/features/payments/view/stores/payments_repository_provider.dart';
-import 'package:dompetqu/features/payments/view/widgets/payment_widgets.dart';
-import 'package:dompetqu/features/transactions/domain/models/payment_method_type.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/core/logger/beta_report_remote.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_card.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/features/payments/domain/models/payment.dart';
+import 'package:cx_dompetqiu/features/payments/view/stores/failed_payments_store.dart';
+import 'package:cx_dompetqiu/features/payments/view/stores/payments_repository_provider.dart';
+import 'package:cx_dompetqiu/features/payments/view/widgets/payment_widgets.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/payment_method_type.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Layar detail satu payment gagal.
 ///

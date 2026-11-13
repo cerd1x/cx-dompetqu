@@ -1,12 +1,12 @@
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/features/assets/view/stores/assets_store.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field_balance.dart';
-import 'package:dompetqu/core/utils/formatters.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field_balance.dart';
+import 'package:cx_dompetqiu/core/utils/formatters.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 class SwapBalanceDialog extends StatefulWidget {
   const SwapBalanceDialog({

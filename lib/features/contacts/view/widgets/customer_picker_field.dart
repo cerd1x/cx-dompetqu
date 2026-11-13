@@ -1,10 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
-import 'package:dompetqu/core/theme/widgets/cx_picker_field_with_modal_topbar.dart';
-import 'package:dompetqu/features/contacts/domain/models/contact.dart';
-import 'package:dompetqu/features/contacts/view/stores/contacts_store.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_picker_field_with_modal_topbar.dart';
+import 'package:cx_dompetqiu/features/contacts/domain/models/contact.dart';
+import 'package:cx_dompetqiu/features/contacts/view/stores/contacts_store.dart';
 
 /// Picker customer dari [contactsStoreProvider].
 ///

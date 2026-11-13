@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:remix/remix.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Avatar brand dengan latar gradient — padanan avatar inisial di web.
 class CxAvatar extends StatelessWidget {

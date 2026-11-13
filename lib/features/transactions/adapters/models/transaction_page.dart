@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:dompetqu/core/utils/isolate_utils.dart';
+import 'package:cx_dompetqiu/core/utils/isolate_utils.dart';
 import 'transaction.dart';
 
 /// Navigasi halaman — padanan `PageInfo` di schema GraphQL.

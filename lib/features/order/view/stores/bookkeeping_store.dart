@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/features/order/view/stores/bookkeeping_repository_provider.dart';
-import 'package:dompetqu/features/order/domain/models/bookkeeping_ledger.dart'
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/order/view/stores/bookkeeping_repository_provider.dart';
+import 'package:cx_dompetqiu/features/order/domain/models/bookkeeping_ledger.dart'
     as domain_bookkeeping;
 
 part 'generated/bookkeeping_store.g.dart';

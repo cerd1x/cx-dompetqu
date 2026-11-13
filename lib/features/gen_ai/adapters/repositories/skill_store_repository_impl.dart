@@ -1,6 +1,6 @@
-import 'package:dompetqu/features/gen_ai/domain/models/skill_store_entry.dart';
-import 'package:dompetqu/features/gen_ai/domain/repositories/skill_store_repository.dart';
-import 'package:dompetqu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/models/skill_store_entry.dart';
+import 'package:cx_dompetqiu/features/gen_ai/domain/repositories/skill_store_repository.dart';
+import 'package:cx_dompetqiu/features/gen_ai/adapters/datasources/skill_store_remote_datasource.dart';
 
 /// Penerusan tipis ke datasource — semua aturan scrape/API ada di datasource
 /// supaya titik ganti sumber (scrape ↔ proxy) tetap satu tempat.

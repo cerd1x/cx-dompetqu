@@ -1,6 +1,6 @@
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/features/statistics/domain/repositories/statistics_repository.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/features/statistics/domain/repositories/statistics_repository.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
 
 /// Use case statistik — delegasi ke [StatisticsRepository].
 class StatisticsUseCases {

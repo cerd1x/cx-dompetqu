@@ -1,18 +1,18 @@
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/dompet_brand.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
 import 'asset_transaction_list.dart';
 import 'swap_balance_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/features/assets/view/widgets/asset_detail.dart';
-import 'package:dompetqu/features/assets/view/widgets/asset_form_dialog.dart';
-import 'package:dompetqu/features/assets/view/widgets/add_balance_dialog.dart';
+import 'package:cx_dompetqiu/features/assets/view/stores/assets_store.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/asset_detail.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/asset_form_dialog.dart';
+import 'package:cx_dompetqiu/features/assets/view/widgets/add_balance_dialog.dart';
 import 'package:remix/remix.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Full screen details for an asset. Route: /details-assets/:id
 class AssetDetailScreen extends ConsumerWidget {

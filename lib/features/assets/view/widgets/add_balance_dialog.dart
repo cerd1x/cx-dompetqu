@@ -1,13 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_dialog.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button.dart';
-import 'package:dompetqu/core/theme/widgets/cx_text_field.dart';
-import 'package:dompetqu/core/utils/balance.dart';
-import 'package:dompetqu/features/assets/view/stores/assets_store.dart';
-import 'package:dompetqu/features/assets/domain/models/asset.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_dialog.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_text_field.dart';
+import 'package:cx_dompetqiu/core/utils/balance.dart';
+import 'package:cx_dompetqiu/features/assets/view/stores/assets_store.dart';
+import 'package:cx_dompetqiu/features/assets/domain/models/asset.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Dialog tambah saldo asset — padanan `_assets/FormAddBalance.svelte`.
 class AddBalanceDialog extends ConsumerStatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dompetqu/core/theme/widgets/cx_button_act_round.dart';
-import 'package:dompetqu/features/order/view/widgets/order_tab.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_button_act_round.dart';
+import 'package:cx_dompetqiu/features/order/view/widgets/order_tab.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan tombol aksi cepat di dashboard (`_dashboard/DashboardPage.svelte`).
 class QuickActions extends StatelessWidget {

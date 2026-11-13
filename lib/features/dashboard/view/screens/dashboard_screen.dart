@@ -6,9 +6,9 @@ import '../widgets/quick_actions.dart';
 import '../widgets/transaction_list_view.dart';
 import '../widgets/stats_grid.dart';
 
-import 'package:dompetqu/core/theme/widgets/cx_app_header.dart';
-import 'package:dompetqu/core/theme/widgets/placeholders.dart';
-import 'package:dompetqu/core/theme/widgets/cx_icons.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_app_header.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/placeholders.dart';
+import 'package:cx_dompetqiu/core/theme/widgets/cx_icons.dart';
 
 /// Padanan `_dashboard/DashboardPage.svelte` + `AppBar.svelte` (restyle fluttermix).
 class DashboardScreen extends ConsumerWidget {

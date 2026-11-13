@@ -3,8 +3,8 @@ import 'package:material_ui/material_ui.dart' show Alignment, Color;
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/database/entities/app_setting_entity.dart';
-import 'package:dompetqu/core/database/objectbox_database.dart';
+import 'package:cx_dompetqiu/core/database/entities/app_setting_entity.dart';
+import 'package:cx_dompetqiu/core/database/objectbox_database.dart';
 import 'ui_style.dart';
 
 part 'generated/ui_style_controller.g.dart';

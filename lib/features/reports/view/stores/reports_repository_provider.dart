@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/features/reports/adapters/datasources/reports_objectbox_datasource.dart';
-import 'package:dompetqu/features/reports/adapters/repositories/reports_repository_impl.dart';
-import 'package:dompetqu/features/reports/domain/repositories/reports_repository.dart';
+import 'package:cx_dompetqiu/features/reports/adapters/datasources/reports_objectbox_datasource.dart';
+import 'package:cx_dompetqiu/features/reports/adapters/repositories/reports_repository_impl.dart';
+import 'package:cx_dompetqiu/features/reports/domain/repositories/reports_repository.dart';
 
 part 'generated/reports_repository_provider.g.dart';
 

@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mix/mix.dart';
 import 'package:remix/remix.dart';
 
-import 'package:dompetqu/core/theme/dompet_brand.dart';
+import 'package:cx_dompetqiu/core/theme/dompet_brand.dart';
 
 /// Tombol aksi bulat — padanan tombol import/add di web.
 class CxButtonActRound extends StatelessWidget {

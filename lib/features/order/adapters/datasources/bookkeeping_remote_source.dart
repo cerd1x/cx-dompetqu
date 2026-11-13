@@ -1,12 +1,12 @@
 import 'package:graphql/client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:dompetqu/core/graphql/gql_result.dart';
-import 'package:dompetqu/core/graphql/graphql_providers.dart';
-import 'package:dompetqu/core/logger/app_logger.dart';
-import 'package:dompetqu/features/transactions/domain/models/transaction.dart';
-import 'package:dompetqu/features/order/domain/models/bookkeeping_ledger.dart';
-import 'package:dompetqu/features/order/domain/models/bookkeeping_failed_payments.dart';
+import 'package:cx_dompetqiu/core/graphql/gql_result.dart';
+import 'package:cx_dompetqiu/core/graphql/graphql_providers.dart';
+import 'package:cx_dompetqiu/core/logger/app_logger.dart';
+import 'package:cx_dompetqiu/features/transactions/domain/models/transaction.dart';
+import 'package:cx_dompetqiu/features/order/domain/models/bookkeeping_ledger.dart';
+import 'package:cx_dompetqiu/features/order/domain/models/bookkeeping_failed_payments.dart';
 
 part 'generated/bookkeeping_remote_source.g.dart';
 
